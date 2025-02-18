@@ -1,0 +1,2 @@
+gcp:
+  json-path: ${GCP_JSON_PATH}

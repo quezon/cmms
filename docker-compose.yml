@@ -1,0 +1,55 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: atlas_db
+    restart: always
+    environment:
+      POSTGRES_DB: atlas
+      POSTGRES_USER: rootUser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+  api:
+    build: api
+    container_name: atlas_api
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: postgres/atlas
+      DB_USER: rootUser
+      DB_PWD: mypassword
+      API_HOST: ${API_HOST:-http://localhost:8080}
+      FASTSPRING_PWD: ${FASTSPRING_PWD}
+      FASTSPRING_USER: ${FASTSPRING_USER}
+      FRONT_URL: ${FRONT_URL}
+      GCP_BUCKET_NAME: ${GCP_BUCKET_NAME}
+      GCP_JSON: ${GCP_JSON}
+      GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+      MAIL_RECIPIENTS: ${MAIL_RECIPIENTS} #abc@gmail.com,acd@gmail.com
+      SMTP_PWD: ${SMTP_PWD}
+      SMTP_USER: ${SMTP_USER}
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    ports:
+      - "8080:8080"
+  frontend:
+    build:
+      context: frontend
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:8080/}
+        REACT_APP_GOOGLE_KEY: ${REACT_APP_GOOGLE_KEY}
+        REACT_APP_GOOGLE_TRACKING_ID: ${REACT_APP_GOOGLE_TRACKING_ID}
+        REACT_APP_JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+    container_name: atlas_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+
+volumes:
+  postgres_data:
+
