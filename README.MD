@@ -1,7 +1,7 @@
 <p align="center"><img src="frontend/public/static/images/logo/logo.png" width="80"></p>
 <h1 align="center">Atlas CMMS</h1>
 
-[Atlas CMMS](https://github.com/grashjs/cmms) is a robust, locally hosted (web-mobile) based  Maintenance management tool using Docker. It is designed to streamline work order management, preventive maintenance, asset tracking, and team collaboration.
+[Atlas CMMS](https://github.com/grashjs/cmms) is a robust, self hosted (web-mobile) based  Maintenance management tool using Docker. It is designed to streamline work order management, preventive maintenance, asset tracking, and team collaboration.
 
 **Screenshot**:
 ![](https://i.ibb.co/7tGYCtv/Screenshot-502.png)
