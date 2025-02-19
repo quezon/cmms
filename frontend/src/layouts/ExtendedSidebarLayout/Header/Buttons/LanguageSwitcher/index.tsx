@@ -15,6 +15,8 @@ import internationalization from 'src/i18n/i18n';
 import { useTranslation } from 'react-i18next';
 
 import { AE, CN, DE, ES, FR, US, TR } from 'country-flag-icons/react/3x2';
+import { FlagComponent } from 'country-flag-icons/react/1x1';
+import { supportedLanguages } from '../../../../../models/owns/generalPreferences';
 
 const SectionHeading = styled(Typography)(
   ({ theme }) => `
@@ -102,122 +104,25 @@ function LanguageSwitcher() {
             }}
             component="nav"
           >
-            <ListItem
-              className={getLanguage === 'fr' ? 'active' : ''}
-              button
-              onClick={() => {
-                switchLanguage({ lng: 'fr' });
-                handleClose();
-              }}
-            >
-              <FR title="French" />
-              <ListItemText
-                sx={{
-                  pl: 1
+            {supportedLanguages.map(({ code, label, Icon }) => (
+              <ListItem
+                key={code}
+                className={
+                  getLanguage === code ||
+                  (code === 'en' && getLanguage === 'en-US')
+                    ? 'active'
+                    : ''
+                }
+                button
+                onClick={() => {
+                  switchLanguage({ lng: code });
+                  handleClose();
                 }}
-                primary="French"
-              />
-            </ListItem>
-            <ListItem
-              className={
-                getLanguage === 'en' || getLanguage === 'en-US' ? 'active' : ''
-              }
-              button
-              onClick={() => {
-                switchLanguage({ lng: 'en' });
-                handleClose();
-              }}
-            >
-              <US title="English" />
-              <ListItemText
-                sx={{
-                  pl: 1
-                }}
-                primary="English"
-              />
-            </ListItem>
-            <ListItem
-              className={
-                getLanguage === 'tr' || getLanguage === 'tr' ? 'active' : ''
-              }
-              button
-              onClick={() => {
-                switchLanguage({ lng: 'tr' });
-                handleClose();
-              }}
-            >
-              <TR title="Turkish" />
-              <ListItemText
-                sx={{
-                  pl: 1
-                }}
-                primary="Turkish"
-              />
-            </ListItem>
-            {/* <ListItem
-              className={getLanguage === 'de' ? 'active' : ''}
-              button
-              onClick={() => {
-                switchLanguage({ lng: 'de' });
-                handleClose();
-              }}
-            >
-              <DE title="German" />
-              <ListItemText
-                sx={{
-                  pl: 1
-                }}
-                primary="German"
-              />
-            </ListItem>
-            <ListItem
-              className={getLanguage === 'es' ? 'active' : ''}
-              button
-              onClick={() => {
-                switchLanguage({ lng: 'es' });
-                handleClose();
-              }}
-            >
-              <ES title="Spanish" />
-              <ListItemText
-                sx={{
-                  pl: 1
-                }}
-                primary="Spanish"
-              />
-            </ListItem>
-            <ListItem
-              className={getLanguage === 'cn' ? 'active' : ''}
-              button
-              onClick={() => {
-                switchLanguage({ lng: 'cn' });
-                handleClose();
-              }}
-            >
-              <CN title="Chinese" />
-              <ListItemText
-                sx={{
-                  pl: 1
-                }}
-                primary="Chinese"
-              />
-            </ListItem>
-            <ListItem
-              className={getLanguage === 'ae' ? 'active' : ''}
-              button
-              onClick={() => {
-                switchLanguage({ lng: 'ae' });
-                handleClose();
-              }}
-            >
-              <AE title="Arabic" />
-              <ListItemText
-                sx={{
-                  pl: 1
-                }}
-                primary="Arabic"
-              />
-            </ListItem>*/}
+              >
+                <Icon title={label} />
+                <ListItemText sx={{ pl: 1 }} primary={label} />
+              </ListItem>
+            ))}
           </List>
         </Box>
       </Popover>

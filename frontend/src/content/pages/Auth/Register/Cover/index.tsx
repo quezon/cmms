@@ -282,7 +282,7 @@ function RegisterCover() {
                     mb: 3
                   }}
                 >
-                  {t('start_trial_today')}
+                  {t('register')}
                 </TypographyPrimary>
 
                 <List

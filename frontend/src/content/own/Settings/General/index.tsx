@@ -1,9 +1,11 @@
 import {
-  Box, debounce,
+  Box,
+  debounce,
   Divider,
   Grid,
   MenuItem,
-  Select, TextField,
+  Select,
+  TextField,
   Typography
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +18,10 @@ import internationalization from '../../../../i18n/i18n';
 import { useDispatch, useSelector } from '../../../../store';
 import { getCurrencies } from '../../../../slices/currency';
 import { useEffect, useMemo } from 'react';
-import { GeneralPreferences } from '../../../../models/owns/generalPreferences';
+import {
+  GeneralPreferences,
+  supportedLanguages
+} from '../../../../models/owns/generalPreferences';
 
 function GeneralSettings() {
   const { t }: { t: any } = useTranslation();
@@ -36,7 +41,10 @@ function GeneralSettings() {
     patchGeneralPreferences({
       daysBeforePrevMaintNotification: Number(event.target.value)
     });
-  const debouncedPMNotifChange = useMemo(() => debounce(onDaysBeforePMNotifChange, 1300), []);
+  const debouncedPMNotifChange = useMemo(
+    () => debounce(onDaysBeforePMNotifChange, 1300),
+    []
+  );
 
   const switches: {
     title: string;
@@ -82,8 +90,7 @@ function GeneralSettings() {
   const onSubmit = async (
     _values,
     { resetForm, setErrors, setStatus, setSubmitting }
-  ) => {
-  };
+  ) => {};
   return (
     <SettingsLayout tabIndex={0}>
       <Grid item xs={12}>
@@ -105,14 +112,14 @@ function GeneralSettings() {
             onSubmit={onSubmit}
           >
             {({
-                errors,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-                isSubmitting,
-                touched,
-                values
-              }) => (
+              errors,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+              touched,
+              values
+            }) => (
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={3}>
                   <Grid item xs={12}>
@@ -134,9 +141,14 @@ function GeneralSettings() {
                           as={Select}
                           name="language"
                         >
-                          <MenuItem value="EN">English</MenuItem>
-                          <MenuItem value="FR">Français</MenuItem>
-                          <MenuItem value="TR">Turkish</MenuItem>
+                          {supportedLanguages.map((language) => (
+                            <MenuItem
+                              key={language.code}
+                              value={language.code.toUpperCase()}
+                            >
+                              {language.label}
+                            </MenuItem>
+                          ))}
                         </Field>
                       </Grid>
                       <Grid item xs={12}>
@@ -189,7 +201,9 @@ function GeneralSettings() {
                         <TextField
                           onChange={debouncedPMNotifChange}
                           type={'number'}
-                          defaultValue={generalPreferences.daysBeforePrevMaintNotification}
+                          defaultValue={
+                            generalPreferences.daysBeforePrevMaintNotification
+                          }
                           name="daysBeforePrevMaintNotification"
                         >
                           {currencies.map((currency) => (

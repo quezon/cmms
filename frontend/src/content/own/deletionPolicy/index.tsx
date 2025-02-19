@@ -72,7 +72,7 @@ function DeletionPolicy() {
                     size: { xs: 'small', md: 'medium' }
                   }}
                 >
-                  {t('start_trial')}
+                  {t('register')}
                 </Button>
               </Stack>
             </Stack>
@@ -84,7 +84,9 @@ function DeletionPolicy() {
       </Box>
       <Card sx={{ mx: 10, padding: 2 }}>
         <Typography>
-          {"You are free to delete your Account at any time. To do that, you need to login go to >Settings>General>Delete account"}
+          {
+            'You are free to delete your Account at any time. To do that, you need to login go to >Settings>General>Delete account'
+          }
         </Typography>
       </Card>
     </Box>

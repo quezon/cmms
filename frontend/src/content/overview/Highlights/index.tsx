@@ -21,7 +21,7 @@ import { AE, CN, DE, ES, FR, US } from 'country-flag-icons/react/3x2';
 import SubscriptionPlans from '../SubscriptionPlans';
 
 const AvatarSuccess = styled(Avatar)(
-    ({ theme }) => `
+  ({ theme }) => `
     background: ${theme.colors.success.light};
     width: ${theme.spacing(4)};
     height: ${theme.spacing(4)};
@@ -29,13 +29,13 @@ const AvatarSuccess = styled(Avatar)(
 );
 
 const BoxRtl = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
     background: ${theme.colors.alpha.white[100]};
 `
 );
 
 const CardImageWrapper = styled(Card)(
-    () => `
+  () => `
     display: flex;
     position: relative;
     z-index: 6;
@@ -48,7 +48,7 @@ const CardImageWrapper = styled(Card)(
 );
 
 const CardImg = styled(Card)(
-    ({ theme }) => `
+  ({ theme }) => `
     position: absolute;
     border-radius: 100%;
     display: inline-flex;
@@ -64,33 +64,33 @@ const CardImg = styled(Card)(
 );
 
 const TypographyH1Primary = styled(Typography)(
-    ({ theme }) => `
+  ({ theme }) => `
     font-size: ${theme.typography.pxToRem(36)};
 `
 );
 
 const TypographyH2 = styled(Typography)(
-    ({ theme }) => `
+  ({ theme }) => `
     font-size: ${theme.typography.pxToRem(17)};
 `
 );
 
 const BoxHighlights = styled(Box)(
-    () => `
+  () => `
     position: relative;
     z-index: 5;
 `
 );
 
 const BlowWrapper = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
     position: relative;
     margin-top: ${theme.spacing(5)};
 `
 );
 
 const Blob1 = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
   background: ${theme.palette.background.default};
   width: 260px;
     height: 260px;
@@ -103,7 +103,7 @@ const Blob1 = styled(Box)(
 );
 
 const Blob2 = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
     background: ${theme.palette.background.default};
     width: 140px;
     bottom: -${theme.spacing(5)};
@@ -116,7 +116,7 @@ const Blob2 = styled(Box)(
 );
 
 const ScreenshotWrapper = styled(Card)(
-    ({ theme }) => `
+  ({ theme }) => `
     perspective: 700px;
     display: flex;
     overflow: visible;
@@ -125,7 +125,7 @@ const ScreenshotWrapper = styled(Card)(
 );
 
 const Screenshot = styled('img')(
-    ({ theme }) => `
+  ({ theme }) => `
     width: 100%;
     height: auto;
     transform: rotateY(-35deg);
@@ -134,19 +134,19 @@ const Screenshot = styled('img')(
 );
 
 const TypographyHeading = styled(Typography)(
-    ({ theme }) => `
+  ({ theme }) => `
     font-size: ${theme.typography.pxToRem(36)};
 `
 );
 
 const TypographySubHeading = styled(Typography)(
-    ({ theme }) => `
+  ({ theme }) => `
     font-size: ${theme.typography.pxToRem(17)};
 `
 );
 
 const TypographyFeature = styled(Typography)(
-    ({ theme }) => `
+  ({ theme }) => `
     font-size: ${theme.typography.pxToRem(50)};
     color: ${theme.colors.primary.main};
     font-weight: bold;
@@ -156,13 +156,13 @@ const TypographyFeature = styled(Typography)(
 );
 
 const AvatarWrapperSuccess = styled(Avatar)(
-    ({ theme }) => `
+  ({ theme }) => `
       background-color: ${theme.colors.success.lighter};
       color:  ${theme.colors.success.main};
 `
 );
 const TabsContainerWrapper = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
 
   .MuiTabs-root {
     height: 40px;
@@ -215,7 +215,7 @@ const TabsContainerWrapper = styled(Box)(
 );
 
 const BoxLayouts = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
       background: ${theme.colors.gradients.blue1};
       padding: ${theme.spacing(16, 0)};
       margin: ${theme.spacing(10, 0, 0)};
@@ -233,7 +233,7 @@ const BoxLayouts = styled(Box)(
 );
 
 const BoxLayoutsImage = styled(Box)(
-    () => `
+  () => `
     background-size: cover;
     position: absolute;
     left: 0;
@@ -245,7 +245,7 @@ const BoxLayoutsImage = styled(Box)(
 );
 
 const BoxLayoutsContent = styled(Container)(
-    ({ theme }) => `
+  ({ theme }) => `
       z-index: 5;
       position: relative;
       color: ${theme.colors.alpha.trueWhite[100]};
@@ -253,7 +253,7 @@ const BoxLayoutsContent = styled(Container)(
 );
 
 const BoxWave = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
     position: absolute;
     top: -10px;
     left: 0;
@@ -267,7 +267,7 @@ const BoxWave = styled(Box)(
 );
 
 const BoxWaveAlt = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
     position: absolute;
     bottom: -10px;
     left: 0;
@@ -281,7 +281,7 @@ const BoxWaveAlt = styled(Box)(
 );
 
 const LayoutImgButton = styled(Box)(
-    ({ theme }) => `
+  ({ theme }) => `
     overflow: hidden;
     border-radius: ${theme.general.borderRadiusXl};
     display: block;
@@ -440,69 +440,69 @@ function Highlights() {
   };
   const CheckItem = ({ description }: { description: string }) => {
     return (
-        <ListItem>
-          <AvatarSuccess
-              sx={{
-                mr: 2
-              }}
-          >
-            <CheckTwoToneIcon />
-          </AvatarSuccess>
-          <ListItemText primary={t(description)} />
-        </ListItem>
+      <ListItem>
+        <AvatarSuccess
+          sx={{
+            mr: 2
+          }}
+        >
+          <CheckTwoToneIcon />
+        </AvatarSuccess>
+        <ListItemText primary={t(description)} />
+      </ListItem>
     );
   };
 
   const Feature = ({
-                     title,
-                     descriptions,
-                     checks,
-                     image
-                   }: {
+    title,
+    descriptions,
+    checks,
+    image
+  }: {
     title: string;
     descriptions: string[];
     checks: string[];
     image: string;
   }) => {
     return (
-        <Grid
+      <Grid
+        sx={{
+          mt: 8
+        }}
+        container
+        spacing={4}
+      >
+        <Grid item xs={12} md={6}>
+          <Typography sx={{ mb: 1 }} variant="h2">
+            {t(title)}.
+          </Typography>
+          {descriptions.map((description, index) => (
+            <Box key={index}>
+              <Typography variant="subtitle2">{t(description)}</Typography>
+              <br />
+            </Box>
+          ))}
+          <List
+            disablePadding
             sx={{
-              mt: 8
+              mt: 2
             }}
-            container
-            spacing={4}
-        >
-          <Grid item xs={12} md={6}>
-            <Typography sx={{ mb: 1 }} variant="h2">
-              {t(title)}.
-            </Typography>
-            {descriptions.map((description, index) => (
-                <Box key={index}>
-                  <Typography variant="subtitle2">{t(description)}</Typography>
-                  <br />
-                </Box>
+          >
+            {checks.map((desc, index) => (
+              <CheckItem key={index} description={desc} />
             ))}
-            <List
-                disablePadding
-                sx={{
-                  mt: 2
-                }}
-            >
-              {checks.map((desc, index) => (
-                  <CheckItem key={index} description={desc} />
-              ))}
-            </List>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <BlowWrapper>
-              <Blob1 />
-              <Blob2 />
-              <CardImageWrapper>
-                <img src={image} alt="Atlas" />
-              </CardImageWrapper>
-            </BlowWrapper>
-          </Grid>
+          </List>
         </Grid>
+        <Grid item xs={12} md={6}>
+          <BlowWrapper>
+            <Blob1 />
+            <Blob2 />
+            <CardImageWrapper>
+              <img src={image} alt="Atlas" />
+            </CardImageWrapper>
+          </BlowWrapper>
+        </Grid>
+      </Grid>
     );
   };
   const handleTabsChange = (_event: any, value: SetStateAction<string>) => {
@@ -510,309 +510,309 @@ function Highlights() {
   };
 
   return (
-      <BoxHighlights>
-        <BoxLayouts>
-          <BoxWave>
-            <svg
-                viewBox="0 0 1440 172"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                  d="M0 0H1440V52.1874C1440 52.1874 873.5 172 720 172C566.5 172 0 52.1874 0 52.1874V0Z"
-                  fill="white"
-              />
-            </svg>
-          </BoxWave>
-          <BoxLayoutsImage
-              sx={{
-                backgroundImage: 'url("/static/images/placeholders/covers/7.jpg")'
-              }}
-          />
-          <BoxLayoutsContent maxWidth="lg">
-            <Grid
-                justifyContent="center"
-                alignItems="center"
-                spacing={6}
-                container
-            >
-              <Grid item xs={12} md={6}>
-                <TypographyFeature
-                    className="typo-feature"
-                    sx={{
-                      mt: { lg: 10 }
-                    }}
-                >
-                  {t('home.what')}
-                </TypographyFeature>
-                <TypographyHeading
-                    className="typo-heading"
-                    sx={{
-                      mb: 1
-                    }}
-                    variant="h3"
-                >
-                  {t('home.you_will_have')}
-                </TypographyHeading>
-                <TypographySubHeading
-                    className="typo-subheading"
-                    sx={{
-                      lineHeight: 1.5
-                    }}
-                    variant="h4"
-                    color="text.secondary"
-                    fontWeight="normal"
-                >
-                  {t('home.you_will_have_description')}
-                </TypographySubHeading>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <LayoutImgButton>
-                  <Typography variant="h4">{t('work_orders')}</Typography>
-                  <img
-                      src="/static/images/overview/work_order_screenshot.png"
-                      alt={t('work_orders')}
-                  />
-                </LayoutImgButton>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <LayoutImgButton>
-                  <Typography variant="h4">{t('custom_dashboards')}</Typography>
-                  <img
-                      src="/static/images/overview/analytics_screenshot.png"
-                      alt={t('custom_dashboards')}
-                  />
-                </LayoutImgButton>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <LayoutImgButton>
-                  <Typography variant="h4">{t('asset_management')}</Typography>
-                  <img
-                      src="/static/images/overview/extended_sidebar.png"
-                      alt={t('asset_management')}
-                  />
-                </LayoutImgButton>
-              </Grid>
-            </Grid>
-          </BoxLayoutsContent>
-          <BoxWaveAlt>
-            <svg
-                viewBox="0 0 1440 172"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                  d="M1440 172H0V119.813C0 119.813 566.5 0 720 0C873.5 0 1440 119.813 1440 119.813V172Z"
-                  fill="white"
-              />
-            </svg>
-          </BoxWaveAlt>
-        </BoxLayouts>
-        <Container
-            maxWidth="lg"
-            sx={{
-              py: { xs: 8, md: 10 }
-            }}
-        >
+    <BoxHighlights>
+      <BoxLayouts>
+        <BoxWave>
+          <svg
+            viewBox="0 0 1440 172"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0 0H1440V52.1874C1440 52.1874 873.5 172 720 172C566.5 172 0 52.1874 0 52.1874V0Z"
+              fill="white"
+            />
+          </svg>
+        </BoxWave>
+        <BoxLayoutsImage
+          sx={{
+            backgroundImage: 'url("/static/images/placeholders/covers/7.jpg")'
+          }}
+        />
+        <BoxLayoutsContent maxWidth="lg">
           <Grid
-              spacing={0}
-              direction={{ xs: 'column-reverse', md: 'row' }}
-              justifyContent="center"
-              container
+            justifyContent="center"
+            alignItems="center"
+            spacing={6}
+            container
           >
             <Grid item xs={12} md={6}>
-              <Box>
-                <TypographyHeading
-                    sx={{
-                      mb: 1
-                    }}
-                    variant="h3"
-                >
-                  {t('home.work')}
-                </TypographyHeading>
-                <TypographyFeature>{t('home.smarter')}</TypographyFeature>
-                <TypographySubHeading
-                    sx={{
-                      lineHeight: 1.5,
-                      pr: 8
-                    }}
-                    variant="h4"
-                    color="text.secondary"
-                    fontWeight="normal"
-                >
-                  {t('home.smarter_description')}
-                </TypographySubHeading>
-              </Box>
-            </Grid>
-          </Grid>
-          <TypographyH1Primary
-              id="key-features"
-              textAlign="center"
-              sx={{
-                mt: 8,
-                mb: 2
-              }}
-              variant="h1"
-          >
-            {t('key_features')}
-          </TypographyH1Primary>
-          <Container maxWidth="sm">
-            <TypographyH2
+              <TypographyFeature
+                className="typo-feature"
                 sx={{
-                  pb: 4,
+                  mt: { lg: 10 }
+                }}
+              >
+                {t('home.what')}
+              </TypographyFeature>
+              <TypographyHeading
+                className="typo-heading"
+                sx={{
+                  mb: 1
+                }}
+                variant="h3"
+              >
+                {t('home.you_will_have')}
+              </TypographyHeading>
+              <TypographySubHeading
+                className="typo-subheading"
+                sx={{
                   lineHeight: 1.5
                 }}
-                textAlign="center"
                 variant="h4"
                 color="text.secondary"
                 fontWeight="normal"
-            >
-              {t('key_features_description')}
-            </TypographyH2>
-          </Container>
-          <TabsContainerWrapper sx={{ justifyContent: 'flex-start' }}>
-            <Tabs
-                onChange={handleTabsChange}
-                value={currentTab}
-                variant="scrollable"
-                scrollButtons={false}
-                textColor="primary"
-                indicatorColor="primary"
-            >
-              {tabs.map((tab) => (
-                  <Tab key={tab.value} label={tab.label} value={tab.value} />
-              ))}
-            </Tabs>
-          </TabsContainerWrapper>
-          {Object.entries(featuresConfiguration).map(([feature, config]) => {
-            return (
-                <>
-                  {currentTab === feature && (
-                      <Feature
-                          title={config.title}
-                          descriptions={config.descriptions}
-                          checks={config.checks}
-                          image={config.image}
-                      />
-                  )}
-                </>
-            );
-          })}
-          {/*<SubscriptionPlans />*/}
-          {currentTab === 'rtl' && (
-              <BoxRtl
-                  sx={{
-                    pt: 10
-                  }}
               >
-                <Container maxWidth="lg">
-                  <Grid container spacing={8}>
-                    <Grid
-                        item
-                        xs={12}
-                        md={5}
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center'
-                        }}
-                    >
-                      <Box>
-                        <TypographyH1Primary variant="h1">
-                          {t('Right-To-Left Layouts & Translation-Ready')}
-                        </TypographyH1Primary>
-                        <Typography
-                            variant="subtitle2"
-                            sx={{
-                              py: 2
-                            }}
-                        >
-                          {t(
-                              "Follow our documentation files to find out how to switch to a RTL layout. It's easy!"
-                          )}
-                        </Typography>
-                        <Typography
-                            variant="h4"
-                            sx={{
-                              my: 2
-                            }}
-                        >
-                          {t('Languages already integrated')}:
-                        </Typography>
-                        <Box
-                            sx={{
-                              svg: {
-                                width: 44,
-                                mr: 1
-                              }
-                            }}
-                        >
-                          <US title="USA" />
-                          <DE title="Germany" />
-                          <ES title="Spain" />
-                          <FR title="France" />
-                          <CN title="China" />
-                          <AE title="United Arab Emirates" />
-                        </Box>
-                        <Typography
-                            sx={{
-                              pt: 1
-                            }}
-                            variant="subtitle1"
-                        >
-                          {t(
-                              'You can add and define translations for any language required. '
-                          )}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={12} md={7}>
-                      <ScreenshotWrapper>
-                        <Screenshot
-                            src="/static/images/overview/rtl-preview.jpg"
-                            alt="RTL Preview"
-                        />
-                      </ScreenshotWrapper>
-                    </Grid>
-                  </Grid>
-                </Container>
-              </BoxRtl>
-          )}
-        </Container>
-
-        <Container
-            sx={{
-              pt: { xs: 6, md: 12 },
-              pb: { xs: 5, md: 15 }
-            }}
-            maxWidth="md"
+                {t('home.you_will_have_description')}
+              </TypographySubHeading>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <LayoutImgButton>
+                <Typography variant="h4">{t('work_orders')}</Typography>
+                <img
+                  src="/static/images/overview/work_order_screenshot.png"
+                  alt={t('work_orders')}
+                />
+              </LayoutImgButton>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <LayoutImgButton>
+                <Typography variant="h4">{t('custom_dashboards')}</Typography>
+                <img
+                  src="/static/images/overview/analytics_screenshot.png"
+                  alt={t('custom_dashboards')}
+                />
+              </LayoutImgButton>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <LayoutImgButton>
+                <Typography variant="h4">{t('asset_management')}</Typography>
+                <img
+                  src="/static/images/overview/extended_sidebar.png"
+                  alt={t('asset_management')}
+                />
+              </LayoutImgButton>
+            </Grid>
+          </Grid>
+        </BoxLayoutsContent>
+        <BoxWaveAlt>
+          <svg
+            viewBox="0 0 1440 172"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M1440 172H0V119.813C0 119.813 566.5 0 720 0C873.5 0 1440 119.813 1440 119.813V172Z"
+              fill="white"
+            />
+          </svg>
+        </BoxWaveAlt>
+      </BoxLayouts>
+      <Container
+        maxWidth="lg"
+        sx={{
+          py: { xs: 8, md: 10 }
+        }}
+      >
+        <Grid
+          spacing={0}
+          direction={{ xs: 'column-reverse', md: 'row' }}
+          justifyContent="center"
+          container
         >
-          <TypographyH1Primary
-              textAlign="center"
-              sx={{
-                mb: 2
-              }}
-              variant="h1"
+          <Grid item xs={12} md={6}>
+            <Box>
+              <TypographyHeading
+                sx={{
+                  mb: 1
+                }}
+                variant="h3"
+              >
+                {t('home.work')}
+              </TypographyHeading>
+              <TypographyFeature>{t('home.smarter')}</TypographyFeature>
+              <TypographySubHeading
+                sx={{
+                  lineHeight: 1.5,
+                  pr: 8
+                }}
+                variant="h4"
+                color="text.secondary"
+                fontWeight="normal"
+              >
+                {t('home.smarter_description')}
+              </TypographySubHeading>
+            </Box>
+          </Grid>
+        </Grid>
+        <TypographyH1Primary
+          id="key-features"
+          textAlign="center"
+          sx={{
+            mt: 8,
+            mb: 2
+          }}
+          variant="h1"
+        >
+          {t('key_features')}
+        </TypographyH1Primary>
+        <Container maxWidth="sm">
+          <TypographyH2
+            sx={{
+              pb: 4,
+              lineHeight: 1.5
+            }}
+            textAlign="center"
+            variant="h4"
+            color="text.secondary"
+            fontWeight="normal"
           >
-            {t('leading_maintenance')}
-          </TypographyH1Primary>
-          <Container
-              sx={{
-                mb: 6,
-                textAlign: 'center'
-              }}
-              maxWidth="sm"
-          >
-            <Button
-                component={RouterLink}
-                size="large"
-                to="/account/register"
-                variant="contained"
-            >
-              {t('start_trial')}
-            </Button>
-          </Container>
+            {t('key_features_description')}
+          </TypographyH2>
         </Container>
-      </BoxHighlights>
+        <TabsContainerWrapper sx={{ justifyContent: 'flex-start' }}>
+          <Tabs
+            onChange={handleTabsChange}
+            value={currentTab}
+            variant="scrollable"
+            scrollButtons={false}
+            textColor="primary"
+            indicatorColor="primary"
+          >
+            {tabs.map((tab) => (
+              <Tab key={tab.value} label={tab.label} value={tab.value} />
+            ))}
+          </Tabs>
+        </TabsContainerWrapper>
+        {Object.entries(featuresConfiguration).map(([feature, config]) => {
+          return (
+            <>
+              {currentTab === feature && (
+                <Feature
+                  title={config.title}
+                  descriptions={config.descriptions}
+                  checks={config.checks}
+                  image={config.image}
+                />
+              )}
+            </>
+          );
+        })}
+        {/*<SubscriptionPlans />*/}
+        {currentTab === 'rtl' && (
+          <BoxRtl
+            sx={{
+              pt: 10
+            }}
+          >
+            <Container maxWidth="lg">
+              <Grid container spacing={8}>
+                <Grid
+                  item
+                  xs={12}
+                  md={5}
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center'
+                  }}
+                >
+                  <Box>
+                    <TypographyH1Primary variant="h1">
+                      {t('Right-To-Left Layouts & Translation-Ready')}
+                    </TypographyH1Primary>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{
+                        py: 2
+                      }}
+                    >
+                      {t(
+                        "Follow our documentation files to find out how to switch to a RTL layout. It's easy!"
+                      )}
+                    </Typography>
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        my: 2
+                      }}
+                    >
+                      {t('Languages already integrated')}:
+                    </Typography>
+                    <Box
+                      sx={{
+                        svg: {
+                          width: 44,
+                          mr: 1
+                        }
+                      }}
+                    >
+                      <US title="USA" />
+                      <DE title="Germany" />
+                      <ES title="Spain" />
+                      <FR title="France" />
+                      <CN title="China" />
+                      <AE title="United Arab Emirates" />
+                    </Box>
+                    <Typography
+                      sx={{
+                        pt: 1
+                      }}
+                      variant="subtitle1"
+                    >
+                      {t(
+                        'You can add and define translations for any language required. '
+                      )}
+                    </Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} md={7}>
+                  <ScreenshotWrapper>
+                    <Screenshot
+                      src="/static/images/overview/rtl-preview.jpg"
+                      alt="RTL Preview"
+                    />
+                  </ScreenshotWrapper>
+                </Grid>
+              </Grid>
+            </Container>
+          </BoxRtl>
+        )}
+      </Container>
+
+      <Container
+        sx={{
+          pt: { xs: 6, md: 12 },
+          pb: { xs: 5, md: 15 }
+        }}
+        maxWidth="md"
+      >
+        <TypographyH1Primary
+          textAlign="center"
+          sx={{
+            mb: 2
+          }}
+          variant="h1"
+        >
+          {t('leading_maintenance')}
+        </TypographyH1Primary>
+        <Container
+          sx={{
+            mb: 6,
+            textAlign: 'center'
+          }}
+          maxWidth="sm"
+        >
+          <Button
+            component={RouterLink}
+            size="large"
+            to="/account/register"
+            variant="contained"
+          >
+            {t('register')}
+          </Button>
+        </Container>
+      </Container>
+    </BoxHighlights>
   );
 }
 

@@ -72,7 +72,7 @@ function Overview() {
                     size: { xs: 'small', md: 'medium' }
                   }}
                 >
-                  {t('start_trial')}
+                  {t('register')}
                 </Button>
               </Stack>
             </Stack>

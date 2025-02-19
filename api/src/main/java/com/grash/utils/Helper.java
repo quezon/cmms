@@ -111,6 +111,8 @@ public class Helper {
                 return Locale.FRANCE;
             case TR:
                 return new Locale("tr", "TR");
+            case ES:
+                return new Locale("es", "ES");
             default:
                 return Locale.getDefault();
         }
