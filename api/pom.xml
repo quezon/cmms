@@ -189,6 +189,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <mainClass>com.grash.ApiApplication</mainClass>
                 </configuration>
             </plugin>
             <plugin>
