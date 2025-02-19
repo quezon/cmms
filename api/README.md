@@ -18,5 +18,3 @@ Set these environment variables.
 - `MAIL_RECIPIENTS` emails separated by a comma: you can provide your email
 
 Without docker, you should first install and use JDK 8 then create a Postgres database. After that go to [src/main/resources/application-dev.yml](src/main/resources/application-dev.yml), change the url, username and password.
-
-Very important run with dev profile. Check [this](https://stackoverflow.com/a/44374099) if you don't know how
