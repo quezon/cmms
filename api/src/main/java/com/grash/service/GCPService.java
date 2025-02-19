@@ -37,14 +37,19 @@ public class GCPService {
     @Value("${gcp.bucket-name}")
     private String gcpBucketName;
     private Storage storage;
+    private static boolean configured = false;
 
     @PostConstruct
     private void init() {
+        if ((gcpJson == null || gcpJson.isEmpty()) && (gcpJsonPath == null || gcpJsonPath.isEmpty())) {
+            return;
+        }
         Credentials credentials;
         try {
             InputStream is = gcpJson == null ? Files.newInputStream(Paths.get(gcpJsonPath)) :
                     new ByteArrayInputStream(gcpJson.getBytes(StandardCharsets.UTF_8));
             credentials = GoogleCredentials.fromStream(is);
+            configured = true;
         } catch (IOException e) {
             throw new CustomException("Wrong credentials", HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -57,6 +62,7 @@ public class GCPService {
     }
 
     public String upload(MultipartFile file, String folder) {
+        checkIfConfigured();
         Helper helper = new Helper();
         try {
             BlobInfo blobInfo = storage.create(
@@ -73,6 +79,7 @@ public class GCPService {
     }
 
     public byte[] download(String filePath) {
+        checkIfConfigured();
         Blob blob = storage.get(BlobId.of(gcpBucketName, filePath));
 
         if (blob == null) {
@@ -86,7 +93,7 @@ public class GCPService {
     }
 
     public byte[] download(File file) {
-
+        checkIfConfigured();
         URI uri = null;
         try {
             uri = new URI(file.getUrl());
@@ -96,5 +103,12 @@ public class GCPService {
         String path = uri.getPath();
         String filePath = "company " + file.getCompany().getId() + "/" + path.substring(path.lastIndexOf('/') + 1);
         return download(filePath);
+    }
+
+    private void checkIfConfigured() {
+        if (!configured)
+            throw new CustomException("Google Cloud Storage is not configured. Please define the GCP credentials in " +
+                    "the " +
+                    "env variables", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
