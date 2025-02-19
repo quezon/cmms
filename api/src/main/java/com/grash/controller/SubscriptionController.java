@@ -33,7 +33,7 @@ public class SubscriptionController {
     private final UserService userService;
     private final EmailService2 emailService2;
     private final SubscriptionChangeRequestRepository subscriptionChangeRequestRepository;
-    @Value("${mail.recipients}")
+    @Value("${mail.recipients:#{null}")
     private String[] recipients;
 
     @GetMapping("")
@@ -72,11 +72,13 @@ public class SubscriptionController {
                                    HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.isOwnsCompany()) {
-            int enabledUsersCount = (int) userService.findByCompany(user.getCompany().getId()).stream().filter(OwnUser::isEnabledInSubscription).count();
+            int enabledUsersCount =
+                    (int) userService.findByCompany(user.getCompany().getId()).stream().filter(OwnUser::isEnabledInSubscription).count();
             Subscription subscription = user.getCompany().getSubscription();
             int subscriptionUsersCount = subscription.getUsersCount();
             if (enabledUsersCount + usersIds.size() <= subscriptionUsersCount) {
-                Collection<OwnUser> users = usersIds.stream().map(userId -> userService.findByIdAndCompany(userId, user.getCompany().getId()).get()).collect(Collectors.toList());
+                Collection<OwnUser> users = usersIds.stream().map(userId -> userService.findByIdAndCompany(userId,
+                        user.getCompany().getId()).get()).collect(Collectors.toList());
                 if (users.stream().noneMatch(OwnUser::isEnabledInSubscription)) {
                     users.forEach(user1 -> user1.setEnabledInSubscription(true));
                     userService.saveAll(users);
@@ -85,7 +87,8 @@ public class SubscriptionController {
                     return new SuccessResponse(true, "Users enabled successfully");
                 } else throw new CustomException("There are some already enabled users", HttpStatus.NOT_ACCEPTABLE);
             } else
-                throw new CustomException("The subscription users count doesn't permit this operation", HttpStatus.NOT_ACCEPTABLE);
+                throw new CustomException("The subscription users count doesn't permit this operation",
+                        HttpStatus.NOT_ACCEPTABLE);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -93,11 +96,16 @@ public class SubscriptionController {
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public SuccessResponse requestUpgrade(@RequestBody SubscriptionChangeRequest subscriptionChangeRequest,
                                           HttpServletRequest req) {
+        if (recipients == null || recipients.length == 0) {
+            throw new CustomException("MAIL_RECIPIENTS env variable not set", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         OwnUser user = userService.whoami(req);
         if (user.isOwnsCompany()) {
             subscriptionChangeRequestRepository.save(subscriptionChangeRequest);
             try {
-                emailService2.sendHtmlMessage(recipients, "New Atlas subscription change request", user.getFirstName() + " " + user.getLastName() + " just requested a subscription change for company " + user.getCompany().getName() + "\nUsers count: " + subscriptionChangeRequest.getUsersCount() + "\nCode: " + subscriptionChangeRequest.getCode() + "\nPeriod: " + (subscriptionChangeRequest.getMonthly() ? "Monthly" : "Annually") + "\nEmail: " + user.getEmail() + "\nPhone: " + user.getPhone());
+                emailService2.sendHtmlMessage(recipients, "New Atlas subscription change request",
+                        user.getFirstName() + " " + user.getLastName() + " just requested a subscription change for " +
+                                "company " + user.getCompany().getName() + "\nUsers count: " + subscriptionChangeRequest.getUsersCount() + "\nCode: " + subscriptionChangeRequest.getCode() + "\nPeriod: " + (subscriptionChangeRequest.getMonthly() ? "Monthly" : "Annually") + "\nEmail: " + user.getEmail() + "\nPhone: " + user.getPhone());
             } catch (MessagingException ignored) {
             }
 
@@ -111,7 +119,8 @@ public class SubscriptionController {
                                      HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.isOwnsCompany()) {
-            int enabledUsersCount = (int) userService.findByCompany(user.getCompany().getId()).stream().filter(OwnUser::isEnabledInSubscription).count();
+            int enabledUsersCount =
+                    (int) userService.findByCompany(user.getCompany().getId()).stream().filter(OwnUser::isEnabledInSubscription).count();
             Subscription subscription = user.getCompany().getSubscription();
             int subscriptionUsersCount = user.getCompany().getSubscription().getUsersCount();
             if (enabledUsersCount - usersIds.size() <= subscriptionUsersCount) {
@@ -126,7 +135,8 @@ public class SubscriptionController {
                     return new SuccessResponse(true, "Users enabled successfully");
                 } else throw new CustomException("There are some already disabled users", HttpStatus.NOT_ACCEPTABLE);
             } else
-                throw new CustomException("The subscription users count doesn't permit this operation", HttpStatus.NOT_ACCEPTABLE);
+                throw new CustomException("The subscription users count doesn't permit this operation",
+                        HttpStatus.NOT_ACCEPTABLE);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 }

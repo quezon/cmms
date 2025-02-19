@@ -62,12 +62,13 @@ public class UserService {
     private String API_HOST;
     @Value("${frontend.url}")
     private String frontendUrl;
-    @Value("${mail.recipients}")
+    @Value("${mail.recipients:#{null}")
     private String[] recipients;
 
     public String signin(String email, String password, String type) {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+            Authentication authentication =
+                    authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
             if (authentication.getAuthorities().stream().noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_" + type.toUpperCase()))) {
                 throw new CustomException("Invalid credentials", HttpStatus.FORBIDDEN);
             }
@@ -106,7 +107,8 @@ public class UserService {
                 Optional<Role> optionalRole = roleService.findById(user.getRole().getId());
                 if (optionalRole.isPresent()) {
                     if (userInvitationService.findByRoleAndEmail(optionalRole.get().getId(), user.getEmail()).isEmpty()) {
-                        throw new CustomException("You are not invited to this organization for this role", HttpStatus.NOT_ACCEPTABLE);
+                        throw new CustomException("You are not invited to this organization for this role",
+                                HttpStatus.NOT_ACCEPTABLE);
                     } else {
                         user.setRole(optionalRole.get());
                         user.setEnabled(true);
@@ -118,7 +120,8 @@ public class UserService {
             if (API_HOST.equals("http://localhost:8080")) {
                 user.setEnabled(true);
                 userRepository.save(user);
-                return new SuccessResponse(true, jwtTokenProvider.createToken(user.getEmail(), Collections.singletonList(user.getRole().getRoleType())));
+                return new SuccessResponse(true, jwtTokenProvider.createToken(user.getEmail(),
+                        Collections.singletonList(user.getRole().getRoleType())));
             } else {
                 if (userReq.getRole() == null) { //send mail
                     String token = UUID.randomUUID().toString();
@@ -129,11 +132,14 @@ public class UserService {
                     }};
                     VerificationToken newUserToken = new VerificationToken(token, user);
                     verificationTokenRepository.save(newUserToken);
-                    emailService2.sendMessageUsingThymeleafTemplate(new String[]{user.getEmail()}, messageSource.getMessage("confirmation_email", null, Helper.getLocale(user)), variables, "signup.html", Helper.getLocale(user));
+                    emailService2.sendMessageUsingThymeleafTemplate(new String[]{user.getEmail()},
+                            messageSource.getMessage("confirmation_email", null, Helper.getLocale(user)), variables,
+                            "signup.html", Helper.getLocale(user));
                 }
                 userRepository.save(user);
                 sendRegistrationMail(user, userReq.getEmployeesCount());
-                return new SuccessResponse(true, "Successful registration. Check your mailbox to activate your account");
+                return new SuccessResponse(true, "Successful registration. Check your mailbox to activate your " +
+                        "account");
             }
         } else {
             throw new CustomException("Email is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -161,7 +167,8 @@ public class UserService {
     }
 
     public String refresh(String username) {
-        return jwtTokenProvider.createToken(username, Arrays.asList(userRepository.findByEmailIgnoreCase(username).get().getRole().getRoleType()));
+        return jwtTokenProvider.createToken(username,
+                Arrays.asList(userRepository.findByEmailIgnoreCase(username).get().getRole().getRoleType()));
     }
 
     public List<OwnUser> getAll() {
@@ -195,7 +202,8 @@ public class UserService {
             put("featuresLink", frontendUrl + "/#key-features");
             put("password", password);
         }};
-        emailService2.sendMessageUsingThymeleafTemplate(new String[]{email}, messageSource.getMessage("password_reset", null, Helper.getLocale(user)), variables, "reset-password.html", Helper.getLocale(user));
+        emailService2.sendMessageUsingThymeleafTemplate(new String[]{email}, messageSource.getMessage("password_reset"
+                , null, Helper.getLocale(user)), variables, "reset-password.html", Helper.getLocale(user));
         return new SuccessResponse(true, "Password changed successfully");
     }
 
@@ -220,7 +228,9 @@ public class UserService {
                 put("inviter", inviter.getFirstName() + " " + inviter.getLastName());
                 put("company", inviter.getCompany().getName());
             }};
-            emailService2.sendMessageUsingThymeleafTemplate(new String[]{email}, messageSource.getMessage("invitation_to_use", null, Helper.getLocale(inviter)), variables, "invite.html", Helper.getLocale(inviter));
+            emailService2.sendMessageUsingThymeleafTemplate(new String[]{email}, messageSource.getMessage(
+                    "invitation_to_use", null, Helper.getLocale(inviter)), variables, "invite.html",
+                    Helper.getLocale(inviter));
         } else throw new CustomException("Email already in use", HttpStatus.NOT_ACCEPTABLE);
     }
 
@@ -260,12 +270,16 @@ public class UserService {
     public Page<OwnUser> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<OwnUser> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), "id");
         return userRepository.findAll(builder.build(), page);
     }
 
     @Async
     void sendRegistrationMail(OwnUser user, int employeesCount) {
+        if (recipients == null || recipients.length == 0) {
+            throw new CustomException("MAIL_RECIPIENTS env variable not set", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
         try {
             emailService2.sendHtmlMessage(recipients, "New Atlas registration",
                     user.getFirstName() + " " + user.getLastName() + " just created an account from company "
