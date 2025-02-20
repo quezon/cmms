@@ -112,7 +112,7 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
     showSnackBar(t('changes_saved_success'), 'success');
   };
   const onEditFailure = (err) =>
-    showSnackBar(t('The User couldn\'t be edited'), 'error');
+    showSnackBar(t("The User couldn't be edited"), 'error');
 
   const handleOpenDrawer = (user: OwnUser) => {
     setCurrentUser(user);
@@ -202,16 +202,15 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
               rate: currentUser?.rate,
               role: currentUser
                 ? {
-                  label:
-                    currentUser.role.code === 'USER_CREATED'
-                      ? currentUser.role.name
-                      : t(`${currentUser.role.code}_name`),
-                  value: currentUser.role.id
-                }
+                    label:
+                      currentUser.role.code === 'USER_CREATED'
+                        ? currentUser.role.name
+                        : t(`${currentUser.role.code}_name`),
+                    value: currentUser.role.id
+                  }
                 : null
             }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               return dispatch(
                 editUser(currentUser.id, {
@@ -364,13 +363,16 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
             onClick={() => handleOpenUpdate(Number(params.id))}
             label={t('edit')}
           />,
-          ...(params.row.enabled && !params.row.ownsCompany ?
-            [<GridActionsCellItem
-              key="disable"
-              icon={<CancelIcon fontSize="small" color={'error'} />}
-              onClick={() => handleOpenDisable(Number(params.id))}
-              label={t('disable')}
-            />] : [])
+          ...(params.row.enabled && !params.row.ownsCompany
+            ? [
+                <GridActionsCellItem
+                  key="disable"
+                  icon={<CancelIcon fontSize="small" color={'error'} />}
+                  onClick={() => handleOpenDisable(Number(params.id))}
+                  label={t('disable')}
+                />
+              ]
+            : [])
         ];
         if (!hasEditPermission(PermissionEntity.PEOPLE_AND_TEAMS, params.row))
           actions = [];
@@ -478,7 +480,7 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
                   width: 50
                 }}
                 alt={
-                  '<a href=\'https://www.flaticon.com/free-icons/team\' title=\'team icons\'>Team icons created by Freepik - Flaticon</a>'
+                  "<a href='https://www.flaticon.com/free-icons/team' title='team icons'>Team icons created by Freepik - Flaticon</a>"
                 }
                 src="/static/images/team.png"
               />
@@ -544,9 +546,9 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
                       setCurrentEmail('');
                       showSnackBar(t('users_invite_success'), 'success');
                     })
-                    .catch((err) =>
-                      showSnackBar(t('users_invite_failure'), 'error')
-                    )
+                    .catch((err: { message: string }) => {
+                      showSnackBar(JSON.parse(err.message).message, 'error');
+                    })
                     .finally(() => setIsInviteSubmitting(false));
                 if (roleId) {
                   if (emails.length || currentEmail) {
@@ -588,7 +590,9 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
           });
         }}
         confirmText={t('disable')}
-        question={t('confirm_disable_user', { user: `${currentUser?.firstName} ${currentUser?.lastName}` })}
+        question={t('confirm_disable_user', {
+          user: `${currentUser?.firstName} ${currentUser?.lastName}`
+        })}
       />
       {renderEditUserModal()}
     </Box>
