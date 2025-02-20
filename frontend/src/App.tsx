@@ -22,7 +22,7 @@ function App() {
   const { isInitialized, company, isAuthenticated, user } = useAuth();
   let location = useLocation();
   useEffect(() => {
-    if (!IS_LOCALHOST)
+    if (!IS_LOCALHOST && googleTrackingId)
       ReactGA.send({
         hitType: 'pageview',
         page: location.pathname + location.search
