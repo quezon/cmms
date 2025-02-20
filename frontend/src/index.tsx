@@ -24,9 +24,7 @@ ReactDOM.render(
             <ScrollTop />
             <ZendeskProvider apiKey={zendeskKey}>
               <AuthProvider>
-                <CompanySettingsProvider>
-                  <App />
-                </CompanySettingsProvider>
+                <App />
               </AuthProvider>
             </ZendeskProvider>
           </BrowserRouter>

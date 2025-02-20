@@ -69,8 +69,7 @@ public class GCPService {
                     BlobInfo.newBuilder(gcpBucketName,
                             folder + "/" + helper.generateString() + " " + file.getOriginalFilename()).build(), //get
                     // original file name
-                    file.getBytes(), // the file
-                    BlobTargetOption.predefinedAcl(PredefinedAcl.PUBLIC_READ) // Set file permission
+                    file.getBytes()// Set file permission
             );
             return blobInfo.getMediaLink(); // Return file url
         } catch (IllegalStateException | IOException e) {

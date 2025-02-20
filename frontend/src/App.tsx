@@ -13,6 +13,7 @@ import { CustomSnackBarProvider } from './contexts/CustomSnackBarContext';
 import ReactGA from 'react-ga4';
 import { googleTrackingId, IS_LOCALHOST } from './config';
 import { useEffect } from 'react';
+import { CompanySettingsProvider } from './contexts/CompanySettingsContext';
 
 if (!IS_LOCALHOST && googleTrackingId) ReactGA.initialize(googleTrackingId);
 function App() {
@@ -64,8 +65,10 @@ function App() {
           }}
         >
           <CustomSnackBarProvider>
-            <CssBaseline />
-            {isInitialized ? content : <AppInit />}
+            <CompanySettingsProvider>
+              <CssBaseline />
+              {isInitialized ? content : <AppInit />}
+            </CompanySettingsProvider>
           </CustomSnackBarProvider>
         </SnackbarProvider>
       </LocalizationProvider>

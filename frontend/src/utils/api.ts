@@ -2,9 +2,9 @@ import { apiUrl } from '../config';
 
 function api<T>(url: string, options: { raw?: boolean }): Promise<T> {
   return fetch(url, { headers: authHeader(false), ...options }).then(
-    (response) => {
+    async (response) => {
       if (!response.ok) {
-        throw new Error(response.statusText);
+        throw new Error(JSON.stringify(await response.json()));
       }
       if (options?.raw) return response as unknown as Promise<T>;
       return response.json() as Promise<T>;

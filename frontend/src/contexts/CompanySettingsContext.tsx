@@ -1,4 +1,4 @@
-import { createContext, FC, useEffect } from 'react';
+import { createContext, FC, useContext, useEffect } from 'react';
 import useAuth from '../hooks/useAuth';
 import { addFiles } from '../slices/file';
 import { useDispatch, useSelector } from '../store';
@@ -7,6 +7,7 @@ import { getUsersMini } from '../slices/user';
 import { IField } from '../content/own/type';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { CustomSnackBarContext } from './CustomSnackBarContext';
 
 type CompanySettingsContext = {
   getFormattedDate: (dateString: string, hideTime?: boolean) => string;
@@ -40,6 +41,7 @@ export const CompanySettingsProvider: FC = ({ children }) => {
     workOrderFieldConfigurations: []
   };
   const { t }: { t: any } = useTranslation();
+  const { showSnackBar } = useContext(CustomSnackBarContext);
 
   const getFormattedDate = (dateString: string, hideTime?: boolean) => {
     if (!dateString) return '';
@@ -63,6 +65,11 @@ export const CompanySettingsProvider: FC = ({ children }) => {
       ? `${code} ${amount} `
       : `${amount} ${code}`;
   };
+
+  const onUploadError = (err: { message: string }) => {
+    showSnackBar(JSON.parse(err.message).message, 'error');
+  };
+
   const uploadFiles = async (
     files: [],
     images: [],
@@ -70,20 +77,20 @@ export const CompanySettingsProvider: FC = ({ children }) => {
   ): Promise<{ id: number; type: FileType }[]> => {
     let result: { id: number; type: FileType }[] = [];
     if (files?.length) {
-      await dispatch(addFiles(files, 'OTHER', undefined, `${hidden}`)).then(
-        (fileIds) => {
+      await dispatch(addFiles(files, 'OTHER', undefined, `${hidden}`))
+        .then((fileIds) => {
           if (Array.isArray(fileIds))
             result = [
               ...fileIds.map((id) => {
                 return { id, type: 'OTHER' as const };
               })
             ];
-        }
-      );
+        })
+        .catch(onUploadError);
     }
     if (images?.length) {
-      await dispatch(addFiles(images, 'IMAGE', undefined, `${hidden}`)).then(
-        (images) => {
+      await dispatch(addFiles(images, 'IMAGE', undefined, `${hidden}`))
+        .then((images) => {
           if (Array.isArray(images))
             result = [
               ...result,
@@ -91,8 +98,8 @@ export const CompanySettingsProvider: FC = ({ children }) => {
                 return { id: imageId, type: 'IMAGE' as const };
               })
             ];
-        }
-      );
+        })
+        .catch(onUploadError);
     }
     return result;
   };
