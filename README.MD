@@ -76,6 +76,7 @@ At the moment all variables are optional. Do not delete the .env file
 | GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                              | (empty)                |
 | MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins for sending emails. You can provide your email address.                                                  | (empty)                |
 
+### Run
 ```sh
 docker-compose up -d
 ```
