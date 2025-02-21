@@ -4,7 +4,6 @@
 [Atlas CMMS](https://github.com/grashjs/cmms) is a powerful, self-hosted maintenance management system designed for both web and mobile platforms using Docker. It simplifies and automates the management of maintenance activities, making it ideal for developers looking to build solutions for organizations that need to keep their assets running smoothly.
 
 **Example industries**
-
 - Facilities Managers (buildings, property, real estate)
 - Manufacturing/Production Teams (machinery and equipment)
 - Healthcare Facilities (medical equipment maintenance)
@@ -104,10 +103,10 @@ Now, go to http://localhost:3000
 Celebrate on how easy this was
 
 ## Getting help
+### Docs
+https://grashjs.github.io/user-guide
 
-You can first go to https://grashjs.github.io/user-guide.
-If you still have questions, concerns, bug reports, etc, please file an issue in this repository's Issue Tracker or send
-an
+If you still have questions after reading the docs, concerns, bug reports, etc, please file an issue in this repository's Issue Tracker or send an
 email at [ibracool99@gmail.com](mailto:ibracool99@gmail.com).
 
 ## Supported languages
