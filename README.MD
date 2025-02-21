@@ -21,6 +21,7 @@ collaboration.  A CMMS is ideal for any organization with assets needing to mana
 
 <img src="https://i.ibb.co/B39dVjC/Screenshot-20230320-110652.jpg" width="300"/>
 </div>
+
 ## ⚡ **Features**
 
 ### Work Orders & Maintenance
