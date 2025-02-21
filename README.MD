@@ -3,7 +3,14 @@
 
 [Atlas CMMS](https://github.com/grashjs/cmms) is a robust, free self hosted (web-mobile) based Maintenance management
 tool using Docker. It is designed to streamline work order management, preventive maintenance, asset tracking, and team
-collaboration.
+collaboration.  A CMMS is ideal for any organization with assets needing to manage maintenance tasks, such as:
+- Facilities Managers (buildings, property, real estate)
+- Manufacturing/Production Teams (machinery and equipment)
+- Healthcare Facilities (medical equipment maintenance)
+- Hospitality Managers (hotels and resorts)
+- Public Sector (infrastructure and public buildings)
+- Educational Institutions (campus maintenance)
+- Utility Companies (power, water, and energy systems)
 
 **Screenshot**:
 ![](https://i.ibb.co/7tGYCtv/Screenshot-502.png)
