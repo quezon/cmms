@@ -12,7 +12,8 @@ collaboration.  A CMMS is ideal for any organization with assets needing to mana
 - Educational Institutions (campus maintenance)
 - Utility Companies (power, water, and energy systems)
 
-**Screenshot**:
+**Screenshots**:
+![work_orders_screenshot.png](images/work_orders_screenshot.png)
 ![](https://i.ibb.co/7tGYCtv/Screenshot-502.png)
 
 ## ⚡ **Features**
