@@ -17,7 +17,6 @@ collaboration. A CMMS is ideal for any organization with assets needing to manag
 <div align="center">
 
 ![work_orders_screenshot.png](images/work_orders_screenshot.png)
-
 ![](https://i.ibb.co/7tGYCtv/Screenshot-502.png)
 
 <img src="https://i.ibb.co/B39dVjC/Screenshot-20230320-110652.jpg" width="300"/>
