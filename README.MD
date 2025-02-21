@@ -3,7 +3,8 @@
 
 [Atlas CMMS](https://github.com/grashjs/cmms) is a robust, free self hosted (web-mobile) based Maintenance management
 tool using Docker. It is designed to streamline work order management, preventive maintenance, asset tracking, and team
-collaboration.  A CMMS is ideal for any organization with assets needing to manage maintenance tasks, such as:
+collaboration. A CMMS is ideal for any organization with assets needing to manage maintenance tasks, such as:
+
 - Facilities Managers (buildings, property, real estate)
 - Manufacturing/Production Teams (machinery and equipment)
 - Healthcare Facilities (medical equipment maintenance)
@@ -73,22 +74,24 @@ cd cmms
 Configure the environment variables in this file [.env](.env)
 At the moment all variables are optional. Do not delete the .env file
 
-| Name                         | Required | Description                                                                                                                                                                                                        | Default Value          |
-|------------------------------|----------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
+| Name                         | Required | Description                                                                                                                                                                                                         | Default Value          |
+|------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
 | SMTP_PWD                     | No       | The SMTP password after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en). To be able to invite people you have to configure it. | (empty)                |
-| SMTP_USER                    | No       | The SMTP username after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en)                                                       | (empty)                |
-| JWT_SECRET_KEY               | No       | JWT secret key                                                                                                                                                                                                     | your_jwt_secret        |
-| REACT_APP_GOOGLE_KEY         | No       | Google Maps API key                                                                                                                                                                                                | (empty)                |
-| REACT_APP_GOOGLE_TRACKING_ID | No       | Google Analytics tracking ID                                                                                                                                                                                       | (empty)                |
-| FASTSPRING_PWD               | No       | FastSpring password. Fastspring is a payment gateway                                                                                                                                                               | (empty)                |
-| FASTSPRING_USER              | No       | FastSpring username                                                                                                                                                                                                | (empty)                |
-| FRONT_URL                    | No       | Frontend URL                                                                                                                                                                                                       | http://localhost:3000  |
-| REACT_APP_API_URL            | No       | Backend API URL                                                                                                                                                                                                    | http://localhost:8080/ |
-| SPRING_PROFILES_ACTIVE       | No       | Active Spring profile(s)                                                                                                                                                                                           | (empty)                |
-| GCP_JSON                     | No       | The Google Cloud JSON key after following [these instructions](./GCP-setup.md).                                                                                                                                    | (empty)                |
-| GCP_PROJECT_ID               | No       | The Google Cloud project ID, also found in the `GCP_JSON` file.                                                                                                                                                    | (empty)                |
-| GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                                                                                    | (empty)                |
-| MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                         | (empty)                |
+| SMTP_USER                    | No       | The SMTP username after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en)                                                        | (empty)                |
+| JWT_SECRET_KEY               | No       | JWT secret key                                                                                                                                                                                                      | your_jwt_secret        |
+| REACT_APP_GOOGLE_KEY         | No       | Google Maps API key                                                                                                                                                                                                 | (empty)                |
+| REACT_APP_GOOGLE_TRACKING_ID | No       | Google Analytics tracking ID                                                                                                                                                                                        | (empty)                |
+| FASTSPRING_PWD               | No       | FastSpring password. Fastspring is a payment gateway                                                                                                                                                                | (empty)                |
+| FASTSPRING_USER              | No       | FastSpring username                                                                                                                                                                                                 | (empty)                |
+| FRONT_URL                    | No       | Frontend URL in this format `http://your.ip:3000`                                                                                                                                                                   | http://localhost:3000  |
+| REACT_APP_API_URL            | No       | Backend API URL in this format `http://your.ip:8080/`                                                                                                                                                               | http://localhost:8080/ |
+| SPRING_PROFILES_ACTIVE       | No       | Active Spring profile(s)                                                                                                                                                                                            | (empty)                |
+| GCP_JSON                     | No       | The Google Cloud JSON key after following [these instructions](./GCP-setup.md).                                                                                                                                     | (empty)                |
+| GCP_PROJECT_ID               | No       | The Google Cloud project ID, also found in the `GCP_JSON` file.                                                                                                                                                     | (empty)                |
+| GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                                                                                     | (empty)                |
+| MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)                |
+
+After changing any env variable starting with `REACT_APP_` you should run  `docker compose up -d --no-deps --build`
 
 ### Run
 
