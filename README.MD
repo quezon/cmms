@@ -2,6 +2,7 @@
 <h1 align="center">Atlas CMMS</h1>
 
 [Atlas CMMS](https://github.com/grashjs/cmms) is a powerful, self-hosted maintenance management system designed for both web and mobile platforms using Docker. It simplifies and automates the management of maintenance activities, making it ideal for developers looking to build solutions for organizations that need to keep their assets running smoothly.
+Think of it like **Jira for technicians**.
 
 **Example industries**
 - Facilities Managers (buildings, property, real estate)
