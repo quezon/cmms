@@ -113,6 +113,7 @@ email at [ibracool99@gmail.com](mailto:ibracool99@gmail.com).
 ## Supported languages
 
 - English
+- Spanish
 - French
 - Turkish
 
