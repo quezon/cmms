@@ -17,7 +17,7 @@ import {
   Typography
 } from '@mui/material';
 import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
-import { AE, CN, DE, ES, FR, US } from 'country-flag-icons/react/3x2';
+import { AE, CN, DE, ES, FR, US, BR } from 'country-flag-icons/react/3x2';
 import SubscriptionPlans from '../SubscriptionPlans';
 
 const AvatarSuccess = styled(Avatar)(
@@ -752,6 +752,7 @@ function Highlights() {
                       <FR title="France" />
                       <CN title="China" />
                       <AE title="United Arab Emirates" />
+                      <BR title="Brazil" />
                     </Box>
                     <Typography
                       sx={{

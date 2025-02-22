@@ -60,7 +60,7 @@ You can check out the [complete list of features](api/Current%20features.pdf).
 We'd love to have **new contributors**, so feel free to join us!  
 ⭐ **Star this repo to support us!**
 
-## Self Host
+## Self Host / Run locally
 
 #### Clone the Repository
 
@@ -116,6 +116,7 @@ email at [ibracool99@gmail.com](mailto:ibracool99@gmail.com).
 - Spanish
 - French
 - Turkish
+- Portuguese (Brazil)
 
 ## 🏗️ **Tech Stack**
 
