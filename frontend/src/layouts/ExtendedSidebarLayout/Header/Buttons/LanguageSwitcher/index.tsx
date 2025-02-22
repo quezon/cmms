@@ -14,7 +14,7 @@ import {
 import internationalization from 'src/i18n/i18n';
 import { useTranslation } from 'react-i18next';
 
-import { AE, CN, DE, ES, FR, US, TR } from 'country-flag-icons/react/3x2';
+import { AE, CN, DE, ES, FR, US, TR, BR } from 'country-flag-icons/react/3x2';
 import { FlagComponent } from 'country-flag-icons/react/1x1';
 import { supportedLanguages } from '../../../../../models/owns/generalPreferences';
 
