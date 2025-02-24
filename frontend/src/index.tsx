@@ -12,8 +12,11 @@ import { TitleProvider } from 'src/contexts/TitleContext';
 import * as serviceWorker from 'src/serviceWorker';
 import { CompanySettingsProvider } from 'src/contexts/CompanySettingsContext';
 import { AuthProvider } from 'src/contexts/JWTAuthContext';
-import { zendeskKey } from './config';
+import { muiLicense, zendeskKey } from './config';
 import { ZendeskProvider } from 'react-use-zendesk';
+import { LicenseInfo } from '@mui/x-data-grid-pro';
+
+LicenseInfo.setLicenseKey(muiLicense);
 
 ReactDOM.render(
   <HelmetProvider>
