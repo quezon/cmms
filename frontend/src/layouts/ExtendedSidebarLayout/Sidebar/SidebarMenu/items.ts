@@ -62,7 +62,7 @@ const ownMenuItems: MenuItems[] = [
         permission: PermissionEntity.PREVENTIVE_MAINTENANCES
       },
       {
-        name: 'Analytics',
+        name: 'Statistics',
         icon: InsertChartTwoToneIcon,
         permission: PermissionEntity.ANALYTICS,
         planFeature: PlanFeature.ANALYTICS,

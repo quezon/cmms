@@ -48,7 +48,6 @@ const esJSON = {
     'Vea órdenes de trabajo con información crítica, como detalles de activos, fecha de vencimiento, prioridad y más.',
   'work-orders.checks.4':
     'Vea indicadores críticos, como el trabajo completado, el tiempo invertido y el trabajo planificado frente al no planificado..',
-
   'work-requests.title':
     'Un plataforma móvil optimizado que permite realizar solicitudes de trabajo',
   'work-requests.descriptions.0':
@@ -60,7 +59,6 @@ const esJSON = {
     'Reduzca el tiempo dedicado a gestionar solicitudes de trabajo hasta en un 34 %.',
   'work-requests.checks.2':
     'Reduzca el tiempo de comunicación con quiénes soliciten una tarea hasta en un 41% (llamadas, correos electrónicos, mensajes de texto).',
-
   'mobile-app.title':
     'Una aplicación CMMS móvil que jerarquiza a su equipo de mantenimiento',
   'mobile-app.descriptions.0':
@@ -78,7 +76,6 @@ const esJSON = {
     'Responde y registra problemas mientras te encuentres trabajando en ello',
   'mobile-app.checks.5':
     'Busque información crítica sobre sus mientras diagnostica un fallo.',
-
   'eam.title': 'Gestión de activos empresariales',
   'eam.description.short': 'Conozca sus activos',
   'eam.descriptions.0':
@@ -95,7 +92,6 @@ const esJSON = {
     'Encuentre información rápido y fácil gracias a los códigos QR (código de barras)',
   'eam.checks.5':
     'Reciba datos de activos en tiempo real con conectividad de sensores.',
-
   'pm.title': 'Un programa de mantenimiento preventivo eficazm',
   'pm.descriptions.0':
     'Deje de perder horas preciosas distribuyendo manualmente listas de verificación de MP y haciendo un seguimiento con su equipo para asegurarse de que el trabajo esté terminado..',
@@ -111,7 +107,6 @@ const esJSON = {
   'pm.checks.4':
     'Al finalizar el MP, el trabajo se registra automáticamente en el registro de mantenimiento del activo.',
   'pm.checks.5': 'Requiere poca o ninguna formación para su uso.',
-
   'part.title': 'Obtenga el control de su inventario de repuestos',
   'part.description.short': 'Sepa cuándo se acabarán sus repuestos',
   'part.descriptions.0':
@@ -134,7 +129,6 @@ const esJSON = {
     'Optimizar los niveles de stock. Vea instantáneamente el pronóstico de uso de un repuesto para ver cuántos se pueden usar durante el próximo año.',
   'part.checks.7':
     'Búsqueda a través de códigos de barra. Haga que su inventario sea fácil de rastrear y acceder con códigos QR personalizados',
-
   'dashboard.title':
     'Tus datos a tu manera, gracias a la implementación de tableros presonalizados',
   'dashboard.descriptions.0':
@@ -157,7 +151,6 @@ const esJSON = {
     'Atlas hace que sea increíblemente fácil para los técnicos trabajar de manera eficiente al brindarles acceso a las herramientas y los datos que necesitan para realizar el trabajo, todo desde la palma de su mano.',
   leading_maintenance:
     'Liderando el camino hacia un futuro mejor para el mantenimiento y la confiabilidad',
-  //register
   premium_included: 'Funciones premium incluidas',
   no_credit_card: 'No se requiere tarjeta de crédito',
   perfect_tool: 'La herramienta perfecta para los equipos de mantenimiento',
@@ -191,13 +184,11 @@ const esJSON = {
   terms_conditions: 'términos y condiciones',
   create_your_account: 'Crear cuenta',
   register: 'Registrarse',
-  //signin
   login_description: 'Fill in the fields below to sign into your account.',
   no_account_yet: 'Don’t have an account, yet?',
   signup_here: 'Sign up here',
   wrong_credentials: 'Los datos proporcionados son incorrectos',
   lost_password: '¿Olvido su contraseña?',
-  //work-orders
   link_wo: 'Vincular órdenes de trabajo',
   link_wo_description: 'Crear relaciones entre Órdenes de Trabajo',
   required_relationType: 'Por favor seleccione el tipo de relación.',
@@ -334,7 +325,6 @@ const esJSON = {
   cancel: 'Cancelar',
   select_parts: 'Seleccionar repuesto',
   sets_of_parts: 'Conjunto de repuestos',
-  //preventive maintenance
   paused: 'Pausado',
   trigger_details: 'Detalles del origen',
   starts_on: 'Comienza el',
@@ -376,7 +366,6 @@ const esJSON = {
   no_access_pm:
     'No tienes acceso a la sección de Mantenimiento Preventivo. Comuníquese con su administrador si necesita tener acceso',
   enter_wo_title: 'Ingrese el título de la Orden de Trabajo',
-  //menuItems
   status_report: 'Informe de estado',
   wo_analysis: 'Análisis de Orden de Trabajo',
   wo_aging: 'Antigüedad de la Orden de Trabajo',
@@ -397,7 +386,6 @@ const esJSON = {
   vendors: 'Proveedores',
   categories: 'Categorías',
   settings: 'Ajustes',
-  //request
   cancelled: 'Cancelada',
   reject: 'Rechazada',
   approve: 'Aprobada',
@@ -427,7 +415,6 @@ const esJSON = {
   low_priority: 'Baja',
   medium_priority: 'Media',
   high_priority: 'Alta',
-  //asset
   downtimes: 'Tiempos de inactividad',
   confirm_delete_file_asset:
     '¿Está seguro de que desea eliminar este archivo de este activo',
@@ -498,7 +485,6 @@ const esJSON = {
   loading_assets: 'Cargando activo número {{name}} #{{id}}',
   no_content: 'Sin contenido',
   no_result_criteria: 'Ningún resultado coincide con sus criterios de búsqueda',
-  //location
   map_view: 'Vista del mapa',
   location_create_success: 'La ubicación ha sido cread exitosamente',
   location_create_failure: 'La ubicación no pudo ser creada',
@@ -536,7 +522,6 @@ const esJSON = {
   assigned_teams: 'Equipos asignados',
   assigned_customers: 'Contratistas asignados',
   assigned_vendors: 'Proveedores asignados',
-  //no_access
   no_access_location:
     'No tienes acceso a Ubicaciones. Comuníquese con su administrador si necesita tener acceso',
   no_access_vendors_customers:
@@ -566,7 +551,6 @@ const esJSON = {
   'noRows.location.message':
     'Las ubicaciones le permiten gestionar activos y trabajadores de forma más eficiente',
   'noRows.location.action': "Presione el botón '+' para crear una ubicación",
-  //inventory
   card_view: 'Vista de tarjetas',
   set_create_success: 'El conjunto ha sido creado exitosamente.',
   set_create_failure: 'El conjunto no pudo ser creado',
@@ -620,7 +604,6 @@ const esJSON = {
   no_wo_found: 'No se encontró ninguna orden de trabajo',
   workers: 'Trabajadores',
   Parts_and_Inventory: 'Partes e inventario',
-  //purchase order
   po_edit_failure: 'La orden de compra no se pudo editar',
   po_delete_success: 'TLa orden de compra ha sido borrada',
   po_delete_failure: 'La orden de compra no pudo ser borrada',
@@ -668,7 +651,6 @@ const esJSON = {
   APPROVED: 'Aprobada',
   PENDING: 'Pendiente',
   REJECTED: 'Rechazada',
-  //meter
   when_reading_is: 'Cuando la lectura del medidor sea',
   greater_than: 'Mayor a',
   lower_than: 'Menor a',
@@ -719,14 +701,12 @@ const esJSON = {
     'Las lecturas de medidores le brindan la capacidad de monitorear activos y activar nuevas órdenes de trabajo basadas en condiciones definidas.',
   'noRows.meter.action': "Presione el botón '+' para crear un medidor",
   meter: 'Medidor',
-  //upload
   drag_one_file: 'Arrastre un único archivo aquí',
   drag_many_files: 'Arrastre y suelte archivos aquí',
   drop_to_start: 'Suelte los archivos para comenzar la carga',
   invalid_files_type: 'No puedes subir estos tipos de archivos.',
   you_have_uploaded: 'Has subido',
   upload: 'Subido',
-  //vendors_customers
   Vendors_Customers: 'Proveedores y contratistas',
   customer_create_success: 'El contratista ha sido creado exitosamente',
   customer_create_failure: 'El contratista no pudo ser creado',
@@ -758,7 +738,6 @@ const esJSON = {
   go_back: 'Volver',
   confirm_delete_customer:
     'Está seguro de que desea eliminar este contratista?',
-  //vendor
   vendor_create_success: 'El proveedor ha sido creado exitosamente',
   vendor_create_failure: 'El proveedor no pudo ser creado',
   vendor_edit_failure: 'El proveedor no pudo ser editado',
@@ -775,7 +754,6 @@ const esJSON = {
     'Los proveedores son organizaciones que proporcionan activos o repuestos.',
   'noRows.vendor.action': "Presiona el botón '+' para crear un proveedor",
   vendor_type_description: 'ej. plomería, electricidad',
-  //people teams
   role: 'Rol',
   edit_user: 'Usuario editor',
   edit_user_description:
@@ -832,7 +810,6 @@ const esJSON = {
     'Los equipos le ayudan a gestionar grupos específicos de personas.',
   'noRows.team.action': "Presione el botón '+' para crear un equipo.",
   user_details: 'Detalles de usuario',
-  //files
   file_delete_success: 'El archivo ha sido eliminado exitosamente.',
   file_delete_failure: 'El archivo no pudo ser eliminado',
   uploaded_by: 'Subido por',
@@ -848,7 +825,6 @@ const esJSON = {
     'Actualice para usar archivos en sus Activos, Órdenes de Trabajo, Ubicaciones, etc.',
   parts_consumption: 'Consumo de repuestos',
   requests_analysis: 'Análisis de solicitudes',
-  //categories,
   category_create_success: 'La categoría ha sido creada exitosamente.',
   category_create_failure: 'La categoría no pudo ser creada',
   category_edit_failure: 'La categoría no pudo ser editada',
@@ -867,7 +843,6 @@ const esJSON = {
   no_category_message:
     'Parece que no tienes ninguna categoría {{categoryName}} aún.',
   acquisition_cost: 'Costo de adquisición',
-  //settings
   general_settings: 'Configuraciones generales',
   request_form_configuration: 'Ajustes del formulario de solicitud',
   roles: 'Roles',
@@ -938,14 +913,12 @@ const esJSON = {
   business_type: 'Tipo de negocio',
   general_asset_management: 'Gestión general de activos',
   physical_asset_management: 'Gestión de activos físicos',
-  //checklist
   checklist_delete_success: 'El Checklist ha sido borrado',
   checklist_delete_failure: 'El Checklist no pudo ser borrado',
   create_checklist: 'Crear Checklist',
   confirm_delete_checklist:
     '¿Está seguro de que desea eliminar este Checklist?',
   upgrade_checklist: 'Por favor actualice para usar Checklists',
-  //components
   upgrade_now: 'Actualice ahora',
   total: 'Total',
   sub_task_status: 'Estado de la subtarea',
@@ -975,7 +948,6 @@ const esJSON = {
   select_date: 'Seleccionar fecha',
   task: 'Tarea',
   checklist: 'Checklist',
-  //analytics
   upgrade_analytics: 'Actualice para ver las mediciones',
   grouped_by_category: 'Agrupados por categoría',
   downtime_by_asset: 'Tiempo de inactividad por activo',
@@ -1045,7 +1017,6 @@ const esJSON = {
   total_purchase_price: 'Precio total de compra',
   you_have: 'Tienes',
   new_messages: 'nuevos mensajes',
-  //company profile
   company: 'Empresa',
   change_cover: 'Cambiar portada',
   required_address: 'La dirección es obligatoria',
@@ -1053,7 +1024,6 @@ const esJSON = {
   company_details_description:
     'Gestionar información relacionada con su empresa',
   learn_more: 'Aprenda más',
-  //user profile
   profile: 'Perfil',
   email_notifications: 'Notificaciones por correo electrónico',
   email_updates_wo:
@@ -1087,7 +1057,6 @@ const esJSON = {
   you_are_using_plan:
     'Actualmente estás utilizando el plan {{planName}}. Caducará el {{expiration}}. Actualice ahora para obtener acceso a más funciones.',
   upgrade_plan: 'Actualizar plan',
-  //subscription
   plans: 'Planes',
   monthly: 'Mensual',
   annually: 'Anual',
@@ -1442,7 +1411,58 @@ const esJSON = {
   BUSINESS_description:
     'Organizaciones listas para capturar datos de mantenimiento y operaciones para administrar múltiples ubicaciones y personalizar el sistema.',
   book_demo: 'Solicitar una demo',
-  request_pricing: 'Solicite más información'
+  request_pricing: 'Solicite más información',
+  missing: {
+    Reports: 'Informes',
+    'Custom dashboard built using the included components':
+      'Tablero personalizado construido usando los componentes incluidos',
+    Export: 'Exportar',
+    'Last year': 'El año pasado',
+    Expenses: 'Gastos',
+    Statistics: 'Estadística',
+    General: 'General',
+    Calendar: 'Calendario',
+    Mailbox: 'Buzones',
+    Dashboards: 'Paneles',
+    Analytics: 'Analítico',
+    Monitoring: 'Escucha',
+    Tasks: 'Tareas',
+    Applications: 'Aplicaciones',
+    Users: 'Usuarios',
+    'List All': 'Todo',
+    'User Profile': 'Perfil de usuario',
+    Login: 'Conectar',
+    Register: 'Registro',
+    'Recover Password': 'Recuperar contraseña',
+    Status: 'Estado',
+    'Error 404': 'Error 404',
+    'Error 500': 'Error 500',
+    'Coming Soon': 'Futuro',
+    Maintenance: 'Mantenimiento',
+    Overview: 'Avance',
+    Documentation: 'Documentación',
+    Welcome: 'Bienvenido',
+    Help: 'Ayuda',
+    'Features tour': 'Visita de características',
+    'Getting started guide': 'Guía de inicio',
+    'Contact support': 'Póngase en contacto con el soporte',
+    Version: 'Versión',
+    Search: 'Buscar',
+    Notifications: 'Notificaciones',
+    Settings: 'Parámetros',
+    'Language Switcher': 'Selector de idiomas',
+    'Sign out': 'Desconexión',
+    'Change Theme': 'Cambiar el tema',
+    'View all notifications': 'Mostrar todas las notificaciones',
+    dashboards: 'paneles',
+    applications: 'aplicaciones',
+    'management sections': 'Secciones de gestión',
+    'dark/light themes': 'Temas oscuros / claros',
+    components: 'componentes',
+    rate: 'Frecuencia',
+    select_at_least_column: 'Hacer una coincidencia de columna al menos',
+    already_read: 'Encuesta'
+  }
 };
 
 export default esJSON;
