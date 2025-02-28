@@ -2,6 +2,7 @@ package com.grash.controller;
 
 import com.grash.dto.SuccessResponse;
 import com.grash.exception.CustomException;
+import com.grash.factory.StorageServiceFactory;
 import com.grash.model.OwnUser;
 import com.grash.model.enums.PermissionEntity;
 import com.grash.service.*;
@@ -38,7 +39,7 @@ public class ExportController {
     private final PartService partService;
     private final WorkOrderService workOrderService;
     private final CsvFileGenerator csvFileGenerator;
-    private final GCPService gcp;
+    private final StorageServiceFactory storageServiceFactory;
 
     @GetMapping("/work-orders")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
@@ -48,11 +49,14 @@ public class ExportController {
         if (user.getRole().getViewOtherPermissions().contains(PermissionEntity.WORK_ORDERS)) {
             ByteArrayOutputStream target = new ByteArrayOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(target, StandardCharsets.UTF_8);
-            csvFileGenerator.writeWorkOrdersToCsv(workOrderService.findByCompany(user.getCompany().getId()), outputStreamWriter, Helper.getLocale(user));
+            csvFileGenerator.writeWorkOrdersToCsv(workOrderService.findByCompany(user.getCompany().getId()),
+                    outputStreamWriter, Helper.getLocale(user));
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Work Orders.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, gcp.upload(file, user.getCompany().getId() + "/exports/work-orders")));
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                            user.getCompany().getId() + "/exports" +
+                            "/work-orders")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -64,11 +68,14 @@ public class ExportController {
         if (user.getRole().getViewOtherPermissions().contains(PermissionEntity.ASSETS)) {
             ByteArrayOutputStream target = new ByteArrayOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(target, StandardCharsets.UTF_8);
-            csvFileGenerator.writeAssetsToCsv(assetService.findByCompany(user.getCompany().getId()), outputStreamWriter, Helper.getLocale(user));
+            csvFileGenerator.writeAssetsToCsv(assetService.findByCompany(user.getCompany().getId()),
+                    outputStreamWriter, Helper.getLocale(user));
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Assets.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, gcp.upload(file, user.getCompany().getId() + "/exports/assets")));
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                            user.getCompany().getId() + "/exports" +
+                            "/assets")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -80,11 +87,14 @@ public class ExportController {
         if (user.getRole().getViewOtherPermissions().contains(PermissionEntity.LOCATIONS)) {
             ByteArrayOutputStream target = new ByteArrayOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(target, StandardCharsets.UTF_8);
-            csvFileGenerator.writeLocationsToCsv(locationService.findByCompany(user.getCompany().getId()), outputStreamWriter, Helper.getLocale(user));
+            csvFileGenerator.writeLocationsToCsv(locationService.findByCompany(user.getCompany().getId()),
+                    outputStreamWriter, Helper.getLocale(user));
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Locations.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, gcp.upload(file, user.getCompany().getId() + "/exports/locations")));
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                            user.getCompany().getId() + "/exports" +
+                            "/locations")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -96,11 +106,14 @@ public class ExportController {
         if (user.getRole().getViewOtherPermissions().contains(PermissionEntity.PARTS_AND_MULTIPARTS)) {
             ByteArrayOutputStream target = new ByteArrayOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(target, StandardCharsets.UTF_8);
-            csvFileGenerator.writePartsToCsv(partService.findByCompany(user.getCompany().getId()), outputStreamWriter, Helper.getLocale(user));
+            csvFileGenerator.writePartsToCsv(partService.findByCompany(user.getCompany().getId()), outputStreamWriter
+                    , Helper.getLocale(user));
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Parts.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, gcp.upload(file, user.getCompany().getId() + "/exports/parts")));
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                            user.getCompany().getId() + "/exports" +
+                            "/parts")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -112,11 +125,14 @@ public class ExportController {
         if (user.getRole().getViewOtherPermissions().contains(PermissionEntity.METERS)) {
             ByteArrayOutputStream target = new ByteArrayOutputStream();
             OutputStreamWriter outputStreamWriter = new OutputStreamWriter(target, StandardCharsets.UTF_8);
-            csvFileGenerator.writeMetersToCsv(meterService.findByCompany(user.getCompany().getId()), outputStreamWriter, Helper.getLocale(user));
+            csvFileGenerator.writeMetersToCsv(meterService.findByCompany(user.getCompany().getId()),
+                    outputStreamWriter, Helper.getLocale(user));
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Meters.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, gcp.upload(file, user.getCompany().getId() + "/exports/meters")));
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                            user.getCompany().getId() + "/exports" +
+                            "/meters")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 }

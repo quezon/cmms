@@ -34,6 +34,12 @@ services:
       SMTP_USER: ${SMTP_USER}
       SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE}
       JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_BUCKET: atlas-bucket
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio123
+      STORAGE_TYPE: ${STORAGE_TYPE:-minio} #gpc|minio
+      MINIO_PUBLIC_ENDPOINT: http://localhost:9000
     ports:
       - "8080:8080"
   frontend:
@@ -50,7 +56,19 @@ services:
       - "3000:3000"
     depends_on:
       - api
-
+  minio:
+    image: minio/minio
+    container_name: atlas_minio
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    volumes:
+      - minio_data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data
+    restart: always
 volumes:
   postgres_data:
-
+  minio_data:

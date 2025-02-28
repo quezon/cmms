@@ -5,12 +5,12 @@ import com.grash.advancedsearch.FilterField;
 import com.grash.advancedsearch.SearchCriteria;
 import com.grash.dto.SuccessResponse;
 import com.grash.exception.CustomException;
+import com.grash.factory.StorageServiceFactory;
 import com.grash.model.File;
 import com.grash.model.OwnUser;
 import com.grash.model.Task;
 import com.grash.model.enums.*;
 import com.grash.service.FileService;
-import com.grash.service.GCPService;
 import com.grash.service.TaskService;
 import com.grash.service.UserService;
 import io.swagger.annotations.Api;
@@ -38,20 +38,23 @@ import java.util.Optional;
 @RequestMapping("/files")
 @RequiredArgsConstructor
 public class FileController {
-    private final GCPService gcpService;
+    private final StorageServiceFactory storageServiceFactory;
     private final FileService fileService;
     private final UserService userService;
     private final TaskService taskService;
 
     @PostMapping(value = "/upload", produces = "application/json")
-    public Collection<File> handleFileUpload(@RequestParam("files") MultipartFile[] filesReq, @RequestParam("folder") String folder, @RequestParam("hidden") String hidden, HttpServletRequest req, @RequestParam("type") FileType fileType,
+    public Collection<File> handleFileUpload(@RequestParam("files") MultipartFile[] filesReq,
+                                             @RequestParam("folder") String folder,
+                                             @RequestParam("hidden") String hidden, HttpServletRequest req,
+                                             @RequestParam("type") FileType fileType,
                                              @RequestParam(value = "taskId", required = false) Integer taskId) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getCreatePermissions().contains(PermissionEntity.FILES) &&
                 user.getCompany().getSubscription().getSubscriptionPlan().getFeatures().contains(PlanFeatures.FILE)) {
             Collection<File> result = new ArrayList<>();
             Arrays.asList(filesReq).forEach(fileReq -> {
-                String url = gcpService.upload(fileReq, folder);
+                String url = storageServiceFactory.getStorageService().upload(fileReq, folder);
                 Task task = null;
                 if (taskId != null) {
                     Optional<Task> optionalTask = taskService.findById(taskId.longValue());
@@ -59,7 +62,8 @@ public class FileController {
                         task = optionalTask.get();
                     }
                 }
-                result.add(fileService.create(new File(fileReq.getOriginalFilename(), url, fileType, task, hidden.equals("true"))));
+                result.add(fileService.create(new File(fileReq.getOriginalFilename(), url, fileType, task,
+                        hidden.equals("true"))));
             });
             return result;
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
@@ -147,11 +151,11 @@ public class FileController {
 
     @GetMapping("/download/tos")
     public byte[] downloadTOS() {
-        return gcpService.download("terms and privacy/Atlas CMMS Terms of service.pdf");
+        return storageServiceFactory.getStorageService().download("terms and privacy/Atlas CMMS Terms of service.pdf");
     }
 
     @GetMapping("/download/privacy-policy")
     public byte[] downloadPrivacyPolicy() {
-        return gcpService.download("terms and privacy/Atlas CMMS privacy policy.pdf");
+        return storageServiceFactory.getStorageService().download("terms and privacy/Atlas CMMS privacy policy.pdf");
     }
 }

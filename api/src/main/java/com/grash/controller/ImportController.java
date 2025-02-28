@@ -2,6 +2,7 @@ package com.grash.controller;
 
 import com.grash.dto.imports.*;
 import com.grash.exception.CustomException;
+import com.grash.factory.StorageServiceFactory;
 import com.grash.model.*;
 import com.grash.model.enums.ImportEntity;
 import com.grash.model.enums.Language;
@@ -30,7 +31,7 @@ public class ImportController {
 
     private final AssetService assetService;
     private final UserService userService;
-    private final GCPService gcpService;
+    private final StorageServiceFactory storageServiceFactory;
     private final LocationService locationService;
     private final PartService partService;
     private final MeterService meterService;
@@ -38,7 +39,8 @@ public class ImportController {
 
     @PostMapping("/work-orders")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ImportResponse importWorkOrders(@Valid @RequestBody List<WorkOrderImportDTO> toImport, HttpServletRequest req) {
+    public ImportResponse importWorkOrders(@Valid @RequestBody List<WorkOrderImportDTO> toImport,
+                                           HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         final int[] created = {0};
         final int[] updated = {0};
@@ -50,7 +52,8 @@ public class ImportController {
                 if (id == null) {
                     created[0] = created[0] + 1;
                 } else {
-                    Optional<WorkOrder> optionalWorkOrder = workOrderService.findByIdAndCompany(id, user.getCompany().getId());
+                    Optional<WorkOrder> optionalWorkOrder = workOrderService.findByIdAndCompany(id,
+                            user.getCompany().getId());
                     if (optionalWorkOrder.isPresent()) {
                         workOrder = optionalWorkOrder.get();
                         updated[0] = updated[0] + 1;
@@ -96,7 +99,8 @@ public class ImportController {
 
     @PostMapping("/locations")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ImportResponse importLocations(@Valid @RequestBody List<LocationImportDTO> toImport, HttpServletRequest req) {
+    public ImportResponse importLocations(@Valid @RequestBody List<LocationImportDTO> toImport,
+                                          HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         final int[] created = {0};
         final int[] updated = {0};
@@ -108,7 +112,8 @@ public class ImportController {
                 if (id == null) {
                     created[0] = created[0] + 1;
                 } else {
-                    Optional<Location> optionalLocation = locationService.findByIdAndCompany(id, user.getCompany().getId());
+                    Optional<Location> optionalLocation = locationService.findByIdAndCompany(id,
+                            user.getCompany().getId());
                     if (optionalLocation.isPresent()) {
                         location = optionalLocation.get();
                         updated[0] = updated[0] + 1;
@@ -182,8 +187,9 @@ public class ImportController {
 
     @GetMapping("/download-template")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public byte[] importMeters(@RequestParam Language language, @RequestParam ImportEntity importEntity, HttpServletRequest req) {
+    public byte[] importMeters(@RequestParam Language language, @RequestParam ImportEntity importEntity,
+                               HttpServletRequest req) {
 //        OwnUser user = userService.whoami(req);
-        return gcpService.download("import templates/" + language.name().toLowerCase() + "/" + importEntity.name().toLowerCase() + ".csv");
+        return storageServiceFactory.getStorageService().download("import templates/" + language.name().toLowerCase() + "/" + importEntity.name().toLowerCase() + ".csv");
     }
 }

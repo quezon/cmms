@@ -77,25 +77,30 @@ cd cmms
 Configure the environment variables in this file [.env](.env)
 At the moment all variables are optional. Do not delete the .env file
 
-| Name                         | Required | Description                                                                                                                                                                                                      | Default Value          |
-|------------------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
+| Name                         | Required | Description                                                                                                                                                                                                         | Default Value          |
+|------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------|
 | SMTP_PWD                     | No       | The SMTP password after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en). To be able to invite people you have to configure it. | (empty)                |
-| SMTP_USER                    | No       | The SMTP username after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en)                                                     | (empty)                |
-| JWT_SECRET_KEY               | No       | JWT secret key                                                                                                                                                                                                   | your_jwt_secret        |
-| REACT_APP_GOOGLE_KEY         | No       | Google Maps API key                                                                                                                                                                                              | (empty)                |
-| REACT_APP_GOOGLE_TRACKING_ID | No       | Google Analytics tracking ID                                                                                                                                                                                     | (empty)                |
-| FASTSPRING_PWD               | No       | FastSpring password. Fastspring is a payment gateway                                                                                                                                                             | (empty)                |
-| FASTSPRING_USER              | No       | FastSpring username                                                                                                                                                                                              | (empty)                |
-| FRONT_URL                    | No       | Frontend URL in this format `http://your.public.ip:3000`                                                                                                                                                         | http://localhost:3000  |
-| REACT_APP_API_URL            | No       | Backend API URL in this format `http://your.public.ip:8080/`. Notice the slash at the end.                                                                                                                       | http://localhost:8080/ |
-| SPRING_PROFILES_ACTIVE       | No       | Active Spring profile(s)                                                                                                                                                                                         | (empty)                |
-| GCP_JSON                     | No       | The Google Cloud JSON key after following [these instructions](./GCP-setup.md).                                                                                                                                  | (empty)                |
-| GCP_PROJECT_ID               | No       | The Google Cloud project ID, also found in the `GCP_JSON` file.                                                                                                                                                  | (empty)                |
-| GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                                                                                  | (empty)                |
-| MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                       | (empty)                |
-| REACT_APP_MUI_X_LICENSE      | No       | Mui license key                                                                                                                                                                                                  | (empty)                |
+| SMTP_USER                    | No       | The SMTP username after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en)                                                        | (empty)                |
+| JWT_SECRET_KEY               | No       | JWT secret key                                                                                                                                                                                                      | your_jwt_secret        |
+| REACT_APP_GOOGLE_KEY         | No       | Google Maps API key                                                                                                                                                                                                 | (empty)                |
+| REACT_APP_GOOGLE_TRACKING_ID | No       | Google Analytics tracking ID                                                                                                                                                                                        | (empty)                |
+| FASTSPRING_PWD               | No       | FastSpring password. Fastspring is a payment gateway                                                                                                                                                                | (empty)                |
+| FASTSPRING_USER              | No       | FastSpring username                                                                                                                                                                                                 | (empty)                |
+| FRONT_URL                    | No       | Frontend URL in this format `http://your.public.ip:3000`                                                                                                                                                            | http://localhost:3000  |
+| REACT_APP_API_URL            | No       | Public API URL in this format `http://your.public.ip:8080/`. Notice the slash at the end.                                                                                                                           | http://localhost:8080/ |
+| SPRING_PROFILES_ACTIVE       | No       | Active Spring profile(s)                                                                                                                                                                                            | (empty)                |
+| STORAGE_TYPE                 | No       | Type of storage either local MinIO or Google Cloud Storage `GCP` or `MINIO`                                                                                                                                         | MINIO                  |
+| MINIO_PUBLIC_ENDPOINT        | No       | Public Mini endpoint in format `http://public.ip:9000`                                                                                                                                                              | http://localhost:9000  |
+| GCP_JSON                     | No       | The Google Cloud JSON key after following [these instructions](./GCP-setup.md).                                                                                                                                     | (empty)                |
+| GCP_PROJECT_ID               | No       | The Google Cloud project ID, also found in the `GCP_JSON` file.                                                                                                                                                     | (empty)                |
+| GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                                                                                     | (empty)                |
+| MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)                |
+| REACT_APP_MUI_X_LICENSE      | No       | Mui license key                                                                                                                                                                                                     | (empty)                |
 
 After changing any env variable starting with `REACT_APP_` you should run  `docker compose up -d --no-deps --build`
+
+### Open ports if necessary
+If you are using a remote server, make sure to open `REACT_APP_API_URL`, `FRONT_URL` ports numbers by default 8080, and 3000. Same for `MINIO_PUBLIC_ENDPOINT` port 9000 if you use Minio.
 
 ### Run
 
@@ -103,7 +108,7 @@ After changing any env variable starting with `REACT_APP_` you should run  `dock
 docker-compose up -d
 ```
 
-Now, go to http://localhost:3000
+Now, go to http://localhost:3000 or your custom `FRONT_URL`
 
 Celebrate on how easy this was
 

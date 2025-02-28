@@ -27,14 +27,14 @@ import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
-public class GCPService {
-    @Value("${gcp.value:#{null}}")
+public class GCPService implements StorageService {
+    @Value("${storage.gcp.value:#{null}}")
     private String gcpJson;
-    @Value("${gcp.json-path:#{null}}")
+    @Value("${storage.gcp.json-path:#{null}}")
     private String gcpJsonPath;
-    @Value("${gcp.project-id}")
+    @Value("${storage.gcp.project-id}")
     private String gcpProjectId;
-    @Value("${gcp.bucket-name}")
+    @Value("${storage.gcp.bucket-name}")
     private String gcpBucketName;
     private Storage storage;
     private static boolean configured = false;
