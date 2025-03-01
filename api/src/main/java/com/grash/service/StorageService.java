@@ -28,4 +28,6 @@ public interface StorageService {
      * @return A byte array of the file content.
      */
     byte[] download(File file);
+
+    String generateSignedUrl(File file, long expirationMinutes);
 }

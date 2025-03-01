@@ -84,7 +84,7 @@ management:
     mail:
       enabled: true
 api:
-  host: ${API_HOST}
+  host: ${PUBLIC_API_URL}
 storage:
   type: ${STORAGE_TYPE}
   minio:

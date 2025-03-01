@@ -3,9 +3,11 @@ package com.grash.controller;
 
 import com.grash.advancedsearch.FilterField;
 import com.grash.advancedsearch.SearchCriteria;
+import com.grash.dto.FileShowDTO;
 import com.grash.dto.SuccessResponse;
 import com.grash.exception.CustomException;
 import com.grash.factory.StorageServiceFactory;
+import com.grash.mapper.FileMapper;
 import com.grash.model.File;
 import com.grash.model.OwnUser;
 import com.grash.model.Task;
@@ -27,10 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -42,19 +42,20 @@ public class FileController {
     private final FileService fileService;
     private final UserService userService;
     private final TaskService taskService;
+    private final FileMapper fileMapper;
 
     @PostMapping(value = "/upload", produces = "application/json")
-    public Collection<File> handleFileUpload(@RequestParam("files") MultipartFile[] filesReq,
-                                             @RequestParam("folder") String folder,
-                                             @RequestParam("hidden") String hidden, HttpServletRequest req,
-                                             @RequestParam("type") FileType fileType,
-                                             @RequestParam(value = "taskId", required = false) Integer taskId) {
+    public List<FileShowDTO> handleFileUpload(@RequestParam("files") MultipartFile[] filesReq,
+                                              @RequestParam("folder") String folder,
+                                              @RequestParam("hidden") String hidden, HttpServletRequest req,
+                                              @RequestParam("type") FileType fileType,
+                                              @RequestParam(value = "taskId", required = false) Integer taskId) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getCreatePermissions().contains(PermissionEntity.FILES) &&
                 user.getCompany().getSubscription().getSubscriptionPlan().getFeatures().contains(PlanFeatures.FILE)) {
             Collection<File> result = new ArrayList<>();
             Arrays.asList(filesReq).forEach(fileReq -> {
-                String url = storageServiceFactory.getStorageService().upload(fileReq, folder);
+                String filePath = storageServiceFactory.getStorageService().upload(fileReq, folder);
                 Task task = null;
                 if (taskId != null) {
                     Optional<Task> optionalTask = taskService.findById(taskId.longValue());
@@ -62,10 +63,10 @@ public class FileController {
                         task = optionalTask.get();
                     }
                 }
-                result.add(fileService.create(new File(fileReq.getOriginalFilename(), url, fileType, task,
+                result.add(fileService.create(new File(fileReq.getOriginalFilename(), filePath, fileType, task,
                         hidden.equals("true"))));
             });
-            return result;
+            return result.stream().map(fileMapper::toShowDto).collect(Collectors.toList());
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 

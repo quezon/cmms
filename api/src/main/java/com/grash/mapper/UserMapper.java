@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.Mappings;
 
-@Mapper(componentModel = "spring", uses = {SuperAccountRelationMapper.class})
+@Mapper(componentModel = "spring", uses = {SuperAccountRelationMapper.class, FileMapper.class})
 public interface UserMapper {
     OwnUser updateUser(@MappingTarget OwnUser entity, UserPatchDTO dto);
 

@@ -18,14 +18,15 @@ services:
     container_name: atlas_api
     depends_on:
       - postgres
+      - mc
     environment:
       DB_URL: postgres/atlas
       DB_USER: rootUser
       DB_PWD: mypassword
-      API_HOST: ${API_HOST:-http://localhost:8080}
+      PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:8080}
       FASTSPRING_PWD: ${FASTSPRING_PWD}
       FASTSPRING_USER: ${FASTSPRING_USER}
-      FRONT_URL: ${FRONT_URL}
+      PUBLIC_FRONT_URL: ${PUBLIC_FRONT_URL}
       GCP_BUCKET_NAME: ${GCP_BUCKET_NAME}
       GCP_JSON: ${GCP_JSON}
       GCP_PROJECT_ID: ${GCP_PROJECT_ID}
@@ -39,14 +40,14 @@ services:
       MINIO_ACCESS_KEY: minio
       MINIO_SECRET_KEY: minio123
       STORAGE_TYPE: ${STORAGE_TYPE:-minio} #gpc|minio
-      MINIO_PUBLIC_ENDPOINT: http://localhost:9000
+      MINIO_PUBLIC_ENDPOINT: ${MINIO_PUBLIC_ENDPOINT:-http://localhost:9000}
     ports:
       - "8080:8080"
   frontend:
     build:
       context: frontend
       args:
-        REACT_APP_API_URL: ${REACT_APP_API_URL:-http://localhost:8080/}
+        REACT_APP_API_URL: ${PUBLIC_API_URL}
         REACT_APP_JWT_SECRET_KEY: ${JWT_SECRET_KEY}
         REACT_APP_GOOGLE_KEY: ${REACT_APP_GOOGLE_KEY}
         REACT_APP_GOOGLE_TRACKING_ID: ${REACT_APP_GOOGLE_TRACKING_ID}
@@ -62,6 +63,8 @@ services:
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio123
+#      MINIO_SERVER_URL: http://minio:9000
+#      MINIO_BROWSER_REDIRECT_URL: ${MINIO_PUBLIC_ENDPOINT:-http://localhost:9000}
     volumes:
       - minio_data:/data
     ports:
@@ -69,6 +72,25 @@ services:
       - "9001:9001"
     command: server /data
     restart: always
+  mc:
+    image: minio/mc
+    container_name: atlas_mc
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      echo 'Waiting for MinIO to be ready...';
+      until mc alias set myminio http://minio:9000 minio minio123; do
+        echo 'Retrying...';
+        sleep 2;
+      done;
+      echo 'MinIO is up!';
+      mc mb --ignore-existing myminio/atlas-bucket;
+      mc anonymous set public myminio/atlas-bucket;
+      sleep infinity"
+    restart: "no"
+
+
 volumes:
   postgres_data:
   minio_data:
