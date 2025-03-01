@@ -1,14 +1,17 @@
 package com.grash.mapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import com.grash.dto.FileMiniDTO;
-import com.grash.dto.FileShowDTO;
 import com.grash.dto.FileShowDTO;
 import com.grash.factory.StorageServiceFactory;
 import com.grash.model.File;
-import com.grash.model.File;
-import com.grash.service.GCPService;
-import com.grash.service.FileService;
-import org.mapstruct.*;
+import com.grash.service.StorageService;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 
@@ -26,7 +29,18 @@ public abstract class FileMapper {
 
     @AfterMapping
     protected FileShowDTO toShowDto(File model, @MappingTarget FileShowDTO target) {
-        target.setUrl(storageServiceFactory.getStorageService().generateSignedUrl(model, 60 * 3));
+        target.setUrl(getSignedUrl(model));
         return target;
+    }
+
+    @AfterMapping
+    protected FileMiniDTO toMiniDto(File model, @MappingTarget FileMiniDTO target) {
+        target.setUrl(getSignedUrl(model));
+        return target;
+    }
+
+    private String getSignedUrl(File file) {
+        StorageService storageService = storageServiceFactory.getStorageService();
+        return storageService.generateSignedUrl(file, 60 * 3);
     }
 }
