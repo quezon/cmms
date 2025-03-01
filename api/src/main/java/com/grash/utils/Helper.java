@@ -18,6 +18,10 @@ import org.springframework.http.ResponseEntity;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -35,7 +39,8 @@ public class Helper {
 
     public HttpHeaders getPagingHeaders(Page<?> page, int size, String name) {
         HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Content-Range", name + (page.getNumber() - 1) * size + "-" + page.getNumber() * size + "/" + page.getTotalElements());
+        responseHeaders.set("Content-Range", name + (page.getNumber() - 1) * size + "-" + page.getNumber() * size +
+                "/" + page.getTotalElements());
         responseHeaders.set("Access-Control-Expose-Headers", "Content-Range");
         return responseHeaders;
     }
@@ -73,7 +78,8 @@ public class Helper {
 
     public static Date getNextOccurence(Date date, int days) {
         if (days == 0)
-            throw new CustomException("getNextOccurence should not have 0 as parameter", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new CustomException("getNextOccurence should not have 0 as parameter",
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         Date result = date;
         if (result.after(new Date())) {
             result = incrementDays(result, days);
@@ -222,11 +228,16 @@ public class Helper {
                         .code(RoleCode.TECHNICIAN)
                         .name("Technician")
                         .paid(true)
-                        .createPermissions(new HashSet<>(Arrays.asList(PermissionEntity.WORK_ORDERS, PermissionEntity.ASSETS, PermissionEntity.LOCATIONS, PermissionEntity.FILES)))
+                        .createPermissions(new HashSet<>(Arrays.asList(PermissionEntity.WORK_ORDERS,
+                                PermissionEntity.ASSETS, PermissionEntity.LOCATIONS, PermissionEntity.FILES)))
                         .editOtherPermissions(new HashSet<>())
                         .deleteOtherPermissions(new HashSet<>())
-                        .viewOtherPermissions(new HashSet<>(Arrays.asList(PermissionEntity.WORK_ORDERS, PermissionEntity.PARTS_AND_MULTIPARTS, PermissionEntity.LOCATIONS, PermissionEntity.ASSETS)))
-                        .viewPermissions(new HashSet<>(Arrays.asList(PermissionEntity.WORK_ORDERS, PermissionEntity.LOCATIONS, PermissionEntity.ASSETS, PermissionEntity.CATEGORIES, PermissionEntity.PREVENTIVE_MAINTENANCES, PermissionEntity.METERS)))
+                        .viewOtherPermissions(new HashSet<>(Arrays.asList(PermissionEntity.WORK_ORDERS,
+                                PermissionEntity.PARTS_AND_MULTIPARTS, PermissionEntity.LOCATIONS,
+                                PermissionEntity.ASSETS)))
+                        .viewPermissions(new HashSet<>(Arrays.asList(PermissionEntity.WORK_ORDERS,
+                                PermissionEntity.LOCATIONS, PermissionEntity.ASSETS, PermissionEntity.CATEGORIES,
+                                PermissionEntity.PREVENTIVE_MAINTENANCES, PermissionEntity.METERS)))
                         .build(),
                 Role.builder()
                         .roleType(RoleType.ROLE_CLIENT)
@@ -236,8 +247,12 @@ public class Helper {
                         .createPermissions(new HashSet<>(Arrays.asList(PermissionEntity.FILES)))
                         .editOtherPermissions(new HashSet<>())
                         .deleteOtherPermissions(new HashSet<>())
-                        .viewOtherPermissions(new HashSet<>(Arrays.asList(PermissionEntity.ASSETS, PermissionEntity.PARTS_AND_MULTIPARTS, PermissionEntity.LOCATIONS)))
-                        .viewPermissions(new HashSet<>(Arrays.asList(PermissionEntity.WORK_ORDERS, PermissionEntity.CATEGORIES, PermissionEntity.PARTS_AND_MULTIPARTS, PermissionEntity.LOCATIONS, PermissionEntity.ASSETS, PermissionEntity.PREVENTIVE_MAINTENANCES, PermissionEntity.METERS)))
+                        .viewOtherPermissions(new HashSet<>(Arrays.asList(PermissionEntity.ASSETS,
+                                PermissionEntity.PARTS_AND_MULTIPARTS, PermissionEntity.LOCATIONS)))
+                        .viewPermissions(new HashSet<>(Arrays.asList(PermissionEntity.WORK_ORDERS,
+                                PermissionEntity.CATEGORIES, PermissionEntity.PARTS_AND_MULTIPARTS,
+                                PermissionEntity.LOCATIONS, PermissionEntity.ASSETS,
+                                PermissionEntity.PREVENTIVE_MAINTENANCES, PermissionEntity.METERS)))
                         .build(),
                 Role.builder()
                         .roleType(RoleType.ROLE_CLIENT)
@@ -255,13 +270,35 @@ public class Helper {
                         .code(RoleCode.REQUESTER)
                         .name("Requester")
                         .paid(false)
-                        .createPermissions(new HashSet<>(Arrays.asList(PermissionEntity.REQUESTS, PermissionEntity.FILES)))
+                        .createPermissions(new HashSet<>(Arrays.asList(PermissionEntity.REQUESTS,
+                                PermissionEntity.FILES)))
                         .editOtherPermissions(new HashSet<>())
                         .deleteOtherPermissions(new HashSet<>())
                         .viewOtherPermissions(new HashSet<>())
-                        .viewPermissions(new HashSet<>(Arrays.asList(PermissionEntity.REQUESTS, PermissionEntity.CATEGORIES)))
+                        .viewPermissions(new HashSet<>(Arrays.asList(PermissionEntity.REQUESTS,
+                                PermissionEntity.CATEGORIES)))
                         .build()
         );
+    }
+
+    public static boolean isLocalhost(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            String host = url.getHost();
+
+            // Check for common localhost values
+            if ("localhost".equalsIgnoreCase(host) || "127.0.0.1".equals(host) || "::1".equals(host)) {
+                return true;
+            }
+
+            // Resolve hostname to IP address and check if it's a local address
+            InetAddress address = InetAddress.getByName(host);
+            return address.isLoopbackAddress();
+
+        } catch (MalformedURLException | UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

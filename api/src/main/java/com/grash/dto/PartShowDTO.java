@@ -1,6 +1,6 @@
 package com.grash.dto;
 
-import com.grash.model.File;
+import com.grash.dto.FileShowDTO;
 import com.grash.model.PartCategory;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,11 +34,11 @@ public class PartShowDTO extends AuditShowDTO {
 
     private LocationMiniDTO location;
 
-    private File image;
+    private FileShowDTO image;
 
     private Collection<UserMiniDTO> assignedTo;
 
-    private Collection<File> files;
+    private Collection<FileShowDTO> files;
 
     private Collection<CustomerMiniDTO> customers;
 

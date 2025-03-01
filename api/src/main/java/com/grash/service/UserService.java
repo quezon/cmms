@@ -59,7 +59,7 @@ public class UserService {
     private final UserMapper userMapper;
 
     @Value("${api.host}")
-    private String API_HOST;
+    private String PUBLIC_API_URL;
     @Value("${frontend.url}")
     private String frontendUrl;
     @Value("${mail.recipients:#{null}")
@@ -117,7 +117,7 @@ public class UserService {
 
                 } else throw new CustomException("Role not found", HttpStatus.NOT_ACCEPTABLE);
             }
-            if (API_HOST.equals("http://localhost:8080")) {
+            if (Helper.isLocalhost(PUBLIC_API_URL)) {
                 user.setEnabled(true);
                 userRepository.save(user);
                 return new SuccessResponse(true, jwtTokenProvider.createToken(user.getEmail(),
@@ -125,7 +125,7 @@ public class UserService {
             } else {
                 if (userReq.getRole() == null) { //send mail
                     String token = UUID.randomUUID().toString();
-                    String link = API_HOST + "/auth/activate-account?token=" + token;
+                    String link = PUBLIC_API_URL + "/auth/activate-account?token=" + token;
                     Map<String, Object> variables = new HashMap<String, Object>() {{
                         put("verifyTokenLink", link);
                         put("featuresLink", frontendUrl + "/#key-features");
@@ -229,7 +229,7 @@ public class UserService {
                 put("company", inviter.getCompany().getName());
             }};
             emailService2.sendMessageUsingThymeleafTemplate(new String[]{email}, messageSource.getMessage(
-                    "invitation_to_use", null, Helper.getLocale(inviter)), variables, "invite.html",
+                            "invitation_to_use", null, Helper.getLocale(inviter)), variables, "invite.html",
                     Helper.getLocale(inviter));
         } else throw new CustomException("Email already in use", HttpStatus.NOT_ACCEPTABLE);
     }

@@ -3,8 +3,6 @@ package com.grash.service;
 import com.google.auth.Credentials;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.storage.*;
-import com.google.cloud.storage.Storage.BlobTargetOption;
-import com.google.cloud.storage.Storage.PredefinedAcl;
 import com.grash.exception.CustomException;
 import com.grash.model.File;
 import com.grash.utils.Helper;
@@ -16,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -27,14 +24,14 @@ import java.nio.file.Paths;
 
 @Service
 @RequiredArgsConstructor
-public class GCPService {
-    @Value("${gcp.value:#{null}}")
+public class GCPService implements StorageService {
+    @Value("${storage.gcp.value:#{null}}")
     private String gcpJson;
-    @Value("${gcp.json-path:#{null}}")
+    @Value("${storage.gcp.json-path:#{null}}")
     private String gcpJsonPath;
-    @Value("${gcp.project-id}")
+    @Value("${storage.gcp.project-id}")
     private String gcpProjectId;
-    @Value("${gcp.bucket-name}")
+    @Value("${storage.gcp.bucket-name}")
     private String gcpBucketName;
     private Storage storage;
     private static boolean configured = false;
@@ -65,13 +62,15 @@ public class GCPService {
         checkIfConfigured();
         Helper helper = new Helper();
         try {
+            String filePath = folder + "/" + helper.generateString() + " " + file.getOriginalFilename();
             BlobInfo blobInfo = storage.create(
-                    BlobInfo.newBuilder(gcpBucketName,
-                            folder + "/" + helper.generateString() + " " + file.getOriginalFilename()).build(), //get
+                    BlobInfo.newBuilder(gcpBucketName, filePath
+                    ).build(), //get
                     // original file name
-                    file.getBytes()// Set file permission
+                    file.getBytes(),
+                    Storage.BlobTargetOption.predefinedAcl(Storage.PredefinedAcl.PRIVATE)
             );
-            return blobInfo.getMediaLink(); // Return file url
+            return filePath;
         } catch (IllegalStateException | IOException e) {
             throw new CustomException(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
         }
@@ -93,15 +92,33 @@ public class GCPService {
 
     public byte[] download(File file) {
         checkIfConfigured();
-        URI uri = null;
-        try {
-            uri = new URI(file.getUrl());
-        } catch (URISyntaxException e) {
-            throw new CustomException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return download(file.getPath());
+    }
+
+    private Blob getBlob(File file) {
+        Blob blob = storage.get(BlobId.of(gcpBucketName, file.getPath()));
+
+        if (blob == null) {
+            throw new CustomException("File not found", HttpStatus.NOT_FOUND);
         }
-        String path = uri.getPath();
-        String filePath = "company " + file.getCompany().getId() + "/" + path.substring(path.lastIndexOf('/') + 1);
-        return download(filePath);
+        return blob;
+    }
+
+    public String generateSignedUrl(File file, long expirationMinutes) {
+        Blob blob = getBlob(file);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blob.getBlobId()).setContentType(blob.getContentType()).build();
+        return generateSignedUrl(blobInfo, expirationMinutes);
+    }
+
+    public String generateSignedUrl(BlobInfo blobInfo, long expirationMinutes) {
+        try {
+            return storage.signUrl(blobInfo, expirationMinutes, java.util.concurrent.TimeUnit.MINUTES,
+                            Storage.SignUrlOption.withV4Signature())
+                    .toString();
+        } catch (StorageException e) {
+            throw new CustomException("Error generating signed URL: " + e.getMessage(),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private void checkIfConfigured() {

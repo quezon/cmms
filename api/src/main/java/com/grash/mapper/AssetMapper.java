@@ -17,7 +17,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
-@Mapper(componentModel = "spring", uses = {CustomerMapper.class, VendorMapper.class, UserMapper.class, TeamMapper.class, FileMapper.class, PartMapper.class})
+@Mapper(componentModel = "spring", uses = {CustomerMapper.class, VendorMapper.class, UserMapper.class, TeamMapper.class, FileMapper.class, PartMapper.class, FileMapper.class})
 public interface AssetMapper {
     Asset updateAsset(@MappingTarget Asset entity, AssetPatchDTO dto);
 

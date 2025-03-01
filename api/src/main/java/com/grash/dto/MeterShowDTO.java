@@ -1,6 +1,6 @@
 package com.grash.dto;
 
-import com.grash.model.File;
+import com.grash.dto.FileShowDTO;
 import com.grash.model.MeterCategory;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,14 +16,13 @@ public class MeterShowDTO extends AuditShowDTO {
 
     private String name;
 
-
     private String unit;
 
     private int updateFrequency;
 
     private MeterCategory meterCategory;
 
-    private File image;
+    private FileShowDTO image;
 
     private List<UserMiniDTO> users = new ArrayList<>();
 

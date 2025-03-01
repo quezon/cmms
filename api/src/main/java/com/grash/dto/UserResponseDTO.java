@@ -37,10 +37,10 @@ public class UserResponseDTO {
 
     private Long userSettingsId;
 
-    private File image;
+    private FileShowDTO image;
 
     private List<SuperAccountRelationDTO> superAccountRelations = new ArrayList<>();
-    
+
     private SuperAccountRelationDTO parentSuperAccount;
 
     private Boolean enabled;

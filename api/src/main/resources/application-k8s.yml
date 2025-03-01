@@ -1,2 +1,3 @@
-gcp:
-  json-path: ${GCP_JSON_PATH}
+storage:
+  gcp:
+    json-path: ${GCP_JSON_PATH}

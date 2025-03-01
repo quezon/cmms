@@ -21,7 +21,8 @@ public class File extends CompanyAudit {
     private String name;
 
     @NotNull
-    private String url;
+    private String path;
+
 
     private FileType type = FileType.OTHER;
 
@@ -87,9 +88,9 @@ public class File extends CompanyAudit {
             })
     private List<Location> locations = new ArrayList<>();
 
-    public File(String name, String url, FileType fileType, Task task, boolean hidden) {
+    public File(String name, String path, FileType fileType, Task task, boolean hidden) {
         this.name = name;
-        this.url = url;
+        this.path = path;
         this.type = fileType;
         this.task = task;
         this.hidden = hidden;
