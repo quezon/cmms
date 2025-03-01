@@ -1,7 +1,7 @@
 package com.grash.dto;
 
 import com.grash.model.Company;
-import com.grash.model.File;
+import com.grash.dto.FileShowDTO;
 import com.grash.model.Location;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -36,7 +36,7 @@ public class LocationShowDTO extends AuditShowDTO {
 
     private List<UserMiniDTO> workers = new ArrayList<>();
 
-    private File image;
+    private FileShowDTO image;
 
     private List<FileMiniDTO> files;
 

@@ -1,6 +1,6 @@
 package com.grash.dto;
 
-import com.grash.model.File;
+import com.grash.dto.FileShowDTO;
 import com.grash.model.PreventiveMaintenance;
 import com.grash.model.enums.Status;
 import lombok.Data;
@@ -22,11 +22,11 @@ public class WorkOrderShowDTO extends WorkOrderBaseShowDTO {
 
     private PreventiveMaintenance parentPreventiveMaintenance;
 
-    private File signature;
+    private FileShowDTO signature;
 
     private Status status;
 
     private String feedback;
 
-    private File audioDescription;
+    private FileShowDTO audioDescription;
 }

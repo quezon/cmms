@@ -2,7 +2,7 @@ package com.grash.dto;
 
 import com.grash.model.AssetCategory;
 import com.grash.model.Deprecation;
-import com.grash.model.File;
+import com.grash.dto.FileShowDTO;
 import com.grash.model.enums.AssetStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,7 +22,7 @@ public class AssetShowDTO extends AuditShowDTO {
 
     private String description;
 
-    private File image;
+    private FileShowDTO image;
 
     private LocationMiniDTO location;
 
