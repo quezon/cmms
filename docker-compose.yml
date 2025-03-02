@@ -18,7 +18,7 @@ services:
     container_name: atlas_api
     depends_on:
       - postgres
-      - mc
+      - minio
     environment:
       DB_URL: postgres/atlas
       DB_USER: rootUser
@@ -70,26 +70,8 @@ services:
     ports:
       - "9000:9000"
       - "9001:9001"
-    command: server /data
+    command: server --address ":9000" --console-address ":9001" /data
     restart: always
-  mc:
-    image: minio/mc
-    container_name: atlas_mc
-    depends_on:
-      - minio
-    entrypoint: >
-      /bin/sh -c "
-      echo 'Waiting for MinIO to be ready...';
-      until mc alias set myminio http://minio:9000 minio minio123; do
-        echo 'Retrying...';
-        sleep 2;
-      done;
-      echo 'MinIO is up!';
-      mc mb --ignore-existing myminio/atlas-bucket;
-      mc anonymous set public myminio/atlas-bucket;
-      sleep infinity"
-    restart: "no"
-
 
 volumes:
   postgres_data:
