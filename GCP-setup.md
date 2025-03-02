@@ -1,6 +1,6 @@
 # GCP Setup tutorial
 1. Create a Google cloud storage bucket. Use default values.
-2. In the bucket page, go to the permissions tab, Click Grant access, add `allUsers` with role Storage Object Viewer
+1. At this step: Choose how to control access to objects: choose fine-grained as access control
 3. After creation, Click on the left menu and navigate to **IAM & Admin** -> **Service Accounts**.
 4. Click on **CREATE SERVICE ACCOUNT**.
 5. Fill in the required details.
