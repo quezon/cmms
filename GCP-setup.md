@@ -1,6 +1,6 @@
 # GCP Setup tutorial
 1. Create a Google cloud storage bucket. Use default values.
-1. At this step: Choose how to control access to objects: choose fine-grained as access control
+2. At this step: Choose how to control access to objects: choose fine-grained as access control
 3. After creation, Click on the left menu and navigate to **IAM & Admin** -> **Service Accounts**.
 4. Click on **CREATE SERVICE ACCOUNT**.
 5. Fill in the required details.
