@@ -87,22 +87,24 @@ At the moment all variables are optional. Do not delete the .env file
 | PUBLIC_FRONT_URL             | No       | Frontend URL in this format `http://your.public.ip:3000`                                                                                                                                                            | http://localhost:3000 |
 | PUBLIC_API_URL               | No       | Public API URL in this format `http://your.public.ip:8080`                                                                                                                                                          | http://localhost:8080 |
 | STORAGE_TYPE                 | No       | Type of storage either local MinIO or Google Cloud Storage `gcp` or `minio`                                                                                                                                         | minio                 |
-| MINIO_PUBLIC_ENDPOINT        | No       | Public Mini endpoint in format `http://public.ip:9000`                                                                                                                                                              | http://localhost:9000 |
+| PUBLIC_MINIO_ENDPOINT        | No       | Public Mini endpoint in format `http://public.ip:9000`                                                                                                                                                              | http://localhost:9000 |
 | GCP_JSON                     | No       | The Google Cloud JSON key after following [these instructions](./GCP-setup.md).                                                                                                                                     | (empty)               |
 | GCP_PROJECT_ID               | No       | The Google Cloud project ID, also found in the `GCP_JSON` file.                                                                                                                                                     | (empty)               |
 | GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                                                                                     | (empty)               |
 | MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)               |
-| REACT_APP_MUI_X_LICENSE      | No       | Mui license key                                                                                                                                                                                                     | (empty)               |
+| REACT_APP_MUI_X_LICENSE      | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
 | FASTSPRING_PWD               | No       | FastSpring password. Fastspring is a payment gateway                                                                                                                                                                | (empty)               |
 | FASTSPRING_USER              | No       | FastSpring username                                                                                                                                                                                                 | (empty)               |
 | SPRING_PROFILES_ACTIVE       | No       | Active Spring profile(s)                                                                                                                                                                                            | (empty)               |
 
-After changing any env variable starting with `REACT_APP_` you should run  `docker compose up -d --no-deps --build`
+After changing any env variable starting with `REACT_APP_` or `PUBLIC_API_URL` you should run  `docker compose up -d --no-deps --build`
 
-### Open ports if necessary
+#### For remote servers
 
-If you are using a remote server, make sure to open `REACT_APP_API_URL`, `PUBLIC_FRONT_URL` ports numbers by default
-8080, and 3000. Same for `MINIO_PUBLIC_ENDPOINT` port 9000 if you use Minio.
+- You need to update every env variable starting with `PUBLIC_`.
+- You must also update every env variable starting with `SMTP`.
+- Open ports if necessary: make sure to open `REACT_APP_API_URL`, `PUBLIC_FRONT_URL` ports numbers by default
+8080, and 3000. Same for `PUBLIC_MINIO_ENDPOINT` port 9000 if you use Minio.
 
 ### Run
 
