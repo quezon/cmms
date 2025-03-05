@@ -32,7 +32,7 @@ const esJSON = {
   asset_management: 'Gestión de activos',
   preventive_maintenance: 'Mantenimiento preventivo',
   parts_inventory: 'Inventario',
-  custom_dashboards: 'Tableros.peesonalizables',
+  custom_dashboards: 'Tableros personalizados',
   'work-orders.title': 'Administra tus órdenes de trabajo como un profesional',
   'work-orders.description.short': 'Visualiza y gestiona todas tus tareas',
   'work-orders.descriptions.0':
@@ -43,13 +43,13 @@ const esJSON = {
     'Ver todas sus tareas, incluidas las órdenes y solicitudes de trabajo y el mantenimiento preventivo',
   'work-orders.checks.1':
     'Establecer prioridades a sus tareas para que el trabajo más importante se realice primero.',
-  'work-orders.checks.2': 'Ver un calendario de tareas actuales y futuras.',
+  'work-orders.checks.2': 'Ver un calendario de tareas presentes y futuras.',
   'work-orders.checks.3':
     'Vea órdenes de trabajo con información crítica, como detalles de activos, fecha de vencimiento, prioridad y más.',
   'work-orders.checks.4':
     'Vea indicadores críticos, como el trabajo completado, el tiempo invertido y el trabajo planificado frente al no planificado..',
   'work-requests.title':
-    'Un plataforma móvil optimizado que permite realizar solicitudes de trabajo',
+    'Una plataforma móvil optimizada que permite realizar solicitudes de trabajo',
   'work-requests.descriptions.0':
     '¿Está cansado de usar el antiguo sistema de teléfono y correos electrónicos que resulta en solicitudes PERDIDAS, constantes interrupciones diarias y trabajo duplicado?',
   'work-requests.descriptions.1':
@@ -69,13 +69,13 @@ const esJSON = {
   'mobile-app.checks.1':
     'Registrar sus órdenes de trabajo en menos de 60 segundos',
   'mobile-app.checks.2':
-    'Recibe comunicaciones instantáneas a través de notificaciones y correos electrónicos.',
+    'Recibir comunicaciones instantáneas a través de notificaciones y correos electrónicos.',
   'mobile-app.checks.3':
-    'Inicia nuevas órdenes de trabajo mientras te encuentres en el campo.',
+    'Iniciar nuevas órdenes de trabajo mientras te encuentres en el campo.',
   'mobile-app.checks.4':
-    'Responde y registra problemas mientras te encuentres trabajando en ello',
+    'Responder y registrar problemas mientras te encuentres trabajando en ello',
   'mobile-app.checks.5':
-    'Busque información crítica sobre sus mientras diagnostica un fallo.',
+    'Buscar información crítica sobre sus activos mientras diagnostica un fallo.',
   'eam.title': 'Gestión de activos empresariales',
   'eam.description.short': 'Conozca sus activos',
   'eam.descriptions.0':
@@ -92,9 +92,9 @@ const esJSON = {
     'Encuentre información rápido y fácil gracias a los códigos QR (código de barras)',
   'eam.checks.5':
     'Reciba datos de activos en tiempo real con conectividad de sensores.',
-  'pm.title': 'Un programa de mantenimiento preventivo eficazm',
+  'pm.title': 'Un programa de mantenimiento preventivo eficaz',
   'pm.descriptions.0':
-    'Deje de perder horas preciosas distribuyendo manualmente listas de verificación de MP y haciendo un seguimiento con su equipo para asegurarse de que el trabajo esté terminado..',
+    'Deje de perder horas preciosas distribuyendo manualmente listas de verificación de MP y haciendo un seguimiento con su equipo para asegurarse de que el trabajo esté terminado.',
   'pm.descriptions.1':
     'Atlas le permite automatizar fácilmente la programación de MP para que el trabajo correcto se entregue automáticamente en el momento adecuado al técnico adecuado para el activo adecuado.',
   'pm.checks.0':
@@ -120,7 +120,7 @@ const esJSON = {
   'part.checks.2':
     'Seguimiento automático del uso de repuestos. A medida que las órdenes de trabajo o los MP utilicen repuestos, el inventario se actualizará automáticamente para reflejar los repuestos utilizados.',
   'part.checks.3':
-    'Conozca el uso de un repuesto. Vea el registro de repuestos para ver dónde se utiliza y quién lo utilizo',
+    'Conozca el uso de un repuesto. Vea el registro de repuestos para ver dónde se utilizó y quién lo utilizó',
   'part.checks.4':
     'Eliminar los repuestos no utilizados. Sepa cuando un repuesto se ha quedado obsoleto.',
   'part.checks.5':
@@ -166,7 +166,7 @@ const esJSON = {
   required_firstName: 'El nombre es obligatorio.',
   required_lastName: 'El apellido es obligatorio.',
   required_company: 'El nombre de la Empresa es obligatorio.',
-  required_employeesCount: 'Por favor proporcione el número de empleados.',
+  required_employeesCount: 'Por favor, proporcione el número de empleados.',
   invalid_phone: 'El número de teléfono no es válido.',
   required_password: 'El campo de contraseña es obligatorio',
   required_terms: 'Debes aceptar nuestros términos y condiciones.',
@@ -184,12 +184,13 @@ const esJSON = {
   terms_conditions: 'términos y condiciones',
   create_your_account: 'Crear cuenta',
   register: 'Registrarse',
-  login_description: 'Fill in the fields below to sign into your account.',
-  no_account_yet: 'Don’t have an account, yet?',
-  signup_here: 'Sign up here',
+  login_description:
+    'Complete los datos a continuación para iniciar sesión con su cuenta.',
+  no_account_yet: '¿Todavía no tienes una cuenta?',
+  signup_here: 'Registrate aquí',
   wrong_credentials: 'Los datos proporcionados son incorrectos',
   lost_password: '¿Olvido su contraseña?',
-  link_wo: 'Vincular órdenes de trabajo',
+  link_wo: 'Vincular Órdenes de Trabajo',
   link_wo_description: 'Crear relaciones entre Órdenes de Trabajo',
   required_relationType: 'Por favor seleccione el tipo de relación.',
   required_wo: 'El campo Orden de trabajo es obligatorio.',
@@ -205,7 +206,7 @@ const esJSON = {
   include_cost_description:
     'Esto agregará el costo al costo total en la Orden de Trabajo.',
   required_cost_description: 'Se requiere descripción del costo',
-  required_cost: 'Cost is required',
+  required_cost: 'El costo es requerido',
   add_cost: 'El costo es requerido',
   add_cost_description:
     'Complete los campos a continuación para crear y agregar costos adicionales',
@@ -227,8 +228,8 @@ const esJSON = {
   feedback_description: 'Danos tu opinión',
   required_feedback: 'El campo comentario es requerido',
   signature: 'Firma',
-  required_signature: 'Se requiere imagen',
-  close_wo: 'Cerrar orden de trabajo',
+  required_signature: 'La firma es obligatoria',
+  close_wo: 'Cerrar Orden de Trabajo',
   close: 'Cerrar',
   task_update_success: 'La tarea ha sido actualizada',
   task_update_failure: 'La tarea no pudo ser actualizada',
@@ -253,15 +254,15 @@ const esJSON = {
   asset: 'Activo',
   team: 'Equipo',
   created_at: 'Fecha de creación',
-  list_view: 'Vista de Lista',
-  calendar_view: 'Vista de Calendario',
+  list_view: 'Vista de lista',
+  calendar_view: 'Vista de calendario',
   column_view: 'Vista de columna',
   wo_create_success: 'La Orden de Trabajo ha sido creada exitosamente',
   wo_create_failure: 'La Orden de Trabajo no pudo ser creada',
   changes_saved_success: 'Los cambios han sido guardados',
   wo_update_failure: 'La Orden de Trabajo no se pudo editar',
   wo_delete_success: 'La Orden de Trabajo ha sido eliminada',
-  wo_delete_failure: "The Work Order couldn't be deleted",
+  wo_delete_failure: 'La Orden de Trabajo no pudo ser eliminada',
   status: 'Estado',
   title: 'Título',
   priority: 'Prioridad',
@@ -296,16 +297,16 @@ const esJSON = {
   labors: 'Tareas',
   add_additional_cost: 'Agregar costo adicional',
   additional_costs: 'Costos adicionales',
-  add_parts: 'Agregar Repuesto',
+  add_parts: 'Agregar repuesto',
   'wo.title_description': 'Introduzca el título de la Orden de Trabajo',
   image: 'Imagen',
   estimated_duration: 'Duración estimada en horas',
   primary_worker: 'Trabajador principal',
   additional_workers: 'Trabajadores adicionales',
   select_team: 'Seleccionar equipo',
-  select_location: 'Seleccionar Ubicación',
-  select_asset: 'Seleccionar Activo',
-  select_tasks: 'Select Tasks',
+  select_location: 'Seleccionar ubicación',
+  select_asset: 'Seleccionar activo',
+  select_tasks: 'Selecccionar tareas',
   requires_signature: 'Firma requerida',
   required_wo_title: 'Se requiere el título de la Orden de Trabajo',
   add_wo: 'Agregar Orden de Trabajo',
@@ -344,25 +345,25 @@ const esJSON = {
   name: 'Nombre',
   wo_title: 'Título de la Orden de Trabajo',
   next_wo: 'Próxima Orden de Trabajo',
-  trigger_name: 'Nombre del desencadenante',
-  enter_trigger_name: 'Introduzca el nombre del desencadenante',
+  trigger_name: 'Nombre del disparador',
+  enter_trigger_name: 'Introduzca el nombre del disparador',
   frequency_description: 'Frecuencia en días',
-  wo_configuration: 'COnfiguración de la Orden de Trabajo',
-  required_trigger_name: 'El nombre del desencadenante es requerido',
-  required_frequency: 'La frecuencia del desencadenate es requerido',
+  wo_configuration: 'Configuración de la Orden de Trabajo',
+  required_trigger_name: 'El nombre del disparador es requerido',
+  required_frequency: 'La frecuencia del disparador es requerido',
   invalid_frequency: 'La frecuencia debe ser superior a 0',
   schedule_wo: 'Programar Orden de Trabajo',
   schedule_wo_description:
     'Complete los campos a continuación para programar una Orden de Trabajo',
-  edit_wo_trigger: 'Editar el desencadenante de la Orden de Trabajo',
+  edit_wo_trigger: 'Editar el disparador de la Orden de Trabajo',
   edit_wo_trigger_description:
-    'Complete los campos a continuación para editar el desencadenante de la Orden de Trabajo',
-  create_trigger: 'Crear desencadenante',
+    'Complete los campos a continuación para editar el disparador de la Orden de Trabajo',
+  create_trigger: 'Crear disparador',
   'noRows.pm.message':
-    'Programa Ordenes de Trabajo con desencadenantes personalizados',
-  'noRows.pm.action': "Presione el botón '+' para crear un desencadenante",
+    'Programa Ordenes de Trabajo con disparadores personalizados',
+  'noRows.pm.action': "Presione el botón '+' para crear un disparador",
   confirm_delete_pm:
-    '¿Está seguro de que desea eliminar este desencadenante de la Orden de Trabajo?',
+    '¿Está seguro de que desea eliminar este disparador de la Orden de Trabajo?',
   no_access_pm:
     'No tienes acceso a la sección de Mantenimiento Preventivo. Comuníquese con su administrador si necesita tener acceso',
   enter_wo_title: 'Ingrese el título de la Orden de Trabajo',
@@ -378,7 +379,7 @@ const esJSON = {
   locations: 'Ubicaciones',
   parts_and_inventory: 'Repuestos/Inventario',
   purchase_orders: 'Órdenes de compra',
-  meters: 'Métricas',
+  meters: 'Mediciones',
   people_teams: 'Personas y equipos',
   people: 'Personas',
   teams: 'Equipos',
@@ -395,7 +396,7 @@ const esJSON = {
   request_delete_success: 'La solicitud ha sido eliminada exitosamente',
   request_delete_failure: 'La Solicitud no pudo ser eliminada',
   rejected: 'Rechazada',
-  approved: 'Aprovada',
+  approved: 'Aprobada',
   pending: 'Pendiente',
   required_request_name: 'Se requiere el título de la solicitud',
   required_field: 'Este campo es requerido',
@@ -409,7 +410,7 @@ const esJSON = {
   'noRows.request.action':
     "Presione el botón '+' para crear una solicitud de trabajo",
   confirm_delete_request: '¿Está seguro de que desea eliminar esta solicitud?',
-  request: 'Sollicitud',
+  request: 'Solicitud',
   request_details: 'Detalles de la solicitud',
   none_priority: 'Ninguna',
   low_priority: 'Baja',
@@ -417,7 +418,7 @@ const esJSON = {
   high_priority: 'Alta',
   downtimes: 'Tiempos de inactividad',
   confirm_delete_file_asset:
-    '¿Está seguro de que desea eliminar este archivo de este activo',
+    '¿Está seguro de que desea eliminar este archivo de este activo?',
   actions: 'Acciones',
   show: 'Mostrar',
   model: 'Modelo',
@@ -451,9 +452,9 @@ const esJSON = {
   no_due_date: 'Sin fecha de vencimiento',
   due_at_date: 'Pendiente {{date}}',
   no_primary_worker: 'Sin trabajador principal asignado',
-  no_wo_linked_asset: 'No hay ninguna orden de trabajo vinculada a este activo',
+  no_wo_linked_asset: 'No hay ninguna Orden de Trabajo vinculada a este activo',
   asset_remove_success: 'El activo ha sido borrado',
-  asset_remove_failure: 'El archivo no ha podido ser borrado',
+  asset_remove_failure: 'El activo no ha podido ser borrado',
   asset_name_description: 'Introduzca el nombre del activo',
   select_asset_location: 'Seleccione la ubicación del activo',
   primary_user_description: 'Seleccione el usuario primario',
@@ -486,14 +487,14 @@ const esJSON = {
   no_content: 'Sin contenido',
   no_result_criteria: 'Ningún resultado coincide con sus criterios de búsqueda',
   map_view: 'Vista del mapa',
-  location_create_success: 'La ubicación ha sido cread exitosamente',
+  location_create_success: 'La ubicación ha sido creada exitosamente',
   location_create_failure: 'La ubicación no pudo ser creada',
   location_edit_failure: 'La ubicación no pudo ser editada',
   location_delete_success: 'La ubicación ha sido borrada',
-  location_delete_failure: 'TLa ubicación no pudo ser borrada',
+  location_delete_failure: 'La ubicación no pudo ser borrada',
   enter_location_name: 'Introduzca el nombre de la ubicación',
   address: 'Dirección',
-  parent_location: 'ubicación padre',
+  parent_location: 'Ubicación padre',
   select_workers: 'Seleccione trabajadores',
   map_coordinates: 'Mapa de coordenadas',
   required_location_name: 'El título de la ubicación es obligatorio',
@@ -529,7 +530,7 @@ const esJSON = {
   no_access_people_team:
     'No tienes acceso a Personas y Equipos. Comuníquese con su administrador si necesita tener acceso',
   no_access_analytics:
-    'No tienes acceso a las Métricas. Comuníquese con su administrador si necesita tener acceso',
+    'No tienes acceso a las Estadísticas. Comuníquese con su administrador si necesita tener acceso',
   no_access_assets:
     'No tienes acceso a Activos. Comuníquese con su administrador si necesita tener acceso',
   no_access_categories:
@@ -537,11 +538,11 @@ const esJSON = {
   no_access_files:
     'No tienes acceso a Archivos. Comuníquese con su administrador si necesita tener acceso',
   no_access_inventory:
-    'No tienes acceso al inventario. Comuníquese con su administrador si necesita tener acceso',
+    'No tienes acceso al Inventario. Comuníquese con su administrador si necesita tener acceso',
   no_access_meters:
     'No tienes acceso a Mediciones. Comuníquese con su administrador si necesita tener acceso',
   no_access_purchase_orders:
-    'No puedes crear una Orden de Compra. Comuníquese con su administrador si necesita tener acceso',
+    'No puedes crear una orden de compra. Comuníquese con su administrador si necesita tener acceso',
   no_access_requests:
     'No tienes acceso a las Solicitudes. Comuníquese con su administrador si necesita tener acceso',
   no_access_settings:
@@ -575,9 +576,9 @@ const esJSON = {
   part_delete_success: 'El repuesto ha sido borrado',
   part_delete_failure: 'El repuesto no pudo ser borrado',
   quantity: 'Cantidad',
-  open_wo: 'Ordenes de Trabajo abiertas',
+  open_wo: 'Órdenes de Trabajo abiertas',
   enter_part_category: 'Ingrese a la categoría del repuesto',
-  enter_part_cost: 'Ingrese a la costo del repuesto',
+  enter_part_cost: 'Ingrese el costo del repuesto',
   enter_part_quantity: 'Ingrese la cantidad del repuesto',
   minimum_quantity: 'Cantidad mínima',
   enter_part_minimum_quantity: 'Ingrese la cantidad mínima',
@@ -601,11 +602,11 @@ const esJSON = {
   assigned_people: 'Personas asignadas',
   no_asset_related_part: 'Ningún activo vinculado a este repuesto',
   no_file_found: 'Ningún archivo encontrado',
-  no_wo_found: 'No se encontró ninguna orden de trabajo',
+  no_wo_found: 'No se encontró ninguna Orden de Trabajo',
   workers: 'Trabajadores',
   Parts_and_Inventory: 'Partes e inventario',
   po_edit_failure: 'La orden de compra no se pudo editar',
-  po_delete_success: 'TLa orden de compra ha sido borrada',
+  po_delete_success: 'La orden de compra ha sido borrada',
   po_delete_failure: 'La orden de compra no pudo ser borrada',
   number_of_items: 'Número de artículo',
   total_quantity: 'Cantidad total',
@@ -624,14 +625,14 @@ const esJSON = {
   fax_number: 'Fax',
   po_date: 'Fecha de la orden de compra',
   notes: 'Notas',
-  add_notes: 'agregar notas',
+  add_notes: 'Agregar notas',
   requisitioner: 'Solicitante',
   terms: 'Términos',
   shipping_method: 'Método de envío',
   required_name: 'El nombre es obligatorio',
   edit_po: 'Editar orden de compra',
   edit_po_description:
-    'Complete los campos a continuación para actualizar la Orden de Compra',
+    'Complete los campos a continuación para actualizar la orden de compra',
   purchase_order: 'Orden de compra',
   'noRows.po.message': 'Gestiona tus órdenes de compra en un solo lugar',
   'noRows.po.action': "Presiona el botón  '+' para crear una orden de compra.",
@@ -658,14 +659,14 @@ const esJSON = {
   required_value: 'El valor es obligatorio',
   required_trigger_condition: 'La condición es requerida',
   wo_trigger_create_success:
-    'El desencadenante de la orden de trabajo se ha creado correctamente',
+    'El disparador de la orden de trabajo se ha creado correctamente',
   wo_trigger_create_failure:
-    'El desencadenante de la orden de trabajo no pudo ser creado',
-  add_wo_trigger: 'Agregar desencadenante de la orden de trabajo',
+    'El disparador de la orden de trabajo no pudo ser creado',
+  add_wo_trigger: 'Agregar disparador a la orden de trabajo',
   add_wo_trigger_description:
-    'Complete los campos a continuación para crear y agregar un desencadenante de orden de trabajo',
+    'Complete los campos a continuación para crear y agregar un disparador a la Orden de Trabajo',
   wo_trigger_edit_success:
-    'El desencadenante de la orden de trabajo se ha actualizado correctamente',
+    'El disparador de la Orden de Trabajo se ha actualizado correctamente',
   meter_create_success: 'La lectura ha sido creado exitosamente',
   meter_create_failure: 'La lectura no pudo ser creada ',
   meter_edit_failure: 'La lectura no pudo ser editada',
@@ -695,7 +696,7 @@ const esJSON = {
   reading_frequency: 'Frecuencia de lectura',
   required_reading_value: 'Valor de lectura es obligatoria',
   wo_triggers: 'Desencadente de la Orden de Trabajo',
-  add_trigger: 'Agregar desencadenante',
+  add_trigger: 'Agregar disparador',
   meter_details: 'Detalles de lectura',
   'noRows.meter.message':
     'Las lecturas de medidores le brindan la capacidad de monitorear activos y activar nuevas órdenes de trabajo basadas en condiciones definidas.',
@@ -743,7 +744,7 @@ const esJSON = {
   vendor_edit_failure: 'El proveedor no pudo ser editado',
   vendor_delete_success: 'El proveedor ha sido borrado',
   vendor_delete_failure: 'El proveedor no pudo ser borrado',
-  required_company_name: 'El nombre de la empresa es obligatorio',
+  required_company_name: 'El nombre de la Empresa es obligatorio',
   vendor_type: 'Tipo de proveedor',
   contact_name: 'Nombre de contacto',
   add_vendor: 'Agregar proveedor',
@@ -760,7 +761,7 @@ const esJSON = {
     'Rellene los campos a continuación para editar el usuario.',
   job_title: 'Título profesional',
   invite_users: 'Invitar usuarios',
-  bring_people_team: 'Bring new people to the team',
+  bring_people_team: 'Agregar nuevas personas al equipo',
   add_20_users:
     "Puede agregar 20 usuarios a la vez presionando 'tab' o 'enter' después de cada entrada de correo electrónico. Cualquier correo electrónico duplicado y registrado se eliminará al registrar a los usuarios solicitados.",
   enter_email: 'Introduzca la dirección de correo electrónico',
@@ -784,15 +785,15 @@ const esJSON = {
   overview: 'Decripción general',
   activity: 'Actividad',
   wo_complete_last_14_days:
-    'Órdenes de trabajo completadas en los últimos 14 días',
+    'Órdenes de Trabajo completadas en los últimos 14 días',
   no_wo_complete_last_14_days:
-    'No ha completado ninguna orden de trabajo en las últimas dos semanas',
+    'No ha completado ninguna Orden de Trabajo en las últimas dos semanas',
   ADMIN_name: 'Administrador',
   ADMIN_description:
     'El administrador tiene acceso completo; incluyendo editar, agregar y eliminar órdenes de trabajo y solicitudes',
   LIMITED_ADMIN_name: 'Administrador limitado',
   LIMITED_ADMIN_description:
-    'Los administradores limitados tienen el mismo acceso que el administrador, excepto que no pueden ver/editar configuraciones ni agregar/editar personas y equipos. No pueden eliminar Órdenes de trabajo, ubicaciones de activos, medidores y Órdenes de compra a menos que hayan creado contratistas, categorías y desencadenantes de MP.',
+    'Los administradores limitados tienen el mismo acceso que el administrador, excepto que no pueden ver/editar configuraciones ni agregar/editar personas y equipos. No pueden eliminar Órdenes de Trabajo, ubicaciones de activos, medidores y órdenes de compra a menos que hayan creado contratistas, categorías y disparadores de MP.',
   TECHNICIAN_name: 'Técnico',
   TECHNICIAN_description:
     'Los técnicos pueden crear y cerrar Órdenes de Trabajo, activos y ubicaciones. Pueden editar y eliminar solo lo que han creado.',
@@ -820,9 +821,9 @@ const esJSON = {
   add_files: 'Agregar archivos',
   edit_file: 'Editar archivos',
   'noRows.file.message': 'Tenga todos los archivos en un solo lugar',
-  'noRows.file.action': "Prsione el botón '+' para subir un archivo",
+  'noRows.file.action': "Presione el botón '+' para subir un archivo",
   upgrade_files:
-    'Actualice para usar archivos en sus Activos, Órdenes de Trabajo, Ubicaciones, etc.',
+    'Actualice para usar archivos en sus activos, Órdenes de Trabajo, ubicaciones, etc.',
   parts_consumption: 'Consumo de repuestos',
   requests_analysis: 'Análisis de solicitudes',
   category_create_success: 'La categoría ha sido creada exitosamente.',
@@ -853,12 +854,12 @@ const esJSON = {
   required: 'Obligatorio',
   hidden: 'Oculto',
   creating_wo: 'Crear una Orden de Trabajo',
-  completing_wo: 'Completar una orden de trabajo',
+  completing_wo: 'Completar una Orden de Trabajo',
   role_edit_failure: 'El rol no pudo ser editado',
   edit_role: 'Editar rol',
   edit_role_description:
     'Complete los campos a continuación para editar el rol',
-  external_id: 'Identificador externo',
+  external_id: 'ID externo',
   permissions: 'Permisos',
   create_role_description:
     'Esta función puede hacer todo lo que un administrador puede hacer en Atlas, pero puede personalizar algunos permisos importantes a continuación.',
@@ -885,19 +886,19 @@ const esJSON = {
   delete_role: 'Borrar rol',
   upgrade_role_delete: 'Actualice para borrar roles',
   create: 'Crear',
-  pm_trigger: 'desencadenante de mantenimiento preventido',
-  auto_assign_wo: 'Auto-asignar Ordenes de Trabajo',
+  pm_trigger: 'disparador de de mantenimiento preventido',
+  auto_assign_wo: 'Auto-asignar Órdenes de Trabajo',
   auto_assign_wo_description:
-    'Asignar automáticamente nuevas órdenes de trabajo a la persona que las crea',
+    'Asignar automáticamente nuevas Órdenes de Trabajo a la persona que las crea',
   auto_assign_requests: 'Auto-asignar solicitudes',
   auto_assign_requests_description:
-    'Asignar automáticamente nuevas órdenes de trabajo a la persona que aprueba la solicitud.',
+    'Asignar automáticamente nuevas Órdenes de Trabajo a la persona que aprueba la solicitud.',
   disable_closed_wo_notification:
     'Deshabilitar notificaciones de Órdenes de Trabajo cerradas',
   disable_closed_wo_notification_description:
     'Deshabilitar notificaciones cuando se actualicen Órdenes de Trabajo cerradas',
   ask_feedback_wo_closed:
-    'Solicite comentarios cuando la orden de trabajo esté cerrada',
+    'Solicite comentarios cuando la Orden de Trabajo esté cerrada',
   ask_feedback_wo_closed_description:
     'Se pide a los usuarios que den su opinión sobre el trabajo realizado.',
   include_labor_in_total_cost:
@@ -931,7 +932,7 @@ const esJSON = {
   PASS: 'Aprobado',
   FLAG: 'En revisión',
   FAIL: 'Desaprobado',
-  enter_task_name: 'Ingrese un nombre de tarea',
+  enter_task_name: 'Ingrese un nombre para la tarea',
   see_details: 'Ver detalles',
   concerned_asset: 'Activo afectado',
   me: 'A mí',
@@ -948,7 +949,7 @@ const esJSON = {
   select_date: 'Seleccionar fecha',
   task: 'Tarea',
   checklist: 'Checklist',
-  upgrade_analytics: 'Actualice para ver las mediciones',
+  upgrade_analytics: 'Actualice para ver las estadísticas',
   grouped_by_category: 'Agrupados por categoría',
   downtime_by_asset: 'Tiempo de inactividad por activo',
   downtime_and_costs: 'Tiempo de inactividad y costos',
@@ -965,7 +966,7 @@ const esJSON = {
   completion_comparison: 'Comparación de finalización',
   hours_worked: 'Horas trabajadas',
   work_remaining: 'Trabajo restante',
-  wo_status: 'Estado de la Orden de ttabajo',
+  wo_status: 'Estado de la Orden de Trabajo',
   cost_trends: 'Tendencia de costos',
   cost_center: 'Análisis de costos del ciclo de vida de los activos',
   downtime_and_availability: 'Tiempo de inactividad y disponibilidad',
@@ -973,21 +974,21 @@ const esJSON = {
   the_numbers: 'Los números',
   hours_and_cost_by_asset: 'Horas y costos por activos',
   completion_comparison_description:
-    'Comparación de varios tipos de Órdenes de Trabajo completadas..',
+    'Comparación de varios tipos de Órdenes de Trabajo completadas.',
   wo_age_description:
-    'La antigüedad de la orden de trabajo se define como la cantidad de días entre la creación de la orden de trabajo (o solicitud de trabajo) y su finalización.',
+    'La antigüedad de la Orden de Trabajo se define como la cantidad de días entre la creación de la Orden de Trabajo (o solicitud de trabajo) y su finalización.',
   rav_description:
-    'del VRA (valor de reemplazo del activo) es igual a (costo de las órdenes de trabajo sobre el activo/precio de compra)*100. El estándar de la industria es un valor objetivo del 3 % para esta métrica.',
+    'el VRA (valor de reemplazo del activo) es igual a (costo de las órdenes de trabajo sobre el activo/precio de compra)*100. El estándar de la industria es un valor objetivo del 3 % para esta medición.',
   downtime_and_availability_description:
     'La disponibilidad se refiere al porcentaje que los activos se encontraban en estado operativo desde su fecha de puesta en servicio. Los tiempos de inactividad totales se refieren a la cantidad de eventos de tiempo de inactividad que ocurrieron durante el rango de fechas especificado.',
   total_cost_description:
     'El costo total incluye el costo de mano de obra, el costo adicional y el costo de los repuestos en una orden de trabajo.',
   compliant_wo_description:
-    'Las órdenes de trabajo cumplidas se definen como órdenes de trabajo que se completaron antes de la fecha de vencimiento. El tiempo del ciclo se refiere a la cantidad de días hasta que se completó una orden de trabajo.',
+    'Las Órdenes de Trabajo cumplidas se definen como Órdenes de Trabajo que se completaron antes de la fecha de vencimiento. El tiempo del ciclo se refiere a la cantidad de días hasta que se completó una orden de trabajo.',
   hours_worked_description:
-    'Estas horas corresponden a órdenes de trabajo que tienen fecha de vencimiento dentro del rango especificado en los filtros.',
+    'Estas horas corresponden a Órdenes de Trabajo que tienen fecha de vencimiento dentro del rango especificado en los filtros.',
   work_remaining_description:
-    'Este gráfico muestra la cantidad de órdenes de trabajo incompletas que vencen en el rango de fechas especificado en los filtros. Las horas estimadas corresponden a esas órdenes de trabajo individuales.',
+    'Este gráfico muestra la cantidad de Órdenes de Trabajo incompletas que vencen en el rango de fechas especificado en los filtros. Las horas estimadas corresponden a esas órdenes de trabajo individuales.',
   total_downtime_in_hours: 'Total de tiempo de inactividad (horas)',
   downtime_events: 'Eventos de tiempo de inactividad',
   percent_downtime: '% tiempo de inactividad',
@@ -998,10 +999,10 @@ const esJSON = {
   count: 'Resultado',
   average_cost: 'Costo promedio',
   compliant: 'Conformidad',
-  average_cycle_time_in_days: 'Tiempo de ciclo promedio (días',
+  average_cycle_time_in_days: 'Tiempo de ciclo promedio (días)',
   total_consumption_cost: 'Costo total de consumo',
   parts_consumed: 'Repuestos consumidos',
-  total_cost_as_pct_rav: 'Costo total como porcentaje de VRA',
+  total_cost_as_pct_rav: 'Costo total como porcentaje del VRA',
   approved_requests: 'Solicitudes aprobadas',
   pending_requests: 'Solicitudes pendientes',
   cancelled_requests: 'Solicitudes canceladas',
@@ -1009,7 +1010,7 @@ const esJSON = {
   compliance_rate: 'Tasa de cumplimiento',
   complete: 'Completo',
   reactive: 'Reactivo',
-  recurring: 'Recurriente',
+  recurring: 'Recurrente',
   part_costs: 'Costo de los repuestos',
   labor_costs: 'Costo de la mano de obra',
   total_time_spent_in_hours: 'Tiempo total empleado (Horas)',
@@ -1022,7 +1023,7 @@ const esJSON = {
   required_address: 'La dirección es obligatoria',
   company_details: 'Detalles de la Empresa',
   company_details_description:
-    'Gestionar información relacionada con su empresa',
+    'Gestionar información relacionada con su Empresa',
   learn_more: 'Aprenda más',
   profile: 'Perfil',
   email_notifications: 'Notificaciones por correo electrónico',
@@ -1030,11 +1031,11 @@ const esJSON = {
     'Actualizaciones por correo electrónico para órdenes de trabajo y mensaje',
   email_updates_requests:
     'Actualizaciones por correo electrónico para órdenes de trabajo solicitadas',
-  po_emails: 'correos electrónicos de pedidos de compra',
+  po_emails: 'Correos electrónicos de pedidos de compra',
   required_job_title: 'El campo título del puesto es obligatorio',
   required_old_password: 'Por favor proporcione la contraseña actual.',
   invalid_password:
-    'La contraseña es demasiado corta. Debe tener un mínimo de 8 caracteres..',
+    'La contraseña es demasiado corta. Debe tener un mínimo de 8 caracteres.',
   required_new_password: 'No se proporcionó contraseña.',
   passwords_must_match: 'Las contraseñas deben coincidir',
   password_change_success: 'Contraseña modificada exitosamente',
@@ -1095,7 +1096,7 @@ const esJSON = {
   pay_only_for_roles:
     'Pague solo por usuarios <strong>Administrador</strong>, <strong>Técnico</strong> y <strong>Técnico limitado</strong>, y use usuarios <strong>Solicitante</strong> y <strong>Solo visualización</strong> ilimitados de forma gratuita.',
   checkout_our: 'Echa un vistazo a nuestra',
-  pricing_page: 'Página de precios',
+  pricing_page: 'página de precios',
   for_more_details: 'para más detalles',
   users_count_display: '{{count}} usuarios',
   monthly_adverb: 'Mensual',
@@ -1112,10 +1113,10 @@ const esJSON = {
   check_mails_for_instructions:
     'Revise su correo electrónico para obtener más instrucciones.',
   pdf_report: 'Reporte en PDF',
-  HIGH: 'Alto',
-  MEDIUM: 'Medio',
-  LOW: 'Bajo',
-  NONE: 'Ninguno',
+  HIGH: 'Alta',
+  MEDIUM: 'Media',
+  LOW: 'Baja',
+  NONE: 'Ninguna',
   import: 'Importar',
   start_import_process: 'Iniciar proceso de importación',
   import_data: 'Importar datos',
@@ -1188,7 +1189,7 @@ const esJSON = {
   print: 'Imprimir',
   download_as_excel: 'Descargar como Excel',
   find_column: 'Encontrar columna',
-  column_title: 'Cítulo de la columna',
+  column_title: 'Título de la columna',
   reorder_column: 'Reordenar columna',
   show_all: 'Mostrar todo',
   hide_all: 'Ocultar todo',
@@ -1226,8 +1227,8 @@ const esJSON = {
   no: 'No',
   more: 'Más',
   to_group: 'Grupo',
-  see_children: 'Ver niños',
-  hide_children: 'Ocultar niños',
+  see_children: 'Ver hijos',
+  hide_children: 'Ocultar hijos',
   expand: 'Expandir',
   collapse: 'Colapsar',
   detail_panel_toggle: 'Alternar panel de detalles',
@@ -1241,7 +1242,7 @@ const esJSON = {
   and_optional: 'y (opcional)',
   then: 'entonces',
   workflow_description:
-    'Cree flujos de trabajo personalizados con la misma facilidad que If, And, Then. Ahorre tiempo y asigne fácilmente sus órdenes de trabajo automáticamente a través de flujos de trabajo para personalizar Atlas de acuerdo con la forma en que opera su equipo. Todos los planes pueden crear hasta 1 flujo de trabajo personalizado. Para agregar flujos de trabajo adicionales, actualice a nuestro plan Business',
+    'Cree flujos de trabajo personalizados con la misma facilidad que If, And, Then. Ahorre tiempo y asigne fácilmente sus Órdenes de Trabajo automáticamente a través de flujos de trabajo para personalizar Atlas de acuerdo con la forma en que opera su equipo. Todos los planes pueden crear hasta 1 flujo de trabajo personalizado. Para agregar flujos de trabajo adicionales, actualice a nuestro plan Business',
   CREATE_PURCHASE_ORDER: 'Crear orden de compra',
   PART_IS: 'El repuesto es',
   QUANTITY_INFERIOR: 'La cantidad es inferior a',
@@ -1260,7 +1261,7 @@ const esJSON = {
   ASSIGN_LOCATION: 'Asignar la ubicación',
   ASSIGN_USER: 'Asignar el usuario',
   ASSIGN_TEAM: 'Asignar el equipo',
-  ADD_CHECKLIST: 'Agregar checklist',
+  ADD_CHECKLIST: 'Agregar Checklist',
   PRIORITY_IS: 'La prioridad es',
   ASSET_IS: 'El activo es',
   LOCATION_IS: 'La ubicación es',
@@ -1277,9 +1278,9 @@ const esJSON = {
   VALUE_CONTAINS: 'El valor contiene',
   NUMBER_VALUE_SUPERIOR: 'El valor es superior a',
   NUMBER_VALUE_INFERIOR: 'El valor es inferior a',
-  WORK_ORDER_CREATED: 'Se crea una orden de trabajo',
-  WORK_ORDER_CLOSED: 'Una orden de trabajo está cerrada',
-  WORK_ORDER_ARCHIVED: 'Una orden de trabajo está archivada',
+  WORK_ORDER_CREATED: 'Se crea una Orden de Trabajo',
+  WORK_ORDER_CLOSED: 'Una Orden de Trabajo está cerrada',
+  WORK_ORDER_ARCHIVED: 'Una Orden de Trabajo está archivada',
   REQUEST_CREATED: 'Se crea una solicitud',
   REQUEST_APPROVED: 'Se aprueba una solicitud',
   REQUEST_REJECTED: 'Se rechaza una solicitud',
@@ -1301,7 +1302,7 @@ const esJSON = {
   click_here: 'Haga clic aquí',
   verify_email_title: 'Verificar correo electrónico',
   verify_email_description:
-    'Se te ha enviado un correo electrónico de verificación. Revisa la carpeta de spam si no lo ves en tu bandeja de entrada..',
+    'Se te ha enviado un correo electrónico de verificación. Revisa la carpeta de spam si no lo ves en tu bandeja de entrada.',
   upgrade: 'Upgrade',
   downgrade: 'Downgrade',
   upgrade_description:
@@ -1309,7 +1310,7 @@ const esJSON = {
   enable_users: 'Habilitar usuarios',
   max_users_description: 'Puede habilitar hasta {{maxUsers}} usuarios',
   downgrade_description:
-    'Acabas de cambiar a una versión inferior de tu plan de suscripción. Debes desactivar algunos usuarios para continuar. Solo puedes hacerlo una vez para la suscripción actual. Elige con cuidado.',
+    'Acabas de cambiar a una versión inferior de tu plan de suscripción. Debes desactivar algunos usuarios para continuar. Solo puedes hacerlo una vez para la suscripción actual. Elija con cuidado.',
   disable_users: 'Deshabilitar usuarios',
   min_users_description: 'Debes desactivar un mìnimo de {{minUsers}} usuarios',
   downgrade_description_no_owner:
@@ -1318,12 +1319,12 @@ const esJSON = {
   due_date_delay: 'Retraso en la fecha de vencimiento',
   due_date_delay_description: 'Retraso de fecha de vencimiento en días',
   days_count: '{{days}} días',
-  trigger_configuration: 'Configuración de los desencadenantes',
+  trigger_configuration: 'Configuración de los diparadores',
   WORK_ORDER_feature: 'Órdenes de Trabajo',
   REQUEST_feature: 'Solicitudes de trabajo',
   PART_feature: 'Gestión de repuestos',
   MOBILE_APP_feature: 'Aplicación móvil',
-  WORK_ORDER_HISTORY_feature: 'Historial de órdenes de trabajo',
+  WORK_ORDER_HISTORY_feature: 'Historial de Órdenes de Trabajo',
   PREVENTIVE_MAINTENANCE_feature: 'Mantenimiento Preventivo',
   CHECKLIST_feature: 'Checklists',
   FILE_feature: 'Archivos subidos',
@@ -1332,7 +1333,7 @@ const esJSON = {
   REQUEST_CONFIGURATION_feature: 'Configuración del formulario de solicitud',
   ADDITIONAL_TIME_feature: 'Seguimiento de tiempo avanzado',
   ADDITIONAL_COST_feature: 'Seguimiento de costos avanzado',
-  ANALYTICS_feature: 'Análisis y reportes',
+  ANALYTICS_feature: 'Estadísticas y reportes',
   REQUEST_PORTAL_feature: 'Portal de solicitudes',
   SIGNATURE_feature: 'Firmas',
   ROLE_feature: 'Roles personalizados',
@@ -1349,11 +1350,11 @@ const esJSON = {
   assign_user: 'Asignar usuario',
   assign_asset: 'Asignar activo',
   required_files_on_completion:
-    'Se requieren archivos al completar la orden de trabajo',
+    'Se requieren archivos al completar la Orden de Trabajo',
   required_tasks_on_completion: 'Las tareas deben completarse',
   required_labor_on_completion: 'Debes registrar el tiempo',
   required_part_on_completion:
-    'No se ha utilizado ningún repuesto en esta orden de trabajo',
+    'No se ha utilizado ningún repuesto en esta Orden de Trabajo',
   required_cost_on_completion:
     'No se proporciona información de costos en esta Orden de Trabajo',
   estimated_hours_in_text: '{{hours}} horas estimadas',
@@ -1364,7 +1365,7 @@ const esJSON = {
   last_login: 'Último inicio de sesión',
   not_enough_part: 'No hay suficiente cantidad de este repuesto',
   remove_blank_meter_tasks: 'Eliminar tareas con medidor de tipo sin medidor',
-  checklist_update_failure: 'El checklist no pudo ser editado',
+  checklist_update_failure: 'El Checklist no pudo ser editado',
   contact_us: 'Contáctenos',
   simplify_wo: 'Simplifique las Órdenes de Trabajo en la aplicación móvil',
   simplify_wo_description:
@@ -1392,7 +1393,7 @@ const esJSON = {
   pareto_by_total_price: 'Pareto por precio total',
   cumulative_percent: 'Porcentaje acumulado',
   part_consumption_by_asset: 'Repuestos consumidos por activo',
-  grouped_by_wo_category: 'Agrupado por categoría de orden de trabajo',
+  grouped_by_wo_category: 'Agrupado por categoría de Orden de Trabajo',
   resolution_rate: 'Tasa de resolución',
   resolved: 'Resuelto',
   average: 'Promedio',
@@ -1400,7 +1401,7 @@ const esJSON = {
   days_before_pm_notification:
     'Notificaciones previas a las órdenes de trabajo programadas',
   estimated_start_date: 'Fecha de inicio prevista',
-  no_file_linked_to_wo: 'No hay ningún archivo adjunto a esta orden de trabajo',
+  no_file_linked_to_wo: 'No hay ningún archivo adjunto a esta Orden de Trabajo',
   add_file: 'Agregar archivo',
   try_for_free: 'Prueba gratis',
   choose_your_plan: 'Elige tu plan',
@@ -1424,7 +1425,7 @@ const esJSON = {
     Calendar: 'Calendario',
     Mailbox: 'Buzones',
     Dashboards: 'Paneles',
-    Analytics: 'Analítico',
+    Analytics: 'Estadísticas',
     Monitoring: 'Escucha',
     Tasks: 'Tareas',
     Applications: 'Aplicaciones',
