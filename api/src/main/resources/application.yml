@@ -70,7 +70,7 @@ security:
       expire-length: 1209600000 # 1000*60*60*24*14
 
 frontend:
-  url: http://localhost:3000
+  url: ${PUBLIC_FRONT_URL}
 mail:
   recipients: ${MAIL_RECIPIENTS}
 superAdmin:
