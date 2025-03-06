@@ -98,14 +98,17 @@ function RegisterJWT({
           role ? { ...valuesClone, role: { id: role } } : valuesClone
         )
           .then(async (res) => {
-            if (await verify(res.message, JWT_SECRET)) {
+            if (res && (await verify(res.message, JWT_SECRET))) {
               loginInternal(res.message);
             } else {
               if (!role) showSnackBar(t('verify_email'), 'success');
               navigate(role ? '/account/login' : '/account/verify');
             }
           })
-          .catch((err) => showSnackBar(t('registration_error'), 'error'))
+          .catch((err) => {
+            showSnackBar(err, 'error');
+            console.error(err);
+          })
           .finally(() => {
             if (isMountedRef.current) {
               setStatus({ success: true });
