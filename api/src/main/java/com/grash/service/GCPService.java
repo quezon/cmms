@@ -25,9 +25,9 @@ import java.nio.file.Paths;
 @Service
 @RequiredArgsConstructor
 public class GCPService implements StorageService {
-    @Value("${storage.gcp.value:#{null}}")
+    @Value("${storage.gcp.value}")
     private String gcpJson;
-    @Value("${storage.gcp.json-path:#{null}}")
+    @Value("${storage.gcp.json-path}")
     private String gcpJsonPath;
     @Value("${storage.gcp.project-id}")
     private String gcpProjectId;
@@ -38,12 +38,12 @@ public class GCPService implements StorageService {
 
     @PostConstruct
     private void init() {
-        if ((gcpJson == null || gcpJson.isEmpty()) && (gcpJsonPath == null || gcpJsonPath.isEmpty())) {
+        if (gcpJson.isEmpty() && gcpJsonPath.isEmpty()) {
             return;
         }
         Credentials credentials;
         try {
-            InputStream is = gcpJson == null ? Files.newInputStream(Paths.get(gcpJsonPath)) :
+            InputStream is = gcpJson.isEmpty() ? Files.newInputStream(Paths.get(gcpJsonPath)) :
                     new ByteArrayInputStream(gcpJson.getBytes(StandardCharsets.UTF_8));
             credentials = GoogleCredentials.fromStream(is);
             configured = true;
