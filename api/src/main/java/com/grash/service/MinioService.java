@@ -25,13 +25,13 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 public class MinioService implements StorageService {
-    @Value("${storage.minio.endpoint}")
+    @Value("${storage.minio.endpoint:#{null}}")
     private String minioEndpoint;
-    @Value("${storage.minio.bucket}")
+    @Value("${storage.minio.bucket:#{null}}")
     private String minioBucket;
-    @Value("${storage.minio.access-key}")
+    @Value("${storage.minio.access-key:#{null}}")
     private String minioAccessKey;
-    @Value("${storage.minio.secret-key}")
+    @Value("${storage.minio.secret-key:#{null}}")
     private String minioSecretKey;
     @Value("${storage.minio.public-endpoint:#{null}}")
     private String minioPublicEndpoint;
@@ -41,7 +41,7 @@ public class MinioService implements StorageService {
 
     @PostConstruct
     private void init() {
-        if (minioEndpoint == null || minioBucket == null || minioAccessKey == null || minioSecretKey == null) {
+        if (minioEndpoint == null || minioBucket == null || minioAccessKey == null || minioSecretKey == null || minioPublicEndpoint == null) {
             return;
         }
         try {

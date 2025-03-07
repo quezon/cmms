@@ -62,7 +62,7 @@ public class UserService {
     private String PUBLIC_API_URL;
     @Value("${frontend.url}")
     private String frontendUrl;
-    @Value("${mail.recipients:#{null}")
+    @Value("${mail.recipients:#{null}}")
     private String[] recipients;
 
     public String signin(String email, String password, String type) {

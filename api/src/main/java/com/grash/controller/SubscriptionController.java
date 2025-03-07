@@ -33,7 +33,7 @@ public class SubscriptionController {
     private final UserService userService;
     private final EmailService2 emailService2;
     private final SubscriptionChangeRequestRepository subscriptionChangeRequestRepository;
-    @Value("${mail.recipients:#{null}")
+    @Value("${mail.recipients:#{null}}")
     private String[] recipients;
 
     @GetMapping("")
