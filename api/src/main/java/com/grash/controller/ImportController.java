@@ -11,14 +11,17 @@ import com.grash.model.enums.PlanFeatures;
 import com.grash.service.*;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.swing.text.html.parser.Entity;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -185,11 +188,25 @@ public class ImportController {
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
+
     @GetMapping("/download-template")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public byte[] importMeters(@RequestParam Language language, @RequestParam ImportEntity importEntity,
-                               HttpServletRequest req) {
-//        OwnUser user = userService.whoami(req);
-        return storageServiceFactory.getStorageService().download("import templates/" + language.name().toLowerCase() + "/" + importEntity.name().toLowerCase() + ".csv");
+                               HttpServletRequest req) throws IOException {
+        String path =
+                "import-templates/" + language.name().toLowerCase() + "/" + importEntity.name().toLowerCase() + ".csv";
+        String fallbackPath = "import-templates/en/" + importEntity.name().toLowerCase() + ".csv";
+
+        return readFileWithFallback(path, fallbackPath);
+    }
+
+    private byte[] readFileWithFallback(String path, String fallbackPath) throws IOException {
+        ClassPathResource resource = new ClassPathResource(path);
+
+        if (!resource.exists()) {
+            resource = new ClassPathResource(fallbackPath);
+        }
+
+        return StreamUtils.copyToByteArray(resource.getInputStream());
     }
 }

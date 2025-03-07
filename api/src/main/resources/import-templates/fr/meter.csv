@@ -1,0 +1,4 @@
+ID,Nom,Unité,Fréquence de mise à jour,Catégorie,Nom de l'équipement,Nom de l'emplacement,Utilisateurs
+,Surveillance de la température,°C,1,État,Moteur du générateur-Groupe électrogène de secours-Zone utilitaire,Site principal 1,"technicien1atlascmms@gmail.com,abc@gmail.com"
+,Déclencheur de vérin hydraulique,cycles,1,Utilisation,Extracteurs d'air-Système de ventilation-Poulailler,Site principal 1,limitedtechnicien1atlascmms@gmail.com
+,Lecture de la consommation d'énergie quotidienne de l'installation 1,KWh,1,Utilisation,Moteur du générateur-Groupe électrogène de secours-Zone utilitaire,Site principal 1,limitedtechnicien1atlascmms@gmail.com
