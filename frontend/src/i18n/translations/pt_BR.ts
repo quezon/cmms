@@ -41,32 +41,44 @@ const ptBRJSON = {
     'Com o Atlas, você pode organizar facilmente todas as suas ordens de serviço, PMs e outras tarefas em um banco de dados centralizado que pode ser acessado em qualquer dispositivo.',
   'work-orders.checks.0':
     'Visualize todas as suas tarefas, incluindo OS, PMs e solicitações de trabalho.',
-  'work-orders.checks.1': 'Defina a prioridade da tarefa para que o trabalho certo seja feito primeiro.',
-  'work-orders.checks.2': 'Visualize um calendário de tarefas atuais e futuras.',
+  'work-orders.checks.1':
+    'Defina a prioridade da tarefa para que o trabalho certo seja feito primeiro.',
+  'work-orders.checks.2':
+    'Visualize um calendário de tarefas atuais e futuras.',
   'work-orders.checks.3':
     'Visualize atribuições de trabalho com informações críticas, como informações do ativo, data de vencimento, prioridade e mais.',
   'work-orders.checks.4':
     'Visualize KPIs críticos, como trabalho concluído, tempo gasto e trabalho planejado vs. não planejado.',
 
-  'work-requests.title': 'Um sistema de solicitação de trabalho móvel simplificado',
+  'work-requests.title':
+    'Um sistema de solicitação de trabalho móvel simplificado',
   'work-requests.descriptions.0':
     'Cansado de usar o antigo sistema de telefone e e-mail que resulta em tickets PERDIDOS, interrupções diárias constantes e trabalho duplicado?',
   'work-requests.descriptions.1':
     'A solução de gerenciamento de manutenção do Atlas permite que qualquer pessoa autorizada envie um problema para o departamento de manutenção simplesmente escaneando um código QR (código de barras) ou visitando uma URL e digitando sua solicitação através de seus dispositivos móveis.',
   'work-requests.checks.0': 'Nunca mais perca trabalho.',
-  'work-requests.checks.1': 'Reduza o tempo gasto com solicitações de trabalho em até 34%.',
-  'work-requests.checks.2': 'Reduza o tempo de comunicação com os solicitantes em até 41% (chamadas, e-mails, textos).',
+  'work-requests.checks.1':
+    'Reduza o tempo gasto com solicitações de trabalho em até 34%.',
+  'work-requests.checks.2':
+    'Reduza o tempo de comunicação com os solicitantes em até 41% (chamadas, e-mails, textos).',
 
-  'mobile-app.title': 'Um aplicativo móvel CMMS que capacita sua equipe de manutenção',
+  'mobile-app.title':
+    'Um aplicativo móvel CMMS que capacita sua equipe de manutenção',
   'mobile-app.descriptions.0':
     'Através do uso de nossos aplicativos móveis Android e IOS, nossos clientes experimentam melhor organização, comunicação, responsabilidade e produtividade em até 30% em toda a equipe de manutenção.',
-  'mobile-app.descriptions.1': 'A partir de seu dispositivo móvel, qualquer membro da sua equipe de manutenção pode:',
+  'mobile-app.descriptions.1':
+    'A partir de seu dispositivo móvel, qualquer membro da sua equipe de manutenção pode:',
   'mobile-app.checks.0': 'Visualizar suas ordens de serviço e PMs atribuídos.',
-  'mobile-app.checks.1': 'Registrar suas ordens de serviço em menos de 60 segundos.',
-  'mobile-app.checks.2': 'Receber comunicações instantâneas via notificações push e e-mail.',
-  'mobile-app.checks.3': 'Iniciar novas ordens de serviço enquanto está em campo.',
-  'mobile-app.checks.4': 'Responder e registrar problemas enquanto trabalha no problema.',
-  'mobile-app.checks.5': 'Consultar informações críticas do ativo enquanto diagnostica um problema.',
+  'mobile-app.checks.1':
+    'Registrar suas ordens de serviço em menos de 60 segundos.',
+  'mobile-app.checks.2':
+    'Receber comunicações instantâneas via notificações push e e-mail.',
+  'mobile-app.checks.3':
+    'Iniciar novas ordens de serviço enquanto está em campo.',
+  'mobile-app.checks.4':
+    'Responder e registrar problemas enquanto trabalha no problema.',
+  'mobile-app.checks.5':
+    'Consultar informações críticas do ativo enquanto diagnostica um problema.',
 
   'eam.title': 'Gestão de Ativos Empresariais',
   'eam.description.short': 'Conheça seus ativos',
@@ -74,12 +86,17 @@ const ptBRJSON = {
     'Frustrado ao tentar organizar a bagunça caótica dos equipamentos da empresa, sem saber se o equipamento foi devidamente cuidado, sem saber o custo de manutenção e todas as outras dores de cabeça que vêm com a gestão de ativos?',
   'eam.descriptions.1':
     'O módulo de Gestão de Ativos Empresariais do Atlas CMMS pode ser usado para entre 10 e 1.000.000 de ativos, permitindo que você rastreie exatamente o que deseja, da maneira que deseja, em uma estrutura de árvore fácil de usar e pesquisável.',
-  'eam.checks.0': 'Conheça a saúde dos seus ativos a qualquer momento e o que eles estão custando.',
+  'eam.checks.0':
+    'Conheça a saúde dos seus ativos a qualquer momento e o que eles estão custando.',
   'eam.checks.1': 'Visualize registros de manutenção completos e detalhados.',
-  'eam.checks.2': 'Acompanhe apenas o que deseja com campos personalizados ilimitados.',
-  'eam.checks.3': 'Organize seus ativos em uma hierarquia clara de pai para filho.',
-  'eam.checks.4': 'Encontre informações rapidamente e facilmente com códigos QR (códigos de barras).',
-  'eam.checks.5': 'Receba dados de ativos em tempo real com conectividade de sensores.',
+  'eam.checks.2':
+    'Acompanhe apenas o que deseja com campos personalizados ilimitados.',
+  'eam.checks.3':
+    'Organize seus ativos em uma hierarquia clara de pai para filho.',
+  'eam.checks.4':
+    'Encontre informações rapidamente e facilmente com códigos QR (códigos de barras).',
+  'eam.checks.5':
+    'Receba dados de ativos em tempo real com conectividade de sensores.',
 
   'pm.title': 'Um Programa Eficaz de Manutenção Preventiva',
   'pm.descriptions.0':
@@ -88,11 +105,13 @@ const ptBRJSON = {
     'O Atlas permite que você automatize facilmente o agendamento de PMs para que o trabalho certo seja entregue automaticamente no momento certo para o técnico certo no ativo certo.',
   'pm.checks.0':
     'Automatize o agendamento de PMs para ser diário, semanal, mensal, anual ou baseado em eventos ou leituras de medidores.',
-  'pm.checks.1': 'Notificações automáticas por push e e-mail quando um PM é criado ou vencido.',
+  'pm.checks.1':
+    'Notificações automáticas por push e e-mail quando um PM é criado ou vencido.',
   'pm.checks.2':
     'Nosso calendário fácil de usar permite que você visualize todo o trabalho aberto e os agendamentos de PMs futuros.',
   'pm.checks.3': 'Arraste e solte para alterar a data de vencimento.',
-  'pm.checks.4': 'Após a conclusão do PM, o trabalho é automaticamente registrado no registro de manutenção do ativo.',
+  'pm.checks.4':
+    'Após a conclusão do PM, o trabalho é automaticamente registrado no registro de manutenção do ativo.',
   'pm.checks.5': 'Requer pouco ou nenhum treinamento para usar.',
 
   'part.title': 'Controle seu Inventário de Peças de Reposição',
@@ -107,8 +126,10 @@ const ptBRJSON = {
     'Os técnicos sabem instantaneamente se a peça está em estoque a partir de uma ordem de serviço. Se a peça não estiver em estoque, verifique facilmente outros locais para ver se está disponível.',
   'part.checks.2':
     'Acompanhamento automático do uso de peças. Conforme as ordens de serviço ou PMs usam peças, o inventário será automaticamente atualizado para refletir as peças usadas.',
-  'part.checks.3': 'Saiba o uso da peça. Visualize o registro de peças para ver onde a peça está sendo usada e por quem.',
-  'part.checks.4': 'Elimine peças não utilizadas. Saiba quando uma peça ficou obsoleta.',
+  'part.checks.3':
+    'Saiba o uso da peça. Visualize o registro de peças para ver onde a peça está sendo usada e por quem.',
+  'part.checks.4':
+    'Elimine peças não utilizadas. Saiba quando uma peça ficou obsoleta.',
   'part.checks.5':
     'Relatórios em tempo real. Saiba quais peças são usadas onde e quanto estão custando.',
   'part.checks.6':
@@ -121,7 +142,8 @@ const ptBRJSON = {
     'Vamos encarar, o primeiro passo para melhorar suas operações é conhecer o bom, o ruim e o feio.',
   'dashboard.descriptions.1':
     'Com os Painéis Personalizados do Atlas, você pode finalmente começar a entender o nefasto "buraco negro da manutenção" e começar a colocar planos baseados em dados em ação, resultando em redução de custos de mão de obra, diminuição do tempo de inatividade e muito mais.',
-  'dashboard.descriptions.2': 'Com os Painéis Personalizados do Atlas, você poderá...',
+  'dashboard.descriptions.2':
+    'Com os Painéis Personalizados do Atlas, você poderá...',
   'dashboard.checks.0': 'Saber onde seu dinheiro está sendo gasto e por quê.',
   'dashboard.checks.1': 'Saber qual ativo está custando mais e por quê.',
   'dashboard.checks.2': 'Crie seus próprios KPIs personalizados.',
@@ -134,14 +156,16 @@ const ptBRJSON = {
   'home.work': 'Trabalho',
   'home.smarter_description':
     'O Atlas torna incrivelmente fácil para os técnicos trabalharem com eficiência, dando-lhes acesso às ferramentas e dados de que precisam para realizar o trabalho - tudo na palma da mão.',
-  leading_maintenance: 'Liderando o Caminho para um Futuro Melhor na Manutenção e Confiabilidade',
+  leading_maintenance:
+    'Liderando o Caminho para um Futuro Melhor na Manutenção e Confiabilidade',
   //register
   premium_included: 'Recursos premium incluídos',
   no_credit_card: 'Nenhum cartão de crédito necessário',
   perfect_tool: 'A ferramenta perfeita para equipes de manutenção',
   start_trial_today: 'Comece seu teste gratuito hoje',
   create_account: 'Criar conta',
-  signup_description: 'Preencha os campos abaixo para se inscrever em uma conta.',
+  signup_description:
+    'Preencha os campos abaixo para se inscrever em uma conta.',
   account_already: 'Já tem uma conta?',
   signin_here: 'Entre aqui',
   invalid_email: 'O e-mail fornecido deve ser um endereço de e-mail válido',
@@ -186,15 +210,18 @@ const ptBRJSON = {
   date: 'Data',
   cost: 'Custo',
   include_cost: 'Incluir este custo no custo total',
-  include_cost_description: 'Isso adicionará o custo ao custo total gasto na Ordem de Serviço',
+  include_cost_description:
+    'Isso adicionará o custo ao custo total gasto na Ordem de Serviço',
   required_cost_description: 'A descrição do custo é obrigatória',
   required_cost: 'O custo é obrigatório',
   add_cost: 'Adicionar Custo Adicional',
-  add_cost_description: 'Preencha os campos abaixo para criar e adicionar um custo adicional',
+  add_cost_description:
+    'Preencha os campos abaixo para criar e adicionar um custo adicional',
   add: 'Adicionar',
   hourly_rate: 'Taxa Horária',
   include_time: 'Incluir este tempo no tempo total',
-  include_time_description: 'Isso adicionará a duração ao tempo total gasto na Ordem de Serviço',
+  include_time_description:
+    'Isso adicionará a duração ao tempo total gasto na Ordem de Serviço',
   work_started_at: 'Trabalho Iniciado em',
   duration: 'Duração',
   hours: 'Horas',
@@ -202,7 +229,8 @@ const ptBRJSON = {
   required_hours: 'O campo de horas é obrigatório',
   required_minutes: 'O campo de minutos é obrigatório',
   add_time: 'Adicionar Tempo',
-  add_time_description: 'Preencha os campos abaixo para criar e adicionar tempo',
+  add_time_description:
+    'Preencha os campos abaixo para criar e adicionar tempo',
   feedback: 'Feedback',
   feedback_description: 'Dê seu feedback',
   required_feedback: 'O feedback é obrigatório',
@@ -221,7 +249,8 @@ const ptBRJSON = {
   tasks: 'Tarefas',
   wo_archive_success: 'A Ordem de Serviço foi arquivada',
   wo_archive_failure: 'A Ordem de Serviço não pôde ser arquivada',
-  wo_archive_confirm: 'Tem certeza de que deseja arquivar esta Ordem de Serviço?',
+  wo_archive_confirm:
+    'Tem certeza de que deseja arquivar esta Ordem de Serviço?',
   quantity_change_success: 'Quantidade alterada com sucesso',
   quantity_change_failure: 'A quantidade não pôde ser alterada',
   details: 'Detalhes',
@@ -269,7 +298,8 @@ const ptBRJSON = {
   no_additional_cost: 'Nenhum custo adicional foi adicionado ainda',
   parts: 'Peças',
   links: 'Links',
-  confirm_delete_file_wo: 'Tem certeza de que deseja remover este arquivo desta Ordem de Serviço?',
+  confirm_delete_file_wo:
+    'Tem certeza de que deseja remover este arquivo desta Ordem de Serviço?',
   archive: 'Arquivar',
   labors: 'Mão de Obra',
   add_additional_cost: 'Adicionar Custo Adicional',
@@ -287,12 +317,14 @@ const ptBRJSON = {
   requires_signature: 'Requer Assinatura',
   required_wo_title: 'O título da Ordem de Serviço é obrigatório',
   add_wo: 'Adicionar Ordem de Serviço',
-  add_wo_description: 'Preencha os campos abaixo para criar e adicionar uma nova Ordem de Serviço',
+  add_wo_description:
+    'Preencha os campos abaixo para criar e adicionar uma nova Ordem de Serviço',
   edit_wo: 'Editar Ordem de Serviço',
-  edit_wo_description: 'Preencha os campos abaixo para atualizar a Ordem de Serviço',
+  edit_wo_description:
+    'Preencha os campos abaixo para atualizar a Ordem de Serviço',
   'noRows.wo.message':
     'Ordens de Serviço são tarefas ou trabalhos que podem ser agendados ou atribuídos a alguém',
-  'noRows.wo.action': 'Pressione o botão \'+\' para criar uma Ordem de Serviço',
+  'noRows.wo.action': "Pressione o botão '+' para criar uma Ordem de Serviço",
   to_delete: 'Excluir',
   confirm_delete_wo: 'Tem certeza de que deseja excluir esta Ordem de Serviço?',
   no_access_wo:
@@ -312,8 +344,10 @@ const ptBRJSON = {
   wo_schedule_success: 'Ordem de Serviço agendada com sucesso',
   wo_schedule_failure: 'A Ordem de Serviço não pôde ser agendada',
   wo_trigger_edit_failure: 'O gatilho da Ordem de Serviço não pôde ser editado',
-  wo_trigger_delete_success: 'O gatilho da Ordem de Serviço foi excluído com sucesso',
-  wo_trigger_delete_failure: 'O gatilho da Ordem de Serviço não pôde ser excluído',
+  wo_trigger_delete_success:
+    'O gatilho da Ordem de Serviço foi excluído com sucesso',
+  wo_trigger_delete_failure:
+    'O gatilho da Ordem de Serviço não pôde ser excluído',
   name: 'Nome',
   wo_title: 'Título da Ordem de Serviço',
   next_wo: 'Próxima Ordem de Serviço',
@@ -325,13 +359,16 @@ const ptBRJSON = {
   required_frequency: 'A frequência do gatilho é obrigatória',
   invalid_frequency: 'A frequência deve ser superior a 0',
   schedule_wo: 'Agendar Ordem de Serviço',
-  schedule_wo_description: 'Preencha os campos abaixo para agendar uma Ordem de Serviço',
+  schedule_wo_description:
+    'Preencha os campos abaixo para agendar uma Ordem de Serviço',
   edit_wo_trigger: 'Editar Gatilho de Ordem de Serviço',
-  edit_wo_trigger_description: 'Preencha os campos abaixo para editar o gatilho da Ordem de Serviço',
+  edit_wo_trigger_description:
+    'Preencha os campos abaixo para editar o gatilho da Ordem de Serviço',
   create_trigger: 'Criar Gatilho',
   'noRows.pm.message': 'Agende Ordens de Serviço com gatilhos personalizados',
-  'noRows.pm.action': 'Pressione o botão \'+\' para criar um gatilho',
-  confirm_delete_pm: 'Tem certeza de que deseja excluir este Gatilho de Ordem de Serviço?',
+  'noRows.pm.action': "Pressione o botão '+' para criar um gatilho",
+  confirm_delete_pm:
+    'Tem certeza de que deseja excluir este Gatilho de Ordem de Serviço?',
   no_access_pm:
     'Você não tem acesso à seção de Manutenção Preventiva. Entre em contato com seu administrador se deveria ter acesso',
   enter_wo_title: 'Insira o título da Ordem de Serviço',
@@ -361,7 +398,8 @@ const ptBRJSON = {
   reject: 'Rejeitar',
   approve: 'Aprovar',
   request_create_success: 'Solicitação de Ordem de Serviço criada com sucesso',
-  request_create_failure: 'A Solicitação de Ordem de Serviço não pôde ser criada',
+  request_create_failure:
+    'A Solicitação de Ordem de Serviço não pôde ser criada',
   request_edit_failure: 'A Solicitação não pôde ser editada',
   request_delete_success: 'A Solicitação foi excluída com sucesso',
   request_delete_failure: 'A Solicitação não pôde ser excluída',
@@ -371,11 +409,14 @@ const ptBRJSON = {
   required_request_name: 'O título da solicitação é obrigatório',
   required_field: 'Este campo é obrigatório',
   add_request: 'Adicionar Solicitação',
-  add_request_description: 'Preencha os campos abaixo para criar e adicionar uma nova Solicitação',
+  add_request_description:
+    'Preencha os campos abaixo para criar e adicionar uma nova Solicitação',
   edit_request: 'Editar Solicitação',
-  edit_request_description: 'Preencha os campos abaixo para editar a Solicitação',
+  edit_request_description:
+    'Preencha os campos abaixo para editar a Solicitação',
   'noRows.request.message': 'Gerencie suas Solicitações de Trabalho',
-  'noRows.request.action': 'Pressione o botão \'+\' para criar uma Solicitação de Trabalho',
+  'noRows.request.action':
+    "Pressione o botão '+' para criar uma Solicitação de Trabalho",
   confirm_delete_request: 'Tem certeza de que deseja excluir esta Solicitação?',
   request: 'Solicitação',
   request_details: 'Detalhes da Solicitação',
@@ -385,7 +426,8 @@ const ptBRJSON = {
   high_priority: 'Alto',
   //asset
   downtimes: 'Tempos de Inatividade',
-  confirm_delete_file_asset: 'Tem certeza de que deseja remover este Arquivo deste ativo?',
+  confirm_delete_file_asset:
+    'Tem certeza de que deseja remover este Arquivo deste ativo?',
   actions: 'Ações',
   show: 'Mostrar',
   model: 'Modelo',
@@ -398,7 +440,8 @@ const ptBRJSON = {
   warranty_expiration: 'Expiração da Garantia',
   asset_information: 'Informações do Ativo',
   more_informations: 'Mais Informações',
-  confirm_delete_asset_downtime: 'Tem certeza de que deseja remover este Tempo de Inatividade?',
+  confirm_delete_asset_downtime:
+    'Tem certeza de que deseja remover este Tempo de Inatividade?',
   create_downtime_success: 'O Tempo de Inatividade foi adicionado com sucesso',
   create_downtime_failure: 'O Tempo de Inatividade não pôde ser adicionado',
   edit_downtime_success: 'O Tempo de Inatividade foi editado com sucesso',
@@ -411,7 +454,8 @@ const ptBRJSON = {
   enter_meter_value: 'Insira o valor do medidor',
   add_reading: 'Adicionar Leitura',
   select_meter: 'Selecionar Medidor',
-  confirm_delete_part_asset: 'Tem certeza de que deseja remover esta Peça deste ativo?',
+  confirm_delete_part_asset:
+    'Tem certeza de que deseja remover esta Peça deste ativo?',
   no_due_date: 'Sem Data de Vencimento',
   due_at_date: 'Vencimento em {{date}}',
   no_primary_worker: 'Nenhum Trabalhador Principal',
@@ -434,7 +478,8 @@ const ptBRJSON = {
   additional_workers_description: 'Selecionar trabalhadores adicionais',
   required_asset_name: 'O nome do ativo é obrigatório',
   add_asset: 'Adicionar Ativo',
-  add_asset_description: 'Preencha os campos abaixo para criar e adicionar um novo ativo',
+  add_asset_description:
+    'Preencha os campos abaixo para criar e adicionar um novo ativo',
   create_asset: 'Criar Ativo',
   hierarchy: 'Hierarquia',
   add_downtime: 'Adicionar Tempo de Inatividade',
@@ -446,7 +491,8 @@ const ptBRJSON = {
   confirm_delete_asset: 'Tem certeza de que deseja excluir este Ativo?',
   loading_assets: 'Carregando ativos sob {{name}} #{{id}}',
   no_content: 'Sem Conteúdo',
-  no_result_criteria: 'Nenhum resultado corresponde aos seus critérios de pesquisa',
+  no_result_criteria:
+    'Nenhum resultado corresponde aos seus critérios de pesquisa',
   //location
   map_view: 'Visualização do Mapa',
   location_create_success: 'A localização foi criada com sucesso',
@@ -462,10 +508,13 @@ const ptBRJSON = {
   required_location_name: 'O título da localização é obrigatório',
   required_location_address: 'O endereço da localização é obrigatório',
   add_location: 'Adicionar localização',
-  add_location_description: 'Preencha os campos abaixo para criar e adicionar uma nova localização',
+  add_location_description:
+    'Preencha os campos abaixo para criar e adicionar uma nova localização',
   edit_location: 'Editar localização',
-  edit_location_description: 'Preencha os campos abaixo para atualizar a localização',
-  confirm_delete_location: 'Tem certeza de que deseja excluir esta Localização?',
+  edit_location_description:
+    'Preencha os campos abaixo para atualizar a localização',
+  confirm_delete_location:
+    'Tem certeza de que deseja excluir esta Localização?',
   floor_plans: 'Plantas Baixas',
   floor_plan: 'Planta Baixa',
   floor_plan_name_description: 'Nome da planta baixa',
@@ -473,7 +522,8 @@ const ptBRJSON = {
   upload_image: 'Carregar uma imagem',
   required_floor_plan_name: 'O nome da planta baixa é obrigatório',
   add_floor_plan: 'Adicionar nova Planta Baixa',
-  add_floor_plan_description: 'Preencha os campos abaixo para criar uma nova Planta Baixa',
+  add_floor_plan_description:
+    'Preencha os campos abaixo para criar uma nova Planta Baixa',
   no_asset_in_location: 'Nenhum ativo nesta localização',
   no_wo_in_location: 'Nenhuma Ordem de Serviço nesta localização',
   no_file_in_location: 'Nenhum arquivo anexado a esta localização',
@@ -510,7 +560,7 @@ const ptBRJSON = {
   file: 'Arquivo',
   'noRows.location.message':
     'Localizações permitem que você gerencie ativos e trabalhadores de forma mais eficiente',
-  'noRows.location.action': 'Pressione o botão \'+\' para criar uma Localização',
+  'noRows.location.action': "Pressione o botão '+' para criar uma Localização",
   //inventory
   card_view: 'Visualização em Cartão',
   set_create_success: 'O Conjunto foi criado com sucesso',
@@ -523,7 +573,8 @@ const ptBRJSON = {
   enter_part_name: 'Insira o nome da peça',
   required_set_name: 'O nome do conjunto é obrigatório',
   add_set: 'Adicionar Conjunto',
-  add_set_description: 'Preencha os campos abaixo para criar e adicionar um novo Conjunto',
+  add_set_description:
+    'Preencha os campos abaixo para criar e adicionar um novo Conjunto',
   create_set: 'Criar Conjunto',
   edit_set: 'Editar Conjunto',
   edit_set_description: 'Preencha os campos abaixo para editar o Conjunto',
@@ -545,12 +596,14 @@ const ptBRJSON = {
   enter_part_area: 'Insira a área da peça',
   additional_part_details: 'Detalhes Adicionais da Peça',
   add_part: 'Adicionar Peça',
-  add_part_description: 'Preencha os campos abaixo para criar e adicionar uma nova Peça',
+  add_part_description:
+    'Preencha os campos abaixo para criar e adicionar uma nova Peça',
   create_part: 'Criar Peça',
   update_part: 'Atualizar Peça',
   update_part_description: 'Preencha os campos abaixo para atualizar a Peça',
-  'noRows.part.message': 'Peças podem ser combinadas em ativos ou usadas sozinhas',
-  'noRows.part.action': 'Pressione o botão \'+\' para criar uma Peça',
+  'noRows.part.message':
+    'Peças podem ser combinadas em ativos ou usadas sozinhas',
+  'noRows.part.action': "Pressione o botão '+' para criar uma Peça",
   confirm_delete_part: 'Tem certeza de que deseja excluir esta Peça?',
   part_details: 'Detalhes da Peça',
   area_details: 'Detalhes da Área',
@@ -587,10 +640,11 @@ const ptBRJSON = {
   shipping_method: 'Método de Envio',
   required_name: 'O nome é obrigatório',
   edit_po: 'Editar Ordem de Compra',
-  edit_po_description: 'Preencha os campos abaixo para atualizar a Ordem de Compra',
+  edit_po_description:
+    'Preencha os campos abaixo para atualizar a Ordem de Compra',
   purchase_order: 'Ordem de Compra',
   'noRows.po.message': 'Gerencie suas Ordens de Compra em um único lugar',
-  'noRows.po.action': 'Pressione o botão \'+\' para criar uma Ordem de Compra.',
+  'noRows.po.action': "Pressione o botão '+' para criar uma Ordem de Compra.",
   confirm_delete_po: 'Tem certeza de que deseja excluir esta Ordem de Compra?',
   upgrade_po: 'Atualize para criar Ordens de Compra',
   new_po: 'Nova Ordem de Compra',
@@ -613,12 +667,15 @@ const ptBRJSON = {
   value: 'Valor',
   required_value: 'O valor é obrigatório',
   required_trigger_condition: 'A condição é obrigatória',
-  wo_trigger_create_success: 'O gatilho da Ordem de Serviço foi criado com sucesso',
-  wo_trigger_create_failure: 'O gatilho da Ordem de Serviço não pôde ser criado',
+  wo_trigger_create_success:
+    'O gatilho da Ordem de Serviço foi criado com sucesso',
+  wo_trigger_create_failure:
+    'O gatilho da Ordem de Serviço não pôde ser criado',
   add_wo_trigger: 'Adicionar Gatilho de Ordem de Serviço',
   add_wo_trigger_description:
     'Preencha os campos abaixo para criar e adicionar um gatilho de Ordem de Serviço',
-  wo_trigger_edit_success: 'O gatilho da Ordem de Serviço foi atualizado com sucesso',
+  wo_trigger_edit_success:
+    'O gatilho da Ordem de Serviço foi atualizado com sucesso',
   meter_create_success: 'O medidor foi criado com sucesso',
   meter_create_failure: 'O medidor não pôde ser criado',
   meter_edit_failure: 'O medidor não pôde ser editado',
@@ -633,10 +690,12 @@ const ptBRJSON = {
   update_frequency_in_days: 'Frequência de Atualização em dias',
   required_meter_name: 'O nome do medidor é obrigatório',
   required_meter_unit: 'A unidade do medidor é obrigatória',
-  required_meter_update_frequency: 'A frequência de atualização do medidor é obrigatória',
+  required_meter_update_frequency:
+    'A frequência de atualização do medidor é obrigatória',
   required_asset: 'O ativo é obrigatório',
   add_meter: 'Adicionar Medidor',
-  add_meter_description: 'Preencha os campos abaixo para criar e adicionar um novo medidor',
+  add_meter_description:
+    'Preencha os campos abaixo para criar e adicionar um novo medidor',
   edit_meter: 'Editar Medidor',
   edit_meter_description: 'Preencha os campos abaixo para editar o medidor',
   confirm_delete_meter: 'Tem certeza de que deseja excluir este Medidor?',
@@ -649,7 +708,7 @@ const ptBRJSON = {
   meter_details: 'Detalhes do Medidor',
   'noRows.meter.message':
     'As leituras do medidor permitem que você monitore ativos e acione novas ordens de serviço com base em condições definidas',
-  'noRows.meter.action': 'Pressione o botão \'+\' para criar um Medidor',
+  'noRows.meter.action': "Pressione o botão '+' para criar um Medidor",
   meter: 'Medidor',
   //upload
   drag_one_file: 'Arraste um único arquivo aqui',
@@ -684,11 +743,12 @@ const ptBRJSON = {
   add_customer_description:
     'Preencha os campos abaixo para criar e adicionar um novo contratante',
   'noRows.customer.message': 'Contratantes são trabalhadores externos',
-  'noRows.customer.action': 'Pressione o botão \'+\' para criar um Contratante',
+  'noRows.customer.action': "Pressione o botão '+' para criar um Contratante",
   type: 'Tipo',
   billing_currency: 'Moeda de Cobrança',
   go_back: 'Voltar',
-  confirm_delete_customer: 'Tem certeza de que deseja excluir este Contratante?',
+  confirm_delete_customer:
+    'Tem certeza de que deseja excluir este Contratante?',
   //vendor
   vendor_create_success: 'O Fornecedor foi criado com sucesso',
   vendor_create_failure: 'O Fornecedor não pôde ser criado',
@@ -704,7 +764,7 @@ const ptBRJSON = {
   confirm_delete_vendor: 'Tem certeza de que deseja excluir este Fornecedor?',
   'noRows.vendor.message':
     'Fornecedores são organizações que fornecem Ativos ou Peças',
-  'noRows.vendor.action': 'Pressione o botão \'+\' para criar um Fornecedor',
+  'noRows.vendor.action': "Pressione o botão '+' para criar um Fornecedor",
   vendor_type_description: 'ex. Encanamento, Elétrica',
   //people teams
   role: 'Função',
@@ -714,7 +774,7 @@ const ptBRJSON = {
   invite_users: 'Convidar Usuários',
   bring_people_team: 'Traga novas pessoas para a equipe',
   add_20_users:
-    'Você pode adicionar 20 usuários de cada vez pressionando \'tab\' ou \'enter\' após cada entrada de e-mail. E-mails duplicados e registrados serão removidos ao registrar os usuários solicitados.',
+    "Você pode adicionar 20 usuários de cada vez pressionando 'tab' ou 'enter' após cada entrada de e-mail. E-mails duplicados e registrados serão removidos ao registrar os usuários solicitados.",
   enter_email: 'Insira o endereço de e-mail',
   users_invite_success: 'Os usuários foram convidados',
   users_invite_failure:
@@ -731,7 +791,8 @@ const ptBRJSON = {
   people_in_team: 'Pessoas na equipe',
   required_team_name: 'O nome da equipe é obrigatório',
   create_team: 'Criar equipe',
-  create_team_description: 'Você pode adicionar membros da equipe a partir daqui',
+  create_team_description:
+    'Você pode adicionar membros da equipe a partir daqui',
   confirm_delete_team: 'Tem certeza de que deseja excluir esta Equipe?',
   overview: 'Visão Geral',
   activity: 'Atividade',
@@ -757,8 +818,9 @@ const ptBRJSON = {
   REQUESTER_description:
     'Os solicitantes só podem enviar solicitações de trabalho e visualizar seu status',
   select_user_role: 'Selecionar função do usuário',
-  'noRows.team.message': 'Equipes ajudam você a gerenciar grupos específicos de pessoas.',
-  'noRows.team.action': 'Pressione o botão \'+\' para criar uma equipe.',
+  'noRows.team.message':
+    'Equipes ajudam você a gerenciar grupos específicos de pessoas.',
+  'noRows.team.action': "Pressione o botão '+' para criar uma equipe.",
   user_details: 'Detalhes do Usuário',
   //files
   file_delete_success: 'O arquivo foi excluído com sucesso',
@@ -771,7 +833,7 @@ const ptBRJSON = {
   add_files: 'Adicionar Arquivos',
   edit_file: 'Editar Arquivo',
   'noRows.file.message': 'Obtenha todos os arquivos em um único lugar',
-  'noRows.file.action': 'Pressione o botão \'+\' para fazer upload de um Arquivo',
+  'noRows.file.action': "Pressione o botão '+' para fazer upload de um Arquivo",
   upgrade_files:
     'Atualize para usar arquivos em seus Ativos, Ordens de Serviço, Localizações etc...',
   parts_consumption: 'Consumo de Peças',
@@ -785,10 +847,12 @@ const ptBRJSON = {
   timers: 'Temporizadores',
   costs: 'Custos',
   add_category: 'Adicionar nova categoria',
-  add_category_description: 'Preencha o nome para criar e adicionar uma nova categoria',
+  add_category_description:
+    'Preencha o nome para criar e adicionar uma nova categoria',
   edit_category: 'Editar Categoria',
   edit_category_description: 'Preencha o nome para editar a categoria',
-  no_category_action: 'Pressione o botão \'+\' para adicionar sua primeira categoria.',
+  no_category_action:
+    "Pressione o botão '+' para adicionar sua primeira categoria.",
   confirm_delete_category: 'Tem certeza de que deseja excluir esta Categoria?',
   no_category_message:
     'Parece que você ainda não tem nenhuma categoria {{categoryName}}.',
@@ -816,7 +880,8 @@ const ptBRJSON = {
   to_access: 'Acessar',
   role_delete_success: 'A função foi excluída com sucesso',
   role_delete_failure: 'A função não pôde ser excluída',
-  confirm_delete_role: 'Tem certeza de que deseja excluir permanentemente esta função?',
+  confirm_delete_role:
+    'Tem certeza de que deseja excluir permanentemente esta função?',
   users: 'Usuários',
   paid: 'Pago',
   free: 'Grátis',
@@ -827,7 +892,8 @@ const ptBRJSON = {
   create_role: 'Criar Função',
   upgrade_role: 'Atualize para criar função',
   add_role: 'Adicionar nova função',
-  add_role_description: 'Preencha os campos abaixo para criar e adicionar uma nova função',
+  add_role_description:
+    'Preencha os campos abaixo para criar e adicionar uma nova função',
   parts_and_sets: 'Peças e Conjuntos de Peças',
   upgrade_role_edit: 'Atualize para editar função',
   delete_role: 'Excluir Função',
@@ -840,16 +906,19 @@ const ptBRJSON = {
   auto_assign_requests: 'Atribuir automaticamente solicitações',
   auto_assign_requests_description:
     'Atribua automaticamente novas ordens de serviço à pessoa que aprova a solicitação',
-  disable_closed_wo_notification: 'Desativar notificações de ordens de serviço fechadas',
+  disable_closed_wo_notification:
+    'Desativar notificações de ordens de serviço fechadas',
   disable_closed_wo_notification_description:
     'Desative notificações quando ordens de serviço fechadas forem atualizadas',
-  ask_feedback_wo_closed: 'Solicitar feedback quando a ordem de serviço for fechada',
+  ask_feedback_wo_closed:
+    'Solicitar feedback quando a ordem de serviço for fechada',
   ask_feedback_wo_closed_description:
     'Os usuários são solicitados a dar feedback sobre o trabalho realizado',
   include_labor_in_total_cost: 'Incluir custo de mão de obra no custo total',
   include_labor_in_total_cost_description:
     'Adicione custos de mão de obra ao total quando um usuário registrar o tempo e tiver uma taxa horária armazenada',
-  enable_wo_updates_requesters: 'Ativar atualizações de ordens de serviço para solicitantes',
+  enable_wo_updates_requesters:
+    'Ativar atualizações de ordens de serviço para solicitantes',
   enable_wo_updates_requesters_description:
     'Os usuários recebem atualizações para as ordens de serviço que solicitaram',
   language: 'Idioma',
@@ -861,7 +930,8 @@ const ptBRJSON = {
   checklist_delete_success: 'A Lista de Verificação foi excluída com sucesso',
   checklist_delete_failure: 'A Lista de Verificação não pôde ser excluída',
   create_checklist: 'Criar Lista de Verificação',
-  confirm_delete_checklist: 'Tem certeza de que deseja excluir esta Lista de Verificação?',
+  confirm_delete_checklist:
+    'Tem certeza de que deseja excluir esta Lista de Verificação?',
   upgrade_checklist: 'Atualize para usar Listas de Verificação',
   //components
   upgrade_now: 'Atualize Agora',
@@ -888,7 +958,8 @@ const ptBRJSON = {
   use_a_checklist: 'Usar uma lista de verificação',
   select_checklist: 'Selecionar Lista de Verificação',
   save_checklist: 'Salvar Lista de Verificação',
-  assign_tasks_description: 'Atribuir Tarefas Personalizadas para técnicos preencherem',
+  assign_tasks_description:
+    'Atribuir Tarefas Personalizadas para técnicos preencherem',
   select_date: 'Selecionar data',
   task: 'Tarefa',
   checklist: 'Lista de Verificação',
@@ -967,13 +1038,16 @@ const ptBRJSON = {
   change_cover: 'Alterar capa',
   required_address: 'O campo de endereço é obrigatório',
   company_details: 'Detalhes da Empresa',
-  company_details_description: 'Gerencie informações relacionadas à sua empresa',
+  company_details_description:
+    'Gerencie informações relacionadas à sua empresa',
   learn_more: 'Saiba mais',
   //user profile
   profile: 'Perfil',
   email_notifications: 'Notificações por e-mail',
-  email_updates_wo: 'Atualizações por e-mail para Ordens de Serviço e Mensagens',
-  email_updates_requests: 'Atualizações por e-mail para Ordens de Serviço Solicitadas',
+  email_updates_wo:
+    'Atualizações por e-mail para Ordens de Serviço e Mensagens',
+  email_updates_requests:
+    'Atualizações por e-mail para Ordens de Serviço Solicitadas',
   po_emails: 'E-mails de Ordem de Compra',
   required_job_title: 'O campo de cargo é obrigatório',
   required_old_password: 'Por favor, forneça a senha atual.',
@@ -1052,7 +1126,8 @@ const ptBRJSON = {
     'Insira o e-mail usado para o registro para redefinir sua senha.',
   send_me_new_password: 'Envie-me uma nova senha',
   want_to_sign_in_again: 'Quer tentar entrar novamente?',
-  check_mails_for_instructions: 'Verifique seu e-mail para obter mais instruções',
+  check_mails_for_instructions:
+    'Verifique seu e-mail para obter mais instruções',
   pdf_report: 'Relatório PDF',
   HIGH: 'Alto',
   MEDIUM: 'Médio',
@@ -1110,7 +1185,7 @@ const ptBRJSON = {
   to_filter: 'Filtrar',
   'noRows.asset.message':
     'Ativos são recursos nos quais sua empresa pode intervir',
-  'noRows.asset.action': 'Pressione o botão \'+\' para criar um novo Ativo.',
+  'noRows.asset.action': "Pressione o botão '+' para criar um novo Ativo.",
   reset_filters: 'Redefinir Filtros',
   toggle_menu: 'Alternar Menu',
   no_results: 'Nenhum resultado encontrado',
@@ -1231,14 +1306,16 @@ const ptBRJSON = {
   PART_UPDATED: 'Uma peça foi atualizada',
   add_condition: 'Adicionar condição',
   workflow_creation_success: 'Fluxo de trabalho criado com sucesso',
-  workflow_creation_failure: 'A criação do fluxo de trabalho não foi bem-sucedida',
+  workflow_creation_failure:
+    'A criação do fluxo de trabalho não foi bem-sucedida',
   action_value_missing: 'O valor da ação está faltando',
   condition_value_missing: 'Um valor de condição está faltando',
   workflow_edit_success: 'O fluxo de trabalho foi atualizado com sucesso',
   workflow_edit_failure: 'O fluxo de trabalho não pôde ser editado',
   workflow_delete_success: 'O fluxo de trabalho foi excluído com sucesso',
   workflow_delete_failure: 'O fluxo de trabalho não pôde ser excluído',
-  confirm_delete_workflow: 'Tem certeza de que deseja excluir este fluxo de trabalho?',
+  confirm_delete_workflow:
+    'Tem certeza de que deseja excluir este fluxo de trabalho?',
   click_here: 'Clique aqui',
   verify_email_title: 'Verificar E-mail',
   verify_email_description:
@@ -1252,7 +1329,8 @@ const ptBRJSON = {
   downgrade_description:
     'Você acabou de rebaixar seu plano de assinatura. Você precisa desabilitar alguns usuários para prosseguir. Você só pode fazer isso uma vez para a assinatura atual. Por favor, escolha com cuidado',
   disable_users: 'Desabilitar usuários',
-  min_users_description: 'Você deve desabilitar no mínimo {{minUsers}} usuários',
+  min_users_description:
+    'Você deve desabilitar no mínimo {{minUsers}} usuários',
   downgrade_description_no_owner:
     'Sua empresa acabou de rebaixar seu plano de assinatura. O proprietário da empresa precisa desabilitar alguns usuários antes que você possa prosseguir',
   past_due: 'Vencido',
@@ -1288,7 +1366,8 @@ const ptBRJSON = {
   members: 'Membros',
   assign_user: 'Atribuir Usuário',
   assign_asset: 'Atribuir Ativo',
-  required_files_on_completion: 'Arquivos são necessários na conclusão da Ordem de Serviço',
+  required_files_on_completion:
+    'Arquivos são necessários na conclusão da Ordem de Serviço',
   required_tasks_on_completion: 'As tarefas devem ser concluídas',
   required_labor_on_completion: 'Você deve registrar o tempo',
   required_part_on_completion: 'Nenhuma peça foi usada nesta Ordem de Serviço',
@@ -1312,7 +1391,8 @@ const ptBRJSON = {
   switch_to_super_user: 'Trocar para super administrador',
   switch_account_description: 'Por favor, escolha uma conta para prosseguir',
   put_location_in_map: 'Colocar localização no mapa',
-  confirm_disable_user: 'Tem certeza de que deseja desabilitar {{user}}? Você só poderá habilitá-lo após um mês',
+  confirm_disable_user:
+    'Tem certeza de que deseja desabilitar {{user}}? Você só poderá habilitá-lo após um mês',
   user_disabled_success: 'Usuário desabilitado com sucesso',
   disable: 'Desabilitar',
   manufacturer: 'Fabricante',
@@ -1334,17 +1414,63 @@ const ptBRJSON = {
   resolved: 'Resolvido',
   average: 'Média',
   documentation: 'Documentação',
-  days_before_pm_notification: 'Notificações pré-ordem de serviço para as agendadas',
+  days_before_pm_notification:
+    'Notificações pré-ordem de serviço para as agendadas',
   estimated_start_date: 'Data de início estimada',
   no_file_linked_to_wo: 'Nenhum arquivo vinculado a esta ordem de serviço',
   add_file: 'Adicionar arquivo',
   try_for_free: 'Experimente gratuitamente',
   choose_your_plan: 'Escolha seu plano',
-  STARTER_description: 'Equipes que desejam construir uma manutenção preventiva eficiente e forte através do status da máquina e visibilidade da mão de obra.',
-  PROFESSIONAL_description: 'Departamentos que precisam aproveitar insights e análises para impulsionar o crescimento e a produtividade da manutenção.',
-  BUSINESS_description: 'Organizações prontas para capturar dados de manutenção e operações para gerenciar várias localizações e personalização do sistema.',
+  STARTER_description:
+    'Equipes que desejam construir uma manutenção preventiva eficiente e forte através do status da máquina e visibilidade da mão de obra.',
+  PROFESSIONAL_description:
+    'Departamentos que precisam aproveitar insights e análises para impulsionar o crescimento e a produtividade da manutenção.',
+  BUSINESS_description:
+    'Organizações prontas para capturar dados de manutenção e operações para gerenciar várias localizações e personalização do sistema.',
   book_demo: 'Agendar uma demonstração',
-  request_pricing: 'Solicitar preços para mais informações'
+  request_pricing: 'Solicitar preços para mais informações',
+  Reports: 'Informação',
+  'Custom dashboard built using the included components':
+    'Placa personalizada construída usando os componentes incluídos',
+  Export: 'Exportar',
+  'Last year': 'Ano passado',
+  Expenses: 'Contas',
+  Statistics: 'Estatística',
+  General: 'Em geral',
+  Calendar: 'Calendário',
+  Mailbox: 'Caixas de correio',
+  Dashboards: 'Painéis',
+  Analytics: 'Analítico',
+  Monitoring: 'Ouvir',
+  Tasks: 'Tarefas',
+  Applications: 'Aplicações',
+  Users: 'Usuários',
+  'List All': 'Todos',
+  'User Profile': 'Perfil de usuário',
+  Login: 'Conectar',
+  Register: 'Registro',
+  'Recover Password': 'Recuperar senha',
+  Status: 'Estado',
+  'Error 404': 'Erro 404',
+  'Error 500': 'Erro 500',
+  'Coming Soon': 'Futuro',
+  Maintenance: 'Manutenção',
+  Overview: 'Avançar',
+  Documentation: 'Documentação',
+  Welcome: 'Bem-vindo',
+  Help: 'Ajuda',
+  'Features tour': 'Visita de recursos',
+  'Getting started guide': 'Guia da casa',
+  'Contact support': 'Entre em contato com o suporte',
+  Version: 'Versão',
+  Search: 'Procurar',
+  Notifications: 'Notificações',
+  Settings: 'Parâmetros',
+  'Language Switcher': 'Seletor de idiomas',
+  'Sign out': 'Desconexão',
+  'Change Theme': 'Altere o assunto',
+  'View all notifications': 'Mostre todas as notificações',
+  rate: 'Freqüência'
 };
 
 export default ptBRJSON;
