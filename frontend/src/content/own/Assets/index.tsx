@@ -13,12 +13,19 @@ import {
   IconButton,
   Menu,
   MenuItem,
-  Stack, styled,
-  Typography, useTheme
+  Stack,
+  styled,
+  Typography,
+  useTheme
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { IField } from '../type';
-import { addAsset, getAssetChildren, getAssets, resetAssetsHierarchy } from '../../../slices/asset';
+import {
+  addAsset,
+  getAssetChildren,
+  getAssets,
+  resetAssetsHierarchy
+} from '../../../slices/asset';
 import { useDispatch, useSelector } from '../../../store';
 import * as React from 'react';
 import ReplayTwoToneIcon from '@mui/icons-material/ReplayTwoTone';
@@ -28,7 +35,8 @@ import { GridEnrichedColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
 import CustomDataGrid from '../components/CustomDatagrid';
 import {
   GridEventListener,
-  GridRenderCellParams, GridRow,
+  GridRenderCellParams,
+  GridRow,
   GridToolbar,
   GridValueGetterParams
 } from '@mui/x-data-grid';
@@ -139,10 +147,14 @@ function Assets() {
     newCriteria.filterFields = newFilters;
     setCriteria(newCriteria);
   };
-  const [deployedAssets, setDeployedAssets] = useState<{ id: number; hierarchy: number[] }[]>([{
-    id: 0,
-    hierarchy: []
-  }]);
+  const [deployedAssets, setDeployedAssets] = useState<
+    { id: number; hierarchy: number[] }[]
+  >([
+    {
+      id: 0,
+      hierarchy: []
+    }
+  ]);
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -255,7 +267,11 @@ function Assets() {
       renderCell: (params: GridRenderCellParams<string>) => (
         <LabelWrapper
           sx={{
-            background: `${params.value === 'OPERATIONAL' ? theme.colors.success.main : theme.colors.error.main}`,
+            background: `${
+              params.value === 'OPERATIONAL'
+                ? theme.colors.success.main
+                : theme.colors.error.main
+            }`,
             color: `white`
           }}
         >
@@ -565,10 +581,15 @@ function Assets() {
             hierarchy: [...row.hierarchy, '']
           }
         ]);
-        if (!deployedAssets.find(deployedAsset => deployedAsset.id === row.id)) setDeployedAssets(deployedAssets.concat({
-          id: row.id,
-          hierarchy: row.hierarchy
-        }));
+        if (
+          !deployedAssets.find((deployedAsset) => deployedAsset.id === row.id)
+        )
+          setDeployedAssets(
+            deployedAssets.concat({
+              id: row.id,
+              hierarchy: row.hierarchy
+            })
+          );
         dispatch(getAssetChildren(row.id, row.hierarchy));
       };
       /**
@@ -640,13 +661,12 @@ function Assets() {
               warrantyExpirationDate: null,
               location: locationParamObject
                 ? {
-                  label: locationParamObject.name,
-                  value: locationParamObject.id
-                }
+                    label: locationParamObject.name,
+                    value: locationParamObject.id
+                  }
                 : null
             }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatAssetValues(values);
               return new Promise<void>((resolve, rej) => {
@@ -662,7 +682,14 @@ function Assets() {
                     dispatch(addAsset(formattedValues))
                       .then(onCreationSuccess)
                       .then(() => {
-                        deployedAssets.forEach(deployedAsset => dispatch(getAssetChildren(deployedAsset.id, deployedAsset.hierarchy)));
+                        deployedAssets.forEach((deployedAsset) =>
+                          dispatch(
+                            getAssetChildren(
+                              deployedAsset.id,
+                              deployedAsset.hierarchy
+                            )
+                          )
+                        );
                       })
                       .catch(onCreationFailure)
                       .finally(resolve);
@@ -690,10 +717,17 @@ function Assets() {
     return (
       <GridRow
         {...props}
-        style={(rowNode?.depth ?? 0) > 0 ? {
-          backgroundColor: rowNode.depth % 2 === 0 ? theme.colors.primary.light : theme.colors.primary.main,
-          color: 'white'
-        } : undefined}
+        style={
+          (rowNode?.depth ?? 0) > 0
+            ? {
+                backgroundColor:
+                  rowNode.depth % 2 === 0
+                    ? theme.colors.primary.light
+                    : theme.colors.primary.main,
+                color: 'white'
+              }
+            : undefined
+        }
       />
     );
   };
@@ -756,6 +790,7 @@ function Assets() {
             >
               <Box sx={{ width: '95%' }}>
                 <CustomDataGrid
+                  pro
                   treeData={view === 'hierarchy'}
                   columns={columns}
                   rows={view === 'hierarchy' ? assetsHierarchy : assets.content}

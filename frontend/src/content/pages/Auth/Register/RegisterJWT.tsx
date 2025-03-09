@@ -106,7 +106,25 @@ function RegisterJWT({
             }
           })
           .catch((err) => {
-            showSnackBar(err, 'error');
+            let errorMessage = 'An unknown error occurred';
+
+            // Check if the error message contains a JSON string
+            if (typeof err.message === 'string') {
+              try {
+                const parsedError = JSON.parse(err.message);
+                // If the JSON contains a 'message' field, use it
+                if (parsedError && parsedError.message) {
+                  errorMessage = parsedError.message;
+                }
+              } catch (e) {
+                // If parsing fails, fallback to the original error message
+                errorMessage = err.message;
+              }
+            } else {
+              // In case err.message is not a string, just use the general error
+              errorMessage = 'An unknown error occurred';
+            }
+            showSnackBar(errorMessage, 'error');
             console.error(err);
           })
           .finally(() => {

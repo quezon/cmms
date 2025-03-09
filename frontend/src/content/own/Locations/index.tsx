@@ -15,7 +15,8 @@ import {
   Stack,
   Tab,
   Tabs,
-  Typography, useTheme
+  Typography,
+  useTheme
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { IField } from '../type';
@@ -41,7 +42,8 @@ import CustomDataGrid from '../components/CustomDatagrid';
 import {
   GridActionsCellItem,
   GridEventListener,
-  GridRenderCellParams, GridRow,
+  GridRenderCellParams,
+  GridRow,
   GridRowParams,
   GridToolbar,
   GridValueGetterParams
@@ -80,10 +82,14 @@ function Locations() {
   const { locationsHierarchy, locations, loadingGet } = useSelector(
     (state) => state.locations
   );
-  const [deployedLocations, setDeployedLocations] = useState<{ id: number; hierarchy: number[] }[]>([{
-    id: 0,
-    hierarchy: []
-  }]);
+  const [deployedLocations, setDeployedLocations] = useState<
+    { id: number; hierarchy: number[] }[]
+  >([
+    {
+      id: 0,
+      hierarchy: []
+    }
+  ]);
 
   const { loadingExport } = useSelector((state) => state.exports);
   const apiRef = useGridApiRef();
@@ -187,10 +193,17 @@ function Locations() {
             hierarchy: [...row.hierarchy, '']
           }
         ]);
-        if (!deployedLocations.find(deployedLocation => deployedLocation.id === row.id)) setDeployedLocations(deployedLocations.concat({
-          id: row.id,
-          hierarchy: row.hierarchy
-        }));
+        if (
+          !deployedLocations.find(
+            (deployedLocation) => deployedLocation.id === row.id
+          )
+        )
+          setDeployedLocations(
+            deployedLocations.concat({
+              id: row.id,
+              hierarchy: row.hierarchy
+            })
+          );
         dispatch(getLocationChildren(row.id, row.hierarchy));
       };
       /**
@@ -363,8 +376,10 @@ function Locations() {
       name: 'mapSwitch',
       type: 'checkbox',
       label: t('put_location_in_map'),
-      relatedFields: [{ field: 'mapTitle', value: false, hide: true },
-        { field: 'coordinates', value: false, hide: true }]
+      relatedFields: [
+        { field: 'mapTitle', value: false, hide: true },
+        { field: 'coordinates', value: false, hide: true }
+      ]
     },
     {
       name: 'mapTitle',
@@ -434,8 +449,7 @@ function Locations() {
             validation={Yup.object().shape(shape)}
             submitText={t('add')}
             values={{}}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
               return new Promise<void>((resolve, rej) => {
@@ -451,7 +465,14 @@ function Locations() {
                       .then(onCreationSuccess)
                       .then(() => {
                         resolve();
-                        deployedLocations.forEach(deployedLocation => dispatch(getLocationChildren(deployedLocation.id, deployedLocation.hierarchy)));
+                        deployedLocations.forEach((deployedLocation) =>
+                          dispatch(
+                            getLocationChildren(
+                              deployedLocation.id,
+                              deployedLocation.hierarchy
+                            )
+                          )
+                        );
                       })
                       .catch((err) => {
                         onCreationFailure(err);
@@ -480,10 +501,17 @@ function Locations() {
     return (
       <GridRow
         {...props}
-        style={(rowNode?.depth ?? 0) > 0 ? {
-          backgroundColor: rowNode.depth % 2 === 0 ? theme.colors.primary.light : theme.colors.primary.main,
-          color: 'white'
-        } : undefined}
+        style={
+          (rowNode?.depth ?? 0) > 0
+            ? {
+                backgroundColor:
+                  rowNode.depth % 2 === 0
+                    ? theme.colors.primary.light
+                    : theme.colors.primary.main,
+                color: 'white'
+              }
+            : undefined
+        }
       />
     );
   };
@@ -581,19 +609,18 @@ function Locations() {
               }),
               coordinates: currentLocation?.longitude
                 ? {
-                  lng: currentLocation.longitude,
-                  lat: currentLocation.latitude
-                }
+                    lng: currentLocation.longitude,
+                    lat: currentLocation.latitude
+                  }
                 : null,
               parentLocation: currentLocation?.parentLocation
                 ? {
-                  label: currentLocation.parentLocation.name,
-                  value: currentLocation.parentLocation.id
-                }
+                    label: currentLocation.parentLocation.name,
+                    value: currentLocation.parentLocation.id
+                  }
                 : null
             }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
               //differentiate files from api and formattedValues
@@ -698,6 +725,7 @@ function Locations() {
               >
                 <Box sx={{ width: '95%' }}>
                   <CustomDataGrid
+                    pro
                     treeData
                     columns={columns}
                     rows={locationsHierarchy}

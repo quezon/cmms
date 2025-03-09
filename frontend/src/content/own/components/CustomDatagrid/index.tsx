@@ -1,4 +1,5 @@
 import { DataGridPro, DataGridProProps } from '@mui/x-data-grid-pro';
+import { DataGrid } from '@mui/x-data-grid';
 import { useTranslation } from 'react-i18next';
 import { Stack, Typography, useTheme } from '@mui/material';
 import gridLocaleText from './GridLocaleText';
@@ -7,6 +8,7 @@ import { useEffect, useRef, useState } from 'react';
 
 interface CustomDatagridProps extends DataGridProProps {
   notClickable?: boolean;
+  pro?: boolean;
 }
 
 function CustomDataGrid(props: CustomDatagridProps) {
@@ -15,7 +17,7 @@ function CustomDataGrid(props: CustomDatagridProps) {
   const { height } = useWindowDimensions();
   const tableRef = useRef<HTMLDivElement>();
   const [tableHeight, setTableHeight] = useState<number>(500);
-
+  const Component = props.pro ? DataGridPro : DataGrid;
   const getTableHeight = () => {
     if (tableRef.current) {
       const viewportOffset = tableRef.current.getBoundingClientRect();
@@ -40,7 +42,8 @@ function CustomDataGrid(props: CustomDatagridProps) {
   );
   return (
     <div ref={tableRef} style={{ height: tableHeight, width: '100%' }}>
-      <DataGridPro
+      {/*@ts-ignore*/}
+      <Component
         sx={{
           ' .MuiDataGrid-columnHeader': {
             fontWeight: 'bold',
