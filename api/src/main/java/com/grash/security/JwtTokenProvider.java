@@ -40,16 +40,12 @@ public class JwtTokenProvider {
 
 
     private final CustomUserDetailsService customUserDetailsService;
-
-    @PostConstruct
-    protected void init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
-
+    
     public String createToken(String username, List<RoleType> roles) {
 
         Claims claims = Jwts.claims().setSubject(username);
-        claims.put("auth", roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
+        claims.put("auth",
+                roles.stream().map(s -> new SimpleGrantedAuthority(s.getAuthority())).filter(Objects::nonNull).collect(Collectors.toList()));
 
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);

@@ -29,7 +29,6 @@ import Meter from '../models/owns/meter';
 import Asset, { AssetDTO } from '../models/owns/asset';
 import Location from '../models/owns/location';
 import { useZendesk } from 'react-use-zendesk';
-import { JWT_SECRET } from '../config';
 
 interface AuthState {
   isInitialized: boolean;
@@ -67,24 +66,24 @@ interface AuthContextValue extends AuthState {
   fetchCompanySettings: () => Promise<void>;
   fetchCompany: () => Promise<void>;
   patchGeneralPreferences: (
-      values: Partial<GeneralPreferences>
+    values: Partial<GeneralPreferences>
   ) => Promise<void>;
   patchFieldConfiguration: (
-      fieldName: string,
-      fieldType: FieldType,
-      fieldConfigurationsType: FieldConfigurationsType
+    fieldName: string,
+    fieldType: FieldType,
+    fieldConfigurationsType: FieldConfigurationsType
   ) => Promise<void>;
   hasViewPermission: (permission: PermissionEntity) => boolean;
   hasViewOtherPermission: (permission: PermissionEntity) => boolean;
   hasFeature: (feature: PlanFeature) => boolean;
   hasCreatePermission: (permission: PermissionEntity) => boolean;
   hasEditPermission: <Entity extends Audit>(
-      permission: PermissionEntity,
-      entity: Entity
+    permission: PermissionEntity,
+    entity: Entity
   ) => boolean;
   hasDeletePermission: <Entity extends Audit>(
-      permission: PermissionEntity,
-      entity: Entity
+    permission: PermissionEntity,
+    entity: Entity
   ) => boolean;
   getFilteredFields: (fields: Array<IField>) => Array<IField>;
 }
@@ -196,23 +195,23 @@ type PatchFieldConfigurationAction = {
   };
 };
 type Action =
-    | InitializeAction
-    | LoginAction
-    | LogoutAction
-    | RegisterAction
-    | PatchUserSettingsAction
-    | PatchUserAction
-    | FetchUserSettingsAction
-    | FetchCompanySettingsAction
-    | PatchGeneralPreferencesAction
-    | PatchFieldConfigurationAction
-    | FetchCompanyAction
-    | PatchCompanyAction
-    | PatchSubscriptionAction
-    | CancelSubscriptionAction
-    | ResumeSubscriptionAction
-    | UpgradeAction
-    | DowngradeAction;
+  | InitializeAction
+  | LoginAction
+  | LogoutAction
+  | RegisterAction
+  | PatchUserSettingsAction
+  | PatchUserAction
+  | FetchUserSettingsAction
+  | FetchCompanySettingsAction
+  | PatchGeneralPreferencesAction
+  | PatchFieldConfigurationAction
+  | FetchCompanyAction
+  | PatchCompanyAction
+  | PatchSubscriptionAction
+  | CancelSubscriptionAction
+  | ResumeSubscriptionAction
+  | UpgradeAction
+  | DowngradeAction;
 
 const initialAuthState: AuthState = {
   isAuthenticated: false,
@@ -237,8 +236,8 @@ const setCompanyId = (companyId: number) => {
 };
 
 const handlers: Record<
-    string,
-    (state: AuthState, action: Action) => AuthState
+  string,
+  (state: AuthState, action: Action) => AuthState
 > = {
   INITIALIZE: (state: AuthState, action: InitializeAction): AuthState => {
     const { isAuthenticated, user, companySettings, company } = action.payload;
@@ -280,8 +279,8 @@ const handlers: Record<
     };
   },
   PATCH_USER_SETTINGS: (
-      state: AuthState,
-      action: PatchUserSettingsAction
+    state: AuthState,
+    action: PatchUserSettingsAction
   ): AuthState => {
     const { userSettings } = action.payload;
     return {
@@ -297,8 +296,8 @@ const handlers: Record<
     };
   },
   PATCH_SUBSCRIPTION: (
-      state: AuthState,
-      action: PatchSubscriptionAction
+    state: AuthState,
+    action: PatchSubscriptionAction
   ): AuthState => {
     const { subscription } = action.payload;
     return {
@@ -307,8 +306,8 @@ const handlers: Record<
     };
   },
   CANCEL_SUBSCRIPTION: (
-      state: AuthState,
-      action: CancelSubscriptionAction
+    state: AuthState,
+    action: CancelSubscriptionAction
   ): AuthState => {
     return {
       ...state,
@@ -319,8 +318,8 @@ const handlers: Record<
     };
   },
   RESUME_SUBSCRIPTION: (
-      state: AuthState,
-      action: CancelSubscriptionAction
+    state: AuthState,
+    action: CancelSubscriptionAction
   ): AuthState => {
     return {
       ...state,
@@ -338,8 +337,8 @@ const handlers: Record<
     };
   },
   GET_USER_SETTINGS: (
-      state: AuthState,
-      action: FetchUserSettingsAction
+    state: AuthState,
+    action: FetchUserSettingsAction
   ): AuthState => {
     const { userSettings } = action.payload;
     return {
@@ -348,8 +347,8 @@ const handlers: Record<
     };
   },
   GET_COMPANY_SETTINGS: (
-      state: AuthState,
-      action: FetchCompanySettingsAction
+    state: AuthState,
+    action: FetchCompanySettingsAction
   ): AuthState => {
     const { companySettings } = action.payload;
     return {
@@ -365,8 +364,8 @@ const handlers: Record<
     };
   },
   PATCH_GENERAL_PREFERENCES: (
-      state: AuthState,
-      action: PatchGeneralPreferencesAction
+    state: AuthState,
+    action: PatchGeneralPreferencesAction
   ): AuthState => {
     const { generalPreferences } = action.payload;
     return {
@@ -396,38 +395,38 @@ const handlers: Record<
     };
   },
   PATCH_FIELD_CONFIGURATION: (
-      state: AuthState,
-      action: PatchFieldConfigurationAction
+    state: AuthState,
+    action: PatchFieldConfigurationAction
   ): AuthState => {
     const { type, fieldConfiguration } = action.payload;
     const stateClone = { ...state };
     if (type === 'workOrder') {
       stateClone.companySettings.workOrderConfiguration.workOrderFieldConfigurations =
-          stateClone.companySettings.workOrderConfiguration.workOrderFieldConfigurations.map(
-              (fC) => {
-                if (fieldConfiguration.id === fC.id) {
-                  return fieldConfiguration;
-                }
-                return fC;
-              }
-          );
+        stateClone.companySettings.workOrderConfiguration.workOrderFieldConfigurations.map(
+          (fC) => {
+            if (fieldConfiguration.id === fC.id) {
+              return fieldConfiguration;
+            }
+            return fC;
+          }
+        );
     } else {
       stateClone.companySettings.workOrderRequestConfiguration.fieldConfigurations =
-          stateClone.companySettings.workOrderRequestConfiguration.fieldConfigurations.map(
-              (fC) => {
-                if (fieldConfiguration.id === fC.id) {
-                  return fieldConfiguration;
-                }
-                return fC;
-              }
-          );
+        stateClone.companySettings.workOrderRequestConfiguration.fieldConfigurations.map(
+          (fC) => {
+            if (fieldConfiguration.id === fC.id) {
+              return fieldConfiguration;
+            }
+            return fC;
+          }
+        );
     }
     return stateClone;
   }
 };
 
 const reducer = (state: AuthState, action: Action): AuthState =>
-    handlers[action.type] ? handlers[action.type](state, action) : state;
+  handlers[action.type] ? handlers[action.type](state, action) : state;
 
 const AuthContext = createContext<AuthContextValue>({
   ...initialAuthState,
@@ -484,7 +483,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     try {
       const accessToken = window.localStorage.getItem('accessToken');
 
-      if (accessToken && (await verify(accessToken, JWT_SECRET))) {
+      if (accessToken && (await verify(accessToken))) {
         setSession(accessToken);
         const user = await updateUserInfos();
         const company = await api.get<Company>(`companies/${user.companyId}`);
@@ -524,13 +523,13 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
   const login = async (email: string, password: string): Promise<void> => {
     const response = await api.post<{ accessToken: string }>(
-        'auth/signin',
-        {
-          email,
-          type: 'client',
-          password
-        },
-        { headers: authHeader(true) }
+      'auth/signin',
+      {
+        email,
+        type: 'client',
+        password
+      },
+      { headers: authHeader(true) }
     );
     const { accessToken } = response;
     return loginInternal(accessToken);
@@ -557,7 +556,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
   const switchAccount = async (id: number): Promise<void> => {
     const response = await api.get<{ accessToken: string }>(
-        `auth/switch-account?id=${id}`
+      `auth/switch-account?id=${id}`
     );
     const { accessToken } = response;
     return loginInternal(accessToken);
@@ -579,12 +578,12 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
 
   const register = async (
-      values
+    values
   ): Promise<{ success: boolean; message: string }> => {
     const response = await api.post<{ message: string; success: boolean }>(
-        'auth/signup',
-        values,
-        { headers: authHeader(true) }
+      'auth/signup',
+      values,
+      { headers: authHeader(true) }
     );
     const { message, success } = response;
     if (message.startsWith('Successful')) {
@@ -607,11 +606,11 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
 
   const patchUserSettings = async (
-      values: Partial<UserSettings>
+    values: Partial<UserSettings>
   ): Promise<void> => {
     const userSettings = await api.patch<UserSettings>(
-        `user-settings/${state.userSettings.id}`,
-        values
+      `user-settings/${state.userSettings.id}`,
+      values
     );
     dispatch({
       type: 'PATCH_USER_SETTINGS',
@@ -677,16 +676,16 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     newPassword: string;
   }): Promise<boolean> => {
     const response = await api.post<{ success: boolean }>(
-        `auth/updatepwd`,
-        values
+      `auth/updatepwd`,
+      values
     );
     const { success } = response;
     return success;
   };
   const resetPassword = async (email: string): Promise<boolean> => {
     const response = await api.get<{ success: boolean }>(
-        `auth/resetpwd?email=${email}`,
-        { headers: authHeader(true) }
+      `auth/resetpwd?email=${email}`,
+      { headers: authHeader(true) }
     );
     const { success } = response;
     return success;
@@ -703,7 +702,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
 
   const fetchCompanySettings = async (): Promise<void> => {
     const companySettings = await getCompanySettings(
-        state.user.companySettingsId
+      state.user.companySettingsId
     );
     dispatch({
       type: 'GET_COMPANY_SETTINGS',
@@ -722,11 +721,11 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     });
   };
   const patchGeneralPreferences = async (
-      values: Partial<GeneralPreferences>
+    values: Partial<GeneralPreferences>
   ): Promise<void> => {
     const generalPreferences = await api.patch<GeneralPreferences>(
-        `general-preferences/${state.companySettings.generalPreferences.id}`,
-        { ...state.companySettings.generalPreferences, ...values }
+      `general-preferences/${state.companySettings.generalPreferences.id}`,
+      { ...state.companySettings.generalPreferences, ...values }
     );
     dispatch({
       type: 'PATCH_GENERAL_PREFERENCES',
@@ -737,26 +736,26 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
 
   const patchFieldConfiguration = async (
-      fieldName: string,
-      fieldType: FieldType,
-      fieldConfigurationsType: FieldConfigurationsType
+    fieldName: string,
+    fieldType: FieldType,
+    fieldConfigurationsType: FieldConfigurationsType
   ): Promise<void> => {
     let id;
     if (fieldConfigurationsType === 'workOrder') {
       id =
-          state.companySettings.workOrderConfiguration.workOrderFieldConfigurations.find(
-              (workOrderFieldConfiguration) =>
-                  workOrderFieldConfiguration.fieldName === fieldName
-          ).id;
+        state.companySettings.workOrderConfiguration.workOrderFieldConfigurations.find(
+          (workOrderFieldConfiguration) =>
+            workOrderFieldConfiguration.fieldName === fieldName
+        ).id;
     } else {
       id =
-          state.companySettings.workOrderRequestConfiguration.fieldConfigurations.find(
-              (fieldConfiguration) => fieldConfiguration.fieldName === fieldName
-          ).id;
+        state.companySettings.workOrderRequestConfiguration.fieldConfigurations.find(
+          (fieldConfiguration) => fieldConfiguration.fieldName === fieldName
+        ).id;
     }
     const fieldConfiguration = await api.patch<FieldConfiguration>(
-        `field-configurations/${id}`,
-        { fieldType }
+      `field-configurations/${id}`,
+      { fieldType }
     );
     dispatch({
       type: 'PATCH_FIELD_CONFIGURATION',
@@ -776,14 +775,14 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     return state.user.role.createPermissions.includes(permissionEntity);
   };
   const hasEditPermission = <Entity extends Audit>(
-      permissionEntity: PermissionEntity,
-      entity: Entity
+    permissionEntity: PermissionEntity,
+    entity: Entity
   ) => {
     if (!entity) return false;
     if (permissionEntity === PermissionEntity.PEOPLE_AND_TEAMS) {
       return (
-          state.user.id === entity.id ||
-          state.user.role.editOtherPermissions.includes(permissionEntity)
+        state.user.id === entity.id ||
+        state.user.role.editOtherPermissions.includes(permissionEntity)
       );
     } else if (permissionEntity === PermissionEntity.WORK_ORDERS) {
       const isAssignedTo = (workOrder: WorkOrder, user: OwnUser): boolean => {
@@ -800,18 +799,18 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         return users.some((user1) => user1.id === user.id);
       };
       return (
-          state.user.id === entity.createdBy ||
-          state.user.role.editOtherPermissions.includes(permissionEntity) ||
-          isAssignedTo(entity as unknown as WorkOrder, state.user)
+        state.user.id === entity.createdBy ||
+        state.user.role.editOtherPermissions.includes(permissionEntity) ||
+        isAssignedTo(entity as unknown as WorkOrder, state.user)
       );
     } else if (permissionEntity === PermissionEntity.METERS) {
       const isAssignedTo = (meter: Meter, user: OwnUser): boolean => {
         return meter.users.some((user1) => user1.id === user.id);
       };
       return (
-          state.user.id === entity.createdBy ||
-          state.user.role.editOtherPermissions.includes(permissionEntity) ||
-          isAssignedTo(entity as unknown as Meter, state.user)
+        state.user.id === entity.createdBy ||
+        state.user.role.editOtherPermissions.includes(permissionEntity) ||
+        isAssignedTo(entity as unknown as Meter, state.user)
       );
     } else if (permissionEntity === PermissionEntity.ASSETS) {
       const isAssignedTo = (asset: AssetDTO, user: OwnUser): boolean => {
@@ -825,9 +824,9 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         return users.some((user1) => user1.id === user.id);
       };
       return (
-          state.user.id === entity.createdBy ||
-          state.user.role.editOtherPermissions.includes(permissionEntity) ||
-          isAssignedTo(entity as unknown as AssetDTO, state.user)
+        state.user.id === entity.createdBy ||
+        state.user.role.editOtherPermissions.includes(permissionEntity) ||
+        isAssignedTo(entity as unknown as AssetDTO, state.user)
       );
     } else if (permissionEntity === PermissionEntity.LOCATIONS) {
       const isAssignedTo = (location: Location, user: OwnUser): boolean => {
@@ -838,29 +837,29 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         return users.some((user1) => user1.id === user.id);
       };
       return (
-          state.user.id === entity.createdBy ||
-          state.user.role.editOtherPermissions.includes(permissionEntity) ||
-          isAssignedTo(entity as unknown as Location, state.user)
+        state.user.id === entity.createdBy ||
+        state.user.role.editOtherPermissions.includes(permissionEntity) ||
+        isAssignedTo(entity as unknown as Location, state.user)
       );
     }
     return (
-        state.user.id === entity.createdBy ||
-        state.user.role.editOtherPermissions.includes(permissionEntity)
+      state.user.id === entity.createdBy ||
+      state.user.role.editOtherPermissions.includes(permissionEntity)
     );
   };
   const hasDeletePermission = <Entity extends Audit>(
-      permissionEntity: PermissionEntity,
-      entity: Entity
+    permissionEntity: PermissionEntity,
+    entity: Entity
   ) => {
     if (!entity) return false;
     return (
-        state.user.id === entity.createdBy ||
-        state.user.role.deleteOtherPermissions.includes(permissionEntity)
+      state.user.id === entity.createdBy ||
+      state.user.role.deleteOtherPermissions.includes(permissionEntity)
     );
   };
   const hasFeature = (feature: PlanFeature) => {
     return state.company.subscription.subscriptionPlan.features.includes(
-        feature
+      feature
     );
   };
   const getFilteredFields = (defaultFields: Array<IField>): IField[] => {
@@ -873,10 +872,10 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const upgrade = async (users: number[]) => {
     try {
       const { success } = await api.post<{ success: boolean }>(
-          'subscriptions/upgrade',
-          users,
-          {},
-          true
+        'subscriptions/upgrade',
+        users,
+        {},
+        true
       );
       if (success)
         dispatch({
@@ -891,10 +890,10 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const downgrade = async (users: number[]) => {
     try {
       const { success } = await api.post<{ success: boolean }>(
-          'subscriptions/downgrade',
-          users,
-          {},
-          true
+        'subscriptions/downgrade',
+        users,
+        {},
+        true
       );
       if (success)
         dispatch({
@@ -911,42 +910,42 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   }, []);
 
   return (
-      <AuthContext.Provider
-          value={{
-            ...state,
-            method: 'JWT',
-            login,
-            logout,
-            register,
-            getInfos,
-            patchUser,
-            patchSubscription,
-            cancelSubscription,
-            resumeSubscription,
-            patchCompany,
-            updatePassword,
-            resetPassword,
-            patchUserSettings,
-            fetchUserSettings,
-            fetchCompanySettings,
-            fetchCompany,
-            patchGeneralPreferences,
-            patchFieldConfiguration,
-            hasViewPermission,
-            hasViewOtherPermission,
-            hasFeature,
-            getFilteredFields,
-            hasEditPermission,
-            hasDeletePermission,
-            hasCreatePermission,
-            upgrade,
-            downgrade,
-            switchAccount,
-            loginInternal
-          }}
-      >
-        {children}
-      </AuthContext.Provider>
+    <AuthContext.Provider
+      value={{
+        ...state,
+        method: 'JWT',
+        login,
+        logout,
+        register,
+        getInfos,
+        patchUser,
+        patchSubscription,
+        cancelSubscription,
+        resumeSubscription,
+        patchCompany,
+        updatePassword,
+        resetPassword,
+        patchUserSettings,
+        fetchUserSettings,
+        fetchCompanySettings,
+        fetchCompany,
+        patchGeneralPreferences,
+        patchFieldConfiguration,
+        hasViewPermission,
+        hasViewOtherPermission,
+        hasFeature,
+        getFilteredFields,
+        hasEditPermission,
+        hasDeletePermission,
+        hasCreatePermission,
+        upgrade,
+        downgrade,
+        switchAccount,
+        loginInternal
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
   );
 };
 

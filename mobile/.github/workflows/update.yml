@@ -32,4 +32,4 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Publish update
-        run: API_URL=${{secrets.API_URL}} JWT_SECRET_KEY=${{secrets.JWT_SECRET_KEY}} eas update --auto
+        run: API_URL=${{secrets.API_URL}} eas update --auto

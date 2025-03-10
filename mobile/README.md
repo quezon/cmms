@@ -30,7 +30,6 @@ Set these environment variables
 | Name       | Required | Description         | Default Value |
 |------------|----------|---------------------|---------------|
 | API_URL    | Yes      | Your public api url | (empty)       |
-| JWT_SECRET | Yes      | The JWT secret key  | (empty)       |
 
 ## Getting help
 

@@ -24,7 +24,6 @@ import { phoneRegExp } from '../../../../utils/validators';
 import { useContext, useState } from 'react';
 import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
 import { useNavigate } from 'react-router-dom';
-import { JWT_SECRET } from '../../../../config';
 import i18n from 'i18next';
 import countries from '../../../../i18n/countries';
 import { downloadPrivacyPolicy, downloadTos } from '../../../../slices/file';
@@ -98,7 +97,7 @@ function RegisterJWT({
           role ? { ...valuesClone, role: { id: role } } : valuesClone
         )
           .then(async (res) => {
-            if (res && (await verify(res.message, JWT_SECRET))) {
+            if (res && (await verify(res.message))) {
               loginInternal(res.message);
             } else {
               if (!role) showSnackBar(t('verify_email'), 'success');

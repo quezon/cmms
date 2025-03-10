@@ -34,8 +34,8 @@ async function post<T>(
     body: isNotJson
       ? data
       : JSON.stringify(
-        withoutCompany ? data : { ...data, company: { id: companyId } }
-      )
+          withoutCompany ? data : { ...data, company: { id: companyId } }
+        )
   });
 }
 

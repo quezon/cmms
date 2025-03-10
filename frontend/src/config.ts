@@ -40,5 +40,3 @@ export const zendeskKey = '';
 
 export const googleTrackingId = process.env.REACT_APP_GOOGLE_TRACKING_ID;
 export const IS_LOCALHOST = apiUrl.includes('localhost:');
-
-export const JWT_SECRET = process.env.REACT_APP_JWT_SECRET_KEY;

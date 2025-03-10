@@ -1,6 +1,5 @@
 import * as jose from 'jose';
 import { Buffer } from 'buffer';
-import { JWT_SECRET } from '../config';
 
 window.Buffer = Buffer;
 /* eslint-disable no-bitwise */
@@ -28,10 +27,7 @@ export const sign = (
   return `${encodedHeader}.${encodedPayload}.${signature}`;
 };
 
-export const verify = async (
-  token: string,
-  secretKey: string
-): Promise<boolean> => {
+export const verify = async (token: string): Promise<boolean> => {
   try {
     const decoded = await jose.decodeJwt(token);
     const currentTime = new Date().getTime() / 1000;

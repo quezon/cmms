@@ -38,7 +38,7 @@ import { useTranslation } from 'react-i18next';
 import analytics from '@react-native-firebase/analytics';
 import { useDispatch } from '../store';
 import { revertAll } from '../utils/redux';
-import { apiUrl, JWT_SECRET } from '../config';
+import { apiUrl } from '../config';
 import { newReceivedNotification } from '../slices/notification';
 import Notification from '../models/notification';
 import { getMobileOverviewStats } from '../slices/analytics/workOrder';
@@ -516,22 +516,30 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         if (!stompClient) {
           const socket = new SockJS(`${apiUrl}ws`);
           const client = Stomp.over(socket);
-          client.connect({ token: await AsyncStorage.getItem('accessToken') }, function(frame) {
-            const subscription = client.subscribe(
-              `/notifications/${state.user.id}`,
-              function(message) {
-                const notification: Notification = JSON.parse(message.body);
-                globalDispatch(
-                  newReceivedNotification(notification)
-                );
-                if (notification.notificationType === 'WORK_ORDER') {
-                  if (state.userSettings?.statsForAssignedWorkOrders !== undefined)
-                    globalDispatch(getMobileOverviewStats(state.userSettings.statsForAssignedWorkOrders));
+          client.connect(
+            { token: await AsyncStorage.getItem('accessToken') },
+            function (frame) {
+              const subscription = client.subscribe(
+                `/notifications/${state.user.id}`,
+                function (message) {
+                  const notification: Notification = JSON.parse(message.body);
+                  globalDispatch(newReceivedNotification(notification));
+                  if (notification.notificationType === 'WORK_ORDER') {
+                    if (
+                      state.userSettings?.statsForAssignedWorkOrders !==
+                      undefined
+                    )
+                      globalDispatch(
+                        getMobileOverviewStats(
+                          state.userSettings.statsForAssignedWorkOrders
+                        )
+                      );
+                  }
                 }
-              }
-            );
-            setStompClient(client);
-          });
+              );
+              setStompClient(client);
+            }
+          );
         }
       } else {
         disconnect();
@@ -621,10 +629,12 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     checkPushNotificationState();
   };
   const getInfos = async (): Promise<void> => {
+    // AsyncStorage.clear();
+
     try {
       const accessToken = await AsyncStorage.getItem('accessToken');
 
-      if (accessToken && await verify(accessToken, JWT_SECRET)) {
+      if (accessToken && (await verify(accessToken))) {
         setSession(accessToken);
         const user = await updateUserInfos();
         const company = await api.get<Company>(`companies/${user.companyId}`);
@@ -664,7 +674,8 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
   const switchAccount = async (id: number): Promise<void> => {
     const response = await api.get<{ accessToken: string }>(
-      `auth/switch-account?id=${id}`);
+      `auth/switch-account?id=${id}`
+    );
     const { accessToken } = response;
     return loginInternal(accessToken);
   };
