@@ -36,8 +36,14 @@ import { PermissionEntity } from '../../models/role';
 import useAuth from '../../hooks/useAuth';
 import { controlTimer, getLabors } from '../../slices/labor';
 import { useDispatch, useSelector } from '../../store';
-import { durationToHours, getHoursAndMinutesAndSeconds } from '../../utils/formatters';
-import { editWOPartQuantities, getPartQuantitiesByWorkOrder } from '../../slices/partQuantity';
+import {
+  durationToHours,
+  getHoursAndMinutesAndSeconds
+} from '../../utils/formatters';
+import {
+  editWOPartQuantities,
+  getPartQuantitiesByWorkOrder
+} from '../../slices/partQuantity';
 import { getAdditionalCosts } from '../../slices/additionalCost';
 import { getRelations } from '../../slices/relation';
 import Relation, { relationTypes } from '../../models/relation';
@@ -55,14 +61,18 @@ import PartQuantities from '../../components/PartQuantities';
 import { SheetManager } from 'react-native-actions-sheet';
 import LoadingDialog from '../../components/LoadingDialog';
 import WorkOrder from '../../models/workOrder';
-import { DownloadDirectoryPath, downloadFile, DownloadFileOptions } from 'react-native-fs';
+import {
+  DownloadDirectoryPath,
+  downloadFile,
+  DownloadFileOptions
+} from 'react-native-fs';
 import Labor from '../../models/labor';
 import { AudioPlayer } from '../../components/AudioPlayer';
 
 export default function WODetailsScreen({
-                                          navigation,
-                                          route
-                                        }: RootStackScreenProps<'WODetails'>) {
+  navigation,
+  route
+}: RootStackScreenProps<'WODetails'>) {
   const { id, workOrderProp } = route.params;
   const { workOrderInfos, loadingGet } = useSelector(
     (state) => state.workOrders
@@ -74,7 +84,10 @@ export default function WODetailsScreen({
     workOrder?.status ?? ''
   );
   const {
-    hasEditPermission, user, companySettings, hasFeature,
+    hasEditPermission,
+    user,
+    companySettings,
+    hasFeature,
     hasViewPermission
   } = useAuth();
   const { showSnackBar } = useContext(CustomSnackBarContext);
@@ -193,8 +206,7 @@ export default function WODetailsScreen({
     }
   ];
   const getInfos = () => {
-    if (!workOrderProp)
-      dispatch(getWorkOrderDetails(id));
+    if (!workOrderProp) dispatch(getWorkOrderDetails(id));
     if (!generalPreferences.simplifiedWorkOrder) {
       dispatch(getPartQuantitiesByWorkOrder(id));
       dispatch(getLabors(id));
@@ -226,7 +238,7 @@ export default function WODetailsScreen({
               });
             }}
           >
-            <IconButton icon='dots-vertical' />
+            <IconButton icon="dots-vertical" />
           </Pressable>
         )
     });
@@ -278,7 +290,10 @@ export default function WODetailsScreen({
     });
   };
   const getRunningTimerDuration = (labor: Labor) => {
-    return durationToHours(labor.duration + (new Date().getTime() - new Date(labor.startedAt).getTime()) / 1000);
+    return durationToHours(
+      labor.duration +
+        (new Date().getTime() - new Date(labor.startedAt).getTime()) / 1000
+    );
   };
   const onDeleteSuccess = () => {
     showSnackBar(t('wo_delete_success'), 'success');
@@ -491,16 +506,17 @@ export default function WODetailsScreen({
     return result;
   };
   useEffect(() => {
-    if (dropDownValue !== workOrder?.status && dropDownValue) onStatusChange(dropDownValue);
+    if (dropDownValue !== workOrder?.status && dropDownValue)
+      onStatusChange(dropDownValue);
   }, [dropDownValue]);
 
   function ObjectField({
-                         label,
-                         value,
-                         link,
-                         permissionEntity,
-                         address
-                       }: {
+    label,
+    value,
+    link,
+    permissionEntity,
+    address
+  }: {
     label: string;
     value: string | number;
     link: { route: keyof RootStackParamList; id: number };
@@ -511,11 +527,8 @@ export default function WODetailsScreen({
       const openMaps = () => {
         if (address) {
           const encodedAddress = encodeURIComponent(address);
-          const encodedLabel = encodeURIComponent(String(value));
-          
-          // URL para abrir o Google Maps com o endereço
           const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodedAddress}`;
-          
+
           Linking.openURL(googleMapsUrl).catch((err) => {
             console.error('Erro ao abrir o mapa:', err);
           });
@@ -539,9 +552,19 @@ export default function WODetailsScreen({
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center' }}>
             <View style={{ flex: 1 }}>
-              <Text variant='titleMedium' style={{ fontWeight: 'bold' }}>{value}</Text>
+              <Text variant="titleMedium" style={{ fontWeight: 'bold' }}>
+                {value}
+              </Text>
               {isLocation && address && (
-                <Text style={{ fontSize: 14, color: theme.colors.onSurfaceVariant, marginTop: 4 }}>{address}</Text>
+                <Text
+                  style={{
+                    fontSize: 14,
+                    color: theme.colors.onSurfaceVariant,
+                    marginTop: 4
+                  }}
+                >
+                  {address}
+                </Text>
               )}
             </View>
             {isLocation && address && (
@@ -562,9 +585,9 @@ export default function WODetailsScreen({
   }
 
   function BasicField({
-                        label,
-                        value
-                      }: {
+    label,
+    value
+  }: {
     label: string;
     value: string | number;
   }) {
@@ -573,7 +596,9 @@ export default function WODetailsScreen({
         <Text style={{ fontSize: 14, color: theme.colors.onSurfaceVariant }}>
           {label}
         </Text>
-        <Text variant='titleMedium' style={{ fontWeight: 'bold' }}>{value}</Text>
+        <Text variant="titleMedium" style={{ fontWeight: 'bold' }}>
+          {value}
+        </Text>
       </View>
     );
   }
@@ -584,7 +609,7 @@ export default function WODetailsScreen({
         <Dialog visible={openArchive} onDismiss={() => setOpenArchive(false)}>
           <Dialog.Title>{t('confirmation')}</Dialog.Title>
           <Dialog.Content>
-            <Text variant='bodyMedium'>
+            <Text variant="bodyMedium">
               {t('wo_archive_confirm') + workOrder.title + ' ?'}
             </Text>
           </Dialog.Content>
@@ -602,7 +627,7 @@ export default function WODetailsScreen({
         <Dialog visible={openDelete} onDismiss={() => setOpenDelete(false)}>
           <Dialog.Title>{t('confirmation')}</Dialog.Title>
           <Dialog.Content>
-            <Text variant='bodyMedium'>{t('confirm_delete_wo')}</Text>
+            <Text variant="bodyMedium">{t('confirm_delete_wo')}</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setOpenDelete(false)}>{t('cancel')}</Button>
@@ -630,15 +655,15 @@ export default function WODetailsScreen({
               />
             }
           >
-            <Text variant='displaySmall'>{workOrder.title}</Text>
+            <Text variant="displaySmall">{workOrder.title}</Text>
             <View style={styles.row}>
               <Text
-                variant='titleMedium'
+                variant="titleMedium"
                 style={{ marginRight: 10 }}
               >{`#${id}`}</Text>
               <Tag
                 text={t('priority_label', { priority: t(workOrder.priority) })}
-                color='white'
+                color="white"
                 backgroundColor={getPriorityColor(workOrder.priority, theme)}
               />
             </View>
@@ -651,7 +676,9 @@ export default function WODetailsScreen({
             <View style={{ marginTop: 20 }}>
               <View style={styles.dropdown}>
                 <Dropdown
-                  disabled={!hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder)}
+                  disabled={
+                    !hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder)
+                  }
                   value={workOrder.status}
                   items={statuses}
                   open={openDropDown}
@@ -659,11 +686,12 @@ export default function WODetailsScreen({
                   setValue={setDropdownValue}
                 />
               </View>
-              {workOrder.audioDescription &&
+              {workOrder.audioDescription && (
                 <View style={{ backgroundColor: 'white', paddingVertical: 20 }}>
                   <Text>{t('audio_description')}</Text>
                   <AudioPlayer url={workOrder.audioDescription.url} />
-                </View>}
+                </View>
+              )}
               {fieldsToRender.map(
                 ({ label, value }, index) =>
                   value && (
@@ -720,7 +748,7 @@ export default function WODetailsScreen({
                     <View style={{ marginTop: 20 }}>
                       <Divider style={{ marginBottom: 20 }} />
                       <Text
-                        variant='titleMedium'
+                        variant="titleMedium"
                         style={{ fontWeight: 'bold' }}
                       >
                         {t('signature')}
@@ -746,13 +774,18 @@ export default function WODetailsScreen({
               )}
               {!!workOrder.assignedTo.length && (
                 <View style={{ marginTop: 20 }}>
-                  <Text style={{ fontSize: 14, color: theme.colors.onSurfaceVariant }}>
+                  <Text
+                    style={{
+                      fontSize: 14,
+                      color: theme.colors.onSurfaceVariant
+                    }}
+                  >
                     {t('assigned_to')}
                   </Text>
                   {workOrder.assignedTo.map((user) => (
                     <TouchableOpacity key={user.id} style={{ marginTop: 5 }}>
                       <Text
-                        variant='bodyLarge'
+                        variant="bodyLarge"
                         style={{ marginTop: 15 }}
                       >{`${user.firstName} ${user.lastName}`}</Text>
                     </TouchableOpacity>
@@ -762,7 +795,7 @@ export default function WODetailsScreen({
                       key={customer.id}
                       style={{ marginTop: 5 }}
                     >
-                      <Text variant='bodyLarge' style={{ marginTop: 15 }}>
+                      <Text variant="bodyLarge" style={{ marginTop: 15 }}>
                         {customer.name}
                       </Text>
                     </TouchableOpacity>
@@ -773,7 +806,10 @@ export default function WODetailsScreen({
                 <View>
                   <View style={styles.shadowedCard}>
                     <Text
-                      style={{ marginBottom: 10, color: theme.colors.onSurfaceVariant }}
+                      style={{
+                        marginBottom: 10,
+                        color: theme.colors.onSurfaceVariant
+                      }}
                     >
                       {t('parts')}
                     </Text>
@@ -782,43 +818,49 @@ export default function WODetailsScreen({
                       isPO={false}
                       navigation={navigation}
                       rootId={id}
-                      disabled={!hasEditPermission(
-                        PermissionEntity.WORK_ORDERS,
-                        workOrder
-                      )}
+                      disabled={
+                        !hasEditPermission(
+                          PermissionEntity.WORK_ORDERS,
+                          workOrder
+                        )
+                      }
                     />
                     {hasEditPermission(
                       PermissionEntity.WORK_ORDERS,
                       workOrder
-                    ) && <Fragment>
-                      <Divider style={{ marginTop: 5 }} />
-                      <Button
-                        onPress={() =>
-                          navigation.navigate('SelectParts', {
-                            onChange: (selectedParts) => {
-                              dispatch(
-                                editWOPartQuantities(
-                                  id,
-                                  selectedParts.map((part) => part.id)
-                                )
-                              ).catch((error) =>
-                                showSnackBar(t('not_enough_part'), 'error')
-                              );
-                            },
-                            selected: partQuantities.map(
-                              (partQuantity) => partQuantity.part.id
-                            )
-                          })
-                        }
-                      >
-                        {t('add_parts')}
-                      </Button>
-                    </Fragment>
-                    }
+                    ) && (
+                      <Fragment>
+                        <Divider style={{ marginTop: 5 }} />
+                        <Button
+                          onPress={() =>
+                            navigation.navigate('SelectParts', {
+                              onChange: (selectedParts) => {
+                                dispatch(
+                                  editWOPartQuantities(
+                                    id,
+                                    selectedParts.map((part) => part.id)
+                                  )
+                                ).catch((error) =>
+                                  showSnackBar(t('not_enough_part'), 'error')
+                                );
+                              },
+                              selected: partQuantities.map(
+                                (partQuantity) => partQuantity.part.id
+                              )
+                            })
+                          }
+                        >
+                          {t('add_parts')}
+                        </Button>
+                      </Fragment>
+                    )}
                   </View>
                   <View style={styles.shadowedCard}>
                     <Text
-                      style={{ marginBottom: 10, color: theme.colors.onSurfaceVariant }}
+                      style={{
+                        marginBottom: 10,
+                        color: theme.colors.onSurfaceVariant
+                      }}
                     >
                       {t('additional_costs')}
                     </Text>
@@ -835,7 +877,7 @@ export default function WODetailsScreen({
                           >
                             <Text
                               style={{ fontWeight: 'bold' }}
-                              variant='bodyLarge'
+                              variant="bodyLarge"
                             >
                               {cost.description}
                             </Text>
@@ -844,7 +886,7 @@ export default function WODetailsScreen({
                         ))}
                         <Text
                           style={{ fontWeight: 'bold' }}
-                          variant='bodyLarge'
+                          variant="bodyLarge"
                         >
                           {t('total')}
                         </Text>
@@ -864,31 +906,39 @@ export default function WODetailsScreen({
                     {hasEditPermission(
                       PermissionEntity.WORK_ORDERS,
                       workOrder
-                    ) && <Fragment>
-                      <Divider style={{ marginTop: 5 }} />
-                      <Button
-                        disabled={
-                          !(
-                            hasEditPermission(
-                              PermissionEntity.WORK_ORDERS,
-                              workOrder
-                            ) && hasFeature(PlanFeature.ADDITIONAL_COST)
-                          )
-                        }
-                        onPress={() =>
-                          navigation.push('AddAdditionalCost', {
-                            workOrderId: workOrder.id
-                          })
-                        }
-                      >
-                        {t('add_additional_cost')}
-                      </Button></Fragment>}
+                    ) && (
+                      <Fragment>
+                        <Divider style={{ marginTop: 5 }} />
+                        <Button
+                          disabled={
+                            !(
+                              hasEditPermission(
+                                PermissionEntity.WORK_ORDERS,
+                                workOrder
+                              ) && hasFeature(PlanFeature.ADDITIONAL_COST)
+                            )
+                          }
+                          onPress={() =>
+                            navigation.push('AddAdditionalCost', {
+                              workOrderId: workOrder.id
+                            })
+                          }
+                        >
+                          {t('add_additional_cost')}
+                        </Button>
+                      </Fragment>
+                    )}
                   </View>
                 </View>
               )}
               {!!tasks.length && (
                 <View style={styles.shadowedCard}>
-                  <Text style={{ marginBottom: 10, color: theme.colors.onSurfaceVariant }}>
+                  <Text
+                    style={{
+                      marginBottom: 10,
+                      color: theme.colors.onSurfaceVariant
+                    }}
+                  >
                     {t('tasks')}
                   </Text>
                   <TouchableOpacity
@@ -899,13 +949,13 @@ export default function WODetailsScreen({
                       })
                     }
                   >
-                    <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
+                    <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
                       {' '}
                       {t('remaining_tasks', {
                         count: tasks.filter((task) => !task.value).length
                       })}
                     </Text>
-                    <Text variant='bodyMedium'>
+                    <Text variant="bodyMedium">
                       {t('complete_tasks_percent', {
                         percent: (
                           (tasks.filter((task) => task.value).length * 100) /
@@ -985,7 +1035,10 @@ export default function WODetailsScreen({
                   )}
                   <View style={styles.shadowedCard}>
                     <Text
-                      style={{ marginBottom: 10, color: theme.colors.onSurfaceVariant }}
+                      style={{
+                        marginBottom: 10,
+                        color: theme.colors.onSurfaceVariant
+                      }}
                     >
                       {t('labors')}
                     </Text>
@@ -1010,27 +1063,28 @@ export default function WODetailsScreen({
                     {hasEditPermission(
                       PermissionEntity.WORK_ORDERS,
                       workOrder
-                    ) && <Fragment>
-                      <Divider style={{ marginTop: 5 }} />
-                      <Button
-                        disabled={
-                          !(
-                            hasEditPermission(
-                              PermissionEntity.WORK_ORDERS,
-                              workOrder
-                            ) && hasFeature(PlanFeature.ADDITIONAL_TIME)
-                          )
-                        }
-                        onPress={() =>
-                          navigation.push('AddAdditionalTime', {
-                            workOrderId: workOrder.id
-                          })
-                        }
-                      >
-                        {t('add_time')}
-                      </Button>
-                    </Fragment>
-                    }
+                    ) && (
+                      <Fragment>
+                        <Divider style={{ marginTop: 5 }} />
+                        <Button
+                          disabled={
+                            !(
+                              hasEditPermission(
+                                PermissionEntity.WORK_ORDERS,
+                                workOrder
+                              ) && hasFeature(PlanFeature.ADDITIONAL_TIME)
+                            )
+                          }
+                          onPress={() =>
+                            navigation.push('AddAdditionalTime', {
+                              workOrderId: workOrder.id
+                            })
+                          }
+                        >
+                          {t('add_time')}
+                        </Button>
+                      </Fragment>
+                    )}
                   </View>
                   {!!currentWorkOrderHistories.length && (
                     <View style={styles.shadowedCard}>
@@ -1057,28 +1111,29 @@ export default function WODetailsScreen({
               )}
             </View>
           </ScrollView>
-          {!generalPreferences.simplifiedWorkOrder && hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder) && (
-            <FAB
-              icon={runningTimer ? 'stop' : 'play'}
-              label={
-                runningTimer
-                  ? runningTimerDuration
-                  : durationToHours(primaryTime?.duration)
-              }
-              disabled={controllingTime}
-              theme={theme}
-              variant={runningTimer ? 'primary' : 'secondary'}
-              color='white'
-              onPress={() => {
-                setControllingTime(true);
-                dispatch(controlTimer(!runningTimer, id)).finally(() =>
-                  setControllingTime(false)
-                );
-              }}
-              visible={true}
-              style={[styles.fabStyle]}
-            />
-          )}
+          {!generalPreferences.simplifiedWorkOrder &&
+            hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder) && (
+              <FAB
+                icon={runningTimer ? 'stop' : 'play'}
+                label={
+                  runningTimer
+                    ? runningTimerDuration
+                    : durationToHours(primaryTime?.duration)
+                }
+                disabled={controllingTime}
+                theme={theme}
+                variant={runningTimer ? 'primary' : 'secondary'}
+                color="white"
+                onPress={() => {
+                  setControllingTime(true);
+                  dispatch(controlTimer(!runningTimer, id)).finally(() =>
+                    setControllingTime(false)
+                  );
+                }}
+                visible={true}
+                style={[styles.fabStyle]}
+              />
+            )}
         </Provider>
       </View>
     );
