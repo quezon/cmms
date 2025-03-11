@@ -159,7 +159,7 @@ We welcome contributions! You can help by:
 
 Check CONTRIBUTING.md inside each subproject for details.
 
-You can also join our [Discord server](https://discord.gg/A6eMSNwg)
+You can also join our [Discord server](https://discord.gg/cHqyVRYpkA)
 
 ## Open source licensing info
 

@@ -1337,7 +1337,7 @@ const enJSON = {
   simplify_wo: 'Simplify Work Orders in the mobile app',
   simplify_wo_description:
     'Hide time controls, costs and parts in the Work Order details while using the mobile app',
-  account_deletion: 'Account deletion',
+  account_deletion: 'Atlas CMMS Account deletion',
   switch_account: 'Switch account',
   switch_to_super_user: 'Switch to super admin',
   switch_account_description: 'Please choose an account to proceed',
