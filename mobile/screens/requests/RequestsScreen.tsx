@@ -1,4 +1,10 @@
-import { Pressable, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View
+} from 'react-native';
 import { useDispatch, useSelector } from '../../store';
 import * as React from 'react';
 import { Fragment, useContext, useEffect, useState } from 'react';
@@ -29,18 +35,18 @@ import { SheetManager } from 'react-native-actions-sheet';
 import _ from 'lodash';
 import EnumFilter from '../workOrders/EnumFilter';
 import { IconWithLabel } from '../../components/IconWithLabel';
-
+import { useAppTheme } from '../../App';
 
 export default function RequestsScreen({
-                                         navigation,
-                                         route
-                                       }: RootTabScreenProps<'Requests'>) {
+  navigation,
+  route
+}: RootTabScreenProps<'Requests'>) {
   const { t } = useTranslation();
   const [startedSearch, setStartedSearch] = useState<boolean>(false);
   const { requests, loadingGet, currentPageNum, lastPage } = useSelector(
     (state) => state.requests
   );
-  const theme = useTheme();
+  const theme = useAppTheme();
   const dispatch = useDispatch();
   const { notifications } = useSelector((state) => state.notifications);
   const [searchQuery, setSearchQuery] = useState('');
@@ -110,14 +116,17 @@ export default function RequestsScreen({
       navigation.setOptions({
         title: t('requests'),
         headerRight: () => (
-          <View style={{
-            display: 'flex',
-            flexDirection: 'row'
-          }}>
-            <Pressable onPress={() => navigation.navigate('Notifications')} style={{ position: 'relative' }}>
-              <IconButton
-                icon={'bell-outline'}
-              />
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row'
+            }}
+          >
+            <Pressable
+              onPress={() => navigation.navigate('Notifications')}
+              style={{ position: 'relative' }}
+            >
+              <IconButton icon={'bell-outline'} />
               <Badge
                 style={{
                   position: 'absolute',
@@ -126,13 +135,15 @@ export default function RequestsScreen({
                   backgroundColor: theme.colors.error
                 }}
                 visible={
-                  notifications.content.filter((notification) => !notification.seen)
-                    .length > 0
+                  notifications.content.filter(
+                    (notification) => !notification.seen
+                  ).length > 0
                 }
               >
                 {
-                  notifications.content.filter((notification) => !notification.seen)
-                    .length
+                  notifications.content.filter(
+                    (notification) => !notification.seen
+                  ).length
                 }
               </Badge>
             </Pressable>
@@ -141,13 +152,12 @@ export default function RequestsScreen({
                 navigation.navigate('Settings');
               }}
             >
-              <IconButton icon='cog-outline' />
+              <IconButton icon="cog-outline" />
             </Pressable>
           </View>
         )
       });
   }, []);
-
 
   useEffect(() => {
     if (user.role.code === 'REQUESTER')
@@ -167,10 +177,10 @@ export default function RequestsScreen({
     } else return [t('pending'), theme.colors.primary];
   };
   const isCloseToBottom = ({
-                             layoutMeasurement,
-                             contentOffset,
-                             contentSize
-                           }) => {
+    layoutMeasurement,
+    contentOffset,
+    contentSize
+  }) => {
     const paddingToBottom = 20;
     return (
       layoutMeasurement.height + contentOffset.y >=
@@ -234,16 +244,16 @@ export default function RequestsScreen({
                 onChange={onFilterChange}
                 completeOptions={['NONE', 'LOW', 'MEDIUM', 'HIGH']}
                 initialOptions={[]}
-                fieldName='priority'
-                icon='signal'
+                fieldName="priority"
+                icon="signal"
               />
               <EnumFilter
                 filterFields={criteria.filterFields}
                 onChange={onFilterChange}
                 completeOptions={['APPROVED', 'CANCELLED', 'PENDING']}
                 initialOptions={['APPROVED', 'CANCELLED', 'PENDING']}
-                fieldName='status'
-                icon='circle-double'
+                fieldName="status"
+                icon="circle-double"
               />
               {!_.isEqual(criteria.filterFields, defaultFilterFields) && (
                 <IconButton
@@ -272,7 +282,10 @@ export default function RequestsScreen({
                         id: request.workOrder.id
                       });
                     } else
-                      navigation.push('RequestDetails', { id: request.id, requestProp: request });
+                      navigation.push('RequestDetails', {
+                        id: request.id,
+                        requestProp: request
+                      });
                   }}
                 >
                   <Card.Content>
@@ -288,14 +301,14 @@ export default function RequestsScreen({
                         <View style={{ marginRight: 10 }}>
                           <Tag
                             text={`#${request.id}`}
-                            color='white'
-                            backgroundColor='#545454'
+                            color="white"
+                            backgroundColor="#545454"
                           />
                         </View>
                         <View style={{ marginRight: 10 }}>
                           <Tag
                             text={t(request.priority)}
-                            color='white'
+                            color="white"
                             backgroundColor={getPriorityColor(
                               request.priority,
                               theme
@@ -304,34 +317,39 @@ export default function RequestsScreen({
                         </View>
                         <Tag
                           text={getStatusMeta(request)[0]}
-                          color='white'
+                          color="white"
                           backgroundColor={getStatusMeta(request)[1]}
                         />
                       </View>
                     </View>
-                    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{request.title}</Text>
+                    <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
+                      {request.title}
+                    </Text>
                     {request.dueDate && (
                       <IconWithLabel
                         color={
-                          (dayDiff(new Date(request.dueDate), new Date()) <= 2 || new Date() > new Date(request.dueDate)) && request.workOrder?.status !== 'COMPLETE'
+                          (dayDiff(new Date(request.dueDate), new Date()) <=
+                            2 ||
+                            new Date() > new Date(request.dueDate)) &&
+                          request.workOrder?.status !== 'COMPLETE'
                             ? theme.colors.error
                             : theme.colors.grey
                         }
                         label={getFormattedDate(request.dueDate)}
-                        icon='clock-alert-outline'
+                        icon="clock-alert-outline"
                       />
                     )}
                     {request.asset && (
                       <IconWithLabel
                         label={request.asset.name}
-                        icon='package-variant-closed'
+                        icon="package-variant-closed"
                         color={theme.colors.grey}
                       />
                     )}
                     {request.location && (
                       <IconWithLabel
                         label={request.location.name}
-                        icon='map-marker-outline'
+                        icon="map-marker-outline"
                         color={theme.colors.grey}
                       />
                     )}

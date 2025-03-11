@@ -17,7 +17,8 @@ import Constants from 'expo-constants';
 
 import {
   MD3LightTheme as DefaultTheme,
-  Provider as PaperProvider
+  Provider as PaperProvider,
+  useTheme
 } from 'react-native-paper';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Linking, LogBox } from 'react-native';
@@ -51,6 +52,8 @@ const theme = {
     grey: '#676b6b'
   }
 };
+export const useAppTheme = () => useTheme<typeof theme>();
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -104,7 +107,9 @@ export default function App() {
       const initialUrl = await Linking.getInitialURL();
       handleUrl(initialUrl);
       // Listen to incoming deep links while the app is open
-      subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url));
+      subscription = Linking.addEventListener('url', ({ url }) =>
+        handleUrl(url)
+      );
     };
 
     const handleUrl = (url) => {
@@ -150,7 +155,7 @@ export default function App() {
                       <Navigation colorScheme={colorScheme} />
                       <StatusBar />
                       <FlashMessage
-                        position='top'
+                        position="top"
                         statusBarHeight={Constants.statusBarHeight}
                       />
                     </SheetProvider>

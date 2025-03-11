@@ -19,9 +19,10 @@ import { getNotifications } from '../slices/notification';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { CustomSnackBarContext } from '../contexts/CustomSnackBarContext';
 import { PermissionEntity } from '../models/role';
+import { useAppTheme } from '../App';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
-  const theme = useTheme();
+  const theme = useAppTheme();
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const netInfo = useNetInfo();
@@ -40,7 +41,9 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
     ...styles.iconButton,
     backgroundColor: theme.colors.background
   };
-  const [assignedToMe, setAssignedToMe] = useState<boolean>(userSettings?.statsForAssignedWorkOrders);
+  const [assignedToMe, setAssignedToMe] = useState<boolean>(
+    userSettings?.statsForAssignedWorkOrders
+  );
   const notificationsCriteria: SearchCriteria = {
     filterFields: [],
     pageSize: 15,
@@ -294,7 +297,10 @@ export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
                     value: user.id
                   });
                 }
-                navigation.navigate('WorkOrders', { filterFields, fromHome: true });
+                navigation.navigate('WorkOrders', {
+                  filterFields,
+                  fromHome: true
+                });
               }
             }}
           >

@@ -3,7 +3,7 @@ import { Audio } from 'expo-av';
 import React, { useState } from 'react';
 import { IconButton, useTheme } from 'react-native-paper';
 
-export function AudioPlayer({ url }: { url: string; }) {
+export function AudioPlayer({ url }: { url: string }) {
   const [sound, setSound] = useState<Audio.Sound>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -15,7 +15,7 @@ export function AudioPlayer({ url }: { url: string; }) {
       await sound.playAsync();
       setIsPlaying(true);
       sound.setOnPlaybackStatusUpdate((status) => {
-        if (!status.isPlaying) {
+        if ('isPlaying' in status && !status.isPlaying) {
           setIsPlaying(false);
         }
       });
@@ -41,19 +41,16 @@ export function AudioPlayer({ url }: { url: string; }) {
     <View>
       {url && !isPlaying && (
         <IconButton
-          icon='play'
+          icon="play"
           iconColor={theme.colors.primary}
           onPress={playRecording}
         />
       )}
       {isPlaying && (
         <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <IconButton icon="pause" onPress={pausePlayback} />
           <IconButton
-            icon='pause'
-            onPress={pausePlayback}
-          />
-          <IconButton
-            icon='stop'
+            icon="stop"
             iconColor={theme.colors.error}
             onPress={stopPlayback}
           />
