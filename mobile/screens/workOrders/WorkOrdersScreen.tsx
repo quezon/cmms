@@ -29,7 +29,7 @@ import EnumFilter from './EnumFilter';
 import { dayDiff } from '../../utils/dates';
 import { IconWithLabel } from '../../components/IconWithLabel';
 import QuickFilter from './QuickFilter';
-import { useAppTheme } from '../../App';
+import { useAppTheme } from '../../custom-theme';
 
 export default function WorkOrdersScreen({
   navigation,

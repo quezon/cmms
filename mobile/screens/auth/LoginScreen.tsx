@@ -15,8 +15,8 @@ import {
 } from 'react-native-paper';
 import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
 import * as React from 'react';
-import logo from '../../assets/images/icon.png';
-import { useAppTheme } from '../../App';
+import { Asset } from 'expo-asset';
+import { useAppTheme } from '../../custom-theme';
 
 export default function LoginScreen({
   navigation
@@ -34,7 +34,10 @@ export default function LoginScreen({
         style={styles.scrollView}
         contentContainerStyle={{ alignItems: 'center' }}
       >
-        <Image style={{ height: 200, width: 200 }} source={logo} />
+        <Image
+          style={{ height: 200, width: 200 }}
+          source={Asset.fromModule(require('../../assets/images/icon.png'))}
+        />
         <Formik
           initialValues={{
             email: '',

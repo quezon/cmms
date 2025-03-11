@@ -35,7 +35,7 @@ import { SheetManager } from 'react-native-actions-sheet';
 import _ from 'lodash';
 import EnumFilter from '../workOrders/EnumFilter';
 import { IconWithLabel } from '../../components/IconWithLabel';
-import { useAppTheme } from '../../App';
+import { useAppTheme } from '../../custom-theme';
 
 export default function RequestsScreen({
   navigation,

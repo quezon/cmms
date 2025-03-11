@@ -19,7 +19,7 @@ import { getNotifications } from '../slices/notification';
 import { useNetInfo } from '@react-native-community/netinfo';
 import { CustomSnackBarContext } from '../contexts/CustomSnackBarContext';
 import { PermissionEntity } from '../models/role';
-import { useAppTheme } from '../App';
+import { useAppTheme } from '../custom-theme';
 
 export default function HomeScreen({ navigation }: RootTabScreenProps<'Home'>) {
   const theme = useAppTheme();
