@@ -7,10 +7,20 @@ import useAuth from '../../hooks/useAuth';
 import { PermissionEntity } from '../../models/role';
 import { getMoreWorkOrders, getWorkOrders } from '../../slices/workOrder';
 import { FilterField, SearchCriteria } from '../../models/page';
-import { Card, IconButton, Searchbar, Text, useTheme } from 'react-native-paper';
+import {
+  Card,
+  IconButton,
+  Searchbar,
+  Text,
+  useTheme
+} from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import WorkOrder from '../../models/workOrder';
-import { getPriorityColor, getStatusColor, onSearchQueryChange } from '../../utils/overall';
+import {
+  getPriorityColor,
+  getStatusColor,
+  onSearchQueryChange
+} from '../../utils/overall';
 import { RootTabScreenProps } from '../../types';
 import Tag from '../../components/Tag';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
@@ -19,18 +29,18 @@ import EnumFilter from './EnumFilter';
 import { dayDiff } from '../../utils/dates';
 import { IconWithLabel } from '../../components/IconWithLabel';
 import QuickFilter from './QuickFilter';
-
+import { useAppTheme } from '../../custom-theme';
 
 export default function WorkOrdersScreen({
-                                           navigation,
-                                           route
-                                         }: RootTabScreenProps<'WorkOrders'>) {
+  navigation,
+  route
+}: RootTabScreenProps<'WorkOrders'>) {
   const { t } = useTranslation();
   const [startedSearch, setStartedSearch] = useState<boolean>(false);
   const { workOrders, loadingGet, currentPageNum, lastPage } = useSelector(
     (state) => state.workOrders
   );
-  const theme = useTheme();
+  const theme = useAppTheme();
   const dispatch = useDispatch();
   const [searchQuery, setSearchQuery] = useState('');
   const fromHomeInit = useRef<boolean>(false);
@@ -112,10 +122,10 @@ export default function WorkOrdersScreen({
     setCriteria(newCriteria);
   };
   const isCloseToBottom = ({
-                             layoutMeasurement,
-                             contentOffset,
-                             contentSize
-                           }) => {
+    layoutMeasurement,
+    contentOffset,
+    contentSize
+  }) => {
     const paddingToBottom = 20;
     return (
       layoutMeasurement.height + contentOffset.y >=
@@ -142,7 +152,6 @@ export default function WorkOrdersScreen({
     <View
       style={{ ...styles.container, backgroundColor: theme.colors.background }}
     >
-
       <Fragment>
         <Searchbar
           placeholder={t('search')}
@@ -199,29 +208,32 @@ export default function WorkOrdersScreen({
                 })
               }
             />
-            {hasViewOtherPermission(PermissionEntity.WORK_ORDERS)
-              && <QuickFilter filterFields={criteria.filterFields}
-                              activeFilterField={{
-                                field: 'assignedToUser',
-                                operation: 'eq',
-                                value: user.id
-                              }}
-                              onChange={onFilterChange} />}
+            {hasViewOtherPermission(PermissionEntity.WORK_ORDERS) && (
+              <QuickFilter
+                filterFields={criteria.filterFields}
+                activeFilterField={{
+                  field: 'assignedToUser',
+                  operation: 'eq',
+                  value: user.id
+                }}
+                onChange={onFilterChange}
+              />
+            )}
             <EnumFilter
               filterFields={criteria.filterFields}
               onChange={onFilterChange}
               completeOptions={['NONE', 'LOW', 'MEDIUM', 'HIGH']}
               initialOptions={['NONE', 'LOW', 'MEDIUM', 'HIGH']}
-              fieldName='priority'
-              icon='signal'
+              fieldName="priority"
+              icon="signal"
             />
             <EnumFilter
               filterFields={criteria.filterFields}
               onChange={onFilterChange}
               completeOptions={['OPEN', 'IN_PROGRESS', 'ON_HOLD', 'COMPLETE']}
               initialOptions={['OPEN', 'IN_PROGRESS', 'ON_HOLD']}
-              fieldName='status'
-              icon='circle-double'
+              fieldName="status"
+              icon="circle-double"
             />
             {!_.isEqual(criteria.filterFields, defaultFilterFields) && (
               <IconButton
@@ -244,7 +256,10 @@ export default function WorkOrdersScreen({
                 }}
                 key={workOrder.id}
                 onPress={() =>
-                  navigation.push('WODetails', { id: workOrder.id, workOrderProp: workOrder })
+                  navigation.push('WODetails', {
+                    id: workOrder.id,
+                    workOrderProp: workOrder
+                  })
                 }
               >
                 <Card.Content>
@@ -253,11 +268,8 @@ export default function WorkOrdersScreen({
                   >
                     <Tag
                       text={t(workOrder.status)}
-                      color='white'
-                      backgroundColor={getStatusColor(
-                        workOrder.status,
-                        theme
-                      )}
+                      color="white"
+                      backgroundColor={getStatusColor(workOrder.status, theme)}
                     />
                     <View
                       style={{
@@ -268,44 +280,50 @@ export default function WorkOrdersScreen({
                       <View style={{ marginRight: 10 }}>
                         <Tag
                           text={`#${workOrder.id}`}
-                          color='white'
-                          backgroundColor='#545454'
+                          color="white"
+                          backgroundColor="#545454"
                         />
                       </View>
-                      {workOrder.priority !== 'NONE' && <Tag
-                        text={t(workOrder.priority)}
-                        color='white'
-                        backgroundColor={getPriorityColor(
-                          workOrder.priority,
-                          theme
-                        )}
-                      />}
+                      {workOrder.priority !== 'NONE' && (
+                        <Tag
+                          text={t(workOrder.priority)}
+                          color="white"
+                          backgroundColor={getPriorityColor(
+                            workOrder.priority,
+                            theme
+                          )}
+                        />
+                      )}
                     </View>
                   </View>
-                  <Text style={{ fontWeight: 'bold', fontSize: 18 }}>{workOrder.title}</Text>
+                  <Text style={{ fontWeight: 'bold', fontSize: 18 }}>
+                    {workOrder.title}
+                  </Text>
                   {workOrder.dueDate && (
                     <IconWithLabel
                       color={
                         (dayDiff(new Date(workOrder.dueDate), new Date()) <=
-                          2 || new Date() > new Date(workOrder.dueDate)) && workOrder.status !== 'COMPLETE'
+                          2 ||
+                          new Date() > new Date(workOrder.dueDate)) &&
+                        workOrder.status !== 'COMPLETE'
                           ? theme.colors.error
                           : theme.colors.grey
                       }
                       label={getFormattedDate(workOrder.dueDate)}
-                      icon='clock-alert-outline'
+                      icon="clock-alert-outline"
                     />
                   )}
                   {workOrder.asset && (
                     <IconWithLabel
                       label={workOrder.asset.name}
-                      icon='package-variant-closed'
+                      icon="package-variant-closed"
                       color={theme.colors.grey}
                     />
                   )}
                   {workOrder.location && (
                     <IconWithLabel
                       label={workOrder.location.name}
-                      icon='map-marker-outline'
+                      icon="map-marker-outline"
                       color={theme.colors.grey}
                     />
                   )}

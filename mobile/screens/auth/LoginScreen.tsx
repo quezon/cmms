@@ -15,22 +15,29 @@ import {
 } from 'react-native-paper';
 import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
 import * as React from 'react';
-import logo from '../../assets/images/icon.png';
+import { Asset } from 'expo-asset';
+import { useAppTheme } from '../../custom-theme';
 
 export default function LoginScreen({
-                                      navigation
-                                    }: AuthStackScreenProps<'Login'>) {
+  navigation
+}: AuthStackScreenProps<'Login'>) {
   const { t } = useTranslation();
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const { login } = useAuth();
-  const theme = useTheme();
+  const theme = useAppTheme();
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const toggleShowPassword = () => setShowPassword((value) => !value);
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scrollView} contentContainerStyle={{ alignItems: 'center' }}>
-        <Image style={{ height: 200, width: 200 }} source={logo} />
+      <ScrollView
+        style={styles.scrollView}
+        contentContainerStyle={{ alignItems: 'center' }}
+      >
+        <Image
+          style={{ height: 200, width: 200 }}
+          source={Asset.fromModule(require('../../assets/images/icon.png'))}
+        />
         <Formik
           initialValues={{
             email: '',
@@ -60,15 +67,15 @@ export default function LoginScreen({
           }}
         >
           {({
-              errors,
-              handleBlur,
-              handleChange,
-              handleSubmit,
-              isSubmitting,
-              touched,
-              values,
-              setFieldValue
-            }) => (
+            errors,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            isSubmitting,
+            touched,
+            values,
+            setFieldValue
+          }) => (
             <View style={{ alignSelf: 'stretch', paddingHorizontal: 30 }}>
               <TextInput
                 error={Boolean(touched.email && errors.email)}
@@ -76,11 +83,11 @@ export default function LoginScreen({
                 onBlur={handleBlur('email')}
                 onChangeText={handleChange('email')}
                 value={values.email}
-                mode='outlined'
+                mode="outlined"
                 style={{ marginBottom: 10 }}
               />
               {Boolean(touched.email && errors.email) && (
-                <HelperText type='error'>{errors.email?.toString()}</HelperText>
+                <HelperText type="error">{errors.email?.toString()}</HelperText>
               )}
               <TextInput
                 error={Boolean(touched.password && errors.password)}
@@ -89,11 +96,13 @@ export default function LoginScreen({
                 onChangeText={handleChange('password')}
                 value={values.password}
                 secureTextEntry={!showPassword}
-                right={<TextInput.Icon onPress={toggleShowPassword} icon='eye' />}
-                mode='outlined'
+                right={
+                  <TextInput.Icon onPress={toggleShowPassword} icon="eye" />
+                }
+                mode="outlined"
               />
               {Boolean(touched.password && errors.password) && (
-                <HelperText type='error'>
+                <HelperText type="error">
                   {errors.password?.toString()}
                 </HelperText>
               )}
@@ -103,14 +112,18 @@ export default function LoginScreen({
                 loading={isSubmitting}
                 style={{ marginTop: 20 }}
                 disabled={isSubmitting}
-                mode='contained'
+                mode="contained"
               >
                 {t('login')}
               </Button>
               <Text style={{ marginVertical: 20 }}>{t('no_account_yet')}</Text>
-              <Button mode={'outlined'}
-                      onPress={() => navigation.navigate('Register')}
-                      style={{ color: theme.colors.primary }}
+              <Button
+                mode={'outlined'}
+                onPress={() => navigation.navigate('Register')}
+                style={{
+                  // @ts-ignore
+                  color: theme.colors.primary
+                }}
               >
                 {t('register_here')}
               </Button>

@@ -19,12 +19,12 @@ import Part from '../../models/part';
 import { onSearchQueryChange } from '../../utils/overall';
 import { RootStackScreenProps } from '../../types';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
-import noPictureImage from '../../assets/images/no-image.png';
+import { Asset } from 'expo-asset';
 
 export default function PartsScreen({
-                                      navigation,
-                                      route
-                                    }: RootStackScreenProps<'Parts'>) {
+  navigation,
+  route
+}: RootStackScreenProps<'Parts'>) {
   const { t } = useTranslation();
   const [startedSearch, setStartedSearch] = useState<boolean>(false);
   const { parts, loadingGet, currentPageNum, lastPage } = useSelector(
@@ -73,10 +73,10 @@ export default function PartsScreen({
   };
 
   const isCloseToBottom = ({
-                             layoutMeasurement,
-                             contentOffset,
-                             contentSize
-                           }) => {
+    layoutMeasurement,
+    contentOffset,
+    contentSize
+  }) => {
     const paddingToBottom = 20;
     return (
       layoutMeasurement.height + contentOffset.y >=
@@ -135,7 +135,9 @@ export default function PartsScreen({
                 backgroundColor: 'white'
               }}
               key={part.id}
-              onPress={() => navigation.push('PartDetails', { id: part.id, partProp: part })}
+              onPress={() =>
+                navigation.push('PartDetails', { id: part.id, partProp: part })
+              }
             >
               <Card.Content>
                 <List.Item
@@ -145,9 +147,11 @@ export default function PartsScreen({
                       source={
                         part.image
                           ? {
-                            uri: part.image.url
-                          }
-                          : noPictureImage
+                              uri: part.image.url
+                            }
+                          : Asset.fromModule(
+                              require('../../assets/images/no-image.png')
+                            )
                       }
                     />
                   )}

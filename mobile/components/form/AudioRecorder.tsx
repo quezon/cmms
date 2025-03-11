@@ -6,9 +6,12 @@ import { IFile } from '../../models/file';
 import { IconButton, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
-export default function AudioRecordingExample({ title, onChange }: {
+export default function AudioRecordingExample({
+  title,
+  onChange
+}: {
   title: string;
-  onChange: (audio: IFile) => void
+  onChange: (audio: IFile) => void;
 }) {
   const [recording, setRecording] = useState(null);
   const [recordingURI, setRecordingURI] = useState(null);
@@ -71,7 +74,7 @@ export default function AudioRecordingExample({ title, onChange }: {
       await sound.playAsync();
       setIsPlaying(true);
       sound.setOnPlaybackStatusUpdate((status) => {
-        if (!status.isPlaying) {
+        if ('isPlaying' in status && !status.isPlaying) {
           setIsPlaying(false);
         }
       });
@@ -99,31 +102,28 @@ export default function AudioRecordingExample({ title, onChange }: {
       <Text>{title}</Text>
       <TouchableOpacity
         onPress={isRecording ? stopRecording : startRecording}
-        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <IconButton iconColor={isRecording ? theme.colors.error : theme.colors.primary}
-                    style={{ height: 40, width: 40 }}
-                    icon={'microphone'}
+        style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      >
+        <IconButton
+          iconColor={isRecording ? theme.colors.error : theme.colors.primary}
+          style={{ height: 40, width: 40 }}
+          icon={'microphone'}
         />
-        <Text>
-          {isRecording ? t('stop_recording') : t('start_recording')}
-        </Text>
+        <Text>{isRecording ? t('stop_recording') : t('start_recording')}</Text>
       </TouchableOpacity>
 
       {recordingURI && !isPlaying && (
         <IconButton
-          icon='play'
+          icon="play"
           iconColor={theme.colors.primary}
           onPress={playRecording}
         />
       )}
       {isPlaying && (
         <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <IconButton icon="pause" onPress={pausePlayback} />
           <IconButton
-            icon='pause'
-            onPress={pausePlayback}
-          />
-          <IconButton
-            icon='stop'
+            icon="stop"
             iconColor={theme.colors.error}
             onPress={stopPlayback}
           />

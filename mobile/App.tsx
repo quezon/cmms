@@ -17,7 +17,8 @@ import Constants from 'expo-constants';
 
 import {
   MD3LightTheme as DefaultTheme,
-  Provider as PaperProvider
+  Provider as PaperProvider,
+  useTheme
 } from 'react-native-paper';
 import { useEffect, useRef, useState } from 'react';
 import { Alert, Linking, LogBox } from 'react-native';
@@ -29,28 +30,8 @@ import { NotificationType } from './models/notification';
 import { navigate } from './navigation/RootNavigation';
 import subscriptionPlan from './slices/subscriptionPlan';
 import { isNumeric } from './utils/validators';
+import { customTheme } from './custom-theme';
 
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#5569ff',
-    secondary: '#959be0',
-    tertiary: '#9DA1A1',
-    background: '#ebecf6',
-    secondaryContainer: '#7b7d93',
-    success: '#57CA22',
-    warning: '#FFA319',
-    error: '#FF1943',
-    info: '#33C2FF',
-    black: '#223354',
-    white: '#ffffff',
-    primaryAlt: '#000C57',
-    primaryContainer: '#333586',
-    tertiaryContainer: 'black',
-    grey: '#676b6b'
-  }
-};
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -104,7 +85,9 @@ export default function App() {
       const initialUrl = await Linking.getInitialURL();
       handleUrl(initialUrl);
       // Listen to incoming deep links while the app is open
-      subscription = Linking.addEventListener('url', ({ url }) => handleUrl(url));
+      subscription = Linking.addEventListener('url', ({ url }) =>
+        handleUrl(url)
+      );
     };
 
     const handleUrl = (url) => {
@@ -144,13 +127,13 @@ export default function App() {
           <PersistGate loading={null} persistor={persistor}>
             <AuthProvider>
               <CompanySettingsProvider>
-                <PaperProvider theme={theme}>
+                <PaperProvider theme={customTheme}>
                   <CustomSnackbarProvider>
                     <SheetProvider>
                       <Navigation colorScheme={colorScheme} />
                       <StatusBar />
                       <FlashMessage
-                        position='top'
+                        position="top"
                         statusBarHeight={Constants.statusBarHeight}
                       />
                     </SheetProvider>

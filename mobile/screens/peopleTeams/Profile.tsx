@@ -31,9 +31,9 @@ import { OwnUser } from '../../models/user';
 import { formatImages } from '../../utils/overall';
 
 export default function UserProfile({
-                                      navigation,
-                                      route
-                                    }: RootStackScreenProps<'UserProfile'>) {
+  navigation,
+  route
+}: RootStackScreenProps<'UserProfile'>) {
   const {
     user,
     fetchUserSettings,
@@ -73,14 +73,18 @@ export default function UserProfile({
       label: t('job_title'),
       value: user?.jobTitle
     },
-    ...(user?.role.code === 'REQUESTER' ? [] : [{
-      label: t('role'),
-      value: user?.role.name
-    },
-      {
-        label: t('hourly_rate'),
-        value: user?.rate
-      }])
+    ...(user?.role.code === 'REQUESTER'
+      ? []
+      : [
+          {
+            label: t('role'),
+            value: user?.role.name
+          },
+          {
+            label: t('hourly_rate'),
+            value: user?.rate
+          }
+        ])
   ];
   const switches: {
     value: boolean;
@@ -134,9 +138,9 @@ export default function UserProfile({
   };
 
   function BasicField({
-                        label,
-                        value
-                      }: {
+    label,
+    value
+  }: {
     label: string;
     value: string | number;
   }) {
@@ -146,10 +150,10 @@ export default function UserProfile({
           key={label}
           style={{ paddingHorizontal: 20, paddingVertical: 10 }}
         >
-          <Text variant='titleMedium' style={{ fontWeight: 'bold' }}>
+          <Text variant="titleMedium" style={{ fontWeight: 'bold' }}>
             {label}
           </Text>
-          <Text variant='bodyLarge'>{value}</Text>
+          <Text variant="bodyLarge">{value}</Text>
           <Divider style={{ marginTop: 5 }} />
         </View>
       );
@@ -198,14 +202,14 @@ export default function UserProfile({
             }}
           >
             {({
-                errors,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-                isSubmitting,
-                touched,
-                values
-              }) => (
+              errors,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              isSubmitting,
+              touched,
+              values
+            }) => (
               <Fragment>
                 <Dialog.Content>
                   <TextInput
@@ -215,10 +219,10 @@ export default function UserProfile({
                     onChangeText={handleChange('oldPassword')}
                     value={values.oldPassword}
                     secureTextEntry={true}
-                    mode='outlined'
+                    mode="outlined"
                   />
                   {Boolean(touched.oldPassword && errors.oldPassword) && (
-                    <HelperText type='error'>
+                    <HelperText type="error">
                       {errors.oldPassword?.toString()}
                     </HelperText>
                   )}
@@ -229,10 +233,10 @@ export default function UserProfile({
                     onChangeText={handleChange('newPassword')}
                     value={values.newPassword}
                     secureTextEntry={true}
-                    mode='outlined'
+                    mode="outlined"
                   />
                   {Boolean(touched.newPassword && errors.newPassword) && (
-                    <HelperText type='error'>
+                    <HelperText type="error">
                       {errors.newPassword?.toString()}
                     </HelperText>
                   )}
@@ -245,12 +249,12 @@ export default function UserProfile({
                     onChangeText={handleChange('confirmPassword')}
                     value={values.confirmPassword}
                     secureTextEntry={true}
-                    mode='outlined'
+                    mode="outlined"
                   />
                   {Boolean(
                     touched.confirmPassword && errors.confirmPassword
                   ) && (
-                    <HelperText type='error'>
+                    <HelperText type="error">
                       {errors.confirmPassword?.toString()}
                     </HelperText>
                   )}
@@ -284,7 +288,7 @@ export default function UserProfile({
       {renderChangePassword()}
       <View style={{ alignItems: 'center', paddingTop: 20 }}>
         {changingPicture ? (
-          <ActivityIndicator size='large' />
+          <ActivityIndicator size="large" />
         ) : (
           <TouchableOpacity onPress={onPictureChange}>
             {user.image ? (
@@ -298,30 +302,31 @@ export default function UserProfile({
       {fieldsToRender.map((field) => (
         <BasicField key={field.label} label={field.label} value={field.value} />
       ))}
-      {user?.role.code !== 'REQUESTER' && switches.map(({ title, value, accessor }) => (
-        <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-          >
-            <Text style={{ flexShrink: 1 }}>{title}</Text>
-            <Switch
-              value={Boolean(userSettings ? userSettings[accessor] : false)}
-              onValueChange={(checked) =>
-                patchUserSettings({
-                  ...userSettings,
-                  [accessor]: checked
-                })
-              }
-            />
+      {user?.role.code !== 'REQUESTER' &&
+        switches.map(({ title, value, accessor }) => (
+          <View style={{ paddingHorizontal: 20, paddingVertical: 10 }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}
+            >
+              <Text style={{ flexShrink: 1 }}>{title}</Text>
+              <Switch
+                value={Boolean(userSettings ? userSettings[accessor] : false)}
+                onValueChange={(checked) => {
+                  patchUserSettings({
+                    ...userSettings,
+                    [accessor]: checked
+                  });
+                }}
+              />
+            </View>
+            <Divider />
           </View>
-          <Divider />
-        </View>
-      ))}
+        ))}
       <View>
         <Button
           style={{ marginHorizontal: 20, marginBottom: 20 }}

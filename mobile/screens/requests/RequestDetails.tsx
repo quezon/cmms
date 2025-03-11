@@ -11,7 +11,8 @@ import {
   Divider,
   IconButton,
   Portal,
-  Text, TextInput,
+  Text,
+  TextInput,
   useTheme
 } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
@@ -31,9 +32,9 @@ import Form from '../../components/form';
 import { AudioPlayer } from '../../components/AudioPlayer';
 
 export default function RequestDetails({
-                                         navigation,
-                                         route
-                                       }: RootStackScreenProps<'RequestDetails'>) {
+  navigation,
+  route
+}: RootStackScreenProps<'RequestDetails'>) {
   const { id, requestProp } = route.params;
   const { loadingGet, requestInfos } = useSelector((state) => state.requests);
   const request = requestInfos[id]?.request ?? requestProp;
@@ -116,7 +117,7 @@ export default function RequestDetails({
         <Dialog visible={openDelete} onDismiss={() => setOpenDelete(false)}>
           <Dialog.Title>{t('confirmation')}</Dialog.Title>
           <Dialog.Content>
-            <Text variant='bodyMedium'>{t('confirm_delete_request')}</Text>
+            <Text variant="bodyMedium">{t('confirm_delete_request')}</Text>
           </Dialog.Content>
           <Dialog.Actions>
             <Button onPress={() => setOpenDelete(false)}>{t('cancel')}</Button>
@@ -129,8 +130,7 @@ export default function RequestDetails({
 
   useEffect(() => {
     const { id, requestProp } = route.params;
-    if (!requestProp)
-      dispatch(getRequestDetails(id));
+    if (!requestProp) dispatch(getRequestDetails(id));
   }, [route]);
 
   useEffect(() => {
@@ -141,7 +141,7 @@ export default function RequestDetails({
           {hasDeletePermission(PermissionEntity.REQUESTS, request) && (
             <IconButton
               onPress={() => setOpenDelete(true)}
-              icon='delete-outline'
+              icon="delete-outline"
             />
           )}
           {!request?.workOrder &&
@@ -158,7 +158,7 @@ export default function RequestDetails({
             !request?.workOrder &&
             !request?.cancelled &&
             hasViewPermission(PermissionEntity.SETTINGS) && (
-              <IconButton onPress={onApprove} icon='check' />
+              <IconButton onPress={onApprove} icon="check" />
             )
           )}
         </View>
@@ -167,9 +167,9 @@ export default function RequestDetails({
   }, [request, approving]);
 
   function BasicField({
-                        label,
-                        value
-                      }: {
+    label,
+    value
+  }: {
     label: string;
     value: string | number;
   }) {
@@ -194,10 +194,10 @@ export default function RequestDetails({
   }
 
   function ObjectField({
-                         label,
-                         value,
-                         link
-                       }: {
+    label,
+    value,
+    link
+  }: {
     label: string;
     value: string | number;
     link: { route: keyof RootStackParamList; id: number };
@@ -205,23 +205,31 @@ export default function RequestDetails({
     if (value) {
       return (
         <TouchableOpacity
-          // @ts-ignore
           onPress={() => {
             if (user.role.code === 'REQUESTER') return;
+            // @ts-ignore
             navigation.navigate(link.route, { id: link.id });
           }}
           style={{ marginTop: 20, padding: 20, backgroundColor: 'white' }}
         >
-          <Text variant='titleMedium' style={{ fontWeight: 'bold' }}>
+          <Text variant="titleMedium" style={{ fontWeight: 'bold' }}>
             {label}
           </Text>
-          <Text variant='bodyLarge'>{value}</Text>
+          <Text variant="bodyLarge">{value}</Text>
         </TouchableOpacity>
       );
     } else return null;
   }
 
-  const RejectDialog = ({ open, onClose, onReject }: { open: boolean; onClose: () => void; onReject: () => void }) => {
+  const RejectDialog = ({
+    open,
+    onClose,
+    onReject
+  }: {
+    open: boolean;
+    onClose: () => void;
+    onReject: () => void;
+  }) => {
     const [feedback, setFeedback] = useState<string>('');
     const [rejecting, setRejecting] = useState<boolean>(false);
     return (
@@ -232,26 +240,33 @@ export default function RequestDetails({
             <View>
               <TextInput
                 style={{ width: '100%' }}
-                mode='outlined'
+                mode="outlined"
                 multiline
                 label={t('feedback')}
-                onChangeText={(value) =>
-                  setFeedback(value)}
+                onChangeText={(value) => setFeedback(value)}
                 value={feedback}
               />
             </View>
           </Dialog.Content>
           <Dialog.Actions>
-            <Button loading={rejecting} disabled={rejecting} mode={'contained'} onPress={() => {
-              setRejecting(true);
-              if (!feedback.trim()) {
-                showSnackBar(t('required_feedback'), 'error');
-                setRejecting(false);
-                return;
-              }
-              dispatch(cancelRequest(request.id, feedback))
-                .then(onReject).finally(() => setRejecting(false));
-            }}>{t('reject')}</Button>
+            <Button
+              loading={rejecting}
+              disabled={rejecting}
+              mode={'contained'}
+              onPress={() => {
+                setRejecting(true);
+                if (!feedback.trim()) {
+                  showSnackBar(t('required_feedback'), 'error');
+                  setRejecting(false);
+                  return;
+                }
+                dispatch(cancelRequest(request.id, feedback))
+                  .then(onReject)
+                  .finally(() => setRejecting(false));
+              }}
+            >
+              {t('reject')}
+            </Button>
           </Dialog.Actions>
         </Dialog>
       </Portal>
@@ -272,10 +287,12 @@ export default function RequestDetails({
             value={field.value}
           />
         ))}
-        {request.audioDescription &&
+        {request.audioDescription && (
           <View style={{ backgroundColor: 'white', padding: 20 }}>
-            <Text>{t('audio_description')}</Text><AudioPlayer url={request.audioDescription.url} />
-          </View>}
+            <Text>{t('audio_description')}</Text>
+            <AudioPlayer url={request.audioDescription.url} />
+          </View>
+        )}
         <ObjectField
           label={t('requested_by')}
           value={getUserNameById(request.createdBy)}
@@ -316,15 +333,18 @@ export default function RequestDetails({
               disabled={cancelling}
               loading={cancelling}
               onPress={() => setOpenRejectModal(true)}
-              mode='contained'
+              mode="contained"
               style={{ margin: 20 }}
               buttonColor={theme.colors.error}
             >
               {t('reject')}
             </Button>
           )}
-        <RejectDialog open={openRejectModal} onClose={() => setOpenRejectModal(false)}
-                      onReject={() => navigation.goBack()} />
+        <RejectDialog
+          open={openRejectModal}
+          onClose={() => setOpenRejectModal(false)}
+          onReject={() => navigation.goBack()}
+        />
       </ScrollView>
     );
   else return <LoadingDialog visible={true} />;
