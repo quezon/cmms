@@ -123,7 +123,7 @@ Celebrate on how easy this was
 
 ### Docs
 
-https://grashjs.github.io/user-guide
+https://docs.atlas-cmms.com
 
 If you still have questions after reading the docs, concerns, bug reports, etc, please file an issue in this
 repository's Issue Tracker or send an
