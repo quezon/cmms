@@ -41,6 +41,6 @@ public abstract class FileMapper {
 
     private String getSignedUrl(File file) {
         StorageService storageService = storageServiceFactory.getStorageService();
-        return storageService.generateSignedUrl(file, 60 * 3);
+        return storageService.generateSignedUrl(file.getPath(), 60 * 3);
     }
 }

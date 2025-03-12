@@ -351,6 +351,7 @@ public class WorkOrderController {
     public ResponseEntity<?> getPDF(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req,
                                     HttpServletResponse response) throws IOException {
         OwnUser user = userService.whoami(req);
+        StorageService storageService = storageServiceFactory.getStorageService();
         Optional<WorkOrder> optionalWorkOrder = workOrderService.findById(id);
         if (optionalWorkOrder.isPresent()) {
             WorkOrder savedWorkOrder = optionalWorkOrder.get();
@@ -401,7 +402,7 @@ public class WorkOrderController {
                 byte[] bytes = target.toByteArray();
                 MultipartFile file = new MultipartFileImpl(bytes, "Work Order Report.pdf");
                 return ResponseEntity.ok()
-                        .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                        .body(new SuccessResponse(true, storageServiceFactory.getStorageService().uploadAndSign(file,
                                 "reports/" + user.getCompany().getId())));
             } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);

@@ -95,8 +95,8 @@ public class GCPService implements StorageService {
         return download(file.getPath());
     }
 
-    private Blob getBlob(File file) {
-        Blob blob = storage.get(BlobId.of(gcpBucketName, file.getPath()));
+    private Blob getBlob(String filePath) {
+        Blob blob = storage.get(BlobId.of(gcpBucketName, filePath));
 
         if (blob == null) {
             throw new CustomException("File not found", HttpStatus.NOT_FOUND);
@@ -105,7 +105,11 @@ public class GCPService implements StorageService {
     }
 
     public String generateSignedUrl(File file, long expirationMinutes) {
-        Blob blob = getBlob(file);
+        return generateSignedUrl(file.getPath(), expirationMinutes);
+    }
+
+    public String generateSignedUrl(String filePath, long expirationMinutes) {
+        Blob blob = getBlob(filePath);
         BlobInfo blobInfo = BlobInfo.newBuilder(blob.getBlobId()).setContentType(blob.getContentType()).build();
         return generateSignedUrl(blobInfo, expirationMinutes);
     }

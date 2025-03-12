@@ -54,9 +54,9 @@ public class ExportController {
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Work Orders.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().uploadAndSign(file,
                             user.getCompany().getId() + "/exports" +
-                            "/work-orders")));
+                                    "/work-orders")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -73,9 +73,9 @@ public class ExportController {
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Assets.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().uploadAndSign(file,
                             user.getCompany().getId() + "/exports" +
-                            "/assets")));
+                                    "/assets")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -92,9 +92,9 @@ public class ExportController {
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Locations.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().uploadAndSign(file,
                             user.getCompany().getId() + "/exports" +
-                            "/locations")));
+                                    "/locations")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -111,9 +111,9 @@ public class ExportController {
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Parts.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().uploadAndSign(file,
                             user.getCompany().getId() + "/exports" +
-                            "/parts")));
+                                    "/parts")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -130,9 +130,9 @@ public class ExportController {
             byte[] bytes = target.toByteArray();
             MultipartFile file = new MultipartFileImpl(bytes, "Meters.csv");
             return ResponseEntity.ok()
-                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().upload(file,
+                    .body(new SuccessResponse(true, storageServiceFactory.getStorageService().uploadAndSign(file,
                             user.getCompany().getId() + "/exports" +
-                            "/meters")));
+                                    "/meters")));
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 }

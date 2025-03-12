@@ -88,12 +88,16 @@ public class MinioService implements StorageService {
     }
 
     public String generateSignedUrl(File file, long expirationMinutes) {
+        return generateSignedUrl(file.getPath(), expirationMinutes);
+    }
+
+    public String generateSignedUrl(String filePath, long expirationMinutes) {
         try {
             String url = minioClient.getPresignedObjectUrl(
                     GetPresignedObjectUrlArgs.builder()
                             .method(Method.GET)
                             .bucket(minioBucket)
-                            .object(file.getPath())
+                            .object(filePath)
                             .expiry(Math.toIntExact(expirationMinutes), TimeUnit.MINUTES)
                             .build()
             );

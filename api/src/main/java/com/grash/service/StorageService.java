@@ -9,7 +9,7 @@ public interface StorageService {
      *
      * @param file   The file to be uploaded.
      * @param folder The folder where the file should be uploaded.
-     * @return The public URL of the uploaded file.
+     * @return The file Path of the uploaded file.
      */
     String upload(MultipartFile file, String folder);
 
@@ -30,4 +30,10 @@ public interface StorageService {
     byte[] download(File file);
 
     String generateSignedUrl(File file, long expirationMinutes);
+
+    String generateSignedUrl(String filePath, long expirationMinutes);
+
+    default String uploadAndSign(MultipartFile file, String folder) {
+        return generateSignedUrl(upload(file, folder), 10);
+    }
 }
