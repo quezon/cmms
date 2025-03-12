@@ -96,9 +96,6 @@ At the moment all variables are optional. Do not delete the .env file
 | GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                                                                                     | (empty)               |
 | MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)               |
 | REACT_APP_MUI_X_LICENSE      | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
-| FASTSPRING_PWD               | No       | FastSpring password. Fastspring is a payment gateway                                                                                                                                                                | (empty)               |
-| FASTSPRING_USER              | No       | FastSpring username                                                                                                                                                                                                 | (empty)               |
-| SPRING_PROFILES_ACTIVE       | No       | Active Spring profile(s)                                                                                                                                                                                            | (empty)               |
 
 After changing any env variable starting with `REACT_APP_` or `PUBLIC_API_URL` you should run  `docker compose up -d --no-deps --build frontend`
 
