@@ -100,7 +100,7 @@ At the moment all variables are optional. Do not delete the .env file
 | FASTSPRING_USER              | No       | FastSpring username                                                                                                                                                                                                 | (empty)               |
 | SPRING_PROFILES_ACTIVE       | No       | Active Spring profile(s)                                                                                                                                                                                            | (empty)               |
 
-After changing any env variable starting with `REACT_APP_` or `PUBLIC_API_URL` you should run  `docker compose up -d --no-deps --build`
+After changing any env variable starting with `REACT_APP_` or `PUBLIC_API_URL` you should run  `docker compose up -d --no-deps --build frontend`
 
 #### For remote servers
 
