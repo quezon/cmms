@@ -53,6 +53,9 @@ public class ChecklistService {
     public Checklist update(Long id, ChecklistPatchDTO checklistReq, Company company) {
         if (checklistRepository.existsById(id)) {
             Checklist savedChecklist = checklistRepository.getById(id);
+            savedChecklist.setCategory(checklistReq.getCategory());
+            savedChecklist.setDescription(checklistReq.getDescription());
+            savedChecklist.setName(checklistReq.getName());
             savedChecklist.getTaskBases().clear();
             List<TaskBase> taskBases = checklistReq.getTaskBases().stream()
                     .map(taskBaseDto -> taskBaseService.createFromTaskBaseDTO(taskBaseDto, company)).collect(Collectors.toList());
