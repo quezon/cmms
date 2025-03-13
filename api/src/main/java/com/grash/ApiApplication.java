@@ -1,6 +1,8 @@
 package com.grash;
 
+import com.grash.dto.UserSignupRequest;
 import com.grash.model.*;
+import com.grash.model.enums.Language;
 import com.grash.model.enums.PlanFeatures;
 import com.grash.model.enums.RoleCode;
 import com.grash.model.enums.RoleType;
@@ -8,6 +10,7 @@ import com.grash.service.*;
 import com.grash.utils.Helper;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.collections4.CollectionUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,6 +22,8 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ApiApplication implements CommandLineRunner {
 
+    private final UserService userService;
+    private final UserInvitationService userInvitationService;
     @Value("${superAdmin.role.name}")
     private String superAdminRole;
 
@@ -36,12 +41,16 @@ public class ApiApplication implements CommandLineRunner {
     public void run(String... args) {
         if (!roleService.findByName(superAdminRole).isPresent()) {
             Company company = companyService.create(new Company());
-            roleService.create(Role.builder().
+            Role savedSuperAdminRole = roleService.create(Role.builder().
                     name(superAdminRole)
                     .companySettings(company.getCompanySettings())
                     .code(RoleCode.ADMIN)
                     .roleType(RoleType.ROLE_SUPER_ADMIN)
                     .build());
+
+            UserSignupRequest signupRequest = getSuperAdminSignupRequest(savedSuperAdminRole);
+            userInvitationService.create(new UserInvitation(signupRequest.getEmail(), savedSuperAdminRole));
+            userService.signup(signupRequest);
         }
         if (!subscriptionPlanService.existByCode("FREE")) {
             subscriptionPlanService.create(SubscriptionPlan.builder()
@@ -101,11 +110,16 @@ public class ApiApplication implements CommandLineRunner {
         for (Role defaultRole : defaultRoles) {
             for (Role upToDateRole : upToDateRoles) {
                 if (defaultRole.getCode().equals(upToDateRole.getCode())) {
-                    if (!CollectionUtils.isEqualCollection(defaultRole.getCreatePermissions(), upToDateRole.getCreatePermissions()) ||
-                            !CollectionUtils.isEqualCollection(defaultRole.getEditOtherPermissions(), upToDateRole.getEditOtherPermissions()) ||
-                            !CollectionUtils.isEqualCollection(defaultRole.getDeleteOtherPermissions(), upToDateRole.getDeleteOtherPermissions()) ||
-                            !CollectionUtils.isEqualCollection(defaultRole.getViewOtherPermissions(), upToDateRole.getViewOtherPermissions()) ||
-                            !CollectionUtils.isEqualCollection(defaultRole.getViewPermissions(), upToDateRole.getViewPermissions())) {
+                    if (!CollectionUtils.isEqualCollection(defaultRole.getCreatePermissions(),
+                            upToDateRole.getCreatePermissions()) ||
+                            !CollectionUtils.isEqualCollection(defaultRole.getEditOtherPermissions(),
+                                    upToDateRole.getEditOtherPermissions()) ||
+                            !CollectionUtils.isEqualCollection(defaultRole.getDeleteOtherPermissions(),
+                                    upToDateRole.getDeleteOtherPermissions()) ||
+                            !CollectionUtils.isEqualCollection(defaultRole.getViewOtherPermissions(),
+                                    upToDateRole.getViewOtherPermissions()) ||
+                            !CollectionUtils.isEqualCollection(defaultRole.getViewPermissions(),
+                                    upToDateRole.getViewPermissions())) {
                         // Update the role in the database
                         defaultRole.getCreatePermissions().clear();
                         defaultRole.getEditOtherPermissions().clear();
@@ -120,7 +134,8 @@ public class ApiApplication implements CommandLineRunner {
                         defaultRole.getViewPermissions().addAll(upToDateRole.getViewPermissions());
 
                         rolesToUpdate.add(defaultRole);
-                        // Optionally, you can break the loop if you only want to update the first occurrence of the role
+                        // Optionally, you can break the loop if you only want to update the first occurrence of the
+                        // role
                         // break;
                     }
                     // If the roles match, no need to check further, break the loop
@@ -129,5 +144,20 @@ public class ApiApplication implements CommandLineRunner {
             }
         }
         if (!rolesToUpdate.isEmpty()) roleService.saveAll(rolesToUpdate);
+    }
+
+    @NotNull
+    private static UserSignupRequest getSuperAdminSignupRequest(Role savedSuperAdminRole) {
+        UserSignupRequest signupRequest = new UserSignupRequest();
+        signupRequest.setRole(savedSuperAdminRole);
+        signupRequest.setEmail("superadmin@test.com");
+        signupRequest.setPassword("pls_change_me");
+        signupRequest.setFirstName("Super");
+        signupRequest.setLastName("Admin");
+        signupRequest.setPhone("");
+        signupRequest.setCompanyName("Super Admin");
+        signupRequest.setEmployeesCount(3);
+        signupRequest.setLanguage(Language.EN);
+        return signupRequest;
     }
 }
