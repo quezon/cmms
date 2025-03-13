@@ -39,15 +39,19 @@ public class ApiApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (!roleService.findByName(superAdminRole).isPresent()) {
-            Company company = companyService.create(new Company());
-            Role savedSuperAdminRole = roleService.create(Role.builder().
-                    name(superAdminRole)
-                    .companySettings(company.getCompanySettings())
-                    .code(RoleCode.ADMIN)
-                    .roleType(RoleType.ROLE_SUPER_ADMIN)
-                    .build());
+        // Find or create the super admin role
+        Role savedSuperAdminRole = roleService.findByName(superAdminRole)
+                .orElseGet(() -> {
+                    Company company = companyService.create(new Company());
+                    return roleService.create(Role.builder()
+                            .name(superAdminRole)
+                            .companySettings(company.getCompanySettings())
+                            .code(RoleCode.ADMIN)
+                            .roleType(RoleType.ROLE_SUPER_ADMIN)
+                            .build());
+                });
 
+        if (userService.findByCompany(savedSuperAdminRole.getCompanySettings().getCompany().getId()).isEmpty()) {
             UserSignupRequest signupRequest = getSuperAdminSignupRequest(savedSuperAdminRole);
             userInvitationService.create(new UserInvitation(signupRequest.getEmail(), savedSuperAdminRole));
             userService.signup(signupRequest);
