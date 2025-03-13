@@ -120,7 +120,9 @@ Celebrate on how easy this was
 
 ### Docs
 
-https://docs.atlas-cmms.com
+[Usage guide](https://docs.atlas-cmms.com)
+
+[Dev docs](./dev-docs)
 
 If you still have questions after reading the docs, concerns, bug reports, etc, please file an issue in this
 repository's Issue Tracker or send an
