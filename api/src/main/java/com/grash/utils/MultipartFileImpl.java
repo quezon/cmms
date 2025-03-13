@@ -27,7 +27,12 @@ public class MultipartFileImpl implements MultipartFile {
 
     @Override
     public String getContentType() {
-        // TODO - implementation depends on your requirements
+        String nameLowerCase = name.toLowerCase();
+        if (nameLowerCase.endsWith(".csv")) {
+            return "text/csv";
+        } else if (nameLowerCase.endsWith(".pdf")) {
+            return "application/pdf";
+        }
         return null;
     }
 
