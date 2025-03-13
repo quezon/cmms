@@ -277,6 +277,7 @@ public class UserService {
 
     @Async
     void sendRegistrationMail(OwnUser user, int employeesCount) {
+        if (user.getEmail().equals("superadmin@test.com")) return;
         if (recipients == null || recipients.length == 0) {
             throw new CustomException("MAIL_RECIPIENTS env variable not set", HttpStatus.INTERNAL_SERVER_ERROR);
         }
