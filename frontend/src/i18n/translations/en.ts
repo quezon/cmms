@@ -1423,7 +1423,16 @@ const enJSON = {
   'View all notifications': 'View all notifications',
   rate: 'rate',
   select_at_least_column: 'Select at least one column',
-  already_read: 'Already read'
+  already_read: 'Already read',
+  OPERATIONAL: 'Operational',
+  DOWN: 'Down',
+  MODERNIZATION: 'Modernization',
+  STANDBY: 'Standby',
+  INSPECTION_SCHEDULED: 'Inspection Scheduled',
+  COMMISSIONING: 'Commissioning',
+  EMERGENCY_SHUTDOWN: 'Emergency Shutdown',
+  select_asset_status: 'Select asset status',
+  asset_status: 'Asset status'
 };
 
 export default enJSON;
