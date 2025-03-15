@@ -35,7 +35,9 @@ import {
 } from 'react';
 import { TitleContext } from '../../../contexts/TitleContext';
 import { GridEnrichedColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
-import CustomDataGrid from '../components/CustomDatagrid';
+import CustomDataGrid, {
+  CustomDatagridColumn
+} from '../components/CustomDatagrid';
 import {
   GridRenderCellParams,
   GridToolbar,
@@ -112,6 +114,7 @@ function WorkOrders() {
     hasFeature,
     user
   } = useAuth();
+  const uiConfiguration = user.uiConfiguration;
   const { uploadFiles, getWOFieldsAndShapes } = useContext(
     CompanySettingsContext
   );
@@ -348,7 +351,7 @@ function WorkOrders() {
     dispatch(getWorkOrders(criteria));
   }, [criteria]);
 
-  const columns: GridEnrichedColDef[] = [
+  const columns: CustomDatagridColumn[] = [
     {
       field: 'id',
       headerName: t('id'),
@@ -425,7 +428,8 @@ function WorkOrders() {
       description: t('location_name'),
       width: 150,
       valueGetter: (params: GridValueGetterParams<LocationMiniDTO>) =>
-        params.value?.name
+        params.value?.name,
+      uiConfigKey: 'locations'
     },
     {
       field: 'locationAddress',
@@ -433,7 +437,8 @@ function WorkOrders() {
       description: t('location_address'),
       width: 150,
       valueGetter: (params: GridValueGetterParams<null, WorkOrder>) =>
-        params.row.location?.address
+        params.row.location?.address,
+      uiConfigKey: 'locations'
     },
     {
       field: 'category',

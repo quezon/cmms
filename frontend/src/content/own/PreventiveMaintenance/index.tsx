@@ -28,8 +28,14 @@ import {
 import { useDispatch, useSelector } from '../../../store';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { GridEnrichedColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
-import CustomDataGrid from '../components/CustomDatagrid';
-import { FilterField, SearchCriteria, SearchOperator } from '../../../models/owns/page';
+import CustomDataGrid, {
+  CustomDatagridColumn
+} from '../components/CustomDatagrid';
+import {
+  FilterField,
+  SearchCriteria,
+  SearchOperator
+} from '../../../models/owns/page';
 import { GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
 import Form from '../components/form';
@@ -47,7 +53,11 @@ import { getWOBaseFields, getWOBaseValues } from '../../../utils/woBase';
 import { PermissionEntity } from '../../../models/owns/role';
 import PermissionErrorMessage from '../components/PermissionErrorMessage';
 import NoRowsMessageWrapper from '../components/NoRowsMessageWrapper';
-import { getImageAndFiles, getNextOccurence, onSearchQueryChange } from '../../../utils/overall';
+import {
+  getImageAndFiles,
+  getNextOccurence,
+  onSearchQueryChange
+} from '../../../utils/overall';
 import { UserMiniDTO } from '../../../models/user';
 import UserAvatars from '../components/UserAvatars';
 import PreventiveMaintenance from '../../../models/owns/preventiveMaintenance';
@@ -225,7 +235,7 @@ function Files() {
     newValues.category = formatSelect(newValues.category);
     return newValues;
   };
-  const columns: GridEnrichedColDef[] = [
+  const columns: CustomDatagridColumn[] = [
     {
       field: 'name',
       headerName: t('name'),
@@ -298,7 +308,8 @@ function Files() {
       description: t('location_name'),
       width: 150,
       valueGetter: (params: GridValueGetterParams<LocationMiniDTO>) =>
-        params.value?.name
+        params.value?.name,
+      uiConfigKey: 'locations'
     },
     {
       field: 'category',
@@ -411,8 +422,7 @@ function Files() {
             validation={Yup.object().shape(getFieldsAndShapes()[1])}
             submitText={t('add')}
             values={{ startsOn: null, endsOn: null, dueDate: null }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
               return new Promise<void>((resolve, rej) => {
@@ -479,8 +489,7 @@ function Files() {
               dueDateDelay: currentPM?.schedule.dueDateDelay,
               tasks
             }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
               return new Promise<void>((resolve, rej) => {
@@ -626,7 +635,6 @@ function Files() {
                   rowsPerPageOptions={[10, 20, 50]}
                   onRowClick={({ id }) => handleOpenDetails(Number(id))}
                   components={{
-
                     NoRowsOverlay: () => (
                       <NoRowsMessageWrapper
                         message={t('noRows.pm.message')}

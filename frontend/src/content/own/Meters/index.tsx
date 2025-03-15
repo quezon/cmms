@@ -33,7 +33,9 @@ import * as React from 'react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { TitleContext } from '../../../contexts/TitleContext';
 import { GridEnrichedColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
-import CustomDataGrid from '../components/CustomDatagrid';
+import CustomDataGrid, {
+  CustomDatagridColumn
+} from '../components/CustomDatagrid';
 import { SearchCriteria } from '../../../models/owns/page';
 import {
   GridRenderCellParams,
@@ -221,7 +223,7 @@ function Meters() {
   };
   const onDeleteFailure = (err) =>
     showSnackBar(t('meter_delete_failure'), 'error');
-  const columns: GridEnrichedColDef[] = [
+  const columns: CustomDatagridColumn[] = [
     {
       field: 'name',
       headerName: t('name'),
@@ -269,7 +271,8 @@ function Meters() {
       headerName: t('location'),
       description: t('location'),
       width: 150,
-      valueGetter: (params) => params.row.location?.name
+      valueGetter: (params) => params.row.location?.name,
+      uiConfigKey: 'locations'
     },
     {
       field: 'asset',
@@ -393,8 +396,7 @@ function Meters() {
             validation={Yup.object().shape(shape)}
             submitText={t('add')}
             values={{}}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
               return new Promise<void>((resolve, rej) => {
@@ -459,21 +461,22 @@ function Meters() {
               }),
               location: currentMeter?.location
                 ? {
-                  label: currentMeter?.location.name,
-                  value: currentMeter?.location.id
-                }
+                    label: currentMeter?.location.name,
+                    value: currentMeter?.location.id
+                  }
                 : null,
               asset: {
                 label: currentMeter?.asset.name,
                 value: currentMeter?.asset.id
               },
-              category: currentMeter?.meterCategory ? {
-                label: currentMeter?.meterCategory.name,
-                value: currentMeter?.meterCategory.id
-              } : null
+              category: currentMeter?.meterCategory
+                ? {
+                    label: currentMeter?.meterCategory.name,
+                    value: currentMeter?.meterCategory.id
+                  }
+                : null
             }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
               return new Promise<void>((resolve, rej) => {
@@ -607,7 +610,6 @@ function Meters() {
                     rowsPerPageOptions={[10, 20, 50]}
                     onRowClick={({ id }) => handleOpenDetails(Number(id))}
                     components={{
-
                       NoRowsOverlay: () => (
                         <NoRowsMessageWrapper
                           message={t('noRows.meter.message')}

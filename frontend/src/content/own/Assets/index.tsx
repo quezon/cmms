@@ -32,7 +32,9 @@ import ReplayTwoToneIcon from '@mui/icons-material/ReplayTwoTone';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import { TitleContext } from '../../../contexts/TitleContext';
 import { GridEnrichedColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
-import CustomDataGrid from '../components/CustomDatagrid';
+import CustomDataGrid, {
+  CustomDatagridColumn
+} from '../components/CustomDatagrid';
 import {
   GridEventListener,
   GridRenderCellParams,
@@ -239,7 +241,7 @@ function Assets() {
       </MenuItem>
     </Menu>
   );
-  const columns: GridEnrichedColDef[] = [
+  const columns: CustomDatagridColumn[] = [
     {
       field: 'id',
       headerName: t('id'),
@@ -268,6 +270,7 @@ function Assets() {
       headerName: t('location'),
       description: t('location'),
       width: 150,
+      uiConfigKey: 'locations',
       valueGetter: (params: GridValueGetterParams<LocationMiniDTO>) =>
         params.value?.name
     },
@@ -346,7 +349,8 @@ function Assets() {
       description: t('vendors'),
       width: 150,
       valueGetter: (params: GridValueGetterParams<VendorMiniDTO[]>) =>
-        enumerate(params.value?.map((vendor) => vendor.companyName) ?? [])
+        enumerate(params.value?.map((vendor) => vendor.companyName) ?? []),
+      uiConfigKey: 'vendorsAndCustomers'
     },
     {
       field: 'parentAsset',

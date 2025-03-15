@@ -901,6 +901,22 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     if (!hasFeature(PlanFeature.FILE)) {
       fields = fields.filter((field) => field.type !== 'file');
     }
+    const uiConfigurationFieldConfig: {
+      key: keyof UiConfiguration;
+      type2: IField['type2'][];
+    }[] = [
+      { key: 'locations', type2: ['location'] },
+      { key: 'vendorsAndCustomers', type2: ['vendor', 'customer'] }
+    ];
+    const uiConfiguration = state.user.uiConfiguration;
+    fields = fields.filter((field) => {
+      for (const { key, type2 } of uiConfigurationFieldConfig) {
+        if (!uiConfiguration[key] && type2.includes(field.type2)) {
+          return false;
+        }
+      }
+      return true;
+    });
     return fields;
   };
   const upgrade = async (users: number[]) => {
