@@ -1467,7 +1467,8 @@ const trJSON = {
   COMMISSIONING: 'Devreye Alma',
   EMERGENCY_SHUTDOWN: 'Acil Kapanış',
   select_asset_status: 'Varlık durumunu seçin',
-  asset_status: 'Varlık durumu'
+  asset_status: 'Varlık durumu',
+  ui_configuration: 'UI Yapılandırması'
 };
 
 export default trJSON;

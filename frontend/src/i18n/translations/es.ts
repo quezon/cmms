@@ -1470,7 +1470,8 @@ const esJSON = {
   COMMISSIONING: 'Puesta en marcha',
   EMERGENCY_SHUTDOWN: 'Apagado de emergencia',
   select_asset_status: 'Seleccionar estado del activo',
-  asset_status: 'Estado del activo'
+  asset_status: 'Estado del activo',
+  ui_configuration: 'Configuración de la interfaz'
 };
 
 export default esJSON;

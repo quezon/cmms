@@ -1432,7 +1432,8 @@ const enJSON = {
   COMMISSIONING: 'Commissioning',
   EMERGENCY_SHUTDOWN: 'Emergency Shutdown',
   select_asset_status: 'Select asset status',
-  asset_status: 'Asset status'
+  asset_status: 'Asset status',
+  ui_configuration: 'Ui configuration'
 };
 
 export default enJSON;

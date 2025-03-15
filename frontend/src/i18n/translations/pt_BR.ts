@@ -1479,7 +1479,8 @@ const ptBRJSON = {
   COMMISSIONING: 'Comissionamento',
   EMERGENCY_SHUTDOWN: 'Desligamento de emergência',
   select_asset_status: 'Selecione o status do ativo',
-  asset_status: 'Status do ativo'
+  asset_status: 'Status do ativo',
+  ui_configuration: 'Configuração da interface'
 };
 
 export default ptBRJSON;

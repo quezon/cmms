@@ -1535,7 +1535,8 @@ const frJSON = {
   COMMISSIONING: 'Mise en service',
   EMERGENCY_SHUTDOWN: "Arrêt d'urgence",
   select_asset_status: "Sélectionnez l'état de l'équipement",
-  asset_status: "État de l'équipement"
+  asset_status: "État de l'équipement",
+  ui_configuration: "Configuration de l'interface"
 };
 
 export default frJSON;
