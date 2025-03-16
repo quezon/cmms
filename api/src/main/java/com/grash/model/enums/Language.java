@@ -5,5 +5,6 @@ public enum Language {
     FR,
     TR,
     ES,
-    PT_BR
+    PT_BR,
+    PL
 }
