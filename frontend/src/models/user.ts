@@ -48,7 +48,7 @@ export interface UserResponseDTO extends OwnUser {
   userSettingsId: number;
   superAccountRelations: SuperAccountRelation[];
   parentSuperAccount: SuperAccountRelation;
-  uiConfiguration: UiConfiguration | null;
+  uiConfiguration: UiConfiguration;
 }
 export interface SuperAccountRelation {
   childCompanyName: string;

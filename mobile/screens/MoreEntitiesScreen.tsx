@@ -6,13 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { RootStackParamList, RootTabScreenProps } from '../types';
 import useAuth from '../hooks/useAuth';
 import { PermissionEntity } from '../models/role';
+import { UiConfiguration } from '../models/uiConfiguration';
 
 export default function MoreEntitiesScreen({
   navigation
 }: RootTabScreenProps<'MoreEntities'>) {
   const theme = useTheme();
   const { t } = useTranslation();
-  const { hasViewPermission } = useAuth();
+  const { hasViewPermission, user } = useAuth();
   const entities: {
     label: string;
     icon: IconSource;
@@ -20,6 +21,7 @@ export default function MoreEntitiesScreen({
     backgroundColor: string;
     link: keyof RootStackParamList;
     visible: boolean;
+    uiConfigKey?: keyof UiConfiguration;
   }[] = [
     {
       label: 'locations',
@@ -27,7 +29,8 @@ export default function MoreEntitiesScreen({
       color: '#2491d1',
       backgroundColor: '#c8cfd3',
       link: 'Locations',
-      visible: hasViewPermission(PermissionEntity.LOCATIONS)
+      visible: hasViewPermission(PermissionEntity.LOCATIONS),
+      uiConfigKey: 'locations'
     },
     {
       label: 'assets',
@@ -52,7 +55,8 @@ export default function MoreEntitiesScreen({
       color: '#d12444',
       backgroundColor: '#d3c8ca',
       link: 'Meters',
-      visible: hasViewPermission(PermissionEntity.METERS)
+      visible: hasViewPermission(PermissionEntity.METERS),
+      uiConfigKey: 'meters'
     },
     {
       label: 'people_teams',
@@ -69,7 +73,8 @@ export default function MoreEntitiesScreen({
       color: theme.colors.warning,
       backgroundColor: '#d2d0c4',
       link: 'VendorsCustomers',
-      visible: hasViewPermission(PermissionEntity.VENDORS_AND_CUSTOMERS)
+      visible: hasViewPermission(PermissionEntity.VENDORS_AND_CUSTOMERS),
+      uiConfigKey: 'vendorsAndCustomers'
     }
   ];
   return (
@@ -81,7 +86,13 @@ export default function MoreEntitiesScreen({
       }}
     >
       {entities
-        .filter((entity) => entity.visible)
+        .filter(
+          (entity) =>
+            entity.visible &&
+            (entity.uiConfigKey
+              ? user.uiConfiguration[entity.uiConfigKey]
+              : true)
+        )
         .map(({ label, icon, color, backgroundColor, link }) => (
           <TouchableOpacity
             key={label}

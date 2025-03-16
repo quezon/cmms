@@ -104,7 +104,16 @@ const esJSON = {
   'Start working on your project directly from one of the included starter kits or use the Figma/Sketch files to create a prototype first':
     'Comience a trabajar en su proyecto directamente desde uno de los kits de inicio incluidos o use los archivos Figma / Sketch para crear un prototipo primero',
   'We only translated a small part of the template, for demonstration purposes':
-    'Solo traducimos una pequeña parte de la plantilla, con fines de demostración'
+    'Solo traducimos una pequeña parte de la plantilla, con fines de demostración',
+  OPERATIONAL: 'Operativo',
+  DOWN: 'Fuera de servicio',
+  MODERNIZATION: 'Modernización',
+  STANDBY: 'En espera',
+  INSPECTION_SCHEDULED: 'Inspección programada',
+  COMMISSIONING: 'Puesta en marcha',
+  EMERGENCY_SHUTDOWN: 'Apagado de emergencia',
+  select_asset_status: 'Seleccionar estado del activo',
+  asset_status: 'Estado del activo'
 };
 
 export default esJSON;

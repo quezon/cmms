@@ -12,6 +12,7 @@ import { useDispatch } from '../../store';
 import { addWorkOrder } from '../../slices/workOrder';
 import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
 import { formatWorkOrderValues, getWorkOrderFields } from '../../utils/fields';
+import { assetStatuses } from '../../models/asset';
 
 export default function CreateWorkOrderScreen({
   navigation,
@@ -40,7 +41,19 @@ export default function CreateWorkOrderScreen({
   return (
     <View style={styles.container}>
       <Form
-        fields={getFieldsAndShapes()[0]}
+        fields={[
+          ...getFieldsAndShapes()[0],
+          {
+            name: 'assetStatus',
+            type: 'select',
+            label: t('asset_status'),
+            placeholder: t('select_asset_status'),
+            items: assetStatuses.map((assetStatus) => ({
+              label: t(assetStatus.status),
+              value: assetStatus.status
+            }))
+          }
+        ]}
         validation={Yup.object().shape(getFieldsAndShapes()[1])}
         navigation={navigation}
         submitText={t('save')}
