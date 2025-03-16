@@ -30,6 +30,7 @@ import { getTaskTypes } from '../../utils/displayers';
 import NumberInput from '../NumberInput';
 import DateRangePicker from './DateRangePicker';
 import AudioRecorder from './AudioRecorder';
+import { SheetManager } from 'react-native-actions-sheet';
 
 interface OwnProps {
   fields: Array<IField>;
@@ -59,10 +60,10 @@ export default function Form(props: OwnProps) {
     field,
     e:
       | (
-      | { label: string; value: number }
-      | { label: string; value: Task }
-      | Task
-      )[]
+          | { label: string; value: number }
+          | { label: string; value: Task }
+          | Task
+        )[]
       | string
       | number
       | Date
@@ -83,10 +84,10 @@ export default function Form(props: OwnProps) {
   const renderSelect = (formik, field: IField) => {
     let values:
       | (
-      | { label: string; value: number }
-      | { label: string; value: Task }
-      | Task
-      )[]
+          | { label: string; value: number }
+          | { label: string; value: Task }
+          | Task
+        )[]
       | { label: string; value: number } = formik.values[field.name];
     const excluded = field.excluded;
     let screenPath: keyof RootStackParamList;
@@ -100,9 +101,55 @@ export default function Form(props: OwnProps) {
         | AssetMiniDTO
         | Category
         | Task
-        )[]
+      )[]
     ) => void;
     let additionalNavigationOptions = {};
+
+    // Handle basic select type
+    if (field.items) {
+      const selectedValue = formik.values[field.name];
+      const selectedItem = field.items.find(
+        (item) => item.value === selectedValue
+      );
+
+      return (
+        <TouchableOpacity
+          disabled={formik.isSubmitting}
+          onPress={() => {
+            SheetManager.show('basic-select-sheet', {
+              payload: {
+                items: field.items,
+                onSelect: (item) => {
+                  handleChange(formik, field.name, item.value);
+                }
+              }
+            });
+          }}
+          style={{
+            display: 'flex',
+            flexDirection: 'column'
+          }}
+        >
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}
+          >
+            <Text>{field.label}</Text>
+            <IconButton icon={selectedValue ? 'check-circle' : 'plus-circle'} />
+          </View>
+          {selectedValue && (
+            <Text style={{ color: theme.colors.primary }}>
+              {selectedItem ? selectedItem.label : selectedValue}
+            </Text>
+          )}
+        </TouchableOpacity>
+      );
+    }
+
     switch (field.type2) {
       case 'priority':
         return (
@@ -193,7 +240,11 @@ export default function Form(props: OwnProps) {
           }));
           handleChange(formik, field.name, field.multiple ? value : value[0]);
         };
-        additionalNavigationOptions = { locationId: field.relatedFields ? formik.values[field.relatedFields[0].field]?.value ?? null : null };
+        additionalNavigationOptions = {
+          locationId: field.relatedFields
+            ? formik.values[field.relatedFields[0].field]?.value ?? null
+            : null
+        };
         break;
       case 'category':
         screenPath = 'SelectCategories';
@@ -228,12 +279,12 @@ export default function Form(props: OwnProps) {
       onChange,
       selected: Array.isArray(values)
         ? values.map((value) => {
-          if (isTask(value)) {
-            return value;
-          } else {
-            return value.value;
-          }
-        })
+            if (isTask(value)) {
+              return value;
+            } else {
+              return value.value;
+            }
+          })
         : [],
       multiple: field.multiple,
       ...additionalNavigationOptions
@@ -299,10 +350,10 @@ export default function Form(props: OwnProps) {
           </View>
           {field.multiple
             ? Array.isArray(values) &&
-            !!values?.length &&
-            values.map((value: { label: string; value: number }) =>
-              renderValue(value)
-            )
+              !!values?.length &&
+              values.map((value: { label: string; value: number }) =>
+                renderValue(value)
+              )
             : values && renderValue(values as { label: string; value: number })}
         </TouchableOpacity>
       );
@@ -381,8 +432,8 @@ export default function Form(props: OwnProps) {
                               (isTask(object) && isTask(item)
                                 ? item.id
                                 : isTask(item.value)
-                                  ? item.value.id
-                                  : 0)
+                                ? item.value.id
+                                : 0)
                             );
                           }
                         )
@@ -433,7 +484,7 @@ export default function Form(props: OwnProps) {
                 {field.type === 'text' ? (
                   <TextInput
                     style={{ width: '100%' }}
-                    mode='outlined'
+                    mode="outlined"
                     error={!!formik.errors[field.name] || field.error}
                     label={field.label}
                     placeholder={field.placeholder ?? field.label}
@@ -448,7 +499,7 @@ export default function Form(props: OwnProps) {
                 ) : field.type === 'number' ? (
                   <NumberInput
                     style={{ width: '100%' }}
-                    mode='outlined'
+                    mode="outlined"
                     error={!!formik.errors[field.name] || field.error}
                     label={field.label}
                     defaultValue={formik.values[field.name]}
@@ -550,16 +601,18 @@ export default function Form(props: OwnProps) {
                       {formik.values[field.name]}
                     </Text>
                   </View>
-                ) : field.type === 'audio' ?
+                ) : field.type === 'audio' ? (
                   <AudioRecorder
                     title={field.label}
                     onChange={(audio) => {
                       formik.setFieldValue(field.name, audio);
-                    }} /> : (
-                    renderSelect(formik, field)
-                  )}
+                    }}
+                  />
+                ) : (
+                  renderSelect(formik, field)
+                )}
                 {Boolean(formik.errors[field.name]) && (
-                  <HelperText type='error'>
+                  <HelperText type="error">
                     {t(formik.errors[field.name]?.toString())}
                   </HelperText>
                 )}
@@ -568,7 +621,7 @@ export default function Form(props: OwnProps) {
             <Button
               style={{ marginVertical: 20, zIndex: 10 }}
               onPress={() => formik.handleSubmit()}
-              mode='contained'
+              mode="contained"
               loading={formik.isSubmitting}
               disabled={Boolean(formik.errors.submit) || formik.isSubmitting}
             >

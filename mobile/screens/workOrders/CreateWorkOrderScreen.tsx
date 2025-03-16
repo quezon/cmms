@@ -13,6 +13,7 @@ import { addWorkOrder } from '../../slices/workOrder';
 import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
 import { formatWorkOrderValues, getWorkOrderFields } from '../../utils/fields';
 import { assetStatuses } from '../../models/asset';
+import { useTheme } from 'react-native-paper';
 
 export default function CreateWorkOrderScreen({
   navigation,
@@ -20,6 +21,7 @@ export default function CreateWorkOrderScreen({
 }: RootStackScreenProps<'AddWorkOrder'>) {
   const { t } = useTranslation();
   const [initialDueDate, setInitialDueDate] = useState<Date>(null);
+  const theme = useTheme();
   const { uploadFiles, getWOFieldsAndShapes } = useContext(
     CompanySettingsContext
   );
@@ -50,7 +52,8 @@ export default function CreateWorkOrderScreen({
             placeholder: t('select_asset_status'),
             items: assetStatuses.map((assetStatus) => ({
               label: t(assetStatus.status),
-              value: assetStatus.status
+              value: assetStatus.status,
+              color: assetStatus.color(theme)
             }))
           }
         ]}

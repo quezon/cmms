@@ -276,7 +276,6 @@ export default function RequestsScreen({
                   }}
                   key={request.id}
                   onPress={() => {
-                    console.log(request.workOrder?.id, request.id);
                     if (request.workOrder) {
                       navigation.push('WODetails', {
                         id: request.workOrder.id

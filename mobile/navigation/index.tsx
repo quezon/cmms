@@ -523,7 +523,10 @@ function BottomTabNavigator({ navigation }: RootTabScreenProps<'Home'>) {
   if (createEntities.some((entity) => hasCreatePermission(entity))) {
     leftButtonsCount++;
   }
-  if (hasViewPermission(PermissionEntity.REQUESTS)) {
+  if (
+    hasViewPermission(PermissionEntity.REQUESTS) &&
+    uiConfiguration.requests
+  ) {
     rightButtonsCount++;
   }
   if (viewMoreEntities.some((entity) => hasViewPermission(entity))) {
@@ -636,18 +639,19 @@ function BottomTabNavigator({ navigation }: RootTabScreenProps<'Home'>) {
           }}
         />
       )}
-      {hasViewPermission(PermissionEntity.REQUESTS) && (
-        <BottomTab.Screen
-          name="Requests"
-          component={RequestsScreen}
-          options={{
-            title: t('requests'),
-            tabBarIcon: ({ color, focused }) => (
-              <Feather name="inbox" color={color} size={30} />
-            )
-          }}
-        />
-      )}
+      {hasViewPermission(PermissionEntity.REQUESTS) &&
+        uiConfiguration.requests && (
+          <BottomTab.Screen
+            name="Requests"
+            component={RequestsScreen}
+            options={{
+              title: t('requests'),
+              tabBarIcon: ({ color, focused }) => (
+                <Feather name="inbox" color={color} size={30} />
+              )
+            }}
+          />
+        )}
       {viewMoreEntities.some((entity) => hasViewPermission(entity)) && (
         <BottomTab.Screen
           name="MoreEntities"
