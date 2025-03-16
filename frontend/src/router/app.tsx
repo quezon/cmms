@@ -10,6 +10,9 @@ const Loader = (Component) => (props) =>
     </Suspense>
   );
 
+const SettingsLayout = Loader(
+  lazy(() => import('../content/own/Settings/SettingsLayout'))
+);
 const GeneralSettings = Loader(
   lazy(() => import('../content/own/Settings/General'))
 );
@@ -31,6 +34,7 @@ const WorkflowsSettings = Loader(
 const UIConfigurationSettings = Loader(
   lazy(() => import('../content/own/Settings/UiConfiguration'))
 );
+
 const UserProfile = Loader(lazy(() => import('../content/own/UserProfile')));
 const CompanyProfile = Loader(
   lazy(() => import('../content/own/CompanyProfile'))
@@ -99,6 +103,7 @@ const SwitchAccount = Loader(
 const appRoutes = [
   {
     path: 'settings',
+    element: <SettingsLayout />,
     children: [
       {
         path: '',

@@ -46,45 +46,43 @@ function WorkOrderSettings() {
   ];
 
   return (
-    <SettingsLayout tabIndex={1}>
-      <Grid item xs={12}>
-        <Box p={4}>
-          <Box>
-            <Tabs
-              onChange={handleTabsChange}
-              value={currentTab}
-              variant="scrollable"
-              scrollButtons="auto"
-              textColor="primary"
-              indicatorColor="primary"
-            >
-              {tabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              ))}
-            </Tabs>
-            <Divider sx={{ mt: 1 }} />
-            <Box p={3}>
-              {currentTab === 'create' && (
-                <FieldsConfigurationForm
-                  initialValues={{}}
-                  fields={createFields.map((field) => {
-                    return { ...field, type: 'workOrder' };
-                  })}
-                />
-              )}
-              {currentTab === 'complete' && (
-                <FieldsConfigurationForm
-                  initialValues={{}}
-                  fields={completeFields.map((field) => {
-                    return { ...field, type: 'workOrder' };
-                  })}
-                />
-              )}
-            </Box>
+    <Grid item xs={12}>
+      <Box p={4}>
+        <Box>
+          <Tabs
+            onChange={handleTabsChange}
+            value={currentTab}
+            variant="scrollable"
+            scrollButtons="auto"
+            textColor="primary"
+            indicatorColor="primary"
+          >
+            {tabs.map((tab) => (
+              <Tab key={tab.value} label={tab.label} value={tab.value} />
+            ))}
+          </Tabs>
+          <Divider sx={{ mt: 1 }} />
+          <Box p={3}>
+            {currentTab === 'create' && (
+              <FieldsConfigurationForm
+                initialValues={{}}
+                fields={createFields.map((field) => {
+                  return { ...field, type: 'workOrder' };
+                })}
+              />
+            )}
+            {currentTab === 'complete' && (
+              <FieldsConfigurationForm
+                initialValues={{}}
+                fields={completeFields.map((field) => {
+                  return { ...field, type: 'workOrder' };
+                })}
+              />
+            )}
           </Box>
         </Box>
-      </Grid>
-    </SettingsLayout>
+      </Box>
+    </Grid>
   );
 }
 

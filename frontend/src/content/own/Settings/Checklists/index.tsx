@@ -109,7 +109,7 @@ function Checklists() {
     }
   ];
   return (
-    <SettingsLayout tabIndex={4}>
+    <>
       {hasFeature(PlanFeature.CHECKLIST) ? (
         <>
           <Grid item xs={12}>
@@ -225,7 +225,7 @@ function Checklists() {
       ) : (
         <FeatureErrorMessage message="upgrade_checklist" />
       )}
-    </SettingsLayout>
+    </>
   );
 }
 
