@@ -23,26 +23,24 @@ function WorkOrderSettings() {
   ];
 
   return (
-    <SettingsLayout tabIndex={2}>
-      <Grid item xs={12}>
-        <Box p={4}>
-          {hasFeature(PlanFeature.REQUEST_CONFIGURATION) ? (
-            <Box>
-              <Box p={3}>
-                <FieldsConfigurationForm
-                  initialValues={{}}
-                  fields={fields.map((field) => {
-                    return { ...field, type: 'request' };
-                  })}
-                />
-              </Box>
+    <Grid item xs={12}>
+      <Box p={4}>
+        {hasFeature(PlanFeature.REQUEST_CONFIGURATION) ? (
+          <Box>
+            <Box p={3}>
+              <FieldsConfigurationForm
+                initialValues={{}}
+                fields={fields.map((field) => {
+                  return { ...field, type: 'request' };
+                })}
+              />
             </Box>
-          ) : (
-            <FeatureErrorMessage message="Upgrade to configure the Request Form" />
-          )}
-        </Box>
-      </Grid>
-    </SettingsLayout>
+          </Box>
+        ) : (
+          <FeatureErrorMessage message="Upgrade to configure the Request Form" />
+        )}
+      </Box>
+    </Grid>
   );
 }
 

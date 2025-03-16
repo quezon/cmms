@@ -35,47 +35,45 @@ function UiConfigurationSettings() {
   ];
 
   return (
-    <SettingsLayout tabIndex={2}>
-      <Formik initialValues={{}} onSubmit={() => null}>
-        {({
-          errors,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          touched,
-          values
-        }) => (
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={1}>
-              <Grid item xs={12}>
-                <Box p={4}>
-                  {uiConfiguration ? (
-                    <GrayWhiteSelector
-                      fields={fields}
-                      options={options}
-                      onFieldChange={(
-                        field,
-                        value,
-                        type: FieldConfigurationsType
-                      ) =>
-                        patchUiConfiguration({
-                          ...uiConfiguration,
-                          [field]: value === 'true'
-                        })
-                      }
-                      getValue={(field) => uiConfiguration[field.name]}
-                    />
-                  ) : (
-                    <Loading />
-                  )}
-                </Box>
-              </Grid>
+    <Formik initialValues={{}} onSubmit={() => null}>
+      {({
+        errors,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+        isSubmitting,
+        touched,
+        values
+      }) => (
+        <form onSubmit={handleSubmit}>
+          <Grid container spacing={1}>
+            <Grid item xs={12}>
+              <Box p={4}>
+                {uiConfiguration ? (
+                  <GrayWhiteSelector
+                    fields={fields}
+                    options={options}
+                    onFieldChange={(
+                      field,
+                      value,
+                      type: FieldConfigurationsType
+                    ) =>
+                      patchUiConfiguration({
+                        ...uiConfiguration,
+                        [field]: value === 'true'
+                      })
+                    }
+                    getValue={(field) => uiConfiguration[field.name]}
+                  />
+                ) : (
+                  <Loading />
+                )}
+              </Box>
             </Grid>
-          </form>
-        )}
-      </Formik>
-    </SettingsLayout>
+          </Grid>
+        </form>
+      )}
+    </Formik>
   );
 }
 

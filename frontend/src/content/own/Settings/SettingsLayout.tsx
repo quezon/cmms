@@ -1,20 +1,17 @@
-import { ReactNode, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Outlet, useLocation } from 'react-router-dom';
 import MultipleTabsLayout from '../components/MultipleTabsLayout';
 import { TitleContext } from '../../../contexts/TitleContext';
 import useAuth from '../../../hooks/useAuth';
 import { PermissionEntity } from '../../../models/owns/role';
 import PermissionErrorMessage from '../components/PermissionErrorMessage';
 
-interface SettingsLayoutProps {
-  children?: ReactNode;
-  tabIndex: number;
-}
-
-function SettingsLayout(props: SettingsLayoutProps) {
-  const { children, tabIndex } = props;
+function SettingsLayout() {
   const { t }: { t: any } = useTranslation();
   const { user } = useAuth();
+  const location = useLocation();
+  
   const tabs = [
     { value: '', label: t('general_settings') },
     { value: 'work-order', label: t('wo_configuration') },
@@ -24,6 +21,14 @@ function SettingsLayout(props: SettingsLayoutProps) {
     { value: 'workflows', label: t('workflows') },
     { value: 'ui-configuration', label: t('ui_configuration') }
   ];
+  
+  // Determine the current tab index based on the URL path
+  const getCurrentTabIndex = () => {
+    const path = location.pathname.split('/').pop();
+    const index = tabs.findIndex(tab => tab.value === path);
+    return index >= 0 ? index : 0;
+  };
+  
   const { setTitle } = useContext(TitleContext);
 
   useEffect(() => {
@@ -34,10 +39,10 @@ function SettingsLayout(props: SettingsLayoutProps) {
     <MultipleTabsLayout
       basePath="/app/settings"
       tabs={tabs}
-      tabIndex={tabIndex}
+      tabIndex={getCurrentTabIndex()}
       title={t('settings')}
     >
-      {children}
+      <Outlet />
     </MultipleTabsLayout>
   ) : (
     <PermissionErrorMessage message={'no_access_settings'} />

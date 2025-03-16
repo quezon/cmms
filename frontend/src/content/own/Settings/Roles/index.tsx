@@ -460,7 +460,7 @@ function Roles() {
   ];
 
   return (
-    <SettingsLayout tabIndex={3}>
+    <>
       <Grid item xs={12}>
         <Box p={4}>
           <PageHeader rolesNumber={roles.length} formatValues={formatValues} />
@@ -505,7 +505,7 @@ function Roles() {
           handleOpenDelete={() => setOpenDelete(true)}
         />
       </Drawer>
-    </SettingsLayout>
+    </>
   );
 }
 
