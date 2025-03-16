@@ -14,14 +14,13 @@ import { Field, Formik } from 'formik';
 import * as Yup from 'yup';
 import CustomSwitch from '../../components/form/CustomSwitch';
 import useAuth from '../../../../hooks/useAuth';
-import internationalization from '../../../../i18n/i18n';
+import internationalization, {
+  supportedLanguages
+} from '../../../../i18n/i18n';
 import { useDispatch, useSelector } from '../../../../store';
 import { getCurrencies } from '../../../../slices/currency';
 import { useEffect, useMemo } from 'react';
-import {
-  GeneralPreferences,
-  supportedLanguages
-} from '../../../../models/owns/generalPreferences';
+import { GeneralPreferences } from '../../../../models/owns/generalPreferences';
 
 function GeneralSettings() {
   const { t }: { t: any } = useTranslation();
