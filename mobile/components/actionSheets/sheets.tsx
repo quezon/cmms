@@ -9,6 +9,7 @@ import VendorDetailsSheet from './VendorDetailsSheet';
 import MeterDetailsSheet from './MeterDetailsSheet';
 import TeamDetailsSheet from './TeamDetailsSheet';
 import UploadFileSheet from './UploadFileSheet';
+import BasicSelectSheet from './BasicSelectSheet';
 
 registerSheet('create-entities-sheet', CreateEntitiesSheet);
 registerSheet('work-order-details-sheet', WorkOrderDetailsSheet);
@@ -20,4 +21,5 @@ registerSheet('vendor-details-sheet', VendorDetailsSheet);
 registerSheet('meter-details-sheet', MeterDetailsSheet);
 registerSheet('team-details-sheet', TeamDetailsSheet);
 registerSheet('upload-file-sheet', UploadFileSheet);
+registerSheet('basic-select-sheet', BasicSelectSheet);
 export {};

@@ -42,6 +42,19 @@ export interface AssetDTO extends Audit {
   parts: PartMiniDTO[];
   files: FileMiniDTO[];
 }
+export const assetStatuses = [
+  { status: 'OPERATIONAL', color: (theme) => theme.colors.success },
+  { status: 'MODERNIZATION', color: (theme) => '#CBC3E3' },
+  { status: 'DOWN', color: (theme) => theme.colors.error },
+  { status: 'STANDBY', color: (theme) => theme.colors.primary },
+  {
+    status: 'INSPECTION_SCHEDULED',
+    color: (theme) => theme.colors.warning
+  },
+  { status: 'COMMISSIONING', color: (theme) => 'grey' },
+  { status: 'EMERGENCY_SHUTDOWN', color: (theme) => theme.colors.error }
+] as const;
+
 export interface AssetRow extends AssetDTO {
   hierarchy: number[];
   childrenFetched?: boolean;

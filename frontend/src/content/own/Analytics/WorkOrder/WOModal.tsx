@@ -5,7 +5,9 @@ import {
   DialogTitle,
   Typography
 } from '@mui/material';
-import CustomDataGrid from '../../components/CustomDatagrid';
+import CustomDataGrid, {
+  CustomDatagridColumn
+} from '../../components/CustomDatagrid';
 import {
   GridRenderCellParams,
   GridToolbar,
@@ -49,7 +51,7 @@ export default function WOModal({
     CompanySettingsContext
   );
 
-  const defaultColumns: GridEnrichedColDef[] = [
+  const defaultColumns: CustomDatagridColumn[] = [
     {
       field: 'id',
       headerName: t('id'),
@@ -126,7 +128,8 @@ export default function WOModal({
       description: t('Location'),
       width: 150,
       valueGetter: (params: GridValueGetterParams<LocationMiniDTO>) =>
-        params.value?.name
+        params.value?.name,
+      uiConfigKey: 'locations'
     },
     {
       field: 'locationAddress',
@@ -134,7 +137,8 @@ export default function WOModal({
       description: t('location_address'),
       width: 150,
       valueGetter: (params: GridValueGetterParams<null, WorkOrder>) =>
-        params.row.location?.address
+        params.row.location?.address,
+      uiConfigKey: 'locations'
     },
     {
       field: 'category',
@@ -231,7 +235,6 @@ export default function WOModal({
             rows={[]}
             loading={false}
             components={{
-              
               NoRowsOverlay: () => (
                 <NoRowsMessageWrapper
                   message={t('No Work Order found')}

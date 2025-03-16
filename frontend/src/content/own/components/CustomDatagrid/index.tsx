@@ -5,10 +5,20 @@ import { Stack, Typography, useTheme } from '@mui/material';
 import gridLocaleText from './GridLocaleText';
 import useWindowDimensions from '../../../../hooks/useWindowDimensions';
 import { useEffect, useRef, useState } from 'react';
+import { UiConfiguration } from '../../../../models/owns/uiConfiguration';
+import type {
+  GridColumns,
+  GridEnrichedColDef
+} from '@mui/x-data-grid/models/colDef/gridColDef';
+import useAuth from '../../../../hooks/useAuth';
 
+export type CustomDatagridColumn = GridEnrichedColDef & {
+  uiConfigKey?: keyof Omit<UiConfiguration, 'id'>;
+};
 interface CustomDatagridProps extends DataGridProProps {
   notClickable?: boolean;
   pro?: boolean;
+  columns: CustomDatagridColumn[];
 }
 
 function CustomDataGrid(props: CustomDatagridProps) {
@@ -17,6 +27,8 @@ function CustomDataGrid(props: CustomDatagridProps) {
   const { height } = useWindowDimensions();
   const tableRef = useRef<HTMLDivElement>();
   const [tableHeight, setTableHeight] = useState<number>(500);
+  const { user } = useAuth();
+
   const Component = props.pro ? DataGridPro : DataGrid;
   const getTableHeight = () => {
     if (tableRef.current) {
@@ -67,6 +79,9 @@ function CustomDataGrid(props: CustomDatagridProps) {
           )
         }}
         {...props}
+        columns={props.columns.filter((col) =>
+          col.uiConfigKey ? user.uiConfiguration[col.uiConfigKey] : true
+        )}
         disableSelectionOnClick
         localeText={translatedGridLocaleText}
       />

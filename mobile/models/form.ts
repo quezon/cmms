@@ -52,7 +52,12 @@ export interface IField {
   onPress?: () => void;
   required?: boolean;
   error?: any;
-  items?: { label: string; value: string | number; checked?: boolean }[];
+  items?: {
+    label: string;
+    value: string | number;
+    checked?: boolean;
+    color?: string;
+  }[];
   // listCheckbox?: { label: string; value: string; checked?: boolean }[];
   icon?: ReactNode | string;
   // onPressIcon?: () => void;

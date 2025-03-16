@@ -45,6 +45,7 @@ import { getMobileOverviewStats } from '../slices/analytics/workOrder';
 import Meter from '../models/meter';
 import { AssetDTO } from '../models/asset';
 import Location from '../models/location';
+import { UiConfiguration } from '../models/uiConfiguration';
 
 interface AuthState {
   isInitialized: boolean;
@@ -101,6 +102,7 @@ interface AuthContextValue extends AuthState {
     entity: Entity
   ) => boolean;
   getFilteredFields: (fields: Array<IField>) => Array<IField>;
+  patchUiConfiguration: (values: Omit<UiConfiguration, 'id'>) => Promise<void>;
 }
 
 interface AuthProviderProps {
@@ -209,6 +211,13 @@ type PatchFieldConfigurationAction = {
     fieldConfiguration: FieldConfiguration;
   };
 };
+type PatchUiConfigurationAction = {
+  type: 'PATCH_UI_CONFIGURATION';
+  payload: {
+    uiConfiguration: UiConfiguration;
+  };
+};
+
 type Action =
   | InitializeAction
   | LoginAction
@@ -226,7 +235,8 @@ type Action =
   | CancelSubscriptionAction
   | ResumeSubscriptionAction
   | UpgradeAction
-  | DowngradeAction;
+  | DowngradeAction
+  | PatchUiConfigurationAction;
 
 const initialAuthState: AuthState = {
   isAuthenticated: false,
@@ -342,6 +352,15 @@ const handlers: Record<
         ...state.company,
         subscription: { ...state.company.subscription, cancelled: false }
       }
+    };
+  },
+  PATCH_UI_CONFIGURATION: (
+    state: AuthState,
+    action: PatchUiConfigurationAction
+  ): AuthState => {
+    return {
+      ...state,
+      user: { ...state.user, uiConfiguration: action.payload.uiConfiguration }
     };
   },
   PATCH_COMPANY: (state: AuthState, action: PatchCompanyAction): AuthState => {
@@ -472,7 +491,8 @@ const AuthContext = createContext<AuthContextValue>({
   hasDeletePermission: () => false,
   downgrade: () => Promise.resolve(false),
   upgrade: () => Promise.resolve(false),
-  switchAccount: () => Promise.resolve()
+  switchAccount: () => Promise.resolve(),
+  patchUiConfiguration: () => Promise.resolve()
 });
 
 export const AuthProvider: FC<AuthProviderProps> = (props) => {
@@ -1007,6 +1027,22 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     if (!hasFeature(PlanFeature.FILE)) {
       fields = fields.filter((field) => field.type !== 'file');
     }
+    const uiConfigurationFieldConfig: {
+      key: keyof UiConfiguration;
+      type2: IField['type2'][];
+    }[] = [
+      { key: 'locations', type2: ['location'] },
+      { key: 'vendorsAndCustomers', type2: ['vendor', 'customer'] }
+    ];
+    const uiConfiguration = state.user.uiConfiguration;
+    fields = fields.filter((field) => {
+      for (const { key, type2 } of uiConfigurationFieldConfig) {
+        if (!uiConfiguration[key] && type2.includes(field.type2)) {
+          return false;
+        }
+      }
+      return true;
+    });
     return fields;
   };
   const upgrade = async (users: number[]) => {
@@ -1045,6 +1081,20 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
       return false;
     }
   };
+  const patchUiConfiguration = async (
+    values: Omit<UiConfiguration, 'id'>
+  ): Promise<void> => {
+    const uiConfiguration = await api.patch<UiConfiguration>(
+      `ui-configurations`,
+      values
+    );
+    dispatch({
+      type: 'PATCH_UI_CONFIGURATION',
+      payload: {
+        uiConfiguration
+      }
+    });
+  };
   useEffect(() => {
     getInfos();
   }, []);
@@ -1080,7 +1130,8 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         hasCreatePermission,
         upgrade,
         downgrade,
-        switchAccount
+        switchAccount,
+        patchUiConfiguration
       }}
     >
       {children}
