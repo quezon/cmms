@@ -134,6 +134,7 @@ email at [ibracool99@gmail.com](mailto:ibracool99@gmail.com).
 - Spanish
 - French
 - Turkish
+- Polish
 - Portuguese (Brazil)
 
 ## 🏗️ **Tech Stack**
