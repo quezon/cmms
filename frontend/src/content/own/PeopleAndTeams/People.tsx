@@ -409,7 +409,13 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
         <UserDetailsDrawer user={currentUser} />
       </Drawer>
 
-      <InviteUserDialog open={openModal} onClose={handleCloseModal} />
+      <InviteUserDialog
+        open={openModal}
+        onClose={handleCloseModal}
+        onRefreshUsers={() => {
+          dispatch(getUsers(criteria));
+        }}
+      />
       <ConfirmDialog
         open={openDisableModal}
         onCancel={() => {

@@ -17,29 +17,40 @@ import UserRoleCardList from '../UserRoleCardList';
 import { EmailOutlined } from '@mui/icons-material';
 import { inviteUsers } from '../../../../slices/user';
 import * as React from 'react';
+import { useContext, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useContext, useState } from 'react';
 import { emailRegExp } from '../../../../utils/validators';
 import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
 import { useDispatch, useSelector } from '../../../../store';
+import { requireEmailVerification } from '../../../../config';
+import CreateUser from './CreateUser';
+import { Simulate } from 'react-dom/test-utils';
 
 export default function InviteUserDialog({
   open,
-  onClose
+  onClose,
+  onRefreshUsers
 }: {
   open: boolean;
   onClose: () => void;
+  onRefreshUsers: () => void;
 }) {
   const [isInviteSubmitting, setIsInviteSubmitting] = useState(false);
   const [roleId, setRoleId] = useState<number>();
   const { t } = useTranslation();
   const [emails, setEmails] = useState<string[]>([]);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const [currentEmail, setCurrentEmail] = useState<string>('');
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const { users, loadingGet, singleUser } = useSelector((state) => state.users);
   const dispatch = useDispatch();
 
-  const onRoleChange = (id: number) => setRoleId(id);
+  const onRoleChange = (id: number) => {
+    setRoleId(id);
+    setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, 500);
+  };
   const verifyCurrentEmail = (): boolean => {
     if (currentEmail) {
       let error;
@@ -65,6 +76,7 @@ export default function InviteUserDialog({
     }
     return true;
   };
+
   return (
     <Dialog fullWidth maxWidth="sm" open={open} onClose={onClose}>
       <DialogTitle
@@ -108,94 +120,109 @@ export default function InviteUserDialog({
             />
             <Typography variant="h5">{t('bring_people_team')}</Typography>
           </Paper>
-
-          <UserRoleCardList onChange={onRoleChange} />
-          <Grid container sx={{ mt: 2 }} spacing={1}>
-            {emails.map((email, index) => (
-              <Grid item key={index}>
-                <Chip
-                  label={email}
-                  onDelete={() => {
-                    const emailsClone = [...emails];
-                    emailsClone.splice(index, 1);
-                    setEmails(emailsClone);
-                  }}
-                />
+          <Box pb={3}>
+            <UserRoleCardList onChange={onRoleChange} />
+          </Box>
+          {requireEmailVerification ? (
+            <>
+              <Grid container spacing={1}>
+                {emails.map((email, index) => (
+                  <Grid item key={index}>
+                    <Chip
+                      label={email}
+                      onDelete={() => {
+                        const emailsClone = [...emails];
+                        emailsClone.splice(index, 1);
+                        setEmails(emailsClone);
+                      }}
+                    />
+                  </Grid>
+                ))}
               </Grid>
-            ))}
-          </Grid>
-          <TextField
-            sx={{ my: 2 }}
-            fullWidth
-            helperText={t('add_20_users')}
-            label={t('enter_email')}
-            placeholder={t('example@email.com')}
-            name="email"
-            value={currentEmail}
-            onChange={(event) => {
-              setCurrentEmail(event.target.value);
-            }}
-            onKeyDown={(event) => {
-              if (['Enter', 'Tab'].includes(event.key)) {
-                if (verifyCurrentEmail()) {
-                  const emailsClone = [...emails];
-                  emailsClone.push(currentEmail);
-                  setEmails(emailsClone);
-                  setCurrentEmail('');
-                }
-              }
-            }}
-            variant={'outlined'}
-            required
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <EmailOutlined />
-                </InputAdornment>
-              )
-            }}
-          />
-          <Button
-            fullWidth
-            sx={{ mb: 3 }}
-            onClick={async () => {
-              setIsInviteSubmitting(true);
-              const invite = (emails: string[]) =>
-                dispatch(inviteUsers(roleId, emails))
-                  .then(() => {
-                    onClose();
-                    setEmails([]);
-                    setCurrentEmail('');
-                    showSnackBar(t('users_invite_success'), 'success');
-                  })
-                  .catch((err: { message: string }) => {
-                    showSnackBar(JSON.parse(err.message).message, 'error');
-                  })
-                  .finally(() => setIsInviteSubmitting(false));
-              if (roleId) {
-                if (emails.length || currentEmail) {
-                  if (currentEmail) {
-                    if (verifyCurrentEmail()) invite([...emails, currentEmail]);
-                  } else {
-                    invite(emails);
+              <TextField
+                sx={{ my: 2 }}
+                fullWidth
+                helperText={t('add_20_users')}
+                label={t('enter_email')}
+                placeholder={t('example@email.com')}
+                name="email"
+                value={currentEmail}
+                onChange={(event) => {
+                  setCurrentEmail(event.target.value);
+                }}
+                onKeyDown={(event) => {
+                  if (['Enter', 'Tab'].includes(event.key)) {
+                    if (verifyCurrentEmail()) {
+                      const emailsClone = [...emails];
+                      emailsClone.push(currentEmail);
+                      setEmails(emailsClone);
+                      setCurrentEmail('');
+                    }
                   }
-                } else {
-                  showSnackBar(t('please_type_emails'), 'error');
-                  setIsInviteSubmitting(false);
+                }}
+                variant={'outlined'}
+                required
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <EmailOutlined />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <Button
+                fullWidth
+                sx={{ mb: 3 }}
+                onClick={async () => {
+                  setIsInviteSubmitting(true);
+                  const invite = (emails: string[]) =>
+                    dispatch(inviteUsers(roleId, emails))
+                      .then(() => {
+                        onClose();
+                        setEmails([]);
+                        setCurrentEmail('');
+                        showSnackBar(t('users_invite_success'), 'success');
+                      })
+                      .catch((err: { message: string }) => {
+                        showSnackBar(JSON.parse(err.message).message, 'error');
+                      })
+                      .finally(() => setIsInviteSubmitting(false));
+                  if (roleId) {
+                    if (emails.length || currentEmail) {
+                      if (currentEmail) {
+                        if (verifyCurrentEmail())
+                          invite([...emails, currentEmail]);
+                      } else {
+                        invite(emails);
+                      }
+                    } else {
+                      showSnackBar(t('please_type_emails'), 'error');
+                      setIsInviteSubmitting(false);
+                    }
+                  } else {
+                    showSnackBar(t('please_select_role'), 'error');
+                    setIsInviteSubmitting(false);
+                  }
+                }}
+                variant="contained"
+                startIcon={
+                  isInviteSubmitting ? <CircularProgress size="1rem" /> : null
                 }
-              } else {
-                showSnackBar(t('please_select_role'), 'error');
-                setIsInviteSubmitting(false);
-              }
-            }}
-            variant="contained"
-            startIcon={
-              isInviteSubmitting ? <CircularProgress size="1rem" /> : null
-            }
-            disabled={isInviteSubmitting}
-          >
-            {t('invite')}
-          </Button>
+                disabled={isInviteSubmitting}
+              >
+                {t('invite')}
+              </Button>
+            </>
+          ) : (
+            roleId && (
+              <CreateUser
+                roleId={roleId}
+                onClose={onClose}
+                onRefreshUsers={onRefreshUsers}
+              />
+            )
+          )}
+          <Box ref={bottomRef} />
         </Box>
       </DialogContent>
     </Dialog>
