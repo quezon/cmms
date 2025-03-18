@@ -64,8 +64,11 @@ public class UserService {
     private String frontendUrl;
     @Value("${mail.recipients:#{null}}")
     private String[] recipients;
-    @Value("${security.require-email-verification}")
-    private boolean requireEmailVerification;
+    @Value("${security.invitation-via-email}")
+    private boolean enableInvitationViaEmail;
+    @Value("${mail.enable}")
+    private boolean enableMails;
+
 
     public String signin(String email, String password, String type) {
         try {
@@ -121,7 +124,7 @@ public class UserService {
             Optional<Role> optionalRole = roleService.findById(user.getRole().getId());
             if (!optionalRole.isPresent())
                 throw new CustomException("Role not found", HttpStatus.NOT_ACCEPTABLE);
-            if (requireEmailVerification && userInvitationService.findByRoleAndEmail(optionalRole.get().getId(),
+            if (enableInvitationViaEmail && userInvitationService.findByRoleAndEmail(optionalRole.get().getId(),
                     user.getEmail()).isEmpty()) {
                 throw new CustomException("You are not invited to this organization for this role",
                         HttpStatus.NOT_ACCEPTABLE);
@@ -135,7 +138,8 @@ public class UserService {
             return enableAndReturnToken(user, false, userReq.getEmployeesCount());
         } else {
             if (userReq.getRole() == null) { //send mail
-                if (requireEmailVerification) {
+                if (enableInvitationViaEmail) {
+                    throwIfEmailNotificationsNotEnabled();
                     String token = UUID.randomUUID().toString();
                     String link = PUBLIC_API_URL + "/auth/activate-account?token=" + token;
                     Map<String, Object> variables = new HashMap<String, Object>() {{
@@ -203,6 +207,7 @@ public class UserService {
     }
 
     public SuccessResponse resetPassword(String email) {
+        throwIfEmailNotificationsNotEnabled();
         email = email.toLowerCase();
         OwnUser user = findByEmail(email).get();
         Helper helper = new Helper();
@@ -232,7 +237,14 @@ public class UserService {
         return userRepository.findByLocation_Id(id);
     }
 
+    private void throwIfEmailNotificationsNotEnabled() {
+        if (!enableMails)
+            throw new CustomException("Please enable mails and configure SMTP in the environment variables",
+                    HttpStatus.NOT_ACCEPTABLE);
+    }
+
     public void invite(String email, Role role, OwnUser inviter) {
+        throwIfEmailNotificationsNotEnabled();
         if (!userRepository.existsByEmailIgnoreCase(email) && Helper.isValidEmailAddress(email)) {
             userInvitationService.create(new UserInvitation(email, role));
             Map<String, Object> variables = new HashMap<String, Object>() {{

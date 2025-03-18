@@ -47,7 +47,10 @@ interface AuthContextValue extends AuthState {
   login: (email: string, password: string) => Promise<void>;
   loginInternal: (accessToken: string) => void;
   logout: () => void;
-  register: (values: any) => Promise<{ message: string; success: boolean }>;
+  register: (
+    values: any,
+    invitationMode: boolean
+  ) => Promise<{ message: string; success: boolean }>;
   getInfos: () => void;
   switchAccount: (id: number) => Promise<void>;
   patchUserSettings: (values: Partial<UserSettings>) => Promise<void>;
@@ -597,7 +600,8 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   };
 
   const register = async (
-    values
+    values,
+    invitationMode: boolean
   ): Promise<{ success: boolean; message: string }> => {
     const response = await api.post<{ message: string; success: boolean }>(
       'auth/signup',
@@ -605,21 +609,10 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
       { headers: authHeader(true) }
     );
     const { message, success } = response;
-    if (message.startsWith('Successful')) {
+    if (message.startsWith('Successful') || invitationMode) {
       return;
     } else {
-      setSession(message);
-      const user = await updateUserInfos();
-      const company = await api.get<Company>(`companies/${user.companyId}`);
-      await setupUser(company.companySettings);
-      dispatch({
-        type: 'REGISTER',
-        payload: {
-          user,
-          companySettings: company.companySettings,
-          company
-        }
-      });
+      await loginInternal(message);
       return response;
     }
   };

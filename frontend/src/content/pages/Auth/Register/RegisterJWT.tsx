@@ -103,15 +103,14 @@ function RegisterJWT({
           (values.countryCode ? `+${values.countryCode.phone}` : '') +
           `${values.phone}`;
         return register(
-          role ? { ...valuesClone, role: { id: role } } : valuesClone
+          role ? { ...valuesClone, role: { id: role } } : valuesClone,
+          invitationMode
         )
           .then(async (res) => {
             if (invitationMode) {
               onInvitationSuccess();
             } else {
-              if (res && (await verify(res.message))) {
-                loginInternal(res.message);
-              } else {
+              if (!(res && (await verify(res.message)))) {
                 if (!role) showSnackBar(t('verify_email'), 'success');
                 navigate(role ? '/account/login' : '/account/verify');
               }

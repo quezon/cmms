@@ -39,6 +39,6 @@ export const muiLicense = process.env.REACT_APP_MUI_X_LICENSE ?? '';
 export const zendeskKey = '';
 
 export const googleTrackingId = process.env.REACT_APP_GOOGLE_TRACKING_ID;
-export const requireEmailVerification: boolean =
-  process.env.REACT_APP_REQUIRE_EMAIL_VERIFICATION === 'true';
+export const isEmailVerificationEnabled: boolean =
+  process.env.REACT_APP_INVITATION_VIA_EMAIL === 'true';
 export const IS_LOCALHOST = apiUrl.includes('localhost:');

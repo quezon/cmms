@@ -68,12 +68,12 @@ security:
     token:
       secret-key: ${JWT_SECRET_KEY}
       expire-length: 1209600000 # 1000*60*60*24*14
-  require-email-verification: ${REQUIRE_EMAIL_VERIFICATION}
+  invitation-via-email: ${INVITATION_VIA_EMAIL}
 frontend:
   url: ${PUBLIC_FRONT_URL}
 mail:
   recipients: ${MAIL_RECIPIENTS}
-  enable: ${ENABLE_EMAILS}
+  enable: ${ENABLE_EMAIL_NOTIFICATIONS}
 superAdmin:
   role:
     name: SuperAdministratorGrash@p;l

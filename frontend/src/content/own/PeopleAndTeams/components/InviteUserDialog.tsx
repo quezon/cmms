@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { emailRegExp } from '../../../../utils/validators';
 import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
 import { useDispatch, useSelector } from '../../../../store';
-import { requireEmailVerification } from '../../../../config';
+import { isEmailVerificationEnabled } from '../../../../config';
 import CreateUser from './CreateUser';
 import { Simulate } from 'react-dom/test-utils';
 
@@ -123,7 +123,7 @@ export default function InviteUserDialog({
           <Box pb={3}>
             <UserRoleCardList onChange={onRoleChange} />
           </Box>
-          {requireEmailVerification ? (
+          {isEmailVerificationEnabled ? (
             <>
               <Grid container spacing={1}>
                 {emails.map((email, index) => (
