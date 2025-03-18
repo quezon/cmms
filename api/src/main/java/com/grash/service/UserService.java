@@ -64,6 +64,11 @@ public class UserService {
     private String frontendUrl;
     @Value("${mail.recipients:#{null}}")
     private String[] recipients;
+    @Value("${security.invitation-via-email}")
+    private boolean enableInvitationViaEmail;
+    @Value("${mail.enable}")
+    private boolean enableMails;
+
 
     public String signin(String email, String password, String type) {
         try {
@@ -82,48 +87,59 @@ public class UserService {
         }
     }
 
+    private SuccessResponse enableAndReturnToken(OwnUser user, boolean sendEmailToSuperAdmins, int employeesCount) {
+        user.setEnabled(true);
+        userRepository.save(user);
+        if (sendEmailToSuperAdmins) sendRegistrationMailToSuperAdmins(user, employeesCount);
+        return new SuccessResponse(true, jwtTokenProvider.createToken(user.getEmail(),
+                Collections.singletonList(user.getRole().getRoleType())));
+    }
+
     public SuccessResponse signup(UserSignupRequest userReq) {
         OwnUser user = userMapper.toModel(userReq);
         user.setEmail(user.getEmail().toLowerCase());
-        if (!userRepository.existsByEmailIgnoreCase(user.getEmail())) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.setUsername(utils.generateStringId());
-            if (user.getRole() == null) {
-                //create company with default roles
-                Subscription subscription = Subscription.builder().usersCount(50).monthly(false)
-                        .startsOn(new Date())
-//                        .endsOn(Helper.incrementDays(new Date(), 15))
-                        .subscriptionPlan(subscriptionPlanService.findByCode("BUSINESS").get()).build();
-                subscriptionService.create(subscription);
-                Company company = new Company(userReq.getCompanyName(), userReq.getEmployeesCount(), subscription);
-                company.getCompanySettings().getGeneralPreferences().setCurrency(currencyService.findByCode("$").get());
-                if (userReq.getLanguage() != null)
-                    company.getCompanySettings().getGeneralPreferences().setLanguage(userReq.getLanguage());
-                companyService.create(company);
-                user.setOwnsCompany(true);
-                user.setCompany(company);
-                user.setRole(company.getCompanySettings().getRoleList().stream().filter(role -> role.getName().equals("Administrator")).findFirst().get());
-            } else {
-                Optional<Role> optionalRole = roleService.findById(user.getRole().getId());
-                if (optionalRole.isPresent()) {
-                    if (userInvitationService.findByRoleAndEmail(optionalRole.get().getId(), user.getEmail()).isEmpty()) {
-                        throw new CustomException("You are not invited to this organization for this role",
-                                HttpStatus.NOT_ACCEPTABLE);
-                    } else {
-                        user.setRole(optionalRole.get());
-                        user.setEnabled(true);
-                        user.setCompany(optionalRole.get().getCompanySettings().getCompany());
-                    }
+        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
+            throw new CustomException("Email is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
 
-                } else throw new CustomException("Role not found", HttpStatus.NOT_ACCEPTABLE);
-            }
-            if (Helper.isLocalhost(PUBLIC_API_URL)) {
-                user.setEnabled(true);
-                userRepository.save(user);
-                return new SuccessResponse(true, jwtTokenProvider.createToken(user.getEmail(),
-                        Collections.singletonList(user.getRole().getRoleType())));
+        }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setUsername(utils.generateStringId());
+        if (user.getRole() == null) {
+            //create company with default roles
+            Subscription subscription = Subscription.builder().usersCount(50).monthly(false)
+                    .startsOn(new Date())
+//                        .endsOn(Helper.incrementDays(new Date(), 15))
+                    .subscriptionPlan(subscriptionPlanService.findByCode("BUSINESS").get()).build();
+            subscriptionService.create(subscription);
+            Company company = new Company(userReq.getCompanyName(), userReq.getEmployeesCount(), subscription);
+            company.getCompanySettings().getGeneralPreferences().setCurrency(currencyService.findByCode("$").get());
+            if (userReq.getLanguage() != null)
+                company.getCompanySettings().getGeneralPreferences().setLanguage(userReq.getLanguage());
+            companyService.create(company);
+            user.setOwnsCompany(true);
+            user.setCompany(company);
+            user.setRole(company.getCompanySettings().getRoleList().stream().filter(role -> role.getName().equals(
+                    "Administrator")).findFirst().get());
+        } else {
+            Optional<Role> optionalRole = roleService.findById(user.getRole().getId());
+            if (!optionalRole.isPresent())
+                throw new CustomException("Role not found", HttpStatus.NOT_ACCEPTABLE);
+            if (enableInvitationViaEmail && userInvitationService.findByRoleAndEmail(optionalRole.get().getId(),
+                    user.getEmail()).isEmpty()) {
+                throw new CustomException("You are not invited to this organization for this role",
+                        HttpStatus.NOT_ACCEPTABLE);
             } else {
-                if (userReq.getRole() == null) { //send mail
+                user.setRole(optionalRole.get());
+                user.setEnabled(true);
+                user.setCompany(optionalRole.get().getCompanySettings().getCompany());
+            }
+        }
+        if (Helper.isLocalhost(PUBLIC_API_URL)) {
+            return enableAndReturnToken(user, false, userReq.getEmployeesCount());
+        } else {
+            if (userReq.getRole() == null) { //send mail
+                if (enableInvitationViaEmail) {
+                    throwIfEmailNotificationsNotEnabled();
                     String token = UUID.randomUUID().toString();
                     String link = PUBLIC_API_URL + "/auth/activate-account?token=" + token;
                     Map<String, Object> variables = new HashMap<String, Object>() {{
@@ -135,15 +151,16 @@ public class UserService {
                     emailService2.sendMessageUsingThymeleafTemplate(new String[]{user.getEmail()},
                             messageSource.getMessage("confirmation_email", null, Helper.getLocale(user)), variables,
                             "signup.html", Helper.getLocale(user));
+                } else {
+                    return enableAndReturnToken(user, true, userReq.getEmployeesCount());
                 }
-                userRepository.save(user);
-                sendRegistrationMail(user, userReq.getEmployeesCount());
-                return new SuccessResponse(true, "Successful registration. Check your mailbox to activate your " +
-                        "account");
             }
-        } else {
-            throw new CustomException("Email is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
+            userRepository.save(user);
+            sendRegistrationMailToSuperAdmins(user, userReq.getEmployeesCount());
+            return new SuccessResponse(true, "Successful registration. Check your mailbox to activate your " +
+                    "account");
         }
+
     }
 
     public void delete(String username) {
@@ -190,6 +207,7 @@ public class UserService {
     }
 
     public SuccessResponse resetPassword(String email) {
+        throwIfEmailNotificationsNotEnabled();
         email = email.toLowerCase();
         OwnUser user = findByEmail(email).get();
         Helper helper = new Helper();
@@ -219,7 +237,14 @@ public class UserService {
         return userRepository.findByLocation_Id(id);
     }
 
+    private void throwIfEmailNotificationsNotEnabled() {
+        if (!enableMails)
+            throw new CustomException("Please enable mails and configure SMTP in the environment variables",
+                    HttpStatus.NOT_ACCEPTABLE);
+    }
+
     public void invite(String email, Role role, OwnUser inviter) {
+        throwIfEmailNotificationsNotEnabled();
         if (!userRepository.existsByEmailIgnoreCase(email) && Helper.isValidEmailAddress(email)) {
             userInvitationService.create(new UserInvitation(email, role));
             Map<String, Object> variables = new HashMap<String, Object>() {{
@@ -276,7 +301,7 @@ public class UserService {
     }
 
     @Async
-    void sendRegistrationMail(OwnUser user, int employeesCount) {
+    void sendRegistrationMailToSuperAdmins(OwnUser user, int employeesCount) {
         if (user.getEmail().equals("superadmin@test.com")) return;
         if (recipients == null || recipients.length == 0) {
             throw new CustomException("MAIL_RECIPIENTS env variable not set", HttpStatus.INTERNAL_SERVER_ERROR);

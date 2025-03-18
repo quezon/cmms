@@ -35,7 +35,14 @@ public class EmailService2 {
 
     private final SimpleMailMessage template;
     private final MailProperties mailProperties;
+    @Value("${spring.mail.username:#{null}")
+    private String smtpUsername;
 
+    @Value("${mail.enable}")
+    private Boolean enableEmails;
+
+    @Value("${spring.mail.password:#{null}}")
+    private String smtpPassword;
 
     private final SpringTemplateEngine thymeleafTemplateEngine;
 
@@ -46,6 +53,8 @@ public class EmailService2 {
 
 
     public void sendSimpleMessage(String[] to, String subject, String text) {
+        if (Boolean.FALSE.equals(enableEmails))
+            return;
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(to);
@@ -62,6 +71,8 @@ public class EmailService2 {
                                           String subject,
                                           String text,
                                           String pathToAttachment) {
+        if (Boolean.FALSE.equals(enableEmails))
+            return;
         try {
             MimeMessage message = emailSender.createMimeMessage();
             // pass 'true' to the constructor to create a multipart message
@@ -84,7 +95,8 @@ public class EmailService2 {
     @Async
     public void sendMessageUsingThymeleafTemplate(
             String[] to, String subject, Map<String, Object> templateModel, String template, Locale locale) {
-
+        if (Boolean.FALSE.equals(enableEmails))
+            return;
         Context thymeleafContext = new Context();
         thymeleafContext.setLocale(locale);
         thymeleafContext.setVariables(templateModel);
@@ -100,6 +112,8 @@ public class EmailService2 {
 
 
     public void sendHtmlMessage(String[] to, String subject, String htmlBody) throws MessagingException {
+        if (Boolean.FALSE.equals(enableEmails))
+            return;
         if (to.length > 0) {
 
             MimeMessage message = emailSender.createMimeMessage();
