@@ -100,8 +100,6 @@ At the moment all variables are optional. Do not delete the .env file
 | MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)               |
 | REACT_APP_MUI_X_LICENSE      | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
 
-After changing any env variable starting with `REACT_APP_` or `PUBLIC_API_URL` or `INVITATION_VIA_EMAIL` you should run
-`docker compose up -d --no-deps --build frontend`
 
 #### For remote servers
 
@@ -121,6 +119,14 @@ Now, go to http://localhost:3000 or your custom `PUBLIC_FRONT_URL`
 
 Celebrate on how easy this was
 
+#### Subsequent runs
+After changing any env variable starting with `REACT_APP_` or `PUBLIC_API_URL` or `INVITATION_VIA_EMAIL` you should run
+
+```sh
+docker compose down
+docker compose up -d --no-deps --build frontend
+docker compose up -d
+```
 ## Getting help
 
 ### Docs
