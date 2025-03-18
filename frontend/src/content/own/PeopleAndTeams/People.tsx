@@ -62,6 +62,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import ConfirmDialog from '../components/ConfirmDialog';
 import { useGridApiRef } from '@mui/x-data-grid-pro';
 import useGridStatePersist from '../../../hooks/useGridStatePersist';
+import InviteUserDialog from './components/InviteUserDialog';
 
 interface PropsType {
   values?: any;
@@ -89,12 +90,8 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
   const { getFormattedCurrency, getFormattedDate } = useContext(
     CompanySettingsContext
   );
-  const [emails, setEmails] = useState<string[]>([]);
   const [openUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
   const [openDisableModal, setOpenDisableModal] = useState<boolean>(false);
-  const [currentEmail, setCurrentEmail] = useState<string>('');
-  const [isInviteSubmitting, setIsInviteSubmitting] = useState(false);
-  const [roleId, setRoleId] = useState<number>();
 
   const onQueryChange = (event) => {
     onSearchQueryChange<User>(event, criteria, setCriteria, [
@@ -233,7 +230,6 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
       </DialogContent>
     </Dialog>
   );
-  const onRoleChange = (id: number) => setRoleId(id);
   // if reload with peopleId
   useEffect(() => {
     if (peopleId && isNumeric(peopleId)) {
@@ -273,31 +269,6 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
     setCriteria({ ...criteria, pageNum: number });
   };
 
-  const verifyCurrentEmail = (): boolean => {
-    if (currentEmail) {
-      let error;
-      if (emails.length < 20) {
-        const emailsClone = [...emails];
-        if (emailsClone.includes(currentEmail)) {
-          error = 'This email is already selected';
-        } else {
-          if (users.content.map((user) => user.email).includes(currentEmail)) {
-            error = 'A user with this email is already in this company';
-          } else {
-            if (!currentEmail.match(emailRegExp)) {
-              error = 'This email is invalid';
-            }
-          }
-        }
-      } else error = 'You can invite a maximum of 20 users at once';
-      if (error) {
-        showSnackBar(t(error), 'error');
-        setIsInviteSubmitting(false);
-        return false;
-      }
-    }
-    return true;
-  };
   // let fields: Array<IField> = [];
 
   // const shape = {};
@@ -438,146 +409,7 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
         <UserDetailsDrawer user={currentUser} />
       </Drawer>
 
-      {/* Render People Add Modal */}
-      <Dialog
-        fullWidth
-        maxWidth="sm"
-        open={openModal}
-        onClose={handleCloseModal}
-      >
-        <DialogTitle
-          sx={{
-            p: 3
-          }}
-        >
-          <Typography variant="h4" gutterBottom>
-            {t('invite_users')}
-          </Typography>
-        </DialogTitle>
-
-        <DialogContent
-          dividers
-          sx={{
-            p: 3,
-            display: 'flex',
-            justifyContent: 'center'
-          }}
-        >
-          <Box sx={{ width: '95%' }}>
-            <Paper
-              elevation={0}
-              sx={{
-                mb: 2,
-                p: 2,
-                textAlign: 'center',
-                background: grey[100]
-              }}
-            >
-              <Box
-                component="img"
-                sx={{
-                  height: 50,
-                  width: 50
-                }}
-                alt={
-                  "<a href='https://www.flaticon.com/free-icons/team' title='team icons'>Team icons created by Freepik - Flaticon</a>"
-                }
-                src="/static/images/team.png"
-              />
-              <Typography variant="h5">{t('bring_people_team')}</Typography>
-            </Paper>
-
-            <UserRoleCardList onChange={onRoleChange} />
-            <Grid container sx={{ mt: 2 }} spacing={1}>
-              {emails.map((email, index) => (
-                <Grid item key={index}>
-                  <Chip
-                    label={email}
-                    onDelete={() => {
-                      const emailsClone = [...emails];
-                      emailsClone.splice(index, 1);
-                      setEmails(emailsClone);
-                    }}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-            <TextField
-              sx={{ my: 2 }}
-              fullWidth
-              helperText={t('add_20_users')}
-              label={t('enter_email')}
-              placeholder={t('example@email.com')}
-              name="email"
-              value={currentEmail}
-              onChange={(event) => {
-                setCurrentEmail(event.target.value);
-              }}
-              onKeyDown={(event) => {
-                if (['Enter', 'Tab'].includes(event.key)) {
-                  if (verifyCurrentEmail()) {
-                    const emailsClone = [...emails];
-                    emailsClone.push(currentEmail);
-                    setEmails(emailsClone);
-                    setCurrentEmail('');
-                  }
-                }
-              }}
-              variant={'outlined'}
-              required
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <EmailOutlined />
-                  </InputAdornment>
-                )
-              }}
-            />
-            <Button
-              fullWidth
-              sx={{ mb: 3 }}
-              onClick={async () => {
-                setIsInviteSubmitting(true);
-                const invite = (emails: string[]) =>
-                  dispatch(inviteUsers(roleId, emails))
-                    .then(() => {
-                      handleCloseModal();
-                      setEmails([]);
-                      setCurrentEmail('');
-                      showSnackBar(t('users_invite_success'), 'success');
-                    })
-                    .catch((err: { message: string }) => {
-                      showSnackBar(JSON.parse(err.message).message, 'error');
-                    })
-                    .finally(() => setIsInviteSubmitting(false));
-                if (roleId) {
-                  if (emails.length || currentEmail) {
-                    if (currentEmail) {
-                      if (verifyCurrentEmail())
-                        invite([...emails, currentEmail]);
-                    } else {
-                      invite(emails);
-                    }
-                  } else {
-                    showSnackBar(t('please_type_emails'), 'error');
-                    setIsInviteSubmitting(false);
-                  }
-                } else {
-                  showSnackBar(t('please_select_role'), 'error');
-                  setIsInviteSubmitting(false);
-                }
-              }}
-              variant="contained"
-              startIcon={
-                isInviteSubmitting ? <CircularProgress size="1rem" /> : null
-              }
-              disabled={isInviteSubmitting}
-            >
-              {t('invite')}
-            </Button>
-          </Box>
-        </DialogContent>
-      </Dialog>
+      <InviteUserDialog open={openModal} onClose={handleCloseModal} />
       <ConfirmDialog
         open={openDisableModal}
         onCancel={() => {
