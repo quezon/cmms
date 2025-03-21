@@ -176,7 +176,7 @@ function Hero() {
               ml: 2
             }}
             component="a"
-            href="mailto:ibracool99@gmail.com"
+            href="mailto:contact@atlas-cmms.com"
             size="medium"
             variant="text"
           >

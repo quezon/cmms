@@ -90,7 +90,11 @@ function CompanyPlan(props: CompanyPlanProps) {
           <Button
             sx={{ mr: 2 }}
             variant="contained"
-            onClick={() => window.open('mailto:ibracool99@gmail.com?subject=Subscription%20change%20request')}
+            onClick={() =>
+              window.open(
+                'mailto:contact@atlas-cmms.com?subject=Subscription%20change%20request'
+              )
+            }
           >
             {t('upgrade_now')}
           </Button>

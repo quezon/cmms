@@ -55,26 +55,31 @@ function SidebarFooter() {
       alignItems="center"
       justifyContent="center"
     >
-      {user.ownsCompany && <LightTooltip placement="top" arrow title={t('upgrade_now')}>
-        <IconButton
-          sx={{
-            background: `${theme.colors.alpha.trueWhite[10]}`,
-            color: `${theme.colors.alpha.trueWhite[70]}`,
-            transition: `${theme.transitions.create(['all'])}`,
+      {user.ownsCompany && (
+        <LightTooltip placement="top" arrow title={t('upgrade_now')}>
+          <IconButton
+            sx={{
+              background: `${theme.colors.alpha.trueWhite[10]}`,
+              color: `${theme.colors.alpha.trueWhite[70]}`,
+              transition: `${theme.transitions.create(['all'])}`,
 
-            '&:hover': {
-              background: `${alpha(theme.colors.alpha.trueWhite[100], 0.2)}`,
-              color: `${theme.colors.alpha.trueWhite[100]}`
+              '&:hover': {
+                background: `${alpha(theme.colors.alpha.trueWhite[100], 0.2)}`,
+                color: `${theme.colors.alpha.trueWhite[100]}`
+              }
+            }}
+            onClick={() =>
+              window.open(
+                'mailto:contact@atlas-cmms.com?subject=Subscription%20change%20request'
+              )
             }
-          }}
-          onClick={() => window.open('mailto:ibracool99@gmail.com?subject=Subscription%20change%20request')}
-          // to="/app/subscription/plans"
-          // component={RouterLink}
-        >
-          <UpgradeTwoToneIcon fontSize="small" />
-        </IconButton>
-      </LightTooltip>
-      }
+            // to="/app/subscription/plans"
+            // component={RouterLink}
+          >
+            <UpgradeTwoToneIcon fontSize="small" />
+          </IconButton>
+        </LightTooltip>
+      )}
       <LightTooltip placement="top" arrow title={t('documentation')}>
         <IconButton
           sx={{
@@ -88,7 +93,6 @@ function SidebarFooter() {
             }
           }}
           onClick={() => window.open('https://grashjs.github.io/user-guide')}
-
         >
           <QuestionMarkTwoToneIcon fontSize="small" />
         </IconButton>
