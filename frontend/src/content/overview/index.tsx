@@ -14,6 +14,7 @@ import Logo from 'src/components/LogoSign';
 import Hero from './Hero';
 import Highlights from './Highlights';
 import LanguageSwitcher from 'src/layouts/ExtendedSidebarLayout/Header/Buttons/LanguageSwitcher';
+import { GitHub } from '@mui/icons-material';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -64,7 +65,28 @@ function Overview() {
               flex={1}
             >
               <Box />
-              <Stack direction="row" spacing={{ xs: 1, md: 2 }}>
+              <Stack
+                direction="row"
+                spacing={{ xs: 1, md: 2 }}
+                alignItems={'center'}
+              >
+                <Box
+                  sx={{
+                    display: {
+                      xs: 'none',
+                      sm: 'block'
+                    }
+                  }}
+                >
+                  <Button
+                    component={'a'}
+                    target={'_blank'}
+                    href={'https://github.com/Grashjs/cmms'}
+                    startIcon={<GitHub />}
+                  >
+                    GitHub
+                  </Button>
+                </Box>
                 <Box
                   sx={{
                     display: {
