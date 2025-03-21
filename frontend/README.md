@@ -12,7 +12,7 @@ And please star the repo.
 
 ```bash
 npm i
-set REACT_APP_API_URL=http://localhost:8080/ # the / at the end is important
+set REACT_APP_API_URL=http://localhost:8080
 npm start
 ```
 
