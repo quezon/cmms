@@ -40,6 +40,8 @@ services:
       MINIO_SECRET_KEY: minio123
       STORAGE_TYPE: ${STORAGE_TYPE:-minio} #gpc|minio
       PUBLIC_MINIO_ENDPOINT: ${PUBLIC_MINIO_ENDPOINT:-http://localhost:9000}
+      INVITATION_VIA_EMAIL: ${INVITATION_VIA_EMAIL:-false}
+      ENABLE_EMAIL_NOTIFICATIONS: ${ENABLE_EMAIL_NOTIFICATIONS:-false}
     ports:
       - "8080:8080"
   frontend:
@@ -50,6 +52,7 @@ services:
         REACT_APP_GOOGLE_KEY: ${REACT_APP_GOOGLE_KEY}
         REACT_APP_GOOGLE_TRACKING_ID: ${REACT_APP_GOOGLE_TRACKING_ID}
         REACT_APP_MUI_X_LICENSE: ${REACT_APP_MUI_X_LICENSE}
+        REACT_APP_INVITATION_VIA_EMAIL: ${INVITATION_VIA_EMAIL:-false}
     container_name: atlas_frontend
     ports:
       - "3000:3000"

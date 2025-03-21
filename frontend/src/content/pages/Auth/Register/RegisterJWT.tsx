@@ -28,15 +28,20 @@ import i18n from 'i18next';
 import countries from '../../../../i18n/countries';
 import { downloadPrivacyPolicy, downloadTos } from '../../../../slices/file';
 import { verify } from '../../../../utils/jwt';
+import { boolean } from 'yup';
 
 function RegisterJWT({
   email,
-  role
+  role,
+  invitationMode,
+  onInvitationSuccess
 }: {
   email?: string | undefined;
   role?: number | undefined;
+  invitationMode?: boolean;
+  onInvitationSuccess?: () => void;
 }) {
-  const { register, loginInternal } = useAuth();
+  const { register, loginInternal, user } = useAuth();
   const isMountedRef = useRefMounted();
   const { t }: { t: any } = useTranslation();
   const { showSnackBar } = useContext(CustomSnackBarContext);
@@ -55,8 +60,8 @@ function RegisterJWT({
       phone: '',
       password: '',
       companyName: '',
-      employeesCount: 5,
-      terms: false,
+      employeesCount: invitationMode ? 0 : 5,
+      terms: !!invitationMode,
       submit: null
     };
     let shape = {
@@ -67,7 +72,9 @@ function RegisterJWT({
       firstName: Yup.string().max(255).required(t('required_firstName')),
       lastName: Yup.string().max(255).required(t('required_lastName')),
       companyName: Yup.string().max(255).required(t('required_company')),
-      countryCode: Yup.object().required(t('required_field')),
+      countryCode: invitationMode
+        ? Yup.object().nullable()
+        : Yup.object().required(t('required_field')),
       employeesCount: Yup.number()
         .min(0)
         .required(t('required_employeesCount')),
@@ -92,16 +99,21 @@ function RegisterJWT({
         setSubmitting(true);
         const valuesClone = { ...values };
         valuesClone.language = getLanguage.toUpperCase();
-        valuesClone.phone = `+${values.countryCode.phone}${values.phone}`;
+        valuesClone.phone =
+          (values.countryCode ? `+${values.countryCode.phone}` : '') +
+          `${values.phone}`;
         return register(
-          role ? { ...valuesClone, role: { id: role } } : valuesClone
+          role ? { ...valuesClone, role: { id: role } } : valuesClone,
+          invitationMode
         )
           .then(async (res) => {
-            if (res && (await verify(res.message))) {
-              loginInternal(res.message);
+            if (invitationMode) {
+              onInvitationSuccess();
             } else {
-              if (!role) showSnackBar(t('verify_email'), 'success');
-              navigate(role ? '/account/login' : '/account/verify');
+              if (!(res && (await verify(res.message)))) {
+                if (!role) showSnackBar(t('verify_email'), 'success');
+                navigate(role ? '/account/login' : '/account/verify');
+              }
             }
           })
           .catch((err) => {
@@ -263,7 +275,7 @@ function RegisterJWT({
               )
             }}
           />
-          {!role && (
+          {!role && !invitationMode && (
             <>
               <Grid item xs={12} lg={6}>
                 <TextField
@@ -298,41 +310,45 @@ function RegisterJWT({
               </Grid>
             </>
           )}
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={values.terms}
-                name="terms"
-                color="primary"
-                onChange={handleChange}
+          {!invitationMode && (
+            <>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={values.terms}
+                    name="terms"
+                    color="primary"
+                    onChange={handleChange}
+                  />
+                }
+                label={
+                  <>
+                    <Typography variant="body2">
+                      {t('i_accept')}{' '}
+                      <Typography
+                        color={'primary'}
+                        onClick={downloadTos}
+                        component="a"
+                      >
+                        {t('terms_conditions')}
+                      </Typography>
+                      .
+                    </Typography>
+                  </>
+                }
               />
-            }
-            label={
-              <>
-                <Typography variant="body2">
-                  {t('i_accept')}{' '}
-                  <Typography
-                    color={'primary'}
-                    onClick={downloadTos}
-                    component="a"
-                  >
-                    {t('terms_conditions')}
-                  </Typography>
-                  .
-                </Typography>
-              </>
-            }
-          />
-          {Boolean(touched.terms && errors.terms) && (
-            <FormHelperText error>{errors.terms}</FormHelperText>
+              {Boolean(touched.terms && errors.terms) && (
+                <FormHelperText error>{errors.terms}</FormHelperText>
+              )}
+              <Typography
+                color={'primary'}
+                onClick={downloadPrivacyPolicy}
+                sx={{ cursor: 'pointer' }}
+              >
+                {t('privacy_policy')}
+              </Typography>
+            </>
           )}
-          <Typography
-            color={'primary'}
-            onClick={downloadPrivacyPolicy}
-            sx={{ cursor: 'pointer' }}
-          >
-            {t('privacy_policy')}
-          </Typography>
           <Button
             sx={{
               mt: 3
@@ -345,7 +361,7 @@ function RegisterJWT({
             size="large"
             variant="contained"
           >
-            {t('create_your_account')}
+            {t(invitationMode ? 'invite' : 'create_your_account')}
           </Button>
         </form>
       )}
