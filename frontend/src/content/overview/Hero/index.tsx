@@ -9,6 +9,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import useScrollToLocation from 'src/hooks/useScrollToLocation';
+import useAuth from '../../../hooks/useAuth';
 
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
@@ -122,6 +123,7 @@ const TsAvatar = styled(Box)(
 
 function Hero() {
   const { t }: { t: any } = useTranslation();
+  const { isAuthenticated } = useAuth();
   useScrollToLocation();
 
   return (
@@ -154,7 +156,7 @@ function Hero() {
           </TypographyH2>
           <Button
             component={RouterLink}
-            to="/app/work-orders"
+            to={isAuthenticated ? '/app/work-orders' : '/account/register'}
             size="large"
             variant="contained"
           >
