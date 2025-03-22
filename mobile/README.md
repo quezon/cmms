@@ -16,21 +16,25 @@ You can see more explanations in [Purpose.pdf](Purpose.pdf). We would be very ha
 npm run android
 ```
 
-## Build
-You will need to create an [expo](https://expo.dev) account
-Place `google-services.json` in the root folder
-```shell
-eas build --profile previewAndroid --platform android
-```
-It will generate an apk in expo.
 ## Configuration
 
-Set these environment variables
+Set these environment variables in the command line or creating a `.env` file
 
 | Name       | Required | Description         | Default Value |
 |------------|----------|---------------------|---------------|
 | API_URL    | Yes      | Your public api url | (empty)       |
 
+## Build
+### Setup
+- Create a firebase project. Export `google-services.json`.
+- Place the json file in `android/app`
+- Create an [expo](https://expo.dev) account.
+- Run `npm install -g eas-cli`
+### Generate apk
+```shell
+eas build --profile previewAndroid --platform android
+```
+It will generate an apk in expo.
 ## Getting help
 
 If you have questions, concerns, bug reports, etc, please file an issue in this repository's Issue Tracker or send an
