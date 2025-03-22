@@ -30,6 +30,8 @@ import Asset, { AssetDTO } from '../models/owns/asset';
 import Location from '../models/owns/location';
 import { useZendesk } from 'react-use-zendesk';
 import { UiConfiguration } from 'src/models/owns/uiConfiguration';
+import { googleTrackingId, IS_LOCALHOST } from '../config';
+import ReactGA from 'react-ga4';
 
 interface AuthState {
   isInitialized: boolean;
@@ -603,6 +605,12 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     values,
     invitationMode: boolean
   ): Promise<{ success: boolean; message: string }> => {
+    if (!IS_LOCALHOST && googleTrackingId)
+      ReactGA.event({
+        category: 'sign_up',
+        action: 'sign_up',
+        label: 'sign_up'
+      });
     const response = await api.post<{ message: string; success: boolean }>(
       'auth/signup',
       values,
