@@ -152,6 +152,9 @@ public class ScheduleService {
     }
 
     public void stopScheduleTimers(Long id) {
+        if (!timersState.containsKey(id)) {
+            return;
+        }
         timersState.get(id).forEach((key, timer) -> {
             timer.cancel();
             timer.purge();
