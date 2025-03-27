@@ -12,11 +12,13 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final PreventiveMaintenanceService preventiveMaintenanceService;
@@ -86,6 +88,7 @@ public class ScheduleService {
                     WorkOrder savedWorkOrder = workOrderService.create(workOrder);
                     tasks.forEach(task -> {
                         Task copiedTask = new Task(task.getTaskBase(), savedWorkOrder, null, task.getValue());
+                        copiedTask.setCompany(preventiveMaintenance.getCompany());
                         taskService.create(copiedTask);
                     });
                 }
