@@ -123,6 +123,8 @@ public class Helper {
                 return new Locale("pt", "BR");
             case PL:
                 return new Locale("pl", "PL");
+            case DE:
+                return new Locale("de", "DE");
             default:
                 return Locale.getDefault();
         }
