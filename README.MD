@@ -144,6 +144,7 @@ email at [ibracool99@gmail.com](mailto:ibracool99@gmail.com).
 - English
 - Spanish
 - French
+- German
 - Turkish
 - Polish
 - Portuguese (Brazil)

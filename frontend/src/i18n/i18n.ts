@@ -40,17 +40,24 @@ i18n
     }
   });
 
-export type SupportedLanguage = 'DE' | 'EN' | 'FR' | 'TR' | 'ES' | 'PT_BR' | 'PL';
+export type SupportedLanguage =
+  | 'DE'
+  | 'EN'
+  | 'FR'
+  | 'TR'
+  | 'ES'
+  | 'PT_BR'
+  | 'PL';
 
 export const supportedLanguages: {
   code: string;
   label: string;
   Icon: FlagComponent;
 }[] = [
-  { code: 'de', label: 'German', Icon: DE },
   { code: 'en', label: 'English', Icon: US },
   { code: 'fr', label: 'French', Icon: FR },
   { code: 'es', label: 'Spanish', Icon: ES },
+  { code: 'de', label: 'German', Icon: DE },
   { code: 'tr', label: 'Turkish', Icon: TR },
   { code: 'pt_br', label: 'Portuguese (Brazil)', Icon: BR },
   { code: 'pl', label: 'Polish', Icon: PL }
