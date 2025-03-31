@@ -127,6 +127,16 @@ export default function LoginScreen({
               >
                 {t('register_here')}
               </Button>
+              
+              <Button
+                mode={'text'}
+                onPress={() => navigation.navigate('CustomServer')}
+                style={{
+                  marginTop: 20
+                }}
+              >
+                {t('custom_server')}
+              </Button>
             </View>
           )}
         </Formik>

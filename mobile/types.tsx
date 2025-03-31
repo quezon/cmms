@@ -165,6 +165,7 @@ export type AuthStackParamList = {
   Register: undefined;
   Login: undefined;
   Verify: undefined;
+  CustomServer: undefined;
 };
 export type SuperUserStackParamList = {
   SwitchAccount: undefined;

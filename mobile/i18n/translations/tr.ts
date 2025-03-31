@@ -570,6 +570,15 @@ const trJSON = {
   po_delete_success: 'Satınalma Siparişi başarıyla silindi',
   po_delete_failure: 'Satınalma Siparişi silinemedi',
   number_of_items: 'Öğe sayısı',
+  custom_server_title: 'Özel Sunucu Ayarları',
+  custom_server_description:
+    "Özel bir API sunucusu URL'si yapılandırın. Yalnızca kendi sunucunuzu kullanıyorsanız bu ayarı değiştirin.",
+  server_url: "Sunucu URL'si",
+  required_url: "Sunucu URL'si gerekli",
+  server_url_saved: "Sunucu URL'si başarıyla kaydedildi",
+  error_saving_url: "Sunucu URL'si kaydedilirken hata oluştu",
+  server_url_reset: "Sunucu URL'si varsayılana sıfırlandı",
+  reset_to_default: 'Varsayılana sıfırla',
   total_quantity: 'Toplam miktar',
   shipping_to: 'Nakliye',
   shipping_address: 'Gönderi Adresi',
@@ -1516,6 +1525,7 @@ const trJSON = {
   COMMISSIONING: 'Devreye Alma',
   EMERGENCY_SHUTDOWN: 'Acil Kapanış',
   select_asset_status: 'Varlık durumunu seçin',
-  asset_status: 'Varlık durumu'
+  asset_status: 'Varlık durumu',
+  custom_server: 'Özel Sunucu'
 };
 export default trJSON;

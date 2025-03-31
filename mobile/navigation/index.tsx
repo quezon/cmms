@@ -462,6 +462,11 @@ function AuthNavigator() {
         component={VerifyScreen}
         options={{ title: t('verify_email_title') }}
       />
+      <AuthStack.Screen
+        name="CustomServer"
+        component={React.lazy(() => import('../screens/auth/CustomServerScreen'))}
+        options={{ title: t('custom_server') }}
+      />
     </AuthStack.Navigator>
   );
 }

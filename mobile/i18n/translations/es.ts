@@ -113,7 +113,18 @@ const esJSON = {
   COMMISSIONING: 'Puesta en marcha',
   EMERGENCY_SHUTDOWN: 'Apagado de emergencia',
   select_asset_status: 'Seleccionar estado del activo',
-  asset_status: 'Estado del activo'
+  asset_status: 'Estado del activo',
+  custom_server: 'Servidor personalizado',
+  custom_server_title: 'Configuración del servidor personalizado',
+  custom_server_description:
+    'Configura una URL de servidor API personalizada. Cambia esta configuración solo si estás utilizando tu propio servidor.',
+  server_url: 'URL del servidor',
+  required_url: 'Se requiere la URL del servidor',
+  server_url_saved: 'La URL del servidor se guardó correctamente',
+  error_saving_url: 'Ocurrió un error al guardar la URL del servidor',
+  server_url_reset:
+    'La URL del servidor se restableció a los valores predeterminados',
+  reset_to_default: 'Restablecer a los valores predeterminados'
 };
 
 export default esJSON;

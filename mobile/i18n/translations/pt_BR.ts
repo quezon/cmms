@@ -1486,7 +1486,17 @@ const ptBRJSON = {
   COMMISSIONING: 'Comissionamento',
   EMERGENCY_SHUTDOWN: 'Desligamento de emergência',
   select_asset_status: 'Selecione o status do ativo',
-  asset_status: 'Status do ativo'
+  asset_status: 'Status do ativo',
+  custom_server: 'Servidor personalizado',
+  custom_server_title: 'Configurações do servidor personalizado',
+  custom_server_description:
+    'Configure uma URL de servidor de API personalizada. Altere esta configuração apenas se você estiver usando seu próprio servidor.',
+  server_url: 'URL do servidor',
+  required_url: 'A URL do servidor é obrigatória',
+  server_url_saved: 'A URL do servidor foi salva com sucesso',
+  error_saving_url: 'Ocorreu um erro ao salvar a URL do servidor',
+  server_url_reset: 'A URL do servidor foi redefinida para o padrão',
+  reset_to_default: 'Redefinir para o padrão'
 };
 
 export default ptBRJSON;

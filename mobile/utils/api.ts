@@ -1,4 +1,4 @@
-import { apiUrl } from '../config';
+import { getApiUrl } from '../config';
 import { AsyncStorage } from 'react-native';
 
 async function api<T>(url: string, options): Promise<T> {
@@ -16,8 +16,9 @@ async function api<T>(url: string, options): Promise<T> {
   );
 }
 
-function get<T>(url, options?) {
-  return api<T>(apiUrl + url, options);
+async function get<T>(url, options?) {
+  const currentApiUrl = await getApiUrl();
+  return api<T>(currentApiUrl + url, options);
 }
 
 async function post<T>(
@@ -28,7 +29,8 @@ async function post<T>(
   isNotJson?: boolean
 ) {
   const companyId = await AsyncStorage.getItem('companyId');
-  return api<T>(apiUrl + url, {
+  const currentApiUrl = await getApiUrl();
+  return api<T>(currentApiUrl + url, {
     ...options,
     method: 'POST',
     body: isNotJson
@@ -41,7 +43,8 @@ async function post<T>(
 
 async function patch<T>(url, data, options?, withoutCompany?: boolean) {
   const companyId = await AsyncStorage.getItem('companyId');
-  return api<T>(apiUrl + url, {
+  const currentApiUrl = await getApiUrl();
+  return api<T>(currentApiUrl + url, {
     ...options,
     method: 'PATCH',
     body: JSON.stringify(
@@ -50,8 +53,9 @@ async function patch<T>(url, data, options?, withoutCompany?: boolean) {
   });
 }
 
-function deletes<T>(url, options?) {
-  return api<T>(apiUrl + url, { ...options, method: 'DELETE' });
+async function deletes<T>(url, options?) {
+  const currentApiUrl = await getApiUrl();
+  return api<T>(currentApiUrl + url, { ...options, method: 'DELETE' });
 }
 
 export async function authHeader(publicRoute) {

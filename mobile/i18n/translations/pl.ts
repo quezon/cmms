@@ -1449,7 +1449,17 @@ const plJSON = {
   COMMISSIONING: 'Uruchomienie',
   EMERGENCY_SHUTDOWN: 'Wyłączenie awaryjne',
   select_asset_status: 'Wybierz status zasobu',
-  asset_status: 'Status aktywów'
+  asset_status: 'Status aktywów',
+  custom_server: 'Niestandardowy serwer',
+  custom_server_title: 'Ustawienia niestandardowego serwera',
+  custom_server_description:
+    'Skonfiguruj niestandardowy adres URL serwera API. Zmień to ustawienie tylko wtedy, gdy używasz własnego serwera.',
+  server_url: 'Adres URL serwera',
+  required_url: 'Adres URL serwera jest wymagany',
+  server_url_saved: 'Adres URL serwera został pomyślnie zapisany',
+  error_saving_url: 'Wystąpił błąd podczas zapisywania adresu URL serwera',
+  server_url_reset: 'Adres URL serwera został zresetowany do domyślnego',
+  reset_to_default: 'Przywróć domyślne'
 };
 
 export default plJSON;

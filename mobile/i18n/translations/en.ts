@@ -1438,7 +1438,17 @@ const enJSON = {
   COMMISSIONING: 'Commissioning',
   EMERGENCY_SHUTDOWN: 'Emergency Shutdown',
   select_asset_status: 'Select asset status',
-  asset_status: 'Asset status'
+  asset_status: 'Asset status',
+  custom_server: 'Custom server',
+  custom_server_title: 'Custom Server Settings',
+  custom_server_description:
+    'Configure a custom API server URL. Change this setting only if you are using your own server.',
+  server_url: 'Server URL',
+  required_url: 'Server URL is required',
+  server_url_saved: 'Server URL successfully saved',
+  error_saving_url: 'Error occurred while saving the Server URL',
+  server_url_reset: 'Server URL reset to default',
+  reset_to_default: 'Reset to default'
 };
 
 export default enJSON;

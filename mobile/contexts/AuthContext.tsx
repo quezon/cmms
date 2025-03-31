@@ -38,7 +38,7 @@ import { useTranslation } from 'react-i18next';
 import analytics from '@react-native-firebase/analytics';
 import { useDispatch } from '../store';
 import { revertAll } from '../utils/redux';
-import { apiUrl } from '../config';
+import { getApiUrl } from '../config';
 import { newReceivedNotification } from '../slices/notification';
 import Notification from '../models/notification';
 import { getMobileOverviewStats } from '../slices/analytics/workOrder';
@@ -534,7 +534,9 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     const registerStompClient = async () => {
       if (state?.user) {
         if (!stompClient) {
-          const socket = new SockJS(`${apiUrl}ws`);
+          // Get the current API URL
+          const currentApiUrl = await getApiUrl();
+          const socket = new SockJS(`${currentApiUrl}ws`);
           const client = Stomp.over(socket);
           client.connect(
             { token: await AsyncStorage.getItem('accessToken') },

@@ -1588,7 +1588,19 @@ const frJSON = {
   COMMISSIONING: 'Mise en service',
   EMERGENCY_SHUTDOWN: "Arrêt d'urgence",
   select_asset_status: "Sélectionnez l'état de l'équipement",
-  asset_status: "État de l'équipement"
+  asset_status: "État de l'équipement",
+  custom_server: 'Serveur personnalisé',
+  custom_server_title: 'Paramètres du serveur personnalisé',
+  custom_server_description:
+    'Configurez une URL de serveur API personnalisée. Modifiez ce paramètre uniquement si vous utilisez votre propre serveur.',
+  server_url: 'URL du serveur',
+  required_url: "L'URL du serveur est requise",
+  server_url_saved: "L'URL du serveur a été enregistrée avec succès",
+  error_saving_url:
+    "Une erreur est survenue lors de l'enregistrement de l'URL du serveur",
+  server_url_reset:
+    "L'URL du serveur a été réinitialisée aux valeurs par défaut",
+  reset_to_default: 'Réinitialiser par défaut'
 };
 
 export default frJSON;
