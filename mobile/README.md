@@ -2,7 +2,8 @@
 
 This project aims to help manage assets, schedule maintenance and track work orders. This is the mobile app developed
 with React Native.
-You can see more explanations in [Purpose.pdf](Purpose.pdf). We would be very happy to have new contributors join us.
+You can use the [live app](https://play.google.com/store/apps/details?id=com.atlas.cmms) and configure it with your custom server url, or build the app locally
+
 **And please star the repo**.
 
 **Screenshot**:
@@ -11,7 +12,6 @@ You can see more explanations in [Purpose.pdf](Purpose.pdf). We would be very ha
 <img src="https://i.ibb.co/NWSfcpq/Screenshot-20230320-111216.jpg" width="300"/>
 
 ## Start/run
-
 ```shell
 npm run android
 ```
