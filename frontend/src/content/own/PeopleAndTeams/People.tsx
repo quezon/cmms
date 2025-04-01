@@ -1,18 +1,11 @@
 import {
   Box,
-  Button,
-  Chip,
-  CircularProgress,
   debounce,
   Dialog,
   DialogContent,
   DialogTitle,
   Drawer,
-  Grid,
-  InputAdornment,
-  Paper,
   Stack,
-  TextField,
   Typography,
   useTheme
 } from '@mui/material';
@@ -30,11 +23,8 @@ import * as React from 'react';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import UserDetailsDrawer from './UserDetailsDrawer';
 import User from '../../../models/owns/user';
-import UserRoleCardList from './UserRoleCardList';
-import { EmailOutlined } from '@mui/icons-material';
-import { grey } from '@mui/material/colors';
 import { useParams } from 'react-router-dom';
-import { emailRegExp, isNumeric } from 'src/utils/validators';
+import { isNumeric } from 'src/utils/validators';
 import { useDispatch, useSelector } from '../../../store';
 import { CustomSnackBarContext } from '../../../contexts/CustomSnackBarContext';
 import {
@@ -43,8 +33,7 @@ import {
   editUser,
   editUserRole,
   getSingleUser,
-  getUsers,
-  inviteUsers
+  getUsers
 } from '../../../slices/user';
 import { OwnUser } from '../../../models/user';
 import { PermissionEntity, Role } from '../../../models/owns/role';
@@ -63,6 +52,7 @@ import ConfirmDialog from '../components/ConfirmDialog';
 import { useGridApiRef } from '@mui/x-data-grid-pro';
 import useGridStatePersist from '../../../hooks/useGridStatePersist';
 import InviteUserDialog from './components/InviteUserDialog';
+import { isEmailVerificationEnabled } from '../../../config';
 
 interface PropsType {
   values?: any;
@@ -155,13 +145,23 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
       type: 'select',
       type2: 'role',
       label: t('role')
-    }
+    },
+    ...(isEmailVerificationEnabled
+      ? []
+      : [
+          {
+            name: 'password',
+            type: 'text',
+            label: t('password_leave_empty_if_you_dont_want_to_change')
+          } as IField
+        ])
   ];
   const getFields = () => {
     let fields = [...defautfields];
     if (currentUser?.ownsCompany || currentUser?.id === user?.id) {
-      const roleIndex = fields.findIndex((field) => field.name === 'role');
-      fields.splice(roleIndex, 1);
+      fields = fields.filter(
+        (field) => !['role', 'password'].includes(field.name)
+      );
     }
     return fields;
   };
@@ -193,7 +193,9 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
         <Box>
           <Form
             fields={getFields()}
-            validation={Yup.object().shape({})}
+            validation={Yup.object().shape({
+              password: Yup.string().min(8, t('invalid_password')).nullable()
+            })}
             submitText={t('save')}
             values={{
               rate: currentUser?.rate,
@@ -205,14 +207,16 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
                         : t(`${currentUser.role.code}_name`),
                     value: currentUser.role.id
                   }
-                : null
+                : null,
+              password: null
             }}
             onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               return dispatch(
                 editUser(currentUser.id, {
                   ...currentUser,
-                  rate: values.rate ?? currentUser.rate
+                  rate: values.rate ?? currentUser.rate,
+                  newPassword: values.password ?? null
                 })
               )
                 .then(

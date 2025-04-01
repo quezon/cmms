@@ -1468,7 +1468,9 @@ const trJSON = {
   EMERGENCY_SHUTDOWN: 'Acil Kapanış',
   select_asset_status: 'Varlık durumunu seçin',
   asset_status: 'Varlık durumu',
-  ui_configuration: 'UI Yapılandırması'
+  ui_configuration: 'UI Yapılandırması',
+  password_leave_empty_if_you_dont_want_to_change:
+    'Şifre - değiştirmek istemiyorsanız boş bırakın'
 };
 
 export default trJSON;

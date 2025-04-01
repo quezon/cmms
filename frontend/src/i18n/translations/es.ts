@@ -1471,7 +1471,9 @@ const esJSON = {
   EMERGENCY_SHUTDOWN: 'Apagado de emergencia',
   select_asset_status: 'Seleccionar estado del activo',
   asset_status: 'Estado del activo',
-  ui_configuration: 'Configuración de la interfaz'
+  ui_configuration: 'Configuración de la interfaz',
+  password_leave_empty_if_you_dont_want_to_change:
+    'Contraseña: déjalo vacío si no quieres cambiarla'
 };
 
 export default esJSON;

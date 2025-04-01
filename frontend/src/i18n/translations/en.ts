@@ -1433,7 +1433,9 @@ const enJSON = {
   EMERGENCY_SHUTDOWN: 'Emergency Shutdown',
   select_asset_status: 'Select asset status',
   asset_status: 'Asset status',
-  ui_configuration: 'Ui configuration'
+  ui_configuration: 'Ui configuration',
+  password_leave_empty_if_you_dont_want_to_change:
+    "Password - leave empty if you don't want to change it"
 };
 
 export default enJSON;

@@ -1480,7 +1480,9 @@ const ptBRJSON = {
   EMERGENCY_SHUTDOWN: 'Desligamento de emergência',
   select_asset_status: 'Selecione o status do ativo',
   asset_status: 'Status do ativo',
-  ui_configuration: 'Configuração da interface'
+  ui_configuration: 'Configuração da interface',
+  password_leave_empty_if_you_dont_want_to_change:
+    'Senha - deixe em branco se não quiser alterá-la'
 };
 
 export default ptBRJSON;

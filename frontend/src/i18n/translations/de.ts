@@ -1502,7 +1502,9 @@ const deJSON = {
   EMERGENCY_SHUTDOWN: 'Notabschaltung',
   select_asset_status: 'Anlagenstatus auswählen',
   asset_status: 'Anlagenstatus',
-  ui_configuration: 'UI-Konfiguration'
+  ui_configuration: 'UI-Konfiguration',
+  password_leave_empty_if_you_dont_want_to_change:
+    'Passwort – leer lassen, wenn du es nicht ändern möchtest'
 };
 
 export default deJSON;

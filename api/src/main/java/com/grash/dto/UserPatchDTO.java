@@ -22,4 +22,6 @@ public class UserPatchDTO {
     private Location location;
 
     private File image;
+
+    private String newPassword;
 }

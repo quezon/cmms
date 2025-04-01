@@ -270,6 +270,14 @@ public class UserService {
     public OwnUser update(Long id, UserPatchDTO userReq) {
         if (userRepository.existsById(id)) {
             OwnUser savedUser = userRepository.findById(id).get();
+            if (userReq.getNewPassword() != null) {
+                if (userReq.getNewPassword().length() < 8)
+                    throw new CustomException("Password must be at least 8 characters", HttpStatus.NOT_ACCEPTABLE);
+                if (enableInvitationViaEmail)
+                    throw new CustomException("Please tell the user to reset his password", HttpStatus.NOT_FOUND);
+
+                savedUser.setPassword(passwordEncoder.encode(userReq.getNewPassword()));
+            }
             OwnUser updatedUser = userRepository.saveAndFlush(userMapper.updateUser(savedUser, userReq));
             em.refresh(updatedUser);
             return updatedUser;

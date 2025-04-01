@@ -19,14 +19,16 @@ import internationalization, {
 } from '../../../../i18n/i18n';
 import { useDispatch, useSelector } from '../../../../store';
 import { getCurrencies } from '../../../../slices/currency';
-import { useEffect, useMemo } from 'react';
+import { useContext, useEffect, useMemo } from 'react';
 import { GeneralPreferences } from '../../../../models/owns/generalPreferences';
+import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
 
 function GeneralSettings() {
   const { t }: { t: any } = useTranslation();
   const switchLanguage = ({ lng }: { lng: any }) => {
     internationalization.changeLanguage(lng);
   };
+  const { showSnackBar } = useContext(CustomSnackBarContext);
   const { patchGeneralPreferences, companySettings } = useAuth();
   const { generalPreferences } = companySettings;
   const dispatch = useDispatch();
@@ -39,7 +41,7 @@ function GeneralSettings() {
   const onDaysBeforePMNotifChange = (event) =>
     patchGeneralPreferences({
       daysBeforePrevMaintNotification: Number(event.target.value)
-    });
+    }).then(() => showSnackBar(t('changes_saved_success'), 'success'));
   const debouncedPMNotifChange = useMemo(
     () => debounce(onDaysBeforePMNotifChange, 1300),
     []
@@ -203,6 +205,9 @@ function GeneralSettings() {
                           generalPreferences.daysBeforePrevMaintNotification
                         }
                         name="daysBeforePrevMaintNotification"
+                        InputProps={{
+                          endAdornment: <Typography>{t('day')}</Typography>
+                        }}
                       >
                         {currencies.map((currency) => (
                           <MenuItem

@@ -1457,7 +1457,9 @@ const plJSON = {
   EMERGENCY_SHUTDOWN: 'Awaryjne wyłączenie',
   select_asset_status: 'Wybierz status zasobu',
   asset_status: 'Status zasobu',
-  ui_configuration: 'Konfiguracja interfejsu'
+  ui_configuration: 'Konfiguracja interfejsu',
+  password_leave_empty_if_you_dont_want_to_change:
+    'Hasło – pozostaw puste, jeśli nie chcesz go zmieniać'
 };
 
 export default plJSON;

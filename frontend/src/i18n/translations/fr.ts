@@ -1536,7 +1536,9 @@ const frJSON = {
   EMERGENCY_SHUTDOWN: "Arrêt d'urgence",
   select_asset_status: "Sélectionnez l'état de l'équipement",
   asset_status: "État de l'équipement",
-  ui_configuration: "Configuration de l'interface"
+  ui_configuration: "Configuration de l'interface",
+  password_leave_empty_if_you_dont_want_to_change:
+    'Mot de passe - laisser vide si vous ne voulez pas le changer'
 };
 
 export default frJSON;

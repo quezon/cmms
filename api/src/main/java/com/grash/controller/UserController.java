@@ -16,13 +16,16 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.Optional;
@@ -107,7 +110,7 @@ public class UserController {
     public UserResponseDTO patch(@ApiParam("User") @Valid @RequestBody UserPatchDTO userReq,
                                  @ApiParam("id") @PathVariable("id") Long id,
                                  @ApiIgnore @CurrentUser OwnUser requester) {
-        Optional<OwnUser> optionalUser = userService.findById(id);
+        Optional<OwnUser> optionalUser = userService.findByIdAndCompany(id, requester.getCompany().getId());
 
         if (optionalUser.isPresent()) {
             OwnUser savedUser = optionalUser.get();
@@ -130,7 +133,7 @@ public class UserController {
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "User not found")})
     public UserResponseDTO getById(@ApiParam("id") @PathVariable("id") Long id, @ApiIgnore @CurrentUser OwnUser user) {
-        Optional<OwnUser> optionalUser = userService.findById(id);
+        Optional<OwnUser> optionalUser = userService.findByIdAndCompany(id, user.getCompany().getId());
         if (optionalUser.isPresent()) {
             OwnUser savedUser = optionalUser.get();
             if (user.getCompany().getId().equals(savedUser.getCompany().getId())) {
@@ -148,10 +151,10 @@ public class UserController {
     public UserResponseDTO patchRole(@ApiParam("id") @PathVariable("id") Long id,
                                      @RequestParam("role") Long roleId,
                                      @ApiIgnore @CurrentUser OwnUser requester) {
-        Optional<OwnUser> optionalUserToPatch = userService.findById(id);
+        Optional<OwnUser> optionalUserToPatch = userService.findByIdAndCompany(id, requester.getCompany().getId());
         Optional<Role> optionalRole = roleService.findById(roleId);
 
-        if (optionalUserToPatch.isPresent() && optionalRole.isPresent()) {
+        if (optionalUserToPatch.isPresent() && optionalRole.isPresent() && optionalRole.get().getCompanySettings().getId().equals(requester.getCompany().getCompanySettings().getId())) {
             OwnUser userToPatch = optionalUserToPatch.get();
             if (requester.getRole().getEditOtherPermissions().contains(PermissionEntity.PEOPLE_AND_TEAMS)) {
                 int usersCount =
@@ -179,7 +182,7 @@ public class UserController {
             @ApiResponse(code = 404, message = "User not found")})
     public UserResponseDTO disable(@ApiParam("id") @PathVariable("id") Long id,
                                    @ApiIgnore @CurrentUser OwnUser requester) {
-        Optional<OwnUser> optionalUserToDisable = userService.findById(id);
+        Optional<OwnUser> optionalUserToDisable = userService.findByIdAndCompany(id, requester.getCompany().getId());
 
         if (optionalUserToDisable.isPresent()) {
             OwnUser userToDisable = optionalUserToDisable.get();
