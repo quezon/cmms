@@ -6,6 +6,9 @@ import {
   Grid,
   IconButton,
   Link,
+  MenuItem,
+  Select,
+  Stack,
   Typography,
   useTheme
 } from '@mui/material';
@@ -36,6 +39,8 @@ import ImageViewer from 'react-simple-image-viewer';
 import { CompanySettingsContext } from '../../../contexts/CompanySettingsContext';
 import FilesList from '../components/FilesList';
 import RequestCancellationModal from './RequestCancellationModal';
+import { editAsset } from '../../../slices/asset';
+import { AssetStatus, assetStatuses } from '../../../models/owns/asset';
 
 interface RequestDetailsProps {
   request: Request;
@@ -45,15 +50,19 @@ interface RequestDetailsProps {
 }
 
 export default function RequestDetails({
-                                         request,
-                                         handleOpenUpdate,
-                                         handleOpenDelete,
-                                         onClose
-                                       }: RequestDetailsProps) {
+  request,
+  handleOpenUpdate,
+  handleOpenDelete,
+  onClose
+}: RequestDetailsProps) {
   const [approving, setApproving] = useState<boolean>(false);
   const { t }: { t: any } = useTranslation();
   const dispatch = useDispatch();
   const theme = useTheme();
+  const [showAssetStatuses, setShowAssetStatuses] = useState<boolean>(false);
+  const [selectedAssetStatus, setSelectedAssetStatus] = useState<AssetStatus>(
+    'INSPECTION_SCHEDULED'
+  );
   const { hasEditPermission, hasDeletePermission, hasViewPermission, user } =
     useAuth();
   const navigate = useNavigate();
@@ -61,10 +70,13 @@ export default function RequestDetails({
     CompanySettingsContext
   );
   const [isImageViewerOpen, setIsImageViewerOpen] = useState<boolean>(false);
-  const [openCancellationModal, setOpenCancellationModal] = useState<boolean>(false);
+  const [openCancellationModal, setOpenCancellationModal] =
+    useState<boolean>(false);
   const onApprove = () => {
     setApproving(true);
-    dispatch(approveRequest(request.id))
+    dispatch(
+      approveRequest(request.id, request.asset ? selectedAssetStatus : null)
+    )
       .then((workOrderId) => {
         navigate(`/app/work-orders/${workOrderId}`);
       })
@@ -72,10 +84,10 @@ export default function RequestDetails({
   };
 
   const BasicField = ({
-                        label,
-                        value,
-                        isPriority
-                      }: {
+    label,
+    value,
+    isPriority
+  }: {
     label: string | number;
     value: string | number;
     isPriority?: boolean;
@@ -171,9 +183,11 @@ export default function RequestDetails({
           )}
         </Box>
       </Grid>
-      {!request.workOrder &&
+      {!showAssetStatuses ? (
+        !request.workOrder &&
         !request.cancelled &&
-        (hasViewPermission(PermissionEntity.SETTINGS) || user.role.code === 'LIMITED_ADMIN') && (
+        (hasViewPermission(PermissionEntity.SETTINGS) ||
+          user.role.code === 'LIMITED_ADMIN') && (
           <>
             <Divider />
             <Grid
@@ -186,9 +200,7 @@ export default function RequestDetails({
               }}
             >
               <Button
-                startIcon={
-                  <ClearTwoToneIcon />
-                }
+                startIcon={<ClearTwoToneIcon />}
                 onClick={() => setOpenCancellationModal(true)}
                 variant="outlined"
               >
@@ -202,14 +214,62 @@ export default function RequestDetails({
                     <CheckTwoToneIcon />
                   )
                 }
-                onClick={onApprove}
+                onClick={() => {
+                  if (request.asset) setShowAssetStatuses(true);
+                  else onApprove();
+                }}
                 variant="contained"
               >
                 {t('approve')}
               </Button>
             </Grid>
           </>
-        )}
+        )
+      ) : (
+        <Stack direction={'column'} spacing={2}>
+          <Box>
+            <Typography fontWeight={'bold'} gutterBottom>
+              {t('asset_status')}
+            </Typography>
+            <Select
+              value={selectedAssetStatus}
+              onChange={(event) => {
+                setSelectedAssetStatus(event.target.value as AssetStatus);
+              }}
+            >
+              {assetStatuses.map((assetStatusConfig) => (
+                <MenuItem
+                  key={assetStatusConfig.status}
+                  value={assetStatusConfig.status}
+                >
+                  {t(assetStatusConfig.status)}
+                </MenuItem>
+              ))}
+            </Select>
+          </Box>
+          <Stack direction={'row'} spacing={4}>
+            <Button
+              onClick={() => setShowAssetStatuses(false)}
+              variant={'outlined'}
+            >
+              {t('go_back')}
+            </Button>
+            <Button
+              startIcon={
+                approving ? (
+                  <CircularProgress size="1rem" sx={{ color: 'white' }} />
+                ) : (
+                  <CheckTwoToneIcon />
+                )
+              }
+              variant={'contained'}
+              onClick={onApprove}
+            >
+              {t('approve')}
+            </Button>
+          </Stack>
+        </Stack>
+      )}
       <Divider />
       <Grid item xs={12}>
         <Box>
@@ -358,7 +418,8 @@ export default function RequestDetails({
         onCancel={() => {
           setOpenCancellationModal(false);
           onClose();
-        }} />
+        }}
+      />
     </Grid>
   );
 }

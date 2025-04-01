@@ -1,10 +1,7 @@
 package com.grash.controller;
 
 import com.grash.advancedsearch.SearchCriteria;
-import com.grash.dto.RequestPatchDTO;
-import com.grash.dto.RequestShowDTO;
-import com.grash.dto.SuccessResponse;
-import com.grash.dto.WorkOrderShowDTO;
+import com.grash.dto.*;
 import com.grash.exception.CustomException;
 import com.grash.mapper.RequestMapper;
 import com.grash.mapper.WorkOrderMapper;
@@ -50,13 +47,15 @@ public class RequestController {
     private final MessageSource messageSource;
     private final WorkflowService workflowService;
     private final EmailService2 emailService2;
+    private final AssetService assetService;
 
     @Value("${frontend.url}")
     private String frontendUrl;
 
     @PostMapping("/search")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Page<RequestShowDTO>> search(@RequestBody SearchCriteria searchCriteria, HttpServletRequest req) {
+    public ResponseEntity<Page<RequestShowDTO>> search(@RequestBody SearchCriteria searchCriteria,
+                                                       HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
             if (user.getRole().getViewPermissions().contains(PermissionEntity.REQUESTS)) {
@@ -112,7 +111,8 @@ public class RequestController {
                     .filter(user1 -> user1.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS)
                             || user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN)).collect(Collectors.toList());
             notificationService.createMultiple(usersToNotify
-                    .stream().map(user1 -> new Notification(message, user1, NotificationType.REQUEST, createdRequest.getId())).collect(Collectors.toList()), true, title);
+                    .stream().map(user1 -> new Notification(message, user1, NotificationType.REQUEST,
+                            createdRequest.getId())).collect(Collectors.toList()), true, title);
             Map<String, Object> mailVariables = new HashMap<String, Object>() {{
                 put("requestLink", frontendUrl + "/app/requests/" + createdRequest.getId());
                 put("featuresLink", frontendUrl + "/#key-features");
@@ -123,7 +123,9 @@ public class RequestController {
                     .toArray(String[]::new), messageSource.getMessage("new_request", null,
                     Helper.getLocale(user)), mailVariables, "new-request.html", Helper.getLocale(user));
 
-            Collection<Workflow> workflows = workflowService.findByMainConditionAndCompany(WFMainCondition.REQUEST_CREATED, user.getCompany().getId());
+            Collection<Workflow> workflows =
+                    workflowService.findByMainConditionAndCompany(WFMainCondition.REQUEST_CREATED,
+                            user.getCompany().getId());
             workflows.forEach(workflow -> workflowService.runRequest(workflow, createdRequest));
             return requestMapper.toShowDto(createdRequest);
         } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
@@ -135,7 +137,8 @@ public class RequestController {
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "Request not found")})
-    public RequestShowDTO patch(@ApiParam("Request") @Valid @RequestBody RequestPatchDTO request, @ApiParam("id") @PathVariable("id") Long id,
+    public RequestShowDTO patch(@ApiParam("Request") @Valid @RequestBody RequestPatchDTO request,
+                                @ApiParam("id") @PathVariable("id") Long id,
                                 HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<Request> optionalRequest = requestService.findById(id);
@@ -159,6 +162,7 @@ public class RequestController {
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "Request not found")})
     public WorkOrderShowDTO approve(@ApiParam("id") @PathVariable("id") Long id,
+                                    @RequestBody RequestApproveDTO requestApproveDTO,
                                     HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<Request> optionalRequest = requestService.findById(id);
@@ -170,17 +174,26 @@ public class RequestController {
             if (savedRequest.getWorkOrder() != null) {
                 throw new CustomException("Request is already approved", HttpStatus.NOT_ACCEPTABLE);
             }
-            Collection<Workflow> workflows = workflowService.findByMainConditionAndCompany(WFMainCondition.REQUEST_APPROVED, user.getCompany().getId());
+            Collection<Workflow> workflows =
+                    workflowService.findByMainConditionAndCompany(WFMainCondition.REQUEST_APPROVED,
+                            user.getCompany().getId());
             workflows.forEach(workflow -> workflowService.runRequest(workflow, savedRequest));
 
-            WorkOrderShowDTO result = workOrderMapper.toShowDto(requestService.createWorkOrderFromRequest(savedRequest, user));
+            WorkOrderShowDTO result =
+                    workOrderMapper.toShowDto(requestService.createWorkOrderFromRequest(savedRequest, user));
+            if (savedRequest.getAsset() != null && requestApproveDTO.getAssetStatus() != null) {
+                savedRequest.getAsset().setStatus(requestApproveDTO.getAssetStatus());
+                assetService.save(savedRequest.getAsset());
+            }
             OwnUser requester = userService.findById(savedRequest.getCreatedBy()).get();
             String title = messageSource.getMessage("request_approved", null, Helper.getLocale(user));
-            String message = messageSource.getMessage("request_approved_description", new Object[]{savedRequest.getTitle()}, Helper.getLocale(user));
+            String message = messageSource.getMessage("request_approved_description",
+                    new Object[]{savedRequest.getTitle()}, Helper.getLocale(user));
             notificationService.createMultiple(Collections.singletonList(new Notification(message, requester,
                     NotificationType.WORK_ORDER, result.getId())), true, title);
 
-            String message2 = messageSource.getMessage("request_approved_description_limited_admin", new Object[]{user.getFullName(), savedRequest.getTitle()}, Helper.getLocale(user));
+            String message2 = messageSource.getMessage("request_approved_description_limited_admin",
+                    new Object[]{user.getFullName(), savedRequest.getTitle()}, Helper.getLocale(user));
             notificationService.createMultiple(userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN) && !user1.getId().equals(user.getId())).map(user1 -> new Notification(message2, user1,
                     NotificationType.WORK_ORDER, result.getId())).collect(Collectors.toList()), true, title);
 
@@ -189,8 +202,9 @@ public class RequestController {
                 put("featuresLink", frontendUrl + "/#key-features");
                 put("workOrderTitle", result.getTitle());
             }};
-            List<OwnUser> usersToMail = userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN))
-                    .filter(user1 -> user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
+            List<OwnUser> usersToMail =
+                    userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN))
+                            .filter(user1 -> user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
             usersToMail.add(requester);
             emailService2.sendMessageUsingThymeleafTemplate(usersToMail.stream().map(OwnUser::getEmail)
                     .toArray(String[]::new), title, mailVariables, "approved-request.html", Helper.getLocale(user));
@@ -222,17 +236,21 @@ public class RequestController {
                 throw new CustomException("Please give a reason", HttpStatus.NOT_ACCEPTABLE);
             savedRequest.setCancellationReason(reason);
             savedRequest.setCancelled(true);
-            Collection<Workflow> workflows = workflowService.findByMainConditionAndCompany(WFMainCondition.REQUEST_REJECTED, user.getCompany().getId());
+            Collection<Workflow> workflows =
+                    workflowService.findByMainConditionAndCompany(WFMainCondition.REQUEST_REJECTED,
+                            user.getCompany().getId());
             workflows.forEach(workflow -> workflowService.runRequest(workflow, savedRequest));
 
             OwnUser requester = userService.findById(savedRequest.getCreatedBy()).get();
 
             String title = messageSource.getMessage("request_rejected", null, Helper.getLocale(user));
-            String message = messageSource.getMessage("request_rejected_description", new Object[]{savedRequest.getTitle()}, Helper.getLocale(user));
+            String message = messageSource.getMessage("request_rejected_description",
+                    new Object[]{savedRequest.getTitle()}, Helper.getLocale(user));
             notificationService.createMultiple(Collections.singletonList(new Notification(message, requester,
                     NotificationType.INFO, null)), true, title);
 
-            String message2 = messageSource.getMessage("request_rejected_description_limited_admin", new Object[]{user.getFullName(), savedRequest.getTitle()}, Helper.getLocale(user));
+            String message2 = messageSource.getMessage("request_rejected_description_limited_admin",
+                    new Object[]{user.getFullName(), savedRequest.getTitle()}, Helper.getLocale(user));
             notificationService.createMultiple(userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN) && !user1.getId().equals(user.getId())).map(user1 -> new Notification(message2, user1,
                     NotificationType.INFO, null)).collect(Collectors.toList()), true, title);
 
@@ -241,8 +259,9 @@ public class RequestController {
                 put("featuresLink", frontendUrl + "/#key-features");
                 put("requestTitle", savedRequest.getTitle());
             }};
-            List<OwnUser> usersToMail = userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN))
-                    .filter(user1 -> user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
+            List<OwnUser> usersToMail =
+                    userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN))
+                            .filter(user1 -> user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
             usersToMail.add(requester);
             emailService2.sendMessageUsingThymeleafTemplate(usersToMail.stream().map(OwnUser::getEmail)
                     .toArray(String[]::new), title, mailVariables, "rejected-request.html", Helper.getLocale(user));
