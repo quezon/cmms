@@ -134,6 +134,7 @@ docker compose up -d
 [Usage guide](https://docs.atlas-cmms.com)
 
 [Dev docs](./dev-docs)
+
 [Join our Discord server](https://discord.gg/cHqyVRYpkA)
 
 If you still have questions after reading the docs, concerns, bug reports, etc, please file an issue in this
