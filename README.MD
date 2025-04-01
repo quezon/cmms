@@ -3,7 +3,8 @@
 
 [Atlas CMMS](https://github.com/grashjs/cmms) is a powerful, self-hosted maintenance management system designed for both
 web and mobile platforms using Docker. It simplifies and automates the management of maintenance activities, making it
-ideal for IT managers or developers looking to implement solutions that keep their organization's assets running smoothly.
+ideal for IT managers or developers looking to implement solutions that keep their organization's assets running
+smoothly.
 Think of it like **Jira for technicians**.
 
 **Example industries**
@@ -88,6 +89,7 @@ At the moment all variables are optional. Do not delete the .env file
 | SMTP_PWD                     | No       | The SMTP password after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en). To be able to invite people you have to configure it. | (empty)               |
 | SMTP_USER                    | No       | The SMTP username after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en)                                                        | (empty)               |
 | JWT_SECRET_KEY               | No       | JWT secret key                                                                                                                                                                                                      | your_jwt_secret       |
+| ALLOWED_ORGANIZATION_ADMINS  | No       | Comma separated email addresses allowed to sign up without being invited, hence allowed to create organizations. Empty means everyone can create an organization                                                    | (empty)               |
 | REACT_APP_GOOGLE_KEY         | No       | Google Maps API key                                                                                                                                                                                                 | (empty)               |
 | REACT_APP_GOOGLE_TRACKING_ID | No       | Google Analytics tracking ID                                                                                                                                                                                        | (empty)               |
 | PUBLIC_FRONT_URL             | No       | Frontend URL in this format `http://your.public.ip:3000`                                                                                                                                                            | http://localhost:3000 |
@@ -100,12 +102,12 @@ At the moment all variables are optional. Do not delete the .env file
 | MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)               |
 | REACT_APP_MUI_X_LICENSE      | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
 
-
 #### For remote servers
 
 - You need to update every env variable starting with `PUBLIC_`.
 
 [//]: # (- You must also update every env variable starting with `SMTP`.)
+
 - Open ports if necessary: make sure to open `PUBLIC_API_URL`, `PUBLIC_FRONT_URL` ports numbers by default
   8080, and 3000. Same for `PUBLIC_MINIO_ENDPOINT` port 9000 if you use Minio.
 
@@ -120,6 +122,7 @@ Now, go to http://localhost:3000 or your custom `PUBLIC_FRONT_URL`
 Celebrate on how easy this was
 
 #### Subsequent runs
+
 After changing any env variable starting with `REACT_APP_` or `PUBLIC_API_URL` or `INVITATION_VIA_EMAIL` you should run
 
 ```sh
@@ -127,6 +130,7 @@ docker compose down
 docker compose up -d --no-deps --build frontend
 docker compose up -d
 ```
+
 ## Getting help
 
 ### Docs

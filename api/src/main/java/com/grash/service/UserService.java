@@ -69,6 +69,9 @@ public class UserService {
     @Value("${mail.enable}")
     private boolean enableMails;
 
+    @Value("${allowed-organization-admins}")
+    private String[] allowedOrganizationAdmins;
+
 
     public String signin(String email, String password, String type) {
         try {
@@ -101,6 +104,10 @@ public class UserService {
         if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
             throw new CustomException("Email is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
 
+        }
+        if (allowedOrganizationAdmins != null && userReq.getRole() == null && allowedOrganizationAdmins.length != 0 && Arrays.stream(allowedOrganizationAdmins).noneMatch(allowedOrganizationAdmin -> allowedOrganizationAdmin.equalsIgnoreCase(userReq.getEmail()))) {
+            throw new CustomException("You are not allowed to create an account without being invited",
+                    HttpStatus.NOT_ACCEPTABLE);
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setUsername(utils.generateStringId());
