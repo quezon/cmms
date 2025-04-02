@@ -4,6 +4,7 @@ import com.grash.dto.SchedulePatchDTO;
 import com.grash.exception.CustomException;
 import com.grash.mapper.ScheduleMapper;
 import com.grash.model.*;
+import com.grash.model.enums.PermissionEntity;
 import com.grash.repository.ScheduleRepository;
 import com.grash.utils.Helper;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class ScheduleService {
     private final EmailService2 emailService2;
     private final WorkOrderService workOrderService;
     private final TaskService taskService;
+    private final UserService userService;
     @Value("${frontend.url}")
     private String frontendUrl;
     private final Map<Long, Map<String, Timer>> timersState = new HashMap<>();
@@ -110,7 +115,16 @@ public class ScheduleService {
                         PreventiveMaintenance preventiveMaintenance = schedule.getPreventiveMaintenance();
                         Locale locale = Helper.getLocale(preventiveMaintenance.getCompany());
                         String title = messageSource.getMessage("coming_wo", null, locale);
-                        Collection<OwnUser> usersToMail = preventiveMaintenance.getUsers();
+                        Collection<OwnUser> admins =
+                                userService.findWorkersByCompany(preventiveMaintenance.getCompany().getId()).stream().filter(ownUser -> ownUser.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS)).collect(Collectors.toList());
+                        List<OwnUser> usersToMail = new ArrayList<>(Stream.concat(
+                                        preventiveMaintenance.getUsers().stream(),
+                                        admins.stream())
+                                .collect(Collectors.toMap(
+                                        OwnUser::getId,  // key by ID
+                                        Function.identity(), // value is the user object
+                                        (existing, replacement) -> existing))  // if duplicate keys, keep existing
+                                .values());
                         Map<String, Object> mailVariables = new HashMap<String, Object>() {{
                             put("pmLink",
                                     frontendUrl + "/app/preventive-maintenances/" + preventiveMaintenance.getId());
