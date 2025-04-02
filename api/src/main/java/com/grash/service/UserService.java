@@ -137,8 +137,8 @@ public class UserService {
                         HttpStatus.NOT_ACCEPTABLE);
             } else {
                 user.setRole(optionalRole.get());
-                user.setEnabled(true);
                 user.setCompany(optionalRole.get().getCompanySettings().getCompany());
+                return enableAndReturnToken(user, true, userReq.getEmployeesCount());
             }
         }
         if (Helper.isLocalhost(PUBLIC_API_URL)) {
