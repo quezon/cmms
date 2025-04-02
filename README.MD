@@ -79,7 +79,7 @@ cd cmms
 
 ### Set environment variables
 
-Configure the environment variables in this file [.env](.env)
+Rename to .env and configure the environment variables in this file [.env.example](.env.example)
 At the moment all variables are optional. Do not delete the .env file
 
 | Name                         | Required | Description                                                                                                                                                                                                         | Default Value         |
