@@ -135,7 +135,8 @@ public class ScheduleService {
                                 .toArray(String[]::new), title, mailVariables, "coming-work-order.html", locale);
                     }
                 };
-                timer1.scheduleAtFixedRate(timerTask1, Helper.minusDays(trueStartsOn, daysBeforePMNotification),
+                timer1.scheduleAtFixedRate(timerTask1, Helper.getNextOccurence(Helper.minusDays(trueStartsOn,
+                                daysBeforePMNotification), 1),
                         (long) schedule.getFrequency() * 24 * 60 * 60 * 1000);
                 localTimers.put("notification", timer1);
             }
