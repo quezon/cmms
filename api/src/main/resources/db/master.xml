@@ -116,4 +116,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2025_03_15_1741998148_ui_configuration.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2025_04_06_work_order_aud_set_null.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>
