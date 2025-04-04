@@ -24,7 +24,7 @@ public class CompanyAudit extends Audit {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(nullable = false)
+    @JoinColumn(nullable = false, updatable = false)
     private Company company;
 
     @PrePersist
@@ -48,7 +48,8 @@ public class CompanyAudit extends Audit {
         if (!user.getRole().getRoleType().equals(RoleType.ROLE_SUPER_ADMIN) &&
                 !company.getId().equals(this.getCompany().getId())
                 && !makesException(user)) {
-            throw new CustomException("afterLoad:  the user (id=" + user.getId() + ")  is not authorized to load  this object (" + this.getClass() + ") with id " + this.id, HttpStatus.FORBIDDEN);
+            throw new CustomException("afterLoad:  the user (id=" + user.getId() + ")  is not authorized to load  " +
+                    "this object (" + this.getClass() + ") with id " + this.id, HttpStatus.FORBIDDEN);
         }
     }
 
@@ -57,7 +58,8 @@ public class CompanyAudit extends Audit {
             return user.getSuperAccountRelations().stream()
                     .anyMatch(relation -> relation.getChildUser().getCompany().getId().equals(this.company.getId()))
 //                    || (user.getParentSuperAccount() !=null && user.getParentSuperAccount().getSuperUser()
-//                    .getSuperAccountRelations().stream().anyMatch(sar->sar.getChildUser().getCompany().getId().equals(this.company.getId())))
+//                    .getSuperAccountRelations().stream().anyMatch(sar->sar.getChildUser().getCompany().getId()
+//                    .equals(this.company.getId())))
                     ;
         }
         return false;
