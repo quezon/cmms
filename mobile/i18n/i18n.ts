@@ -3,7 +3,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 import deJSON from './translations/de';
-import enJSON from './translations/en';
+import locale from './translations/en';
 import esJSON from './translations/es';
 import frJSON from './translations/fr';
 import trJSON from './translations/tr';
@@ -12,7 +12,7 @@ import ptBRJSON from './translations/pt_BR';
 
 const resources = {
   de: { translation: deJSON },
-  en: { translation: enJSON },
+  en: { translation: locale },
   es: { translation: esJSON },
   fr: { translation: frJSON },
   tr: { translation: trJSON },

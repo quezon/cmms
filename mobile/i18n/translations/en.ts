@@ -1,4 +1,4 @@
-const enJSON = {
+const locale = {
   DUPLICATE_OF: 'Duplicate of',
   DUPLICATED_BY: 'Duplicated by',
   RELATED_TO: 'Related to',
@@ -1451,4 +1451,4 @@ const enJSON = {
   reset_to_default: 'Reset to default'
 };
 
-export default enJSON;
+export default locale;
