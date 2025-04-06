@@ -19,6 +19,7 @@ import {
 import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
 import { AE, CN, DE, ES, FR, US, BR } from 'country-flag-icons/react/3x2';
 import SubscriptionPlans from '../SubscriptionPlans';
+import SubscriptionPlanSelector from '../../pricing/components/SubscriptionPlanSelector';
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
@@ -326,7 +327,7 @@ function Highlights() {
   const { t }: { t: any } = useTranslation();
 
   const [currentTab, setCurrentTab] = useState('work-orders');
-
+  const [monthly, setMonthly] = useState<boolean>(true);
   const tabs = [
     { value: 'work-orders', label: t('work_orders') },
     { value: 'request', label: t('request_system') },
@@ -779,6 +780,19 @@ function Highlights() {
           </BoxRtl>
         )}
       </Container>
+      <TypographyH1Primary
+        textAlign="center"
+        sx={{
+          mt: 8,
+          mb: 2
+        }}
+        variant="h1"
+      >
+        {t('choose_your_plan')}
+      </TypographyH1Primary>
+      <Box px={4}>
+        <SubscriptionPlanSelector monthly={monthly} setMonthly={setMonthly} />
+      </Box>
 
       <Container
         sx={{

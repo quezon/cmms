@@ -37,4 +37,6 @@ public class UserSignupRequest {
 
     private Language language;
 
+    private String subscriptionPlanId;
+
 }

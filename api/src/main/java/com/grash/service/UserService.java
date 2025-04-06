@@ -90,10 +90,11 @@ public class UserService {
         }
     }
 
-    private SuccessResponse enableAndReturnToken(OwnUser user, boolean sendEmailToSuperAdmins, int employeesCount) {
+    private SuccessResponse enableAndReturnToken(OwnUser user, boolean sendEmailToSuperAdmins,
+                                                 UserSignupRequest userSignupRequest) {
         user.setEnabled(true);
         userRepository.save(user);
-        if (sendEmailToSuperAdmins) sendRegistrationMailToSuperAdmins(user, employeesCount);
+        if (sendEmailToSuperAdmins) sendRegistrationMailToSuperAdmins(user, userSignupRequest);
         return new SuccessResponse(true, jwtTokenProvider.createToken(user.getEmail(),
                 Collections.singletonList(user.getRole().getRoleType())));
     }
@@ -138,11 +139,11 @@ public class UserService {
             } else {
                 user.setRole(optionalRole.get());
                 user.setCompany(optionalRole.get().getCompanySettings().getCompany());
-                return enableAndReturnToken(user, true, userReq.getEmployeesCount());
+                return enableAndReturnToken(user, true, userReq);
             }
         }
         if (Helper.isLocalhost(PUBLIC_API_URL)) {
-            return enableAndReturnToken(user, false, userReq.getEmployeesCount());
+            return enableAndReturnToken(user, false, userReq);
         } else {
             if (userReq.getRole() == null) { //send mail
                 if (enableInvitationViaEmail) {
@@ -159,11 +160,11 @@ public class UserService {
                             messageSource.getMessage("confirmation_email", null, Helper.getLocale(user)), variables,
                             "signup.html", Helper.getLocale(user));
                 } else {
-                    return enableAndReturnToken(user, true, userReq.getEmployeesCount());
+                    return enableAndReturnToken(user, true, userReq);
                 }
             }
             userRepository.save(user);
-            sendRegistrationMailToSuperAdmins(user, userReq.getEmployeesCount());
+            sendRegistrationMailToSuperAdmins(user, userReq);
             return new SuccessResponse(true, "Successful registration. Check your mailbox to activate your " +
                     "account");
         }
@@ -316,16 +317,18 @@ public class UserService {
     }
 
     @Async
-    void sendRegistrationMailToSuperAdmins(OwnUser user, int employeesCount) {
+    void sendRegistrationMailToSuperAdmins(OwnUser user, UserSignupRequest userSignupRequest) {
         if (user.getEmail().equals("superadmin@test.com")) return;
         if (recipients == null || recipients.length == 0) {
             return;
 //            throw new CustomException("MAIL_RECIPIENTS env variable not set", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
-            emailService2.sendHtmlMessage(recipients, "New Atlas registration",
+            emailService2.sendHtmlMessage(recipients, userSignupRequest.getSubscriptionPlanId() == null ? "New Atlas " +
+                            "registration" : "Atlas plan " + userSignupRequest.getSubscriptionPlanId() + " used",
                     user.getFirstName() + " " + user.getLastName() + " just created an account from company "
-                            + user.getCompany().getName() + " with " + employeesCount + " employees.\nEmail: " + user.getEmail()
+                            + user.getCompany().getName() + " with " + userSignupRequest.getEmployeesCount() + " " +
+                            "employees.\nEmail: " + user.getEmail()
                             + "\nPhone: " + user.getPhone()
                             + (user.isOwnsCompany() ? "" : " after invitation"));
 

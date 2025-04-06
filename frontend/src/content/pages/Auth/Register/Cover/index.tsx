@@ -345,6 +345,7 @@ function RegisterCover() {
               <JWTRegister
                 email={searchParams.get('email')}
                 role={Number(searchParams.get('role'))}
+                subscriptionPlanId={searchParams.get('subscription-plan-id')}
               />
               <Box mt={4}>
                 <Typography
