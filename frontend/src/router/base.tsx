@@ -13,6 +13,7 @@ const Loader = (Component) => (props) =>
 // Pages
 
 const Overview = Loader(lazy(() => import('../content/overview')));
+const Pricing = Loader(lazy(() => import('../content/pricing')));
 
 // Status
 
@@ -35,6 +36,10 @@ const baseRoutes = [
   {
     path: '/',
     element: <Overview />
+  },
+  {
+    path: 'pricing',
+    element: <Pricing />
   },
   {
     path: 'privacy-policy',
