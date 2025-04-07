@@ -133,7 +133,8 @@ const locale = {
     'Seamos realistas: el primer paso para mejorar sus operaciones es conocer lo bueno, lo malo y lo feo.',
   'dashboard.descriptions.1':
     'Con los tableros personalizados de Atlas, finalmente puede comenzar a comprender ese nefasto "agujero negro del mantenimiento" y comenzar a poner en práctica planes respaldados por datos, lo que se traduce en menores costos laborales, menor tiempo de inactividad y más.',
-  'dashboard.descriptions.2': 'Con los tableros personalizados de Atlas podrás…',
+  'dashboard.descriptions.2':
+    'Con los tableros personalizados de Atlas podrás…',
   'dashboard.checks.0': 'Saber dónde se gasta su dinero y por qué',
   'dashboard.checks.1': 'Saber qué activo cuesta más y por qué',
   'dashboard.checks.2': 'Crear tus propios KPI personalizados.',
@@ -167,7 +168,8 @@ const locale = {
   invalid_phone: 'El número de teléfono no es válido',
   required_password: 'El campo de contraseña es obligatorio',
   required_terms: 'Debes aceptar nuestros términos y condiciones.',
-  verify_email: 'Por favor revise su bandeja de correo electrónico para activar su cuenta',
+  verify_email:
+    'Por favor revise su bandeja de correo electrónico para activar su cuenta',
   registration_error: 'El registro no se realizó correctamente',
   first_name: 'Nombre',
   last_name: 'Apellido',
@@ -286,7 +288,7 @@ const locale = {
   not_assigned: 'No asignado',
   no_additional_cost: 'Aún no se han añadido costos adicionales',
   parts: 'Partes',
-  links: 'Enlaces,
+  links: 'Enlaces',
   confirm_delete_file_wo:
     '¿Está seguro de que desea eliminar este archivo de esta Orden de Trabajo?',
   archive: 'Archivo',
