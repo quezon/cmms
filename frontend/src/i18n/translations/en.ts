@@ -1,4 +1,4 @@
-const enJSON = {
+const locale = {
   DUPLICATE_OF: 'Duplicate of',
   DUPLICATED_BY: 'Duplicated by',
   RELATED_TO: 'Related to',
@@ -1438,4 +1438,4 @@ const enJSON = {
     "Password - leave empty if you don't want to change it"
 };
 
-export default enJSON;
+export default locale;

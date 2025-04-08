@@ -1,8 +1,3 @@
-export const auth0Config = {
-  client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
-  domain: process.env.REACT_APP_AUTH0_DOMAIN
-};
-
 export const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
   authDomain: process.env.REACT_APP_AUTH_DOMAIN,
@@ -14,31 +9,32 @@ export const firebaseConfig = {
   measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
-export const amplifyConfig = {
-  aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
-  aws_cognito_identity_pool_id:
-    process.env.REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID,
-  aws_cognito_region: process.env.REACT_APP_AWS_COGNITO_REGION,
-  aws_user_pools_id: process.env.REACT_APP_AWS_USER_POOLS_ID,
-  aws_user_pools_web_client_id:
-    process.env.REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID
-};
-
 export const googleMapsConfig = {
-  apiKey: process.env.REACT_APP_GOOGLE_KEY
+  apiKey:
+    process.env.REACT_APP_GOOGLE_KEY ||
+    window.__RUNTIME_CONFIG__.GOOGLE_KEY?.trim()
 };
-export const apiUrl = process.env.REACT_APP_API_URL
-  ? process.env.REACT_APP_API_URL.endsWith('/')
-    ? process.env.REACT_APP_API_URL
-    : process.env.REACT_APP_API_URL + '/'
+const rawApiUrl =
+  process.env.REACT_APP_API_URL || window.__RUNTIME_CONFIG__.API_URL;
+export const apiUrl = rawApiUrl
+  ? rawApiUrl.endsWith('/')
+    ? rawApiUrl
+    : rawApiUrl + '/'
   : 'http://localhost:8080/';
 // TODO
-// export const zendeskKey = process.env.REACT_APP_ZENDESK_KEY ?? '';
-export const muiLicense = process.env.REACT_APP_MUI_X_LICENSE ?? '';
+// export const zendeskKey =  window.__RUNTIME_CONFIG__.ZENDESK_KEY ?? '';
+export const muiLicense =
+  (process.env.REACT_APP_MUI_X_LICENSE ||
+    window.__RUNTIME_CONFIG__.MUI_X_LICENSE?.trim()) ??
+  '';
 
 export const zendeskKey = '';
 
-export const googleTrackingId = process.env.REACT_APP_GOOGLE_TRACKING_ID;
+export const googleTrackingId =
+  process.env.REACT_APP_GOOGLE_TRACKING_ID ||
+  window.__RUNTIME_CONFIG__.GOOGLE_TRACKING_ID?.trim();
 export const isEmailVerificationEnabled: boolean =
-  process.env.REACT_APP_INVITATION_VIA_EMAIL === 'true';
+  (process.env.REACT_APP_INVITATION_VIA_EMAIL
+    ? process.env.REACT_APP_INVITATION_VIA_EMAIL
+    : window.__RUNTIME_CONFIG__.INVITATION_VIA_EMAIL) === 'true';
 export const IS_LOCALHOST = apiUrl.includes('localhost:');

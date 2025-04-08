@@ -90,8 +90,8 @@ At the moment all variables are optional. Do not delete the .env file
 | SMTP_USER                    | No       | The SMTP username after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en)                                                        | (empty)               |
 | JWT_SECRET_KEY               | No       | JWT secret key                                                                                                                                                                                                      | your_jwt_secret       |
 | ALLOWED_ORGANIZATION_ADMINS  | No       | Comma separated email addresses allowed to sign up without being invited, hence allowed to create organizations. Empty means everyone can create an organization                                                    | (empty)               |
-| REACT_APP_GOOGLE_KEY         | No       | Google Maps API key                                                                                                                                                                                                 | (empty)               |
-| REACT_APP_GOOGLE_TRACKING_ID | No       | Google Analytics tracking ID                                                                                                                                                                                        | (empty)               |
+| GOOGLE_KEY         | No       | Google Maps API key                                                                                                                                                                                                 | (empty)               |
+| GOOGLE_TRACKING_ID | No       | Google Analytics tracking ID                                                                                                                                                                                        | (empty)               |
 | PUBLIC_FRONT_URL             | No       | Frontend URL in this format `http://your.public.ip:3000`                                                                                                                                                            | http://localhost:3000 |
 | PUBLIC_API_URL               | No       | Public API URL in this format `http://your.public.ip:8080`                                                                                                                                                          | http://localhost:8080 |
 | STORAGE_TYPE                 | No       | Type of storage either local MinIO or Google Cloud Storage `gcp` or `minio`                                                                                                                                         | minio                 |
@@ -100,7 +100,7 @@ At the moment all variables are optional. Do not delete the .env file
 | GCP_PROJECT_ID               | No       | The Google Cloud project ID, also found in the `GCP_JSON` file.                                                                                                                                                     | (empty)               |
 | GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                                                                                     | (empty)               |
 | MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)               |
-| REACT_APP_MUI_X_LICENSE      | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
+| MUI_X_LICENSE      | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
 
 #### For remote servers
 
@@ -120,16 +120,6 @@ docker-compose up -d
 Now, go to http://localhost:3000 or your custom `PUBLIC_FRONT_URL`
 
 Celebrate on how easy this was
-
-#### Subsequent runs
-
-After changing any env variable starting with `REACT_APP_` or `PUBLIC_API_URL` or `INVITATION_VIA_EMAIL` you should run
-
-```sh
-docker compose down
-docker compose up -d --no-deps --build frontend
-docker compose up -d
-```
 
 ## Getting help
 
