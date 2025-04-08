@@ -12,29 +12,29 @@ export const firebaseConfig = {
 export const googleMapsConfig = {
   apiKey:
     process.env.REACT_APP_GOOGLE_KEY ||
-    window.__RUNTIME_CONFIG__.GOOGLE_KEY?.trim()
+    window.__RUNTIME_CONFIG__?.GOOGLE_KEY?.trim()
 };
 const rawApiUrl =
-  process.env.REACT_APP_API_URL || window.__RUNTIME_CONFIG__.API_URL;
+  process.env.REACT_APP_API_URL || window.__RUNTIME_CONFIG__?.API_URL;
 export const apiUrl = rawApiUrl
   ? rawApiUrl.endsWith('/')
     ? rawApiUrl
     : rawApiUrl + '/'
   : 'http://localhost:8080/';
 // TODO
-// export const zendeskKey =  window.__RUNTIME_CONFIG__.ZENDESK_KEY ?? '';
+// export const zendeskKey =  window.__RUNTIME_CONFIG__?.ZENDESK_KEY ?? '';
 export const muiLicense =
   (process.env.REACT_APP_MUI_X_LICENSE ||
-    window.__RUNTIME_CONFIG__.MUI_X_LICENSE?.trim()) ??
+    window.__RUNTIME_CONFIG__?.MUI_X_LICENSE?.trim()) ??
   '';
 
 export const zendeskKey = '';
 
 export const googleTrackingId =
   process.env.REACT_APP_GOOGLE_TRACKING_ID ||
-  window.__RUNTIME_CONFIG__.GOOGLE_TRACKING_ID?.trim();
+  window.__RUNTIME_CONFIG__?.GOOGLE_TRACKING_ID?.trim();
 export const isEmailVerificationEnabled: boolean =
   (process.env.REACT_APP_INVITATION_VIA_EMAIL
     ? process.env.REACT_APP_INVITATION_VIA_EMAIL
-    : window.__RUNTIME_CONFIG__.INVITATION_VIA_EMAIL) === 'true';
+    : window.__RUNTIME_CONFIG__?.INVITATION_VIA_EMAIL) === 'true';
 export const IS_LOCALHOST = apiUrl.includes('localhost:');
