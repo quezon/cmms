@@ -2,7 +2,7 @@ FROM node:21.6.1 AS build
 
 WORKDIR /usr/src/app
 COPY package*.json ./
-RUN npm ci
+RUN NODE_OPTIONS="--max_old_space_size=4096" npm install --legacy-peer-deps
 COPY . .
 RUN npm run build
 
