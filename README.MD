@@ -70,16 +70,9 @@ We'd love to have **new contributors**, so feel free to join us!
 
 ## Self Host / Run locally
 
-#### Clone the Repository
-
-```sh
-git clone https://github.com/grashjs/cmms.git
-cd cmms
-```
-
 ### Set environment variables
 
-Rename to .env and configure the environment variables in this file [.env.example](.env.example)
+Rename to `.env` and configure the environment variables in this file [.env.example](.env.example)
 At the moment all variables are optional. Do not delete the .env file
 
 | Name                         | Required | Description                                                                                                                                                                                                         | Default Value         |
@@ -112,6 +105,7 @@ At the moment all variables are optional. Do not delete the .env file
   8080, and 3000. Same for `PUBLIC_MINIO_ENDPOINT` port 9000 if you use Minio.
 
 ### Run
+Download this [docker-compose.yml file](./docker-compose.yml) and run 
 
 ```sh
 docker-compose up -d
