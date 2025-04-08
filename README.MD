@@ -116,7 +116,7 @@ Go to http://localhost:3000 or your custom `PUBLIC_FRONT_URL`
 
 Celebrate on how easy this was
 ### Mobile app
-You can use the [live Android app](https://play.google.com/store/apps/details?id=com.atlas.cmms) and configure it with your custom server url
+You can use the [live Android app](https://play.google.com/store/apps/details?id=com.atlas.cmms) and configure it with your custom backend server url
 ## Getting help
 
 ### Docs
