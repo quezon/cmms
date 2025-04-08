@@ -72,7 +72,7 @@ We'd love to have **new contributors**, so feel free to join us!
 
 ### Set environment variables
 
-Rename to `.env` and configure the environment variables in this file [.env.example](.env.example)
+Download this file [.env.example](.env.example), rename it to `.env` and configure the environment variables inside it.
 At the moment all variables are optional. Do not delete the .env file
 
 | Name                         | Required | Description                                                                                                                                                                                                         | Default Value         |
@@ -105,13 +105,14 @@ At the moment all variables are optional. Do not delete the .env file
   8080, and 3000. Same for `PUBLIC_MINIO_ENDPOINT` port 9000 if you use Minio.
 
 ### Run
-Download this [docker-compose.yml file](./docker-compose.yml) and run 
+Download this [docker-compose.yml file](./docker-compose.yml). At this point you should have 2 files `.env` and `docker-compose.yml`.
+Now run
 
 ```sh
 docker-compose up -d
 ```
 
-Now, go to http://localhost:3000 or your custom `PUBLIC_FRONT_URL`
+Go to http://localhost:3000 or your custom `PUBLIC_FRONT_URL`
 
 Celebrate on how easy this was
 ### Mobile app
