@@ -3,6 +3,7 @@ package com.grash.controller;
 
 import com.grash.advancedsearch.FilterField;
 import com.grash.advancedsearch.SearchCriteria;
+import com.grash.dto.FilePatchDTO;
 import com.grash.dto.FileShowDTO;
 import com.grash.dto.SuccessResponse;
 import com.grash.exception.CustomException;
@@ -72,7 +73,8 @@ public class FileController {
 
     @PostMapping("/search")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Page<File>> search(@RequestBody SearchCriteria searchCriteria, HttpServletRequest req) {
+    public ResponseEntity<Page<FileShowDTO>> search(@RequestBody SearchCriteria searchCriteria,
+                                                    HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
             if (user.getRole().getViewPermissions().contains(PermissionEntity.FILES)) {
@@ -89,7 +91,7 @@ public class FileController {
                         .alternatives(new ArrayList<>()).build());
             } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
         }
-        return ResponseEntity.ok(fileService.findBySearchCriteria(searchCriteria));
+        return ResponseEntity.ok(fileService.findBySearchCriteria(searchCriteria).map(fileMapper::toShowDto));
     }
 
     @GetMapping("/{id}")
@@ -98,14 +100,14 @@ public class FileController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "File not found")})
-    public File getById(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
+    public FileShowDTO getById(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<File> optionalFile = fileService.findById(id);
         if (optionalFile.isPresent()) {
             File savedFile = optionalFile.get();
             if (user.getRole().getViewPermissions().contains(PermissionEntity.FILES) &&
                     (user.getRole().getViewOtherPermissions().contains(PermissionEntity.FILES) || savedFile.getCreatedBy().equals(user.getId()))) {
-                return savedFile;
+                return fileMapper.toShowDto(savedFile);
             } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
     }
@@ -116,15 +118,17 @@ public class FileController {
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "File not found")})
-    public File patch(@ApiParam("File") @Valid @RequestBody File file, @ApiParam("id") @PathVariable("id") Long id,
-                      HttpServletRequest req) {
+    public FileShowDTO patch(@ApiParam("File") @Valid @RequestBody FilePatchDTO file,
+                             @ApiParam("id") @PathVariable("id") Long id,
+                             HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<File> optionalFile = fileService.findById(id);
 
         if (optionalFile.isPresent()) {
             File savedFile = optionalFile.get();
             if (user.getRole().getEditOtherPermissions().contains(PermissionEntity.FILES) || savedFile.getCreatedBy().equals(user.getId())) {
-                return fileService.update(file);
+                savedFile.setName(file.getName());
+                return fileMapper.toShowDto(fileService.update(savedFile));
             } else throw new CustomException("Forbidden", HttpStatus.FORBIDDEN);
         } else throw new CustomException("File not found", HttpStatus.NOT_FOUND);
     }
