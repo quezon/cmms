@@ -52,6 +52,7 @@ services:
         GOOGLE_TRACKING_ID: ${GOOGLE_TRACKING_ID:- }
         MUI_X_LICENSE: ${MUI_X_LICENSE:- }
         INVITATION_VIA_EMAIL: ${INVITATION_VIA_EMAIL:-false}
+        CLOUD_VERSION: false
         NODE_ENV: production
     ports:
       - "3000:3000"
