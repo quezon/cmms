@@ -33,7 +33,9 @@ public class SubscriptionService {
     public Subscription update(Long id, SubscriptionPatchDTO subscriptionPatchDTO) {
         if (subscriptionRepository.existsById(id)) {
             Subscription savedSubscription = subscriptionRepository.findById(id).get();
-            Subscription updatedSubscription = subscriptionRepository.saveAndFlush(subscriptionMapper.updateSubscription(savedSubscription, subscriptionPatchDTO));
+            Subscription updatedSubscription =
+                    subscriptionRepository.saveAndFlush(subscriptionMapper.updateSubscription(savedSubscription,
+                            subscriptionPatchDTO));
             em.refresh(updatedSubscription);
             return updatedSubscription;
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
@@ -56,7 +58,8 @@ public class SubscriptionService {
     }
 
     public void scheduleEnd(Subscription subscription) {
-        boolean shouldSchedule = !subscription.getSubscriptionPlan().getCode().equals("FREE") && subscription.getEndsOn() != null && subscription.getEndsOn().after(new Date());
+        boolean shouldSchedule =
+                !subscription.getSubscriptionPlan().getCode().equals("FREE") && subscription.getEndsOn() != null;
         if (shouldSchedule) {
             Timer timer = new Timer();
             TimerTask timerTask = new TimerTask() {
