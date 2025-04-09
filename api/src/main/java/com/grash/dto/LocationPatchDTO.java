@@ -4,6 +4,7 @@ import com.grash.model.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -15,9 +16,9 @@ public class LocationPatchDTO {
 
     private String address;
 
-    private Long longitude;
+    private Double longitude;
 
-    private Long latitude;
+    private Double latitude;
 
     private Location parentLocation;
 

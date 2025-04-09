@@ -118,4 +118,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2025_04_06_work_order_aud_set_null.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2025_04_10_1744226393_update_location.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -27,9 +27,9 @@ public class Location extends CompanyAudit {
 
     private String address;
 
-    private Long longitude;
+    private Double longitude;
 
-    private Long latitude;
+    private Double latitude;
 
     private boolean hasChildren;
 

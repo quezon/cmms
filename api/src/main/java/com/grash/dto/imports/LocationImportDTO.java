@@ -14,9 +14,9 @@ public class LocationImportDTO {
 
     private String address;
 
-    private Long longitude;
+    private Double longitude;
 
-    private Long latitude;
+    private Double latitude;
 
     private String parentLocationName;
 
@@ -25,7 +25,7 @@ public class LocationImportDTO {
     private Collection<String> teamsNames;
 
     private Collection<String> customersNames;
-    
+
     private Collection<String> vendorsNames;
 
 }
