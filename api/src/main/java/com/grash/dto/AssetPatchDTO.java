@@ -59,4 +59,6 @@ public class AssetPatchDTO {
 
     private String manufacturer;
 
+    private String model;
+
 }
