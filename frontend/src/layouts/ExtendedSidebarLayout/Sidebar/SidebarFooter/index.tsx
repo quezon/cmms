@@ -15,6 +15,9 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import useAuth from 'src/hooks/useAuth';
 import UpgradeTwoToneIcon from '@mui/icons-material/UpgradeTwoTone';
 import QuestionMarkTwoToneIcon from '@mui/icons-material/QuestionMarkTwoTone';
+import { isCloudVersion } from '../../../../config';
+import { useContext } from 'react';
+import { CompanySettingsContext } from '../../../../contexts/CompanySettingsContext';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -35,6 +38,7 @@ function SidebarFooter() {
   const { t }: { t: any } = useTranslation();
   const theme = useTheme();
   const { logout, user } = useAuth();
+  const { requestSubscriptionChange } = useContext(CompanySettingsContext);
   const navigate = useNavigate();
 
   const handleLogout = async (): Promise<void> => {
@@ -55,7 +59,7 @@ function SidebarFooter() {
       alignItems="center"
       justifyContent="center"
     >
-      {user.ownsCompany && (
+      {isCloudVersion && user.ownsCompany && (
         <LightTooltip placement="top" arrow title={t('upgrade_now')}>
           <IconButton
             sx={{
@@ -68,13 +72,9 @@ function SidebarFooter() {
                 color: `${theme.colors.alpha.trueWhite[100]}`
               }
             }}
-            onClick={() =>
-              window.open(
-                'mailto:contact@atlas-cmms.com?subject=Subscription%20change%20request'
-              )
-            }
-            // to="/app/subscription/plans"
-            // component={RouterLink}
+            // onClick={requestSubscriptionChange}
+            to="/app/subscription/plans"
+            component={RouterLink}
           >
             <UpgradeTwoToneIcon fontSize="small" />
           </IconButton>

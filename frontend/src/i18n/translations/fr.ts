@@ -1538,7 +1538,9 @@ const frJSON = {
   asset_status: "État de l'équipement",
   ui_configuration: "Configuration de l'interface",
   password_leave_empty_if_you_dont_want_to_change:
-    'Mot de passe - laisser vide si vous ne voulez pas le changer'
+    'Mot de passe - laisser vide si vous ne voulez pas le changer',
+  upgrade_request_success:
+    'Demande de mise à niveau reçue ! Nous vous contacterons bientôt avec les détails de paiement'
 };
 
 export default frJSON;

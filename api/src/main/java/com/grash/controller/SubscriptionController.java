@@ -106,9 +106,9 @@ public class SubscriptionController {
                 emailService2.sendHtmlMessage(recipients, "New Atlas subscription change request",
                         user.getFirstName() + " " + user.getLastName() + " just requested a subscription change for " +
                                 "company " + user.getCompany().getName() + "\nUsers count: " + subscriptionChangeRequest.getUsersCount() + "\nCode: " + subscriptionChangeRequest.getCode() + "\nPeriod: " + (subscriptionChangeRequest.getMonthly() ? "Monthly" : "Annually") + "\nEmail: " + user.getEmail() + "\nPhone: " + user.getPhone());
-            } catch (MessagingException ignored) {
+            } catch (MessagingException exception) {
+                throw new CustomException(exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
-
             return new SuccessResponse(true, "Success");
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }

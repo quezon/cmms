@@ -9,6 +9,7 @@ import CompanyPlan from './CompanyPlan';
 import { TitleContext } from '../../../contexts/TitleContext';
 import { useTranslation } from 'react-i18next';
 import useAuth from '../../../hooks/useAuth';
+import { isCloudVersion } from '../../../config';
 
 function CompanyProfile() {
   const { t }: { t: any } = useTranslation();
@@ -47,11 +48,11 @@ function CompanyProfile() {
           <Grid item xs={12}>
             <CompanyDetails company={company} />
           </Grid>
-          {/*{user.ownsCompany && (*/}
-          {/*  <Grid item xs={12}>*/}
-          {/*    <CompanyPlan plan={company.subscription.subscriptionPlan} />*/}
-          {/*  </Grid>*/}
-          {/*)}*/}
+          {isCloudVersion && user.ownsCompany && (
+            <Grid item xs={12}>
+              <CompanyPlan plan={company.subscription.subscriptionPlan} />
+            </Grid>
+          )}
         </Grid>
       </Box>
     </>

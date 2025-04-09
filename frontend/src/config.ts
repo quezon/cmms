@@ -37,4 +37,9 @@ export const isEmailVerificationEnabled: boolean =
   (process.env.REACT_APP_INVITATION_VIA_EMAIL
     ? process.env.REACT_APP_INVITATION_VIA_EMAIL
     : window.__RUNTIME_CONFIG__?.INVITATION_VIA_EMAIL) === 'true';
+
+export const isCloudVersion: boolean =
+  (process.env.REACT_APP_CLOUD_VERSION
+    ? process.env.REACT_APP_CLOUD_VERSION
+    : window.__RUNTIME_CONFIG__?.CLOUD_VERSION) === 'true';
 export const IS_LOCALHOST = apiUrl.includes('localhost:');

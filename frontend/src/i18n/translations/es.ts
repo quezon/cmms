@@ -1473,7 +1473,9 @@ const esJSON = {
   asset_status: 'Estado del activo',
   ui_configuration: 'Configuración de la interfaz',
   password_leave_empty_if_you_dont_want_to_change:
-    'Contraseña: déjalo vacío si no quieres cambiarla'
+    'Contraseña: déjalo vacío si no quieres cambiarla',
+  upgrade_request_success:
+    '¡Solicitud de actualización recibida! Nos pondremos en contacto contigo pronto con los detalles de pago'
 };
 
 export default esJSON;

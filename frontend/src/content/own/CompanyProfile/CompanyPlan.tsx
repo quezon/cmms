@@ -11,10 +11,12 @@ import {
 import { useTranslation } from 'react-i18next';
 import { SubscriptionPlan } from '../../../models/owns/subscriptionPlan';
 import CardMembershipTwoToneIcon from '@mui/icons-material/CardMembershipTwoTone';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import i18n from 'i18next';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import mailToLink from 'mailto-link';
+import { CompanySettingsContext } from '../../../contexts/CompanySettingsContext';
 
 interface CompanyPlanProps {
   plan: SubscriptionPlan;
@@ -22,7 +24,8 @@ interface CompanyPlanProps {
 
 function CompanyPlan(props: CompanyPlanProps) {
   const { plan } = props;
-  const { company, cancelSubscription, resumeSubscription } = useAuth();
+  const { company, cancelSubscription, resumeSubscription, user } = useAuth();
+  const { requestSubscriptionChange } = useContext(CompanySettingsContext);
   const navigate = useNavigate();
   const theme = useTheme();
   const [loadingCancel, setLoadingCancel] = useState<boolean>(false);
@@ -90,16 +93,13 @@ function CompanyPlan(props: CompanyPlanProps) {
           <Button
             sx={{ mr: 2 }}
             variant="contained"
-            onClick={() =>
-              window.open(
-                'mailto:contact@atlas-cmms.com?subject=Subscription%20change%20request'
-              )
-            }
+            to="/app/subscription/plans"
+            component={RouterLink}
           >
             {t('upgrade_now')}
           </Button>
           <Button
-            onClick={() => navigate('/billing')}
+            onClick={() => navigate('/pricing')}
             variant="contained"
             color="secondary"
             sx={{ mr: 2 }}

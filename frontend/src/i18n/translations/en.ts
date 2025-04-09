@@ -1435,7 +1435,9 @@ const locale = {
   asset_status: 'Asset status',
   ui_configuration: 'Ui configuration',
   password_leave_empty_if_you_dont_want_to_change:
-    "Password - leave empty if you don't want to change it"
+    "Password - leave empty if you don't want to change it",
+  upgrade_request_success:
+    "Upgrade request received! We'll contact you soon with payment details"
 };
 
 export default locale;

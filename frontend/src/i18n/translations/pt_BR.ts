@@ -1482,7 +1482,9 @@ const ptBRJSON = {
   asset_status: 'Status do ativo',
   ui_configuration: 'Configuração da interface',
   password_leave_empty_if_you_dont_want_to_change:
-    'Senha - deixe em branco se não quiser alterá-la'
+    'Senha - deixe em branco se não quiser alterá-la',
+  upgrade_request_success:
+    'Solicitação de upgrade recebida! Entraremos em contato em breve com os detalhes de pagamento'
 };
 
 export default ptBRJSON;

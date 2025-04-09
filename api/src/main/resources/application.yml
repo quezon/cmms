@@ -101,3 +101,4 @@ storage:
     json-path: ${GCP_JSON_PATH:}
 
 allowed-organization-admins: ${ALLOWED_ORGANIZATION_ADMINS:}
+cloud-version: ${CLOUD_VERSION:false}

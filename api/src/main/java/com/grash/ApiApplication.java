@@ -72,14 +72,14 @@ public class ApiApplication implements CommandLineRunner {
                             PlanFeatures.METER,
                             PlanFeatures.ADDITIONAL_COST,
                             PlanFeatures.ADDITIONAL_TIME)))
-                    .monthlyCostPerUser(20)
-                    .yearlyCostPerUser(200).build());
+                    .monthlyCostPerUser(10)
+                    .yearlyCostPerUser(100).build());
         }
         if (!subscriptionPlanService.existByCode("PROFESSIONAL")) {
             subscriptionPlanService.create(SubscriptionPlan.builder()
                     .code("PROFESSIONAL")
                     .name("Professional")
-                    .monthlyCostPerUser(40)
+                    .monthlyCostPerUser(15)
                     .features(new HashSet<>(Arrays.asList(PlanFeatures.PREVENTIVE_MAINTENANCE,
                             PlanFeatures.CHECKLIST,
                             PlanFeatures.FILE,
@@ -92,7 +92,7 @@ public class ApiApplication implements CommandLineRunner {
                             PlanFeatures.ANALYTICS,
                             PlanFeatures.IMPORT_CSV
                     )))
-                    .yearlyCostPerUser(400).build());
+                    .yearlyCostPerUser(150).build());
         }
         if (!subscriptionPlanService.existByCode("BUSINESS")) {
             subscriptionPlanService.create(SubscriptionPlan.builder()

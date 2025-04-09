@@ -8,6 +8,7 @@ import { IField } from '../content/own/type';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { CustomSnackBarContext } from './CustomSnackBarContext';
+import mailToLink from 'mailto-link';
 
 type CompanySettingsContext = {
   getFormattedDate: (dateString: string, hideTime?: boolean) => string;
@@ -22,6 +23,7 @@ type CompanySettingsContext = {
     defaultShape: { [key: string]: any }
   ) => [Array<IField>, { [key: string]: any }];
   getFormattedCurrency: (amount: number | string) => string;
+  requestSubscriptionChange: () => void;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
@@ -30,7 +32,8 @@ export const CompanySettingsContext = createContext<CompanySettingsContext>(
 );
 
 export const CompanySettingsProvider: FC = ({ children }) => {
-  const { companySettings, getFilteredFields, isAuthenticated } = useAuth();
+  const { companySettings, getFilteredFields, isAuthenticated, company, user } =
+    useAuth();
   const dispatch = useDispatch();
   const { generalPreferences } = companySettings ?? {
     dateFormat: 'DDMMYY',
@@ -177,6 +180,39 @@ export const CompanySettingsProvider: FC = ({ children }) => {
     });
     return [fields, shape];
   };
+  const requestSubscriptionChange = () => {
+    window.open(
+      mailToLink({
+        to: 'contact@atlas-cmms.com',
+        subject: 'Subscription change request',
+        body: `Dear Atlas CMMS Team,
+
+I would like to request an upgrade to my current Atlas CMMS plan.
+
+Account Information:
+- Company Name: ${company.name}
+- Current Plan: ${company.subscription.subscriptionPlan.name}
+- Account Email: ${user.email}
+
+Upgrade Details:
+- Desired Plan: [Basic/Professional/Enterprise]
+- Number of Users Needed: [Number]
+- Preferred Billing Cycle: [Monthly/Annual]
+- Preferred Payment Method: [Credit Card/Bank Transfer]
+
+Additional Comments:
+[Add any specific requirements or questions here]
+
+Thank you for your assistance.
+
+Best regards,
+${user.firstName} ${user.lastName}
+[Your Position]
+${company.name}
+`
+      })
+    );
+  };
   useEffect(() => {
     if (isAuthenticated) dispatch(getUsersMini());
   }, [isAuthenticated]);
@@ -187,7 +223,8 @@ export const CompanySettingsProvider: FC = ({ children }) => {
         uploadFiles,
         getUserNameById,
         getWOFieldsAndShapes,
-        getFormattedCurrency
+        getFormattedCurrency,
+        requestSubscriptionChange
       }}
     >
       {children}

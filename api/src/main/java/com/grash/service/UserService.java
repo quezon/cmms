@@ -68,7 +68,8 @@ public class UserService {
     private boolean enableInvitationViaEmail;
     @Value("${mail.enable}")
     private boolean enableMails;
-
+    @Value("${cloud-version}")
+    private boolean cloudVersion;
     @Value("${allowed-organization-admins}")
     private String[] allowedOrganizationAdmins;
 
@@ -114,10 +115,11 @@ public class UserService {
         user.setUsername(utils.generateStringId());
         if (user.getRole() == null) {
             //create company with default roles
-            Subscription subscription = Subscription.builder().usersCount(50).monthly(false)
-                    .startsOn(new Date())
-//                        .endsOn(Helper.incrementDays(new Date(), 15))
-                    .subscriptionPlan(subscriptionPlanService.findByCode("BUSINESS").get()).build();
+            Subscription subscription =
+                    Subscription.builder().usersCount(cloudVersion ? 10 : 100).monthly(cloudVersion)
+                            .startsOn(new Date())
+                            .endsOn(cloudVersion ? Helper.incrementDays(new Date(), 15) : null)
+                            .subscriptionPlan(subscriptionPlanService.findByCode("BUSINESS").get()).build();
             subscriptionService.create(subscription);
             Company company = new Company(userReq.getCompanyName(), userReq.getEmployeesCount(), subscription);
             company.getCompanySettings().getGeneralPreferences().setCurrency(currencyService.findByCode("$").get());

@@ -4,7 +4,8 @@ import { randomInt } from '../../../../utils/generators';
 import {
   Box,
   Button,
-  Card, CircularProgress,
+  Card,
+  CircularProgress,
   FormControlLabel,
   Grid,
   Link,
@@ -114,7 +115,7 @@ function SubscriptionPlans() {
         payload
       );
       if (success) {
-        showSnackBar(t('operation_success'), 'success');
+        showSnackBar(t('upgrade_request_success'), 'success');
         return;
       }
     } catch (err) {
@@ -186,8 +187,8 @@ function SubscriptionPlans() {
     );
     return selectedPlanData
       ? selectedPlanData[
-      period == 'monthly' ? 'monthlyCostPerUser' : 'yearlyCostPerUser'
-      ] * usersCount
+          period == 'monthly' ? 'monthlyCostPerUser' : 'yearlyCostPerUser'
+        ] * usersCount
       : 0;
   };
 
@@ -196,7 +197,7 @@ function SubscriptionPlans() {
     navigate('/app/work-orders');
   };
   const onSubcriptionPatchFailure = () => {
-    showSnackBar(t('The Subscription couldn\'t be changed'), 'error');
+    showSnackBar(t("The Subscription couldn't be changed"), 'error');
   };
 
   if (user.ownsCompany)

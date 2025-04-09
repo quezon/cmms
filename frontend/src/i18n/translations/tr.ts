@@ -1470,7 +1470,9 @@ const trJSON = {
   asset_status: 'Varlık durumu',
   ui_configuration: 'UI Yapılandırması',
   password_leave_empty_if_you_dont_want_to_change:
-    'Şifre - değiştirmek istemiyorsanız boş bırakın'
+    'Şifre - değiştirmek istemiyorsanız boş bırakın',
+  upgrade_request_success:
+    'Yükseltme talebiniz alındı! Ödeme detaylarıyla yakında sizinle iletişime geçeceğiz'
 };
 
 export default trJSON;

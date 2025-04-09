@@ -1459,7 +1459,9 @@ const plJSON = {
   asset_status: 'Status zasobu',
   ui_configuration: 'Konfiguracja interfejsu',
   password_leave_empty_if_you_dont_want_to_change:
-    'Hasło – pozostaw puste, jeśli nie chcesz go zmieniać'
+    'Hasło – pozostaw puste, jeśli nie chcesz go zmieniać',
+  upgrade_request_success:
+    'Otrzymano prośbę o uaktualnienie! Wkrótce skontaktujemy się z Tobą w sprawie szczegółów płatności'
 };
 
 export default plJSON;
