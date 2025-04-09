@@ -346,44 +346,54 @@ function SubscriptionPlans() {
                     name="plans"
                   >
                     <Grid container spacing={1}>
-                      {subscriptionPlans.map((plan) => (
-                        <Grid item xs={12} md={4} key={plan.id}>
-                          <FormControlLabel
-                            sx={{
-                              border: 2,
-                              borderColor:
-                                plan.code === selectedPlan
-                                  ? theme.colors.primary.main
-                                  : theme.colors.alpha.black[30],
-                              p: 2,
-                              backgroundColor:
-                                plan.code === selectedPlan
-                                  ? theme.colors.primary.lighter
-                                  : null
-                            }}
-                            value={plan.code}
-                            control={<Radio />}
-                            label={
-                              <Box>
-                                <Typography variant="h6" fontWeight="bold">
-                                  {plan.name}
-                                </Typography>
-                                <Typography variant="subtitle1">
-                                  <b>
-                                    {period == 'monthly'
-                                      ? plan.monthlyCostPerUser
-                                      : plan.yearlyCostPerUser}{' '}
-                                    USD
-                                  </b>{' '}
-                                  {period == 'monthly'
-                                    ? t('per_user_month')
-                                    : t('per_user_year')}
-                                </Typography>
-                              </Box>
-                            }
-                          />
-                        </Grid>
-                      ))}
+                      {[...subscriptionPlans]
+                        .sort(
+                          (a, b) => a.monthlyCostPerUser - b.monthlyCostPerUser
+                        )
+                        .map((plan) => (
+                          <Grid item xs={12} md={4} key={plan.id}>
+                            <FormControlLabel
+                              sx={{
+                                border: 2,
+                                borderColor:
+                                  plan.code === selectedPlan
+                                    ? theme.colors.primary.main
+                                    : theme.colors.alpha.black[30],
+                                p: 2,
+                                backgroundColor:
+                                  plan.code === selectedPlan
+                                    ? theme.colors.primary.lighter
+                                    : null
+                              }}
+                              value={plan.code}
+                              control={<Radio />}
+                              label={
+                                <Box>
+                                  <Typography variant="h6" fontWeight="bold">
+                                    {plan.name}
+                                  </Typography>
+                                  {plan.code === 'BUSINESS' ? (
+                                    <Typography variant="subtitle1">
+                                      Custom pricing
+                                    </Typography>
+                                  ) : (
+                                    <Typography variant="subtitle1">
+                                      <b>
+                                        {period == 'monthly'
+                                          ? plan.monthlyCostPerUser
+                                          : plan.yearlyCostPerUser}{' '}
+                                        USD
+                                      </b>{' '}
+                                      {period == 'monthly'
+                                        ? t('per_user_month')
+                                        : t('per_user_year')}
+                                    </Typography>
+                                  )}
+                                </Box>
+                              }
+                            />
+                          </Grid>
+                        ))}
                     </Grid>
                   </RadioGroup>
                 </Box>
@@ -401,12 +411,14 @@ function SubscriptionPlans() {
                     my: 3
                   }}
                 >
-                  <Typography sx={{ my: 2 }} variant="h4" gutterBottom>
-                    {t('you_will_be_charged')} <b>{`$ ${getCost()}`}</b>{' '}
-                    {period == 'monthly'
-                      ? t('monthly_adverb')
-                      : t('yearly_adverb')}
-                  </Typography>
+                  {selectedPlanObject?.code !== 'BUSINESS' && (
+                    <Typography sx={{ my: 2 }} variant="h4" gutterBottom>
+                      {t('you_will_be_charged')} <b>{`$ ${getCost()}`}</b>{' '}
+                      {period == 'monthly'
+                        ? t('monthly_adverb')
+                        : t('yearly_adverb')}
+                    </Typography>
+                  )}
                   <Button
                     onClick={onUpgradeRequest}
                     size="large"
