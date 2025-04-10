@@ -4,12 +4,13 @@ on:
   push:
     branches:
       - main
+    tags:
+      - 'v*'
 
 jobs:
   build-and-push-backend:
     runs-on: ubuntu-latest
     env:
-      REGISTRY: docker.io
       BACKEND_IMAGE: intelloop/atlas-cmms-backend
     steps:
       - name: Checkout code
@@ -24,18 +25,28 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Determine Docker tag
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+          else
+            TAG_NAME="latest"
+          fi
+          echo "DOCKER_TAG=$TAG_NAME" >> $GITHUB_OUTPUT
+
       - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
           context: ./api
           push: true
           platforms: linux/amd64,linux/arm64
-          tags: ${{ env.BACKEND_IMAGE }}:latest
+          tags: |
+            ${{ env.BACKEND_IMAGE }}:${{ steps.vars.outputs.DOCKER_TAG }}
 
   build-and-push-frontend:
     runs-on: ubuntu-latest
     env:
-      REGISTRY: docker.io
       FRONTEND_IMAGE: intelloop/atlas-cmms-frontend
     steps:
       - name: Checkout code
@@ -50,10 +61,21 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: Determine Docker tag
+        id: vars
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+          else
+            TAG_NAME="latest"
+          fi
+          echo "DOCKER_TAG=$TAG_NAME" >> $GITHUB_OUTPUT
+
       - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
-          platforms: linux/amd64,linux/arm64
           push: true
-          tags: ${{ env.FRONTEND_IMAGE }}:latest
+          platforms: linux/amd64,linux/arm64
+          tags: |
+            ${{ env.FRONTEND_IMAGE }}:${{ steps.vars.outputs.DOCKER_TAG }}
