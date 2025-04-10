@@ -186,18 +186,14 @@ export default function WorkOrderFilters({
       | { label: string; value: string }
       | { label: string; value: number }[]
       | boolean
+      | string
       | [string, string];
   } => {
     const typeValue = filterFields.find(
       (filterField) => filterField.field === 'parentPreventiveMaintenance'
     );
     return {
-      type: typeValue
-        ? {
-            label: getTypeLabelAndValue(typeValue.operation).label,
-            value: getTypeLabelAndValue(typeValue.operation).value
-          }
-        : { label: t('ALL'), value: 'ALL' },
+      type: typeValue ? getTypeLabelAndValue(typeValue.operation).value : 'ALL',
       archived: filterFields.find(
         (filterField) => filterField.field === 'archived'
       ).value,
