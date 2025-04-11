@@ -36,7 +36,7 @@ jobs:
           echo "DOCKER_TAG=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Build and push backend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./api
           push: true
@@ -72,7 +72,7 @@ jobs:
           echo "DOCKER_TAG=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Build and push frontend image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./frontend
           push: true
