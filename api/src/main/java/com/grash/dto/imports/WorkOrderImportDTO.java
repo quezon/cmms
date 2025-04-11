@@ -17,7 +17,7 @@ public class WorkOrderImportDTO {
     private String priority;
     private String description;
     private Double dueDate;
-    private int estimatedDuration;
+    private double estimatedDuration;
     private String requiredSignature;
     private String category;
 

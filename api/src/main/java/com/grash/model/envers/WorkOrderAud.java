@@ -30,7 +30,7 @@ public class WorkOrderAud implements Serializable {
     private Integer priority;
 
     @Column(name = "estimated_duration")
-    private Integer estimatedDuration;
+    private Double estimatedDuration;
 
     @Column(name = "estimated_start_date")
     private Date estimatedStartDate;
@@ -198,10 +198,12 @@ public class WorkOrderAud implements Serializable {
             summary.append("Team: ").append(team == null ? "N/A" : team.getName()).append("\n");
         }
         if (primaryUserIdMod != null && primaryUserIdMod) {
-            summary.append("Primary User: ").append(primaryUser == null ? "N/A" : primaryUser.getFullName()).append("\n");
+            summary.append("Primary User: ").append(primaryUser == null ? "N/A" : primaryUser.getFullName()).append(
+                    "\n");
         }
         if (completedByIdMod != null && completedByIdMod) {
-            summary.append("Completed By: ").append(completedBy == null ? "N/A" : completedBy.getFullName()).append("\n");
+            summary.append("Completed By: ").append(completedBy == null ? "N/A" : completedBy.getFullName()).append(
+                    "\n");
         }
         if (completedOnMod != null && completedOnMod) {
             summary.append("Completed On: ").append(completedOn).append("\n");
@@ -222,7 +224,8 @@ public class WorkOrderAud implements Serializable {
             summary.append("Feedback: ").append(feedback).append("\n");
         }
         if (parentPreventiveMaintenanceIdMod != null && parentPreventiveMaintenanceIdMod) {
-            summary.append("Parent Preventive Maintenance: ").append(parentPreventiveMaintenance == null ? "N/A" : parentPreventiveMaintenance.getName()).append("\n");
+            summary.append("Parent Preventive Maintenance: ").append(parentPreventiveMaintenance == null ? "N/A" :
+                    parentPreventiveMaintenance.getName()).append("\n");
         }
         if (assetIdMod != null && assetIdMod) {
             summary.append("Asset: ").append(asset == null ? "N/A" : asset.getName()).append("\n");

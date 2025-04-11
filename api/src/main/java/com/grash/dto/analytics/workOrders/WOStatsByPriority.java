@@ -21,6 +21,6 @@ public class WOStatsByPriority {
     @AllArgsConstructor
     public static class BasicStats {
         private int count;
-        private int estimatedHours;
+        private double estimatedHours;
     }
 }

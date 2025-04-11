@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class WOHours {
-    private int estimated;
+    private double estimated;
     private int actual;
 }

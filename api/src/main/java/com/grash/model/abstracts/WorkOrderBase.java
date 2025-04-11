@@ -26,7 +26,7 @@ public abstract class WorkOrderBase extends CompanyAudit {
 
     private Priority priority = Priority.NONE;
 
-    private int estimatedDuration;
+    private double estimatedDuration;
 
     private Date estimatedStartDate;
 
@@ -93,7 +93,7 @@ public abstract class WorkOrderBase extends CompanyAudit {
                 ArrayList::new));
     }
 
-    public void setEstimatedDuration(int estimatedDuration) {
+    public void setEstimatedDuration(double estimatedDuration) {
         if (estimatedDuration < 0)
             throw new CustomException("Estimated duration should not be negative", HttpStatus.NOT_ACCEPTABLE);
         this.estimatedDuration = estimatedDuration;

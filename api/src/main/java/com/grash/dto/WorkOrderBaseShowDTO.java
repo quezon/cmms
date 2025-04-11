@@ -15,7 +15,7 @@ public class WorkOrderBaseShowDTO extends AuditShowDTO {
 
     private Date dueDate;
     private Priority priority = Priority.NONE;
-    private int estimatedDuration;
+    private double estimatedDuration;
     private Date estimatedStartDate;
     private String description;
     private String title;
