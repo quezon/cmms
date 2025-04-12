@@ -3,6 +3,7 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: atlas_db
+    restart: unless-stopped
     environment:
       POSTGRES_DB: atlas
       POSTGRES_USER: rootUser
@@ -14,6 +15,7 @@ services:
   api:
     image: intelloop/atlas-cmms-backend
     container_name: atlas-cmms-backend
+    restart: unless-stopped
     depends_on:
       - postgres
       - minio
@@ -46,6 +48,7 @@ services:
   frontend:
     image: intelloop/atlas-cmms-frontend
     container_name: atlas-cmms-frontend
+    restart: unless-stopped
     environment:
         API_URL: ${PUBLIC_API_URL}
         GOOGLE_KEY: ${GOOGLE_KEY:- }
@@ -61,6 +64,7 @@ services:
   minio:
     image: minio/minio
     container_name: atlas_minio
+    restart: unless-stopped
     environment:
       MINIO_ROOT_USER: minio
       MINIO_ROOT_PASSWORD: minio123
