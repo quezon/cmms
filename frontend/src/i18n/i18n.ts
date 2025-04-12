@@ -3,6 +3,7 @@ import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 // import LanguageDetector from 'i18next-browser-languagedetector';
 import deJSON from './translations/de';
+import arJSON from './translations/ar';
 import locale from './translations/en';
 import esJSON from './translations/es';
 import frJSON from './translations/fr';
@@ -10,7 +11,7 @@ import trJSON from './translations/tr';
 import plJSON from './translations/pl';
 import ptBRJSON from './translations/pt_BR';
 import { FlagComponent } from 'country-flag-icons/react/1x1';
-import { BR, DE, ES, FR, PL, TR, US } from 'country-flag-icons/react/3x2';
+import { BR, DE, ES, FR, PL, TR, US, SA } from 'country-flag-icons/react/3x2';
 
 const resources = {
   de: { translation: deJSON },
@@ -21,7 +22,8 @@ const resources = {
   // ae: { translation: aeJSON },
   // cn: { translation: zhJSON },
   tr: { translation: trJSON },
-  pt_br: { translation: ptBRJSON }
+  pt_br: { translation: ptBRJSON },
+  ar: { translation: arJSON }
 };
 
 i18n
@@ -47,7 +49,8 @@ export type SupportedLanguage =
   | 'TR'
   | 'ES'
   | 'PT_BR'
-  | 'PL';
+  | 'PL'
+  | 'AR';
 
 export const supportedLanguages: {
   code: string;
@@ -60,6 +63,7 @@ export const supportedLanguages: {
   { code: 'de', label: 'German', Icon: DE },
   { code: 'tr', label: 'Turkish', Icon: TR },
   { code: 'pt_br', label: 'Portuguese (Brazil)', Icon: BR },
-  { code: 'pl', label: 'Polish', Icon: PL }
+  { code: 'pl', label: 'Polish', Icon: PL },
+  { code: 'ar', label: 'Arabic', Icon: SA }
 ];
 export default i18n;
