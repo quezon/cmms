@@ -32,7 +32,7 @@ function TermsOfService() {
           </Typography>
         </Box>
 
-        <Card sx={{ mx: 10, padding: 4 }}>
+        <Card sx={{ mx: { md: 10, xs: 1 }, padding: { xs: 2, md: 4 } }}>
           <Typography variant="subtitle1" sx={{ mb: 3 }}>
             <strong>Effective Date:</strong> April 10, 2025
           </Typography>
