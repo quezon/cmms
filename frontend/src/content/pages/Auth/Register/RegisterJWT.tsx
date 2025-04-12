@@ -1,20 +1,19 @@
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import {
+  Autocomplete,
+  Box,
   Button,
   Checkbox,
   CircularProgress,
   FormControlLabel,
   FormHelperText,
   Grid,
-  Link,
-  TextField,
-  Typography,
-  Stack,
-  Autocomplete,
-  InputAdornment,
   IconButton,
-  Box
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography
 } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import useAuth from 'src/hooks/useAuth';
@@ -26,9 +25,7 @@ import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContex
 import { useNavigate } from 'react-router-dom';
 import i18n from 'i18next';
 import countries from '../../../../i18n/countries';
-import { downloadPrivacyPolicy, downloadTos } from '../../../../slices/file';
 import { verify } from '../../../../utils/jwt';
-import { boolean } from 'yup';
 
 function RegisterJWT({
   email,
@@ -330,7 +327,7 @@ function RegisterJWT({
                       {t('i_accept')}{' '}
                       <Typography
                         color={'primary'}
-                        onClick={downloadTos}
+                        onClick={() => navigate('/terms-of-service')}
                         component="a"
                       >
                         {t('terms_conditions')}
@@ -345,7 +342,7 @@ function RegisterJWT({
               )}
               <Typography
                 color={'primary'}
-                onClick={downloadPrivacyPolicy}
+                onClick={() => navigate('/privacy-policy')}
                 sx={{ cursor: 'pointer' }}
               >
                 {t('privacy_policy')}

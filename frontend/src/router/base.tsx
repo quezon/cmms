@@ -14,6 +14,9 @@ const Loader = (Component) => (props) =>
 
 const Overview = Loader(lazy(() => import('../content/overview')));
 const Pricing = Loader(lazy(() => import('../content/pricing')));
+const TermsOfService = Loader(
+  lazy(() => import('../content/terms-of-service'))
+);
 
 // Status
 
@@ -30,7 +33,9 @@ const StatusMaintenance = Loader(
   lazy(() => import('../content/pages/Status/Maintenance'))
 );
 const PrivacyPolicy = Loader(lazy(() => import('../content/privacyPolicy')));
-const DeletionPolicy = Loader(lazy(() => import('../content/own/deletionPolicy')));
+const DeletionPolicy = Loader(
+  lazy(() => import('../content/own/deletionPolicy'))
+);
 
 const baseRoutes = [
   {
@@ -49,6 +54,7 @@ const baseRoutes = [
     path: 'deletion-policy',
     element: <DeletionPolicy />
   },
+  { path: 'terms-of-service', element: <TermsOfService /> },
   {
     path: 'overview',
     element: <Navigate to="/" replace />
