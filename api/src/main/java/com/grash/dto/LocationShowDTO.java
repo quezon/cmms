@@ -40,4 +40,6 @@ public class LocationShowDTO extends AuditShowDTO {
 
     private List<FileMiniDTO> files;
 
+    private String customId;
+
 }

@@ -299,7 +299,7 @@ export default function RequestsScreen({
                       >
                         <View style={{ marginRight: 10 }}>
                           <Tag
-                            text={`#${request.id}`}
+                            text={`#${request.customId}`}
                             color="white"
                             backgroundColor="#545454"
                           />

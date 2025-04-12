@@ -282,6 +282,12 @@ function Locations() {
         getFormattedDate(params.value)
     },
     {
+      field: 'customId',
+      headerName: t('id'),
+      description: t('id'),
+      width: 150
+    },
+    {
       field: 'actions',
       type: 'actions',
       headerName: t('actions'),

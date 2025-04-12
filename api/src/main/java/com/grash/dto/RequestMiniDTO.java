@@ -10,4 +10,6 @@ public class RequestMiniDTO extends AuditShowDTO {
     private String title;
 
     private Long id;
+
+    private String customId;
 }

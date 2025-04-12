@@ -24,6 +24,8 @@ import static java.util.stream.Collectors.toCollection;
 @NoArgsConstructor
 public class Asset extends CompanyAudit {
 
+    private String customId;
+    
     private boolean archived;
 
     private boolean hasChildren;

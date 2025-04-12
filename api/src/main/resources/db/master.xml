@@ -122,4 +122,8 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2025_04_11_1744385772_estimated_duration_double.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2025_04_11_1744385773_create_custom_sequence.xml"
+             relativeToChangelogFile="true"/>
+    <include file="changelog/2025_04_11_1744385774_populate_custom_id.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

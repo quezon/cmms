@@ -11,4 +11,6 @@ public class PreventiveMaintenanceShowDTO extends WorkOrderBaseShowDTO {
     private String name;
 
     private Schedule schedule;
+
+    private String customId;
 }

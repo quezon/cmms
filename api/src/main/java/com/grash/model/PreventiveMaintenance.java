@@ -15,6 +15,8 @@ public class PreventiveMaintenance extends WorkOrderBase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    private String customId;
 
     private String name;
 

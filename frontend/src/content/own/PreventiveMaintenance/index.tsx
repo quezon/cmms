@@ -237,6 +237,11 @@ function Files() {
   };
   const columns: CustomDatagridColumn[] = [
     {
+      field: 'customId',
+      headerName: t('id'),
+      description: t('id')
+    },
+    {
       field: 'name',
       headerName: t('name'),
       description: t('name'),

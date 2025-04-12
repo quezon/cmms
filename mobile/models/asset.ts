@@ -41,6 +41,7 @@ export interface AssetDTO extends Audit {
   inServiceDate?: string;
   parts: PartMiniDTO[];
   files: FileMiniDTO[];
+  customId: string;
 }
 export const assetStatuses = [
   { status: 'OPERATIONAL', color: (theme) => theme.colors.success },
@@ -62,24 +63,5 @@ export interface AssetRow extends AssetDTO {
 export interface AssetMiniDTO {
   id: number;
   name: string;
+  customId: string;
 }
-export const assets: Asset[] = [
-  {
-    id: 212,
-    name: 'cgvg',
-    createdAt: 'dfggj',
-    description: 'bjhb',
-    createdBy: 1,
-    updatedAt: 'ghfgj',
-    updatedBy: 1
-  },
-  {
-    id: 44,
-    name: 'fcgvc',
-    createdAt: 'dfggj',
-    createdBy: 1,
-    description: 'fchg',
-    updatedAt: 'ghfgj',
-    updatedBy: 1
-  }
-];

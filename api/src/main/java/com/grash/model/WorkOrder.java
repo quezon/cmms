@@ -35,6 +35,9 @@ public class WorkOrder extends WorkOrderBase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    @Audited(withModifiedFlag = true)
+    private String customId;
 
     @ManyToOne
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED, withModifiedFlag = true)

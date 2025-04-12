@@ -14,4 +14,6 @@ public class RequestShowDTO extends WorkOrderBaseShowDTO {
     private WorkOrderMiniDTO workOrder;
 
     private FileMiniDTO audioDescription;
+
+    private String customId;
 }

@@ -90,7 +90,7 @@ public class ScheduleService {
                     if (schedule.getDueDateDelay() != null) {
                         workOrder.setDueDate(Helper.incrementDays(new Date(), schedule.getDueDateDelay()));
                     }
-                    WorkOrder savedWorkOrder = workOrderService.create(workOrder);
+                    WorkOrder savedWorkOrder = workOrderService.create(workOrder, preventiveMaintenance.getCompany());
                     tasks.forEach(task -> {
                         Task copiedTask = new Task(task.getTaskBase(), savedWorkOrder, null, task.getValue());
                         copiedTask.setCompany(preventiveMaintenance.getCompany());

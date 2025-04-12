@@ -29,4 +29,6 @@ public class WorkOrderShowDTO extends WorkOrderBaseShowDTO {
     private String feedback;
 
     private FileShowDTO audioDescription;
+
+    private String customId;
 }

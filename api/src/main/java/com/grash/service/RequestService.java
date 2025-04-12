@@ -6,10 +6,7 @@ import com.grash.dto.RequestPatchDTO;
 import com.grash.dto.RequestShowDTO;
 import com.grash.exception.CustomException;
 import com.grash.mapper.RequestMapper;
-import com.grash.model.OwnUser;
-import com.grash.model.PreventiveMaintenance;
-import com.grash.model.Request;
-import com.grash.model.WorkOrder;
+import com.grash.model.*;
 import com.grash.model.enums.Priority;
 import com.grash.model.enums.RoleType;
 import com.grash.repository.RequestRepository;
@@ -41,9 +38,13 @@ public class RequestService {
     private final WorkOrderService workOrderService;
     private final RequestMapper requestMapper;
     private final EntityManager em;
+    private final CustomSequenceService customSequenceService;
 
     @Transactional
-    public Request create(Request request) {
+    public Request create(Request request, Company company) {
+        Long nextSequence = customSequenceService.getNextRequestSequence(company);
+        request.setCustomId("R" + String.format("%06d", nextSequence));
+
         Request savedRequest = requestRepository.saveAndFlush(request);
         em.refresh(savedRequest);
         return savedRequest;
@@ -82,7 +83,7 @@ public class RequestService {
             workOrder.setPrimaryUser(primaryUser == null ? creator : primaryUser);
         }
         workOrder.setParentRequest(request);
-        WorkOrder savedWorkOrder = workOrderService.create(workOrder);
+        WorkOrder savedWorkOrder = workOrderService.create(workOrder, creator.getCompany());
         request.setWorkOrder(savedWorkOrder);
         requestRepository.save(request);
 
@@ -103,7 +104,8 @@ public class RequestService {
 
         builder.with((Specification<Request>) (requestRoot, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (searchCriteriaClone.getFilterFields().stream().anyMatch(filterField -> filterField.getField().equals("priority"))) {
+            if (searchCriteriaClone.getFilterFields().stream().anyMatch(filterField -> filterField.getField().equals(
+                    "priority"))) {
                 List<Priority> priorities = searchCriteriaClone.getFilterFields().stream()
                         .filter(filterField -> filterField.getField().equals("priority"))
                         .findFirst().get().getValues().stream().map(value -> Priority.getPriorityFromString(value.toString())).collect(Collectors.toList());
@@ -113,7 +115,8 @@ public class RequestService {
                 }
             }
 
-            if (searchCriteriaClone.getFilterFields().stream().anyMatch(filterField -> filterField.getField().equals("status"))) {
+            if (searchCriteriaClone.getFilterFields().stream().anyMatch(filterField -> filterField.getField().equals(
+                    "status"))) {
                 List<Object> values = searchCriteriaClone.getFilterFields().stream()
                         .filter(filterField -> filterField.getField().equals("status"))
                         .findFirst().get().getValues();
@@ -125,7 +128,8 @@ public class RequestService {
                             case "APPROVED":
                                 return criteriaBuilder.isNotNull(requestRoot.get("workOrder"));
                             case "PENDING":
-                                return criteriaBuilder.and(criteriaBuilder.isNull(requestRoot.get("workOrder")), criteriaBuilder.equal(requestRoot.get("cancelled"), false));
+                                return criteriaBuilder.and(criteriaBuilder.isNull(requestRoot.get("workOrder")),
+                                        criteriaBuilder.equal(requestRoot.get("cancelled"), false));
                             default:
                                 return null;
                         }
@@ -136,9 +140,11 @@ public class RequestService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
         searchCriteria.getFilterFields().
-                removeIf(filterField -> filterField.getField().equals("status") || filterField.getField().equals("priority"));
+                removeIf(filterField -> filterField.getField().equals("status") || filterField.getField().equals(
+                        "priority"));
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), "id");
         return requestRepository.findAll(builder.build(), page).map(requestMapper::toShowDto);
     }
 

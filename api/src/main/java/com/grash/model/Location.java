@@ -22,6 +22,8 @@ import static java.util.stream.Collectors.toCollection;
 @Data
 @NoArgsConstructor
 public class Location extends CompanyAudit {
+    private String customId;
+    
     @NotNull
     private String name;
 

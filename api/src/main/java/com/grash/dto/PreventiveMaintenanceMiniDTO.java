@@ -8,4 +8,5 @@ import lombok.NoArgsConstructor;
 public class PreventiveMaintenanceMiniDTO {
     private String title;
     private Long id;
+    private String customId;
 }

@@ -31,7 +31,7 @@ public class AssetShowDTO extends AuditShowDTO {
     private String area;
 
     private String barCode;
-    
+
     private AssetCategory category;
 
     private String name;
@@ -69,4 +69,6 @@ public class AssetShowDTO extends AuditShowDTO {
     private String power;
 
     private String manufacturer;
+
+    private String customId;
 }

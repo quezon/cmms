@@ -14,7 +14,8 @@ import {
   Menu,
   MenuItem,
   Select,
-  Stack, styled,
+  Stack,
+  styled,
   Tab,
   Tabs,
   TextField,
@@ -22,7 +23,14 @@ import {
   useTheme
 } from '@mui/material';
 import WorkOrder from '../../../../models/owns/workOrder';
-import { ChangeEvent, Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  Fragment,
+  useContext,
+  useEffect,
+  useMemo,
+  useState
+} from 'react';
 import { useTranslation } from 'react-i18next';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
@@ -44,11 +52,26 @@ import { useDispatch, useSelector } from '../../../../store';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import SelectParts from '../../components/form/SelectParts';
 import ImageViewer from 'react-simple-image-viewer';
-import { editPartQuantity, editWOPartQuantities, getPartQuantitiesByWorkOrder } from '../../../../slices/partQuantity';
+import {
+  editPartQuantity,
+  editWOPartQuantities,
+  getPartQuantitiesByWorkOrder
+} from '../../../../slices/partQuantity';
 import Labor from '../../../../models/owns/labor';
-import { controlTimer, deleteLabor, editLabor, getLabors } from '../../../../slices/labor';
-import { durationToHours, getHoursAndMinutesAndSeconds } from '../../../../utils/formatters';
-import { deleteAdditionalCost, getAdditionalCosts } from '../../../../slices/additionalCost';
+import {
+  controlTimer,
+  deleteLabor,
+  editLabor,
+  getLabors
+} from '../../../../slices/labor';
+import {
+  durationToHours,
+  getHoursAndMinutesAndSeconds
+} from '../../../../utils/formatters';
+import {
+  deleteAdditionalCost,
+  getAdditionalCosts
+} from '../../../../slices/additionalCost';
 import { getTasksByWorkOrder } from '../../../../slices/task';
 import { Task } from '../../../../models/owns/tasks';
 import { getWorkOrderHistories } from '../../../../slices/workOrderHistory';
@@ -57,7 +80,11 @@ import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContex
 import { deleteRelation, getRelations } from '../../../../slices/relation';
 import Relation, { relationTypes } from '../../../../models/owns/relation';
 import { CompanySettingsContext } from '../../../../contexts/CompanySettingsContext';
-import { getAssetUrl, getPreventiveMaintenanceUrl, getUserUrl } from '../../../../utils/urlPaths';
+import {
+  getAssetUrl,
+  getPreventiveMaintenanceUrl,
+  getUserUrl
+} from '../../../../utils/urlPaths';
 import CompleteWOModal from './CompleteWOModal';
 import useAuth from '../../../../hooks/useAuth';
 import { PermissionEntity } from '../../../../models/owns/role';
@@ -271,7 +298,9 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
         feedback: feedback ?? null,
         signature: signatureId ? { id: signatureId } : null
       })
-    ).then(() => dispatch(getLabors(workOrder?.id))).finally(() => setChangingStatus(false));
+    )
+      .then(() => dispatch(getLabors(workOrder?.id)))
+      .finally(() => setChangingStatus(false));
   };
   const groupRelations = (
     relations: Relation[]
@@ -366,11 +395,11 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
       .finally(() => setSavingPrimaryTime(false));
   };
   const BasicField = ({
-                        label,
-                        value,
-                        id,
-                        type
-                      }: {
+    label,
+    value,
+    id,
+    type
+  }: {
     label: string | number;
     value: string | number;
     type?: string;
@@ -408,7 +437,7 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
   }[] => [
     {
       label: t('id'),
-      value: workOrder.id
+      value: workOrder.customId
     },
     {
       label: t('due_date'),
@@ -572,18 +601,18 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                         workOrder.status === 'OPEN'
                           ? {}
                           : {
-                            backgroundColor:
-                              workOrder.status === 'IN_PROGRESS'
-                                ? theme.colors.success.main
-                                : workOrder.status === 'ON_HOLD'
+                              backgroundColor:
+                                workOrder.status === 'IN_PROGRESS'
+                                  ? theme.colors.success.main
+                                  : workOrder.status === 'ON_HOLD'
                                   ? theme.colors.warning.main
                                   : theme.colors.alpha.black[30],
-                            color: 'white',
-                            fontWeight: 'bold',
-                            '.MuiSvgIcon-root ': {
-                              fill: 'white !important'
+                              color: 'white',
+                              fontWeight: 'bold',
+                              '.MuiSvgIcon-root ': {
+                                fill: 'white !important'
+                              }
                             }
-                          }
                       }
                     >
                       {workOrderStatuses.map((workOrderStatus, index) => (
@@ -621,8 +650,8 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                     {runningTimer
                       ? t('timer_running')
                       : t('run_timer') +
-                      ' - ' +
-                      durationToHours(primaryTime?.duration)}
+                        ' - ' +
+                        durationToHours(primaryTime?.duration)}
                   </Button>
                 </Box>
               </Grid>
@@ -883,7 +912,9 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                   tasksProps={tasks}
                   workOrderId={workOrder?.id}
                   handleZoomImage={setImageState}
-                  disabled={!hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder)}
+                  disabled={
+                    !hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder)
+                  }
                 />
               </Box>
             )}
@@ -953,8 +984,10 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                               )}
                             </>
                           }
-                          secondary={`${getHoursAndMinutesAndSeconds(labor.duration)[0]
-                          }h ${getHoursAndMinutesAndSeconds(labor.duration)[1]
+                          secondary={`${
+                            getHoursAndMinutesAndSeconds(labor.duration)[0]
+                          }h ${
+                            getHoursAndMinutesAndSeconds(labor.duration)[1]
                           }m`}
                         />
                       </ListItem>
@@ -1207,14 +1240,24 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                                       <Typography variant="h6">
                                         {relation.workOrder.title}
                                       </Typography>
-                                      <LabelWrapper sx={{
-                                        background: relation.workOrder.status === 'IN_PROGRESS'
-                                          ? theme.colors.success.main
-                                          : relation.workOrder.status === 'ON_HOLD'
-                                            ? theme.colors.warning.main
-                                            : relation.workOrder.status === 'COMPLETE' ? theme.colors.primary.main
-                                              : theme.colors.alpha.black[30], color: 'white'
-                                      }}>{t(relation.workOrder.status)}</LabelWrapper>
+                                      <LabelWrapper
+                                        sx={{
+                                          background:
+                                            relation.workOrder.status ===
+                                            'IN_PROGRESS'
+                                              ? theme.colors.success.main
+                                              : relation.workOrder.status ===
+                                                'ON_HOLD'
+                                              ? theme.colors.warning.main
+                                              : relation.workOrder.status ===
+                                                'COMPLETE'
+                                              ? theme.colors.primary.main
+                                              : theme.colors.alpha.black[30],
+                                          color: 'white'
+                                        }}
+                                      >
+                                        {t(relation.workOrder.status)}
+                                      </LabelWrapper>
                                     </Stack>
                                   }
                                   secondary={getFormattedDate(
@@ -1227,13 +1270,18 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                         )
                     )}
                   </List>
-                  {hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder) && <Button
-                    onClick={() => setOpenLinkModal(true)}
-                    variant="outlined"
-                    sx={{ mt: 1 }}
-                  >
-                    {t('link_wo')}
-                  </Button>}
+                  {hasEditPermission(
+                    PermissionEntity.WORK_ORDERS,
+                    workOrder
+                  ) && (
+                    <Button
+                      onClick={() => setOpenLinkModal(true)}
+                      variant="outlined"
+                      sx={{ mt: 1 }}
+                    >
+                      {t('link_wo')}
+                    </Button>
+                  )}
                 </Fragment>
               )}
             </Box>
@@ -1242,20 +1290,22 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
               <Typography sx={{ mt: 2, mb: 1 }} variant="h3">
                 {t('files')}
               </Typography>
-              {!!workOrder.files.length ? <FilesList
-                confirmMessage={t('confirm_delete_file_wo')}
-                removeDisabled={
-                  !hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder)
-                }
-                files={workOrder.files}
-                onRemove={(id: number) => {
-                  dispatch(
-                    removeFileFromWorkOrder(workOrder.id, id)
-                  );
-                }}
-              /> : <Typography sx={{ color: theme.colors.alpha.black[70] }}>
-                {t('no_file_linked_to_wo')}
-              </Typography>}
+              {!!workOrder.files.length ? (
+                <FilesList
+                  confirmMessage={t('confirm_delete_file_wo')}
+                  removeDisabled={
+                    !hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder)
+                  }
+                  files={workOrder.files}
+                  onRemove={(id: number) => {
+                    dispatch(removeFileFromWorkOrder(workOrder.id, id));
+                  }}
+                />
+              ) : (
+                <Typography sx={{ color: theme.colors.alpha.black[70] }}>
+                  {t('no_file_linked_to_wo')}
+                </Typography>
+              )}
               {hasEditPermission(PermissionEntity.WORK_ORDERS, workOrder) && (
                 <Button
                   onClick={() => setOpenAddFileModal(true)}

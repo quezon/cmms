@@ -5,6 +5,7 @@ import { Task } from './tasks';
 export default interface PreventiveMaintenance extends WorkOrderBase {
   name: string;
   schedule: Schedule;
+  customId: string;
 }
 export interface PreventiveMaintenancePost extends PreventiveMaintenance {
   frequency: number;

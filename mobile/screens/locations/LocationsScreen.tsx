@@ -25,11 +25,12 @@ import { IconSource } from 'react-native-paper/src/components/Icon';
 import { onSearchQueryChange } from '../../utils/overall';
 import { RootStackScreenProps } from '../../types';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
+import Tag from '../../components/Tag';
 
 export default function LocationsScreen({
-                                          navigation,
-                                          route
-                                        }: RootStackScreenProps<'Locations'>) {
+  navigation,
+  route
+}: RootStackScreenProps<'Locations'>) {
   const { t } = useTranslation();
   const [startedSearch, setStartedSearch] = useState<boolean>(false);
   const {
@@ -101,10 +102,10 @@ export default function LocationsScreen({
   };
 
   const isCloseToBottom = ({
-                             layoutMeasurement,
-                             contentOffset,
-                             contentSize
-                           }) => {
+    layoutMeasurement,
+    contentOffset,
+    contentSize
+  }) => {
     const paddingToBottom = 20;
     return (
       layoutMeasurement.height + contentOffset.y >=
@@ -134,11 +135,14 @@ export default function LocationsScreen({
     if (route.params?.id) {
       result = locationsHierarchy.filter((location, index) => {
         return (
-          location.hierarchy[location.hierarchy.length - 2] === route.params.id &&
-          location.id !== route.params.id
+          location.hierarchy[location.hierarchy.length - 2] ===
+            route.params.id && location.id !== route.params.id
         );
       });
-    } else result = locationsHierarchy.filter(location => location.hierarchy.length === 1);
+    } else
+      result = locationsHierarchy.filter(
+        (location) => location.hierarchy.length === 1
+      );
     setCurrentLocations(result);
   }, [locationsHierarchy]);
 
@@ -180,7 +184,10 @@ export default function LocationsScreen({
                 }}
                 key={location.id}
                 onPress={() =>
-                  navigation.push('LocationDetails', { id: location.id, locationProp: location })
+                  navigation.push('LocationDetails', {
+                    id: location.id,
+                    locationProp: location
+                  })
                 }
               >
                 <Card.Content>
@@ -188,6 +195,15 @@ export default function LocationsScreen({
                     titleStyle={{ fontWeight: 'bold' }}
                     title={location.name}
                     description={location.address}
+                    right={(props) => (
+                      <View>
+                        <Tag
+                          text={`#${location.customId}`}
+                          color="white"
+                          backgroundColor="#545454"
+                        />
+                      </View>
+                    )}
                   />
                 </Card.Content>
               </Card>
@@ -225,7 +241,10 @@ export default function LocationsScreen({
                 }}
                 key={location.id}
                 onPress={() =>
-                  navigation.push('LocationDetails', { id: location.id, locationProp: location })
+                  navigation.push('LocationDetails', {
+                    id: location.id,
+                    locationProp: location
+                  })
                 }
               >
                 <Card.Content>
@@ -233,6 +252,15 @@ export default function LocationsScreen({
                     titleStyle={{ fontWeight: 'bold' }}
                     title={location.name}
                     description={location.address}
+                    right={(props) => (
+                      <View>
+                        <Tag
+                          text={`#${location.customId}`}
+                          color="white"
+                          backgroundColor="#545454"
+                        />
+                      </View>
+                    )}
                   />
                 </Card.Content>
                 <Card.Actions>

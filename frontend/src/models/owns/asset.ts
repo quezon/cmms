@@ -12,6 +12,7 @@ export default interface Asset extends Audit {
   id: number;
   name: string;
   description: string;
+  customId: string;
 }
 
 export const assetStatuses = [
@@ -56,6 +57,7 @@ export interface AssetDTO extends Audit {
   files: FileMiniDTO[];
   power: string;
   manufacturer: string;
+  customId: string;
 }
 export interface AssetRow extends AssetDTO {
   hierarchy: number[];
@@ -64,4 +66,5 @@ export interface AssetRow extends AssetDTO {
 export interface AssetMiniDTO {
   id: number;
   name: string;
+  customId: string;
 }

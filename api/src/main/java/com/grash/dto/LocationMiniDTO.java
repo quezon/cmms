@@ -13,4 +13,6 @@ public class LocationMiniDTO {
 
     private String address;
 
+    private String customId;
+
 }

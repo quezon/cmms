@@ -47,7 +47,8 @@ public class PreventiveMaintenanceController {
 
     @PostMapping("/search")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Page<PreventiveMaintenanceShowDTO>> search(@RequestBody SearchCriteria searchCriteria, HttpServletRequest req) {
+    public ResponseEntity<Page<PreventiveMaintenanceShowDTO>> search(@RequestBody SearchCriteria searchCriteria,
+                                                                     HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
             if (user.getRole().getViewPermissions().contains(PermissionEntity.PREVENTIVE_MAINTENANCES)) {
@@ -81,11 +82,12 @@ public class PreventiveMaintenanceController {
     public PreventiveMaintenanceShowDTO create(@ApiParam("PreventiveMaintenance") @Valid @RequestBody PreventiveMaintenancePostDTO preventiveMaintenancePost, HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         PreventiveMaintenance preventiveMaintenance = preventiveMaintenanceMapper.toModel(preventiveMaintenancePost);
-        preventiveMaintenance = preventiveMaintenanceService.create(preventiveMaintenance);
+        preventiveMaintenance = preventiveMaintenanceService.create(preventiveMaintenance, user);
 
         Schedule schedule = preventiveMaintenance.getSchedule();
         schedule.setEndsOn(preventiveMaintenancePost.getEndsOn());
-        schedule.setStartsOn(preventiveMaintenancePost.getStartsOn() != null ? preventiveMaintenancePost.getStartsOn() : new Date());
+        schedule.setStartsOn(preventiveMaintenancePost.getStartsOn() != null ?
+                preventiveMaintenancePost.getStartsOn() : new Date());
         schedule.setFrequency(preventiveMaintenancePost.getFrequency());
         schedule.setDueDateDelay(preventiveMaintenancePost.getDueDateDelay());
         Schedule savedSchedule = scheduleService.save(schedule);
@@ -108,7 +110,8 @@ public class PreventiveMaintenanceController {
 
         if (optionalPreventiveMaintenance.isPresent()) {
             PreventiveMaintenance savedPreventiveMaintenance = optionalPreventiveMaintenance.get();
-            PreventiveMaintenance patchedPreventiveMaintenance = preventiveMaintenanceService.update(id, preventiveMaintenance);
+            PreventiveMaintenance patchedPreventiveMaintenance = preventiveMaintenanceService.update(id,
+                    preventiveMaintenance);
             return preventiveMaintenanceMapper.toShowDto(patchedPreventiveMaintenance);
         } else throw new CustomException("PreventiveMaintenance not found", HttpStatus.NOT_FOUND);
     }

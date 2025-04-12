@@ -172,7 +172,7 @@ public class WorkOrderController {
                 OwnUser primaryUser = workOrderReq.getPrimaryUser();
                 workOrderReq.setPrimaryUser(primaryUser == null ? user : primaryUser);
             }
-            WorkOrder createdWorkOrder = workOrderService.create(workOrderReq);
+            WorkOrder createdWorkOrder = workOrderService.create(workOrderReq, user.getCompany());
 
             return workOrderMapper.toShowDto(createdWorkOrder);
         } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);

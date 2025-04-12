@@ -660,7 +660,7 @@ export default function WODetailsScreen({
               <Text
                 variant="titleMedium"
                 style={{ marginRight: 10 }}
-              >{`#${id}`}</Text>
+              >{`#${workOrder.customId}`}</Text>
               <Tag
                 text={t('priority_label', { priority: t(workOrder.priority) })}
                 color="white"

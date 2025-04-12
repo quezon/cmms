@@ -48,6 +48,7 @@ public class AssetService {
     private final AssetDowntimeService assetDowntimeService;
     private WorkOrderService workOrderService;
     private final MessageSource messageSource;
+    private final CustomSequenceService customSequenceService;
 
     @Autowired
     public void setDeps(@Lazy LocationService locationService, @Lazy LaborService laborService,
@@ -59,7 +60,12 @@ public class AssetService {
     }
 
     @Transactional
-    public Asset create(Asset asset) {
+    public Asset create(Asset asset, OwnUser user) {
+        // Generate custom ID
+        Company company = user.getCompany();
+        Long nextSequence = customSequenceService.getNextAssetSequence(company);
+        asset.setCustomId("A" + String.format("%06d", nextSequence));
+        
         Asset savedAsset = assetRepository.saveAndFlush(asset);
         em.refresh(savedAsset);
         return savedAsset;

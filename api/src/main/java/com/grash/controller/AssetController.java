@@ -194,7 +194,7 @@ public class AssetController {
                     throw new CustomException("Asset with same nfc code exists", HttpStatus.NOT_ACCEPTABLE);
                 }
             }
-            Asset createdAsset = assetService.create(assetReq);
+            Asset createdAsset = assetService.create(assetReq, user);
             String message = messageSource.getMessage("notification_asset_assigned",
                     new Object[]{createdAsset.getName()}, Helper.getLocale(user));
             assetService.notify(createdAsset, messageSource.getMessage("new_assignment", null,

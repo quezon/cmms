@@ -68,7 +68,8 @@ public class ReadingController {
             if (!readings.isEmpty()) {
                 Reading lastReading = Collections.max(readings, new AuditComparator());
                 Date nextReading = Helper.getNextOccurence(lastReading.getCreatedAt(), meter.getUpdateFrequency());
-                if (!(Helper.isSameDay(new Date(), nextReading) && !Helper.isSameDay(new Date(), lastReading.getCreatedAt()))) {
+                if (!(Helper.isSameDay(new Date(), nextReading) && !Helper.isSameDay(new Date(),
+                        lastReading.getCreatedAt()))) {
                     throw new CustomException("The update frequency has not been respected", HttpStatus.NOT_ACCEPTABLE);
                 }
             }
@@ -82,18 +83,20 @@ public class ReadingController {
                 if (meterTrigger.getTriggerCondition().equals(WorkOrderMeterTriggerCondition.LESS_THAN)) {
                     if (readingReq.getValue() < meterTrigger.getValue()) {
                         error = true;
-                        message.append(messageSource.getMessage("notification_reading_less_than", notificationArgs, locale));
+                        message.append(messageSource.getMessage("notification_reading_less_than", notificationArgs,
+                                locale));
                     }
                 } else if (readingReq.getValue() > meterTrigger.getValue()) {
                     error = true;
-                    message.append(messageSource.getMessage("notification_reading_more_than", notificationArgs, locale));
+                    message.append(messageSource.getMessage("notification_reading_more_than", notificationArgs,
+                            locale));
                 }
                 if (error) {
                     notificationService.createMultiple(meter.getUsers().stream().map(user1 ->
                             new Notification(message.toString(), user1, NotificationType.METER, meter.getId())
                     ).collect(Collectors.toList()), true, title);
                     WorkOrder workOrder = workOrderService.getWorkOrderFromWorkOrderBase(meterTrigger);
-                    workOrderService.create(workOrder);
+                    workOrderService.create(workOrder, user.getCompany());
                 }
             });
             return readingService.create(readingReq);
@@ -106,7 +109,8 @@ public class ReadingController {
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "Reading not found")})
-    public Reading patch(@ApiParam("Reading") @Valid @RequestBody ReadingPatchDTO reading, @ApiParam("id") @PathVariable("id") Long id,
+    public Reading patch(@ApiParam("Reading") @Valid @RequestBody ReadingPatchDTO reading,
+                         @ApiParam("id") @PathVariable("id") Long id,
                          HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<Reading> optionalReading = readingService.findById(id);

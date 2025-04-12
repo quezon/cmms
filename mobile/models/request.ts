@@ -6,4 +6,5 @@ export default interface Request extends WorkOrderBase {
   cancelled: boolean;
   audioDescription: File;
   workOrder: WorkOrder;
+  customId: string;
 }

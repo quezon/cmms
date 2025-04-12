@@ -15,7 +15,7 @@ import {
   useTheme
 } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
-import { AssetDTO } from '../../models/asset';
+import { AssetDTO, AssetRow } from '../../models/asset';
 import { IconSource } from 'react-native-paper/src/components/Icon';
 import { onSearchQueryChange } from '../../utils/overall';
 import { RootStackScreenProps } from '../../types';
@@ -24,9 +24,9 @@ import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 import { IconWithLabel } from '../../components/IconWithLabel';
 
 export default function AssetsScreen({
-                                       navigation,
-                                       route
-                                     }: RootStackScreenProps<'Assets'>) {
+  navigation,
+  route
+}: RootStackScreenProps<'Assets'>) {
   const { t } = useTranslation();
   const [startedSearch, setStartedSearch] = useState<boolean>(false);
   const { assets, assetsHierarchy, loadingGet, currentPageNum, lastPage } =
@@ -66,7 +66,7 @@ export default function AssetsScreen({
       );
     }
   }, [criteria]);
-  const [currentAssets, setCurrentAssets] = useState([]);
+  const [currentAssets, setCurrentAssets] = useState<AssetRow[]>([]);
   useEffect(() => {
     if (
       route.params?.id &&
@@ -88,10 +88,10 @@ export default function AssetsScreen({
   };
 
   const isCloseToBottom = ({
-                             layoutMeasurement,
-                             contentOffset,
-                             contentSize
-                           }) => {
+    layoutMeasurement,
+    contentOffset,
+    contentSize
+  }) => {
     const paddingToBottom = 20;
     return (
       layoutMeasurement.height + contentOffset.y >=
@@ -125,7 +125,8 @@ export default function AssetsScreen({
           asset.id !== route.params.id
         );
       });
-    } else result = assetsHierarchy.filter(asset => asset.hierarchy.length === 1);
+    } else
+      result = assetsHierarchy.filter((asset) => asset.hierarchy.length === 1);
     setCurrentAssets(result);
   }, [assetsHierarchy]);
 
@@ -168,7 +169,10 @@ export default function AssetsScreen({
                 }}
                 key={asset.id}
                 onPress={() =>
-                  navigation.push('AssetDetails', { id: asset.id, assetProp: asset })
+                  navigation.push('AssetDetails', {
+                    id: asset.id,
+                    assetProp: asset
+                  })
                 }
               >
                 <Card.Content>
@@ -180,9 +184,9 @@ export default function AssetsScreen({
                     >
                       <View style={{ marginRight: 10 }}>
                         <Tag
-                          text={`#${asset.id}`}
-                          color='white'
-                          backgroundColor='#545454'
+                          text={`#${asset.customId}`}
+                          color="white"
+                          backgroundColor="#545454"
                         />
                       </View>
                       <Tag
@@ -194,18 +198,18 @@ export default function AssetsScreen({
                         backgroundColor={
                           asset.status === 'OPERATIONAL'
                             ? //@ts-ignore
-                            theme.colors.success
+                              theme.colors.success
                             : theme.colors.error
                         }
-                        color='white'
+                        color="white"
                       />
                     </View>
                   </View>
-                  <Text variant='titleMedium'>{asset.name}</Text>
+                  <Text variant="titleMedium">{asset.name}</Text>
                   {asset.location && (
                     <IconWithLabel
                       label={asset.location.name}
-                      icon='map-marker-outline'
+                      icon="map-marker-outline"
                     />
                   )}
                 </Card.Content>
@@ -245,7 +249,10 @@ export default function AssetsScreen({
                 }}
                 key={asset.id}
                 onPress={() =>
-                  navigation.push('AssetDetails', { id: asset.id, assetProp: asset })
+                  navigation.push('AssetDetails', {
+                    id: asset.id,
+                    assetProp: asset
+                  })
                 }
               >
                 <Card.Content>
@@ -257,9 +264,9 @@ export default function AssetsScreen({
                     >
                       <View style={{ marginRight: 10 }}>
                         <Tag
-                          text={`#${asset.id}`}
-                          color='white'
-                          backgroundColor='#545454'
+                          text={`#${asset.customId}`}
+                          color="white"
+                          backgroundColor="#545454"
                         />
                       </View>
                       <Tag
@@ -271,18 +278,18 @@ export default function AssetsScreen({
                         backgroundColor={
                           asset.status === 'OPERATIONAL'
                             ? //@ts-ignore
-                            theme.colors.success
+                              theme.colors.success
                             : theme.colors.error
                         }
-                        color='white'
+                        color="white"
                       />
                     </View>
                   </View>
-                  <Text variant='titleMedium'>{asset.name}</Text>
+                  <Text variant="titleMedium">{asset.name}</Text>
                   {asset.location && (
                     <IconWithLabel
                       label={asset.location.name}
-                      icon='map-marker-outline'
+                      icon="map-marker-outline"
                     />
                   )}
                 </Card.Content>

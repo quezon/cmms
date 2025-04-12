@@ -55,6 +55,7 @@ public class WorkOrderService {
     private final WorkOrderCategoryService workOrderCategoryService;
     private WorkflowService workflowService;
     private final MessageSource messageSource;
+    private final CustomSequenceService customSequenceService;
 
     @Value("${frontend.url}")
     private String frontendUrl;
@@ -66,7 +67,7 @@ public class WorkOrderService {
     }
 
     @Transactional
-    public WorkOrder create(WorkOrder workOrder) {
+    public WorkOrder create(WorkOrder workOrder, Company company) {
         if (workOrder instanceof WorkOrderPostDTO) {
             WorkOrderPostDTO workOrderPostDTO = (WorkOrderPostDTO) workOrder;
             workOrder = workOrderMapper.fromPostDto(workOrderPostDTO);
@@ -76,9 +77,12 @@ public class WorkOrderService {
                 assetService.save(asset);
             }
         }
+
+        Long nextSequence = customSequenceService.getNextWorkOrderSequence(company);
+        workOrder.setCustomId("WO" + String.format("%06d", nextSequence));
+
         WorkOrder savedWorkOrder = workOrderRepository.saveAndFlush(workOrder);
         em.refresh(savedWorkOrder);
-        Company company = savedWorkOrder.getCompany();
         notify(savedWorkOrder, Helper.getLocale(company));
         Collection<Workflow> workflows =
                 workflowService.findByMainConditionAndCompany(WFMainCondition.WORK_ORDER_CREATED, company.getId());

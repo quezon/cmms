@@ -243,7 +243,7 @@ function Assets() {
   );
   const columns: CustomDatagridColumn[] = [
     {
-      field: 'id',
+      field: 'customId',
       headerName: t('id'),
       description: t('id'),
       width: 150

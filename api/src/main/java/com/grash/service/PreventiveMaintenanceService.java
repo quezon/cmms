@@ -7,10 +7,10 @@ import com.grash.dto.PreventiveMaintenancePatchDTO;
 import com.grash.dto.PreventiveMaintenanceShowDTO;
 import com.grash.exception.CustomException;
 import com.grash.mapper.PreventiveMaintenanceMapper;
+import com.grash.model.Company;
 import com.grash.model.OwnUser;
 import com.grash.model.PreventiveMaintenance;
 import com.grash.model.Schedule;
-import com.grash.model.enums.RoleType;
 import com.grash.repository.PreventiveMaintenanceRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -34,12 +34,18 @@ public class PreventiveMaintenanceService {
     private final CompanyService companyService;
     private final LocationService locationService;
     private final EntityManager em;
+    private final CustomSequenceService customSequenceService;
 
     private final PreventiveMaintenanceMapper preventiveMaintenanceMapper;
 
     @Transactional
-    public PreventiveMaintenance create(PreventiveMaintenance PreventiveMaintenance) {
-        PreventiveMaintenance savedPM = preventiveMaintenanceRepository.saveAndFlush(PreventiveMaintenance);
+    public PreventiveMaintenance create(PreventiveMaintenance preventiveMaintenance, OwnUser user) {
+        // Generate custom ID
+        Company company = user.getCompany();
+        Long nextSequence = customSequenceService.getNextPreventiveMaintenanceSequence(company);
+        preventiveMaintenance.setCustomId("PM" + String.format("%06d", nextSequence));
+
+        PreventiveMaintenance savedPM = preventiveMaintenanceRepository.saveAndFlush(preventiveMaintenance);
         em.refresh(savedPM);
         return savedPM;
     }
@@ -48,7 +54,8 @@ public class PreventiveMaintenanceService {
     public PreventiveMaintenance update(Long id, PreventiveMaintenancePatchDTO preventiveMaintenance) {
         if (preventiveMaintenanceRepository.existsById(id)) {
             PreventiveMaintenance savedPreventiveMaintenance = preventiveMaintenanceRepository.findById(id).get();
-            PreventiveMaintenance updatedPM = preventiveMaintenanceRepository.saveAndFlush(preventiveMaintenanceMapper.updatePreventiveMaintenance(savedPreventiveMaintenance, preventiveMaintenance));
+            PreventiveMaintenance updatedPM =
+                    preventiveMaintenanceRepository.saveAndFlush(preventiveMaintenanceMapper.updatePreventiveMaintenance(savedPreventiveMaintenance, preventiveMaintenance));
             em.refresh(updatedPM);
             return updatedPM;
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
@@ -73,13 +80,16 @@ public class PreventiveMaintenanceService {
     public Page<PreventiveMaintenanceShowDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<PreventiveMaintenance> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), "id");
         return preventiveMaintenanceRepository.findAll(builder.build(), page).map(preventiveMaintenanceMapper::toShowDto);
     }
 
-    public boolean isPreventiveMaintenanceInCompany(PreventiveMaintenance preventiveMaintenance, long companyId, boolean optional) {
+    public boolean isPreventiveMaintenanceInCompany(PreventiveMaintenance preventiveMaintenance, long companyId,
+                                                    boolean optional) {
         if (optional) {
-            Optional<PreventiveMaintenance> optionalPreventiveMaintenance = preventiveMaintenance == null ? Optional.empty() : findById(preventiveMaintenance.getId());
+            Optional<PreventiveMaintenance> optionalPreventiveMaintenance = preventiveMaintenance == null ?
+                    Optional.empty() : findById(preventiveMaintenance.getId());
             return preventiveMaintenance == null || (optionalPreventiveMaintenance.isPresent() && optionalPreventiveMaintenance.get().getCompany().getId().equals(companyId));
         } else {
             Optional<PreventiveMaintenance> optionalPreventiveMaintenance = findById(preventiveMaintenance.getId());
@@ -88,7 +98,8 @@ public class PreventiveMaintenanceService {
     }
 
     public List<CalendarEvent> getEvents(Date end, Long companyId) {
-        List<PreventiveMaintenance> preventiveMaintenances = preventiveMaintenanceRepository.findByCreatedAtBeforeAndCompany_Id(end, companyId);
+        List<PreventiveMaintenance> preventiveMaintenances =
+                preventiveMaintenanceRepository.findByCreatedAtBeforeAndCompany_Id(end, companyId);
         List<CalendarEvent> result = new ArrayList<>();
         for (PreventiveMaintenance preventiveMaintenance : preventiveMaintenances) {
             Schedule schedule = preventiveMaintenance.getSchedule();
@@ -101,7 +112,8 @@ public class PreventiveMaintenanceService {
             // Add the start date to the list
             dates.add(schedule.getStartsOn());
 
-            Date max = schedule.getEndsOn() == null ? end : schedule.getEndsOn().before(end) ? schedule.getEndsOn() : end;
+            Date max = schedule.getEndsOn() == null ? end : schedule.getEndsOn().before(end) ? schedule.getEndsOn() :
+                    end;
             // Loop until the calendar date is after the end date
             while (calendar.getTime().before(max)) {
                 // Add the frequency days to the current date
@@ -113,7 +125,8 @@ public class PreventiveMaintenanceService {
                 }
             }
 
-            result.addAll(dates.stream().map(date -> new CalendarEvent("PREVENTIVE_MAINTENANCE", preventiveMaintenanceMapper.toBaseMiniDto(preventiveMaintenance), date)).collect(Collectors.toList()));
+            result.addAll(dates.stream().map(date -> new CalendarEvent("PREVENTIVE_MAINTENANCE",
+                    preventiveMaintenanceMapper.toBaseMiniDto(preventiveMaintenance), date)).collect(Collectors.toList()));
         }
         return result;
     }

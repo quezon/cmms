@@ -12,7 +12,6 @@ import { WorkOrderBase } from './workOrderBase';
 
 export type Priority = 'HIGH' | 'MEDIUM' | 'LOW' | 'NONE';
 
-
 export default interface WorkOrder extends WorkOrderBase {
   category: Category | null;
   id: number;
@@ -26,5 +25,6 @@ export default interface WorkOrder extends WorkOrderBase {
   requiredSignature: boolean;
   status: string;
   audioDescription: File;
+  customId: string;
   //parentPreventiveMaintenance:
 }

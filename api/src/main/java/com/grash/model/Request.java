@@ -13,6 +13,9 @@ public class Request extends WorkOrderBase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    
+    private String customId;
+    
     private boolean cancelled;
 
     private String cancellationReason;

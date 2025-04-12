@@ -38,9 +38,13 @@ public class LocationService {
     private final TeamService teamService;
     private final EntityManager em;
     private final FileService fileService;
+    private final CustomSequenceService customSequenceService;
 
     @Transactional
-    public Location create(Location location) {
+    public Location create(Location location, Company company) {
+        Long nextSequence = customSequenceService.getNextLocationSequence(company);
+        location.setCustomId("L" + String.format("%06d", nextSequence));
+
         Location savedLocation = locationRepository.saveAndFlush(location);
         em.refresh(savedLocation);
         return savedLocation;
@@ -50,7 +54,8 @@ public class LocationService {
     public Location update(Long id, LocationPatchDTO location) {
         if (locationRepository.existsById(id)) {
             Location savedLocation = locationRepository.findById(id).get();
-            Location patchedLocation = locationRepository.saveAndFlush(locationMapper.updateLocation(savedLocation, location));
+            Location patchedLocation = locationRepository.saveAndFlush(locationMapper.updateLocation(savedLocation,
+                    location));
             em.refresh(patchedLocation);
             return patchedLocation;
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
@@ -74,13 +79,16 @@ public class LocationService {
 
     public void notify(Location location, Locale locale) {
         String title = messageSource.getMessage("new_assignment", null, locale);
-        String message = messageSource.getMessage("notification_location_assigned", new Object[]{location.getName()}, locale);
-        notificationService.createMultiple(location.getUsers().stream().map(user -> new Notification(message, user, NotificationType.LOCATION, location.getId())).collect(Collectors.toList()), true, title);
+        String message = messageSource.getMessage("notification_location_assigned", new Object[]{location.getName()},
+                locale);
+        notificationService.createMultiple(location.getUsers().stream().map(user -> new Notification(message, user,
+                NotificationType.LOCATION, location.getId())).collect(Collectors.toList()), true, title);
     }
 
     public void patchNotify(Location oldLocation, Location newLocation, Locale locale) {
         String title = messageSource.getMessage("new_assignment", null, locale);
-        String message = messageSource.getMessage("notification_location_assigned", new Object[]{newLocation.getName()}, locale);
+        String message = messageSource.getMessage("notification_location_assigned",
+                new Object[]{newLocation.getName()}, locale);
         notificationService.createMultiple(oldLocation.getNewUsersToNotify(newLocation.getUsers()).stream().map(user ->
                 new Notification(message, user, NotificationType.LOCATION, newLocation.getId())).collect(Collectors.toList()), true, title);
     }
@@ -149,8 +157,10 @@ public class LocationService {
     public Page<LocationShowDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<Location> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
-        return locationRepository.findAll(builder.build(), page).map(location -> locationMapper.toShowDto(location, this));
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), "id");
+        return locationRepository.findAll(builder.build(), page).map(location -> locationMapper.toShowDto(location,
+                this));
     }
 
     public static List<LocationImportDTO> orderLocations(List<LocationImportDTO> locations) {
@@ -173,7 +183,9 @@ public class LocationService {
         return orderedLocations;
     }
 
-    private static void orderLocationsRecursive(Map<String, List<LocationImportDTO>> locationMap, List<LocationImportDTO> locations, List<LocationImportDTO> orderedLocations) {
+    private static void orderLocationsRecursive(Map<String, List<LocationImportDTO>> locationMap,
+                                                List<LocationImportDTO> locations,
+                                                List<LocationImportDTO> orderedLocations) {
         for (LocationImportDTO location : locations) {
             orderedLocations.add(location);
             List<LocationImportDTO> children = locationMap.get(location.getName());

@@ -55,17 +55,20 @@ public class LocationController {
         if (user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
             if (user.getRole().getViewPermissions().contains(PermissionEntity.LOCATIONS)) {
                 return locationService.findByCompany(user.getCompany().getId()).stream().filter(location -> {
-                    boolean canViewOthers = user.getRole().getViewOtherPermissions().contains(PermissionEntity.LOCATIONS);
+                    boolean canViewOthers =
+                            user.getRole().getViewOtherPermissions().contains(PermissionEntity.LOCATIONS);
                     return canViewOthers || location.getCreatedBy().equals(user.getId());
-                }).map(location->locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
+                }).map(location -> locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
             } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
         } else
-            return locationService.getAll().stream().map(location->locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
+            return locationService.getAll().stream().map(location -> locationMapper.toShowDto(location,
+                    locationService)).collect(Collectors.toList());
     }
 
     @PostMapping("/search")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Page<LocationShowDTO>> search(@RequestBody SearchCriteria searchCriteria, HttpServletRequest req) {
+    public ResponseEntity<Page<LocationShowDTO>> search(@RequestBody SearchCriteria searchCriteria,
+                                                        HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
             if (user.getRole().getViewPermissions().contains(PermissionEntity.LOCATIONS)) {
@@ -85,16 +88,17 @@ public class LocationController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "Location not found")})
-    public Collection<LocationShowDTO> getChildrenById(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
+    public Collection<LocationShowDTO> getChildrenById(@ApiParam("id") @PathVariable("id") Long id,
+                                                       HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (id.equals(0L) && user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
-            return locationService.findByCompany(user.getCompany().getId()).stream().filter(location -> location.getParentLocation() == null).map(location->locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
+            return locationService.findByCompany(user.getCompany().getId()).stream().filter(location -> location.getParentLocation() == null).map(location -> locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
         }
         Optional<Location> optionalLocation = locationService.findById(id);
         if (optionalLocation.isPresent()) {
             Location savedLocation = optionalLocation.get();
             if (user.getRole().getViewPermissions().contains(PermissionEntity.LOCATIONS)) {
-                return locationService.findLocationChildren(id).stream().map(location->locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
+                return locationService.findLocationChildren(id).stream().map(location -> locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
             } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
 
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
@@ -134,10 +138,11 @@ public class LocationController {
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied")})
-    public LocationShowDTO create(@ApiParam("Location") @Valid @RequestBody Location locationReq, HttpServletRequest req) {
+    public LocationShowDTO create(@ApiParam("Location") @Valid @RequestBody Location locationReq,
+                                  HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getCreatePermissions().contains(PermissionEntity.LOCATIONS)) {
-            Location savedLocation = locationService.create(locationReq);
+            Location savedLocation = locationService.create(locationReq, user.getCompany());
             locationService.notify(savedLocation, Helper.getLocale(user));
             return locationMapper.toShowDto(savedLocation, locationService);
         } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
@@ -149,7 +154,8 @@ public class LocationController {
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "Location not found")})
-    public LocationShowDTO patch(@ApiParam("Location") @Valid @RequestBody LocationPatchDTO location, @ApiParam("id") @PathVariable("id") Long id,
+    public LocationShowDTO patch(@ApiParam("Location") @Valid @RequestBody LocationPatchDTO location,
+                                 @ApiParam("id") @PathVariable("id") Long id,
                                  HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<Location> optionalLocation = locationService.findById(id);
@@ -157,7 +163,7 @@ public class LocationController {
             Location savedLocation = optionalLocation.get();
             em.detach(savedLocation);
             if (user.getRole().getEditOtherPermissions().contains(PermissionEntity.LOCATIONS) || savedLocation.getCreatedBy().equals(user.getId())) {
-                if(location.getParentLocation() !=null && location.getParentLocation().getId().equals(id))
+                if (location.getParentLocation() != null && location.getParentLocation().getId().equals(id))
                     throw new CustomException("Parent location cannot be the same id", HttpStatus.NOT_ACCEPTABLE);
 
                 Location patchedLocation = locationService.update(id, location);

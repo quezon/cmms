@@ -11,4 +11,6 @@ public class WorkOrderMiniDTO {
     private Long id;
     private String title;
     private Date dueDate;
+    private String customId;
+
 }

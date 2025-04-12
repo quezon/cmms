@@ -279,7 +279,7 @@ export default function WorkOrdersScreen({
                     >
                       <View style={{ marginRight: 10 }}>
                         <Tag
-                          text={`#${workOrder.id}`}
+                          text={`#${workOrder.customId}`}
                           color="white"
                           backgroundColor="#545454"
                         />

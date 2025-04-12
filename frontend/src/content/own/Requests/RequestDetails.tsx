@@ -112,7 +112,7 @@ export default function RequestDetails({
     },
     {
       label: t('id'),
-      value: request.id
+      value: request.customId
     },
     {
       label: t('priority'),

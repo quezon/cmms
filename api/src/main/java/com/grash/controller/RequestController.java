@@ -104,7 +104,7 @@ public class RequestController {
     public RequestShowDTO create(@ApiParam("Request") @Valid @RequestBody Request requestReq, HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getCreatePermissions().contains(PermissionEntity.REQUESTS)) {
-            Request createdRequest = requestService.create(requestReq);
+            Request createdRequest = requestService.create(requestReq, user.getCompany());
             String title = messageSource.getMessage("new_request", null, Helper.getLocale(user));
             String message = messageSource.getMessage("notification_new_request", null, Helper.getLocale(user));
             List<OwnUser> usersToNotify = userService.findByCompany(user.getCompany().getId()).stream()

@@ -26,5 +26,6 @@ export default interface WorkOrder extends WorkOrderBase {
   requiredSignature: boolean;
   status: WorkOrderStatus;
   audioDescription: File;
+  customId: string;
   //parentPreventiveMaintenance:
 }
