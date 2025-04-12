@@ -1,12 +1,15 @@
 import { Box, Divider, Grid, Tab, Tabs } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import SettingsLayout from '../SettingsLayout';
 import { ChangeEvent, useState } from 'react';
 import FieldsConfigurationForm from '../FieldsConfigurationForm';
+import FeatureErrorMessage from '../../components/FeatureErrorMessage';
+import useAuth from '../../../../hooks/useAuth';
+import { PlanFeature } from '../../../../models/owns/subscriptionPlan';
 
 function WorkOrderSettings() {
   const { t }: { t: any } = useTranslation();
   const [currentTab, setCurrentTab] = useState<string>('create');
+  const { hasFeature } = useAuth();
   const tabs = [
     { value: 'create', label: t('creating_wo') },
     { value: 'complete', label: t('completing_wo') }
@@ -62,24 +65,28 @@ function WorkOrderSettings() {
             ))}
           </Tabs>
           <Divider sx={{ mt: 1 }} />
-          <Box p={3}>
-            {currentTab === 'create' && (
-              <FieldsConfigurationForm
-                initialValues={{}}
-                fields={createFields.map((field) => {
-                  return { ...field, type: 'workOrder' };
-                })}
-              />
-            )}
-            {currentTab === 'complete' && (
-              <FieldsConfigurationForm
-                initialValues={{}}
-                fields={completeFields.map((field) => {
-                  return { ...field, type: 'workOrder' };
-                })}
-              />
-            )}
-          </Box>
+          {!hasFeature(PlanFeature.REQUEST_CONFIGURATION) ? (
+            <FeatureErrorMessage message="Upgrade to configure the work orders" />
+          ) : (
+            <Box p={3}>
+              {currentTab === 'create' && (
+                <FieldsConfigurationForm
+                  initialValues={{}}
+                  fields={createFields.map((field) => {
+                    return { ...field, type: 'workOrder' };
+                  })}
+                />
+              )}
+              {currentTab === 'complete' && (
+                <FieldsConfigurationForm
+                  initialValues={{}}
+                  fields={completeFields.map((field) => {
+                    return { ...field, type: 'workOrder' };
+                  })}
+                />
+              )}
+            </Box>
+          )}
         </Box>
       </Box>
     </Grid>
