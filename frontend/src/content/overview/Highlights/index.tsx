@@ -671,12 +671,20 @@ function Highlights() {
             {t('key_features_description')}
           </TypographyH2>
         </Container>
-        <TabsContainerWrapper sx={{ justifyContent: 'flex-start' }}>
+        <Box
+          sx={{
+            justifyContent: 'flex-start',
+            '.MuiTabs-scrollableX': {
+              overflow: 'auto !important'
+            }
+          }}
+        >
           <Tabs
             onChange={handleTabsChange}
             value={currentTab}
             variant="scrollable"
-            scrollButtons={false}
+            scrollButtons={true}
+            allowScrollButtonsMobile
             textColor="primary"
             indicatorColor="primary"
           >
@@ -684,7 +692,7 @@ function Highlights() {
               <Tab key={tab.value} label={tab.label} value={tab.value} />
             ))}
           </Tabs>
-        </TabsContainerWrapper>
+        </Box>
         {Object.entries(featuresConfiguration).map(([feature, config]) => {
           return (
             <>
