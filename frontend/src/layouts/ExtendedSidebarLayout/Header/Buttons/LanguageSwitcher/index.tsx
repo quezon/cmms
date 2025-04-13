@@ -34,7 +34,7 @@ const IconButtonWrapper = styled(IconButton)(
 `
 );
 
-function LanguageSwitcher() {
+function LanguageSwitcher({ onSwitch }: { onSwitch?: () => void }) {
   const { i18n } = useTranslation();
   const { t }: { t: any } = useTranslation();
   const getLanguage = i18n.language;
@@ -110,6 +110,7 @@ function LanguageSwitcher() {
                 button
                 onClick={() => {
                   switchLanguage({ lng: code });
+                  onSwitch?.();
                   handleClose();
                 }}
               >
