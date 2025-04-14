@@ -4,10 +4,10 @@
 # This script allows users to backup and restore the Atlas CMMS system
 
 # Default variables - Will be overridden by .env file if it exists
-POSTGRES_USER="postgres"
-POSTGRES_PWD="postgres"
-MINIO_USER="minioadmin"
-MINIO_PASSWORD="minioadmin"
+POSTGRES_USER="rootUser"
+POSTGRES_PWD="mypassword"
+MINIO_USER="minio"
+MINIO_PASSWORD="minio123"
 
 # Directory where backups will be stored
 BACKUP_DIR="./atlas_backups"

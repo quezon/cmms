@@ -26,10 +26,10 @@ $BACKUP_DIR = ".\atlas_backups"
 $TIMESTAMP = Get-Date -Format "yyyyMMdd_HHmmss"
 
 # Default variables - Load from .env file if exists
-$POSTGRES_USER = "postgres"
-$POSTGRES_PWD = "postgres"
-$MINIO_USER = "minioadmin"
-$MINIO_PASSWORD = "minioadmin"
+$POSTGRES_USER = "rootUser"
+$POSTGRES_PWD = "mypassword"
+$MINIO_USER = "minio"
+$MINIO_PASSWORD = "minio123"
 
 # Try to load environment variables from .env file
 if (Test-Path ".env") {

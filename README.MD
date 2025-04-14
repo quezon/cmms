@@ -132,7 +132,7 @@ your custom backend server url
 
 [Usage guide](https://docs.atlas-cmms.com)
 
-[Dev docs](./dev-docs)
+[Super admin docs](./dev-docs)
 
 [Join our Discord server](https://discord.gg/cHqyVRYpkA)
 
