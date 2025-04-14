@@ -293,7 +293,7 @@ set -e
 wget -q https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/bin/mc
 chmod +x /usr/bin/mc
 mc alias set atlas-minio http://minio:9000 "$MINIO_USER" "$MINIO_PASSWORD" --api S3v4
-mc mirror /backup_data atlas-minio/atlas-bucket
+mc mirror /backup_data atlas-minio/atlas-bucket --overwrite
 echo "MinIO restore complete."
 "@
 
