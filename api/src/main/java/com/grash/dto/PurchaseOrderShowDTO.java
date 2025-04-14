@@ -13,8 +13,6 @@ import java.util.Date;
 @NoArgsConstructor
 public class PurchaseOrderShowDTO extends AuditShowDTO {
 
-    private Long id;
-
     private ApprovalStatus status = ApprovalStatus.PENDING;
 
     private String name;

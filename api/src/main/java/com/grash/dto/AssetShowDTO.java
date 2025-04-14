@@ -14,7 +14,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class AssetShowDTO extends AuditShowDTO {
-    private Long id;
 
     private boolean archived;
 

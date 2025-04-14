@@ -9,8 +9,6 @@ import java.util.Collection;
 @NoArgsConstructor
 public class MultiPartsShowDTO extends AuditShowDTO {
 
-    private Long id;
-
     private String name;
 
     private Collection<PartMiniDTO> parts;

@@ -14,8 +14,6 @@ import java.util.List;
 public class LocationShowDTO extends AuditShowDTO {
     private Company company;
 
-    private Long id;
-
     private String name;
 
     private String address;

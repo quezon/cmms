@@ -11,8 +11,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public class WorkOrderBaseShowDTO extends AuditShowDTO {
-    private Long id;
-
     private Date dueDate;
     private Priority priority = Priority.NONE;
     private double estimatedDuration;

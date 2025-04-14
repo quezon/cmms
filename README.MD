@@ -73,39 +73,44 @@ We'd love to have **new contributors**, so feel free to join us!
 ### Set environment variables
 
 Download this file [.env.example](.env.example), rename it to `.env` and configure the environment variables inside it.
-At the moment all variables are optional. Do not delete the .env file
+Do not delete the .env file
 
-| Name                         | Required | Description                                                                                                                                                                                                         | Default Value         |
-|------------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
-| ENABLE_EMAIL_NOTIFICATIONS   | No       | Enables or disables email notifications (`true` or `false`). Requires SMTP if enabled.                                                                                                                              | false                 |
-| INVITATION_VIA_EMAIL         | No       | Enables or disables user invitations via email (`true` or `false`). Requires SMTP and ENABLE_EMAIL_NOTIFICATIONS if enabled.                                                                                        | false                 |
-| SMTP_PWD                     | No       | The SMTP password after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en). To be able to invite people you have to configure it. | (empty)               |
-| SMTP_USER                    | No       | The SMTP username after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en)                                                        | (empty)               |
-| JWT_SECRET_KEY               | No       | JWT secret key                                                                                                                                                                                                      | your_jwt_secret       |
-| ALLOWED_ORGANIZATION_ADMINS  | No       | Comma separated email addresses allowed to sign up without being invited, hence allowed to create organizations. Empty means everyone can create an organization                                                    | (empty)               |
-| GOOGLE_KEY         | No       | Google Maps API key                                                                                                                                                                                                 | (empty)               |
-| GOOGLE_TRACKING_ID | No       | Google Analytics tracking ID                                                                                                                                                                                        | (empty)               |
-| PUBLIC_FRONT_URL             | No       | Frontend URL in this format `http://your.public.ip:3000`                                                                                                                                                            | http://localhost:3000 |
-| PUBLIC_API_URL               | No       | Public API URL in this format `http://your.public.ip:8080`                                                                                                                                                          | http://localhost:8080 |
-| STORAGE_TYPE                 | No       | Type of storage either local MinIO or Google Cloud Storage `gcp` or `minio`                                                                                                                                         | minio                 |
-| PUBLIC_MINIO_ENDPOINT        | No       | Public Mini endpoint in format `http://public.ip:9000`                                                                                                                                                              | http://localhost:9000 |
-| GCP_JSON                     | No       | The Google Cloud JSON key after following [these instructions](./GCP-setup.md).                                                                                                                                     | (empty)               |
-| GCP_PROJECT_ID               | No       | The Google Cloud project ID, also found in the `GCP_JSON` file.                                                                                                                                                     | (empty)               |
-| GCP_BUCKET_NAME              | No       | GCP Bucket Name                                                                                                                                                                                                     | (empty)               |
-| MAIL_RECIPIENTS              | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)               |
-| MUI_X_LICENSE      | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
+| Name                        | Required | Description                                                                                                                                                                                                         | Default Value         |
+|-----------------------------|----------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------|
+| POSTGRES_USER               | Yes      | Postgres user                                                                                                                                                                                                       | rootUser              |
+| POSTGRES_PWD                | Yes      | Postgres password                                                                                                                                                                                                   | mypassword            |
+| MINIO_USER                  | Yes      | MiniO user                                                                                                                                                                                                          | minio                 |
+| MINIO_PWD                   | Yes      | MiniO password                                                                                                                                                                                                      | minio123              |
+| ENABLE_EMAIL_NOTIFICATIONS  | No       | Enables or disables email notifications (`true` or `false`). Requires SMTP if enabled.                                                                                                                              | false                 |
+| INVITATION_VIA_EMAIL        | No       | Enables or disables user invitations via email (`true` or `false`). Requires SMTP and ENABLE_EMAIL_NOTIFICATIONS if enabled.                                                                                        | false                 |
+| SMTP_PWD                    | No       | The SMTP password after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en). To be able to invite people you have to configure it. | (empty)               |
+| SMTP_USER                   | No       | The SMTP username after creating an app password with Google. [Learn how to create an app password](https://support.google.com/accounts/answer/185833?hl=en)                                                        | (empty)               |
+| JWT_SECRET_KEY              | No       | JWT secret key                                                                                                                                                                                                      | your_jwt_secret       |
+| ALLOWED_ORGANIZATION_ADMINS | No       | Comma separated email addresses allowed to sign up without being invited, hence allowed to create organizations. Empty means everyone can create an organization                                                    | (empty)               |
+| GOOGLE_KEY                  | No       | Google Maps API key                                                                                                                                                                                                 | (empty)               |
+| GOOGLE_TRACKING_ID          | No       | Google Analytics tracking ID                                                                                                                                                                                        | (empty)               |
+| PUBLIC_FRONT_URL            | No       | Frontend URL in this format `http://your.public.ip:3000`                                                                                                                                                            | http://localhost:3000 |
+| PUBLIC_API_URL              | No       | Public API URL in this format `http://your.public.ip:8080`                                                                                                                                                          | http://localhost:8080 |
+| STORAGE_TYPE                | No       | Type of storage either local MinIO or Google Cloud Storage `gcp` or `minio`                                                                                                                                         | minio                 |
+| PUBLIC_MINIO_ENDPOINT       | No       | Public Mini endpoint in format `http://public.ip:9000`                                                                                                                                                              | http://localhost:9000 |
+| GCP_JSON                    | No       | The Google Cloud JSON key after following [these instructions](./GCP-setup.md).                                                                                                                                     | (empty)               |
+| GCP_PROJECT_ID              | No       | The Google Cloud project ID, also found in the `GCP_JSON` file.                                                                                                                                                     | (empty)               |
+| GCP_BUCKET_NAME             | No       | GCP Bucket Name                                                                                                                                                                                                     | (empty)               |
+| MAIL_RECIPIENTS             | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)               |
+| MUI_X_LICENSE               | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
 
+For production deployments, it’s strongly recommended to use unique credentials and not rely on defaults.
 #### For remote servers
 
 - You need to update every env variable starting with `PUBLIC_`.
-
-[//]: # (- You must also update every env variable starting with `SMTP`.)
 
 - Open ports if necessary: make sure to open `PUBLIC_API_URL`, `PUBLIC_FRONT_URL` ports numbers by default
   8080, and 3000. Same for `PUBLIC_MINIO_ENDPOINT` port 9000 if you use Minio.
 
 ### Run
-Download this [docker-compose.yml file](./docker-compose.yml). At this point you should have 2 files `.env` and `docker-compose.yml`.
+
+Download this [docker-compose.yml file](./docker-compose.yml). At this point you should have 2 files `.env` and
+`docker-compose.yml`.
 Now run
 
 ```sh
@@ -115,8 +120,12 @@ docker-compose up -d
 Go to http://localhost:3000 or your custom `PUBLIC_FRONT_URL`
 
 Celebrate on how easy this was
+
 ### Mobile app
-You can use the [live Android app](https://play.google.com/store/apps/details?id=com.atlas.cmms) and configure it with your custom backend server url
+
+You can use the [live Android app](https://play.google.com/store/apps/details?id=com.atlas.cmms) and configure it with
+your custom backend server url
+
 ## Getting help
 
 ### Docs

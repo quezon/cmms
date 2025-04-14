@@ -10,7 +10,6 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 public class PartShowDTO extends AuditShowDTO {
-    private Long id;
 
     private String name;
 

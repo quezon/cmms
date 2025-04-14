@@ -14,7 +14,6 @@ import java.util.List;
 
 @Data
 public class FileShowDTO extends AuditShowDTO {
-    private Long id;
     private String name;
 
     private String url;

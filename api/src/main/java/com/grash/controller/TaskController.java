@@ -3,7 +3,9 @@ package com.grash.controller;
 import com.grash.dto.SuccessResponse;
 import com.grash.dto.TaskBaseDTO;
 import com.grash.dto.TaskPatchDTO;
+import com.grash.dto.TaskShowDTO;
 import com.grash.exception.CustomException;
+import com.grash.mapper.TaskMapper;
 import com.grash.model.*;
 import com.grash.model.enums.TaskType;
 import com.grash.model.enums.workflow.WFMainCondition;
@@ -35,6 +37,7 @@ public class TaskController {
     private final TaskBaseService taskBaseService;
     private final WorkOrderService workOrderService;
     private final WorkflowService workflowService;
+    private final TaskMapper taskMapper;
     private final PreventiveMaintenanceService preventiveMaintenanceService;
 
     @GetMapping("/{id}")
@@ -43,11 +46,11 @@ public class TaskController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "Task not found")})
-    public Task getById(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
+    public TaskShowDTO getById(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
         Optional<Task> optionalTask = taskService.findById(id);
         if (optionalTask.isPresent()) {
             Task savedTask = optionalTask.get();
-            return savedTask;
+            return taskMapper.toShowDto(savedTask);
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
     }
 
@@ -57,10 +60,10 @@ public class TaskController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "Task not found")})
-    public Collection<Task> getByWorkOrder(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
+    public Collection<TaskShowDTO> getByWorkOrder(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
         Optional<WorkOrder> optionalWorkOrder = workOrderService.findById(id);
         if (optionalWorkOrder.isPresent()) {
-            return taskService.findByWorkOrder(id);
+            return taskService.findByWorkOrder(id).stream().map(taskMapper::toShowDto).collect(Collectors.toList());
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
     }
 
@@ -75,7 +78,7 @@ public class TaskController {
 
     @PatchMapping("/preventive-maintenance/{id}")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public Collection<Task> createByPreventiveMaintenance(@ApiParam("Task") @Valid @RequestBody Collection<TaskBaseDTO> taskBasesReq, @ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
+    public Collection<TaskShowDTO> createByPreventiveMaintenance(@ApiParam("Task") @Valid @RequestBody Collection<TaskBaseDTO> taskBasesReq, @ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<PreventiveMaintenance> optionalPreventiveMaintenance = preventiveMaintenanceService.findById(id);
         if (optionalPreventiveMaintenance.isPresent() && optionalPreventiveMaintenance.get().canBeEditedBy(user)) {
@@ -91,7 +94,7 @@ public class TaskController {
                 }
                 Task task = new Task(taskBase, null, optionalPreventiveMaintenance.get(), value.toString());
                 return taskService.create(task);
-            }).collect(Collectors.toList());
+            }).map(taskMapper::toShowDto).collect(Collectors.toList());
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
     }
 
@@ -100,7 +103,8 @@ public class TaskController {
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied")})
-    public Collection<Task> create(@ApiParam("Task") @Valid @RequestBody Collection<TaskBaseDTO> taskBasesReq, @ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
+    public Collection<TaskShowDTO> create(@ApiParam("Task") @Valid @RequestBody Collection<TaskBaseDTO> taskBasesReq,
+                                          @ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<WorkOrder> optionalWorkOrder = workOrderService.findById(id);
         if (optionalWorkOrder.isPresent() && optionalWorkOrder.get().canBeEditedBy(user)) {
@@ -116,7 +120,7 @@ public class TaskController {
                 }
                 Task task = new Task(taskBase, optionalWorkOrder.get(), null, value.toString());
                 return taskService.create(task);
-            }).collect(Collectors.toList());
+            }).map(taskMapper::toShowDto).collect(Collectors.toList());
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
     }
 
@@ -126,16 +130,19 @@ public class TaskController {
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "Task not found")})
-    public Task patch(@ApiParam("Task") @Valid @RequestBody TaskPatchDTO task, @ApiParam("id") @PathVariable("id") Long id,
-                      HttpServletRequest req) {
+    public TaskShowDTO patch(@ApiParam("Task") @Valid @RequestBody TaskPatchDTO task, @ApiParam("id") @PathVariable(
+                                     "id") Long id,
+                             HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<Task> optionalTask = taskService.findById(id);
 
         if (optionalTask.isPresent()) {
             Task patchedTask = taskService.update(id, task);
-            Collection<Workflow> workflows = workflowService.findByMainConditionAndCompany(WFMainCondition.TASK_UPDATED, user.getCompany().getId());
+            Collection<Workflow> workflows =
+                    workflowService.findByMainConditionAndCompany(WFMainCondition.TASK_UPDATED,
+                            user.getCompany().getId());
             workflows.forEach(workflow -> workflowService.runTask(workflow, patchedTask));
-            return patchedTask;
+            return taskMapper.toShowDto(patchedTask);
         } else throw new CustomException("Task not found", HttpStatus.NOT_FOUND);
     }
 
