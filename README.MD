@@ -129,7 +129,7 @@ You can use the [live Android app](https://play.google.com/store/apps/details?id
 
 If you still have questions after reading the docs, concerns, bug reports, etc, please file an issue in this
 repository's Issue Tracker or send an
-email at [ibracool99@gmail.com](mailto:ibracool99@gmail.com).
+email at [contact@atlas-cmms.com](mailto:contact@atlas-cmms.com).
 
 ## Supported languages
 
@@ -151,7 +151,7 @@ email at [ibracool99@gmail.com](mailto:ibracool99@gmail.com).
 ## Need Professional Help?
 
 Don't want to handle the maintenance and management yourself? We offer a complete done-for-you
-service. [Please reach out to us](mailto:ibracool99@gmail.com)
+service. [Please reach out to us](mailto:contact@atlas-cmms.com)
 
 ## 🤝 Looking to contribute?
 
