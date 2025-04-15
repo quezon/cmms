@@ -103,6 +103,7 @@ public class PreventiveMaintenanceService {
         List<CalendarEvent> result = new ArrayList<>();
         for (PreventiveMaintenance preventiveMaintenance : preventiveMaintenances) {
             Schedule schedule = preventiveMaintenance.getSchedule();
+            if (schedule.isDisabled()) continue;
             List<Date> dates = new ArrayList<>();
 
             // Create a Calendar instance and set the start date
