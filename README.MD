@@ -89,7 +89,7 @@ Do not delete the .env file
 | ALLOWED_ORGANIZATION_ADMINS | No       | Comma separated email addresses allowed to sign up without being invited, hence allowed to create organizations. Empty means everyone can create an organization                                                    | (empty)               |
 | GOOGLE_KEY                  | No       | Google Maps API key                                                                                                                                                                                                 | (empty)               |
 | GOOGLE_TRACKING_ID          | No       | Google Analytics tracking ID                                                                                                                                                                                        | (empty)               |
-| PUBLIC_FRONT_URL            | No       | Frontend URL in this format `http://your.public.ip:3000`                                                                                                                                                            | http://localhost:3000 |
+| PUBLIC_FRONT_URL            | No       | Frontend URL in this format `http://your.public.ip:3000` . Multiple addresses may open the website but only this one will work with the backend because of CORS.                                                    | http://localhost:3000 |
 | PUBLIC_API_URL              | No       | Public API URL in this format `http://your.public.ip:8080`                                                                                                                                                          | http://localhost:8080 |
 | STORAGE_TYPE                | No       | Type of storage either local MinIO or Google Cloud Storage `gcp` or `minio`                                                                                                                                         | minio                 |
 | PUBLIC_MINIO_ENDPOINT       | No       | Public Mini endpoint in format `http://public.ip:9000`                                                                                                                                                              | http://localhost:9000 |
@@ -106,6 +106,7 @@ For production deployments, it’s strongly recommended to use unique credential
 
 - Open ports if necessary: make sure to open `PUBLIC_API_URL`, `PUBLIC_FRONT_URL` ports numbers by default
   8080, and 3000. Same for `PUBLIC_MINIO_ENDPOINT` port 9000 if you use Minio.
+- Make sure the backend and frontend use the same protocol: https or http
 
 ### Run
 
