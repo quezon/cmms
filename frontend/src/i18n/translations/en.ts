@@ -1437,7 +1437,8 @@ const locale = {
   password_leave_empty_if_you_dont_want_to_change:
     "Password - leave empty if you don't want to change it",
   upgrade_request_success:
-    "Upgrade request received! We'll contact you soon with payment details"
+    "Upgrade request received! We'll contact you soon with payment details",
+  continue_with_sso: 'Continue with SSO'
 };
 
 export default locale;

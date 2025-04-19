@@ -36,4 +36,7 @@ public interface UserRepository extends JpaRepository<OwnUser, Long>, JpaSpecifi
     @Query("select u from OwnUser u where u.company.id=:id and u.role.code not in :roleCodes")
     Collection<OwnUser> findWorkersByCompany(@Param("id") Long id, @Param("roleCodes") List<RoleCode> roleCodes);
 
+    @Query("select u from OwnUser u where u.createdViaSso=true and lower(u.email) like concat('%@',lower" +
+            "(:emailDomain))")
+    List<OwnUser> findBySSOCompany(@Param("emailDomain") String emailDomain);
 }

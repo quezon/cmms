@@ -1475,7 +1475,8 @@ const esJSON = {
   password_leave_empty_if_you_dont_want_to_change:
     'Contraseña: déjalo vacío si no quieres cambiarla',
   upgrade_request_success:
-    '¡Solicitud de actualización recibida! Nos pondremos en contacto contigo pronto con los detalles de pago'
+    '¡Solicitud de actualización recibida! Nos pondremos en contacto contigo pronto con los detalles de pago',
+  continue_with_sso: 'Continuar con SSO'
 };
 
 export default esJSON;

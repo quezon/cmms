@@ -1506,7 +1506,8 @@ const deJSON = {
   password_leave_empty_if_you_dont_want_to_change:
     'Passwort – leer lassen, wenn du es nicht ändern möchtest',
   upgrade_request_success:
-    'Upgrade-Anfrage erhalten! Wir kontaktieren Sie in Kürze mit den Zahlungsdetails'
+    'Upgrade-Anfrage erhalten! Wir kontaktieren Sie in Kürze mit den Zahlungsdetails',
+  continue_with_sso: 'Weiter mit SSO'
 };
 
 export default deJSON;

@@ -1,5 +1,6 @@
 package com.grash.configuration;
 
+import com.grash.model.OwnUser;
 import com.grash.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,7 +35,7 @@ public class AuditConfig {
                 return Optional.empty();
             }
             String username = authentication.getName();
-            return Optional.ofNullable(userService.findByEmail(username).get().getId());
+            return userService.findByEmail(username).map(OwnUser::getId);
         }
 
     }

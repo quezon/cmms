@@ -4,12 +4,21 @@ import { useContext, useState } from 'react';
 import { Formik } from 'formik';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 
-import { Box, Button, CircularProgress, IconButton, InputAdornment, Link, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  IconButton,
+  InputAdornment,
+  Link,
+  TextField
+} from '@mui/material';
 import useAuth from 'src/hooks/useAuth';
 import useRefMounted from 'src/hooks/useRefMounted';
 import { useTranslation } from 'react-i18next';
 import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
-import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const LoginJWT: FC = () => {
   const { login } = useAuth() as any;
@@ -17,7 +26,7 @@ const LoginJWT: FC = () => {
   const { t }: { t: any } = useTranslation();
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const [searchParams, setSearchParams] = useSearchParams();
-  const [showPassword, setShowPassword] = useState<boolean>(false)
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   return (
     <Formik
@@ -83,17 +92,17 @@ const LoginJWT: FC = () => {
             name="password"
             onBlur={handleBlur}
             onChange={handleChange}
-            type={showPassword?"text":"password"}
+            type={showPassword ? 'text' : 'password'}
             value={values.password}
             variant="outlined"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <IconButton onClick={()=>setShowPassword(!showPassword)}>
+                  <IconButton onClick={() => setShowPassword(!showPassword)}>
                     <VisibilityIcon />
                   </IconButton>
                 </InputAdornment>
-              ),
+              )
             }}
           />
           <Box
@@ -119,6 +128,25 @@ const LoginJWT: FC = () => {
             variant="contained"
           >
             {t('login')}
+          </Button>
+          <Box display="flex" alignItems="center" my={3}>
+            <Divider sx={{ flexGrow: 1 }} />
+            <Box px={2} color="text.secondary">
+              {t('or')}
+            </Box>
+            <Divider sx={{ flexGrow: 1 }} />
+          </Box>
+
+          <Button
+            onClick={() => {
+              window.location.href =
+                'http://localhost:8080/oauth2/authorize/google';
+            }}
+            fullWidth
+            size="large"
+            variant="outlined"
+          >
+            {t('continue_with_sso')}
           </Button>
         </form>
       )}

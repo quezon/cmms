@@ -143,6 +143,11 @@ public class OwnUser extends Audit {
     @JsonIgnore
     private SuperAccountRelation parentSuperAccount;
 
+    // SSO fields
+    private String ssoProvider;
+    private String ssoProviderId;
+    private boolean createdViaSso = false;
+
     public int hashCode() {
         return Math.toIntExact(id);
     }
@@ -159,5 +164,6 @@ public class OwnUser extends Audit {
     public boolean isEnabledInSubscriptionAndPaid() {
         return enabledInSubscription && this.getRole().isPaid();
     }
+
 }
 

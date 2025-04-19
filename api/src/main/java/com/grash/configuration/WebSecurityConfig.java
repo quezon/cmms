@@ -2,6 +2,8 @@ package com.grash.configuration;
 
 import com.grash.security.JwtTokenFilterConfigurer;
 import com.grash.security.JwtTokenProvider;
+import com.grash.security.OAuth2AuthenticationFailureHandler;
+import com.grash.security.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -36,10 +40,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Entry points
         http.authorizeRequests()//
                 .antMatchers("/auth/signin").permitAll()//
-                .antMatchers("/auth/signin").permitAll()//
                 .antMatchers("/auth/signup").permitAll()//
+                .antMatchers("/auth/sso/**").permitAll()//
                 .antMatchers("/auth/sendMail").permitAll()//
                 .antMatchers("/auth/resetpwd/**").permitAll()
+                .antMatchers("/oauth2/**").permitAll()
+                .antMatchers("/login/oauth2/**").permitAll()
                 .antMatchers("/fast-spring/**").permitAll()
                 .antMatchers("/health-check").permitAll()
                 .antMatchers("/mail/send").permitAll()
@@ -51,6 +57,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/h2-console/**/**").permitAll()
                 // Disallow everything else..
                 .anyRequest().authenticated();
+
+        // OAuth2 Configuration
+        http.oauth2Login()
+                .authorizationEndpoint()
+                .baseUri("/oauth2/authorize")
+                .and()
+                .redirectionEndpoint()
+                .baseUri("/oauth2/callback/*")
+                .and()
+                .successHandler(oAuth2AuthenticationSuccessHandler)
+                .failureHandler(oAuth2AuthenticationFailureHandler);
 
         // If a user try to access a resource without having enough permissions
         http.exceptionHandling().accessDeniedPage("/login");
