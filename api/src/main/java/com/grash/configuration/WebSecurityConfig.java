@@ -4,6 +4,7 @@ import com.grash.security.JwtTokenFilterConfigurer;
 import com.grash.security.JwtTokenProvider;
 import com.grash.security.OAuth2AuthenticationFailureHandler;
 import com.grash.security.OAuth2AuthenticationSuccessHandler;
+import com.grash.service.LicenseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,6 +32,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+    private final LicenseService licenseService;
     @Value("${enable-sso}")
     private boolean enableSso;
 
@@ -65,7 +67,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         // OAuth2 Configuration
-        if (enableSso) http.oauth2Login()
+        if (enableSso && licenseService.isSSOEnabled()) http.oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorize")
                 .and()

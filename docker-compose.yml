@@ -63,6 +63,7 @@ services:
         NODE_ENV: production
         ENABLE_SSO: ${ENABLE_SSO:-false}
         OAUTH2_PROVIDER: ${OAUTH2_PROVIDER}
+        LICENSE_KEY: ${LICENSE_KEY:-}
     ports:
       - "3000:3000"
     depends_on:
