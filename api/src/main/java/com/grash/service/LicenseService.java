@@ -24,6 +24,9 @@ public class LicenseService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public boolean isLicenseValid() {
+        if (licenseKey == null || licenseKey.isEmpty()) {
+            return false;
+        }
         try {
             String apiUrl = "https://api.keygen.sh/v1/accounts/1ca3e517-f3d8-473f-a45c-81069900acb7/licenses/actions" +
                     "/validate-key";
