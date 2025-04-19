@@ -3,16 +3,13 @@ package com.grash.security;
 import com.grash.exception.CustomException;
 import com.grash.model.Company;
 import com.grash.model.OwnUser;
-import com.grash.model.Role;
 import com.grash.model.Subscription;
-import com.grash.model.enums.RoleType;
 import com.grash.repository.UserRepository;
 import com.grash.service.*;
 import com.grash.utils.Helper;
 import com.grash.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
@@ -67,10 +64,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                                         Authentication authentication) {
         try {
             Optional<String> redirectUri = Optional.ofNullable(request.getParameter("redirect_uri"));
-
-            if (redirectUri.isPresent() && !isAuthorizedRedirectUri(redirectUri.get())) {
-                throw new CustomException("Unauthorized redirect URI", HttpStatus.BAD_REQUEST);
-            }
 
             String targetUrl = redirectUri.orElse(oAuth2Properties.getSuccessRedirectUrl());
 
@@ -129,15 +122,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         user.setFirstName(extractFirstName(attributes, provider));
         user.setLastName(extractLastName(attributes, provider));
-
-        // Generate a random username
         user.setUsername(utils.generateStringId());
-
-        // Set a secure random password (user won't need this since they'll use SSO)
         user.setPassword(passwordEncoder.encode(utils.generateStringId()));
 
         try {
-            // Create a default subscription
             Subscription subscription = Subscription.builder()
                     .usersCount(cloudVersion ? 10 : 100)
                     .monthly(cloudVersion)
@@ -148,20 +136,17 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
             subscriptionService.create(subscription);
 
-            // Create a new company for this user based on their email domain
             Company company = new Company("Organization " + emailDomain, 10, subscription);
             company.getCompanySettings().getGeneralPreferences().setCurrency(currencyService.findByCode("$").get());
 
             companyService.create(company);
 
-            // Set user as owner of this new company
             user.setOwnsCompany(true);
             user.setRole(company.getCompanySettings().getRoleList().stream()
                     .filter(role -> role.getName().equals("Administrator"))
                     .findFirst().get());
 
             user.setCompany(company);
-            // Save the user
             OwnUser savedUser = userRepository.save(user);
 
             // Send notification to super admins about new SSO account
@@ -255,11 +240,5 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             default:
                 return "";
         }
-    }
-
-    private boolean isAuthorizedRedirectUri(String uri) {
-        return oAuth2Properties.getAuthorizedRedirectUris()
-                .stream()
-                .anyMatch(authorizedRedirectUri -> uri.startsWith(authorizedRedirectUri));
     }
 }

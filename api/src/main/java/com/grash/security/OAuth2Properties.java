@@ -13,5 +13,4 @@ import java.util.List;
 public class OAuth2Properties {
     private String successRedirectUrl;
     private String failureRedirectUrl;
-    private List<String> authorizedRedirectUris = new ArrayList<>();
 }
