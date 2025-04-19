@@ -19,6 +19,7 @@ import useRefMounted from 'src/hooks/useRefMounted';
 import { useTranslation } from 'react-i18next';
 import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { apiUrl, isSSOEnabled, oauth2Provider } from '../../../../config';
 
 const LoginJWT: FC = () => {
   const { login } = useAuth() as any;
@@ -129,25 +130,28 @@ const LoginJWT: FC = () => {
           >
             {t('login')}
           </Button>
-          <Box display="flex" alignItems="center" my={3}>
-            <Divider sx={{ flexGrow: 1 }} />
-            <Box px={2} color="text.secondary">
-              {t('or')}
-            </Box>
-            <Divider sx={{ flexGrow: 1 }} />
-          </Box>
+          {isSSOEnabled && (
+            <Box>
+              <Box display="flex" alignItems="center" my={3}>
+                <Divider sx={{ flexGrow: 1 }} />
+                <Box px={2} color="text.secondary">
+                  {t('or')}
+                </Box>
+                <Divider sx={{ flexGrow: 1 }} />
+              </Box>
 
-          <Button
-            onClick={() => {
-              window.location.href =
-                'http://localhost:8080/oauth2/authorize/google';
-            }}
-            fullWidth
-            size="large"
-            variant="outlined"
-          >
-            {t('continue_with_sso')}
-          </Button>
+              <Button
+                onClick={() => {
+                  window.location.href = `${apiUrl}oauth2/authorize/${oauth2Provider.toLowerCase()}`;
+                }}
+                fullWidth
+                size="large"
+                variant="outlined"
+              >
+                {t('continue_with_sso')}
+              </Button>
+            </Box>
+          )}
         </form>
       )}
     </Formik>

@@ -9,8 +9,9 @@ import java.util.List;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "app.oauth2")
+@ConfigurationProperties(prefix = "oauth2")
 public class OAuth2Properties {
     private String successRedirectUrl;
     private String failureRedirectUrl;
+    private String provider;
 }

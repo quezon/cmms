@@ -5,6 +5,7 @@ import com.grash.security.JwtTokenProvider;
 import com.grash.security.OAuth2AuthenticationFailureHandler;
 import com.grash.security.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -30,7 +31,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtTokenProvider jwtTokenProvider;
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
     private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-    private final Environment environment;
+    @Value("${enable-sso}")
+    private boolean enableSso;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -63,7 +65,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest().authenticated();
 
         // OAuth2 Configuration
-        if (Arrays.asList(environment.getActiveProfiles()).contains("sso")) http.oauth2Login()
+        if (enableSso) http.oauth2Login()
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorize")
                 .and()

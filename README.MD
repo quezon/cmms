@@ -98,8 +98,13 @@ Do not delete the .env file
 | GCP_BUCKET_NAME             | No       | GCP Bucket Name                                                                                                                                                                                                     | (empty)               |
 | MAIL_RECIPIENTS             | No       | Comma-separated email addresses of the super admins where to send information emails like new signups. You can provide your email address.                                                                          | (empty)               |
 | MUI_X_LICENSE               | No       | Mui Pro license key                                                                                                                                                                                                 | (empty)               |
+| ENABLE_SSO                  | No       | Enables or disables SSO. (`true` or `false` ) Requires `OAUTH2_PROVIDER`, `OAUTH2_CLIENT_ID` and `OAUTH2_CLIENT_SECRET`                                                                                             | false                 |
+| OAUTH2_PROVIDER             | No       | Oauth2 provider `google` or `microsoft`                                                                                                                                                                             | (empty)               |
+| OAUTH2_CLIENT_ID            | No       | Oauth2 Client ID                                                                                                                                                                                                    | (empty)               |
+| OAUTH2_CLIENT_SECRET        | No       | Oauth2 client secret                                                                                                                                                                                                | (empty)               |
 
 For production deployments, it’s strongly recommended to use unique credentials and not rely on defaults.
+
 #### For remote servers
 
 - You need to update every env variable starting with `PUBLIC_`.
