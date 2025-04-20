@@ -75,6 +75,7 @@ const SidebarMenuItem: FC<SidebarMenuItemProps> = ({
             menuToggle ? <ExpandLessTwoToneIcon /> : <ExpandMoreTwoToneIcon />
           }
           onClick={toggleMenu}
+          sx={{ textAlign: 'start' }}
         >
           {badgeTooltip ? (
             <TooltipWrapper title={badgeTooltip} arrow placement="right">
