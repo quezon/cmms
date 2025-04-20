@@ -59,7 +59,6 @@ spring:
       auth: true
       starttls.enable: true
       ssl.trust: smtp.gmail.com
-
 server:
   port: 8080 # This is the default port anyway, but you can change it here
 
@@ -102,3 +101,9 @@ storage:
 
 allowed-organization-admins: ${ALLOWED_ORGANIZATION_ADMINS:}
 cloud-version: ${CLOUD_VERSION:false}
+enable-sso: ${ENABLE_SSO:false}
+oauth2:
+  success-redirect-url: ${PUBLIC_FRONT_URL}/oauth2/success
+  failure-redirect-url: ${PUBLIC_FRONT_URL}/oauth2/failure
+  provider: ${OAUTH2_PROVIDER}
+license-key: ${LICENSE_KEY}

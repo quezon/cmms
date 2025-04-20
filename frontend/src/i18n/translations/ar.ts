@@ -1377,7 +1377,8 @@ const locale = {
   asset_status: 'حالة الأصول',
   ui_configuration: 'تكوين واجهة المستخدم',
   password_leave_empty_if_you_dont_want_to_change:
-    'كلمة المرور - اتركها فارغة إذا كنت لا تريد تغييرها'
+    'كلمة المرور - اتركها فارغة إذا كنت لا تريد تغييرها',
+  continue_with_sso: 'استمر مع تسجيل الدخول'
 };
 
 export default locale;

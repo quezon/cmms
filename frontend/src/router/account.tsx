@@ -29,6 +29,11 @@ const RecoverPassword = Loader(
 const VerifyEmail = Loader(
   lazy(() => import('../content/pages/Auth/VerifyEmail'))
 );
+
+const OauthSuccess = Loader(
+  lazy(() => import('../content/pages/Oauth/OauthSuccess'))
+);
+
 const accountRoutes = [
   {
     path: 'login',

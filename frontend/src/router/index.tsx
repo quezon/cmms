@@ -7,12 +7,14 @@ import ExtendedSidebarLayout from 'src/layouts/ExtendedSidebarLayout';
 import appRoutes from './app';
 import accountRoutes from './account';
 import baseRoutes from './base';
+import oauthRoutes from './oauth';
 
 const router: RouteObject[] = [
   {
     path: 'account',
     children: accountRoutes
   },
+  { path: 'oauth2', children: oauthRoutes },
   {
     path: '',
     element: <BaseLayout />,
