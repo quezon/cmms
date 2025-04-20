@@ -31,7 +31,7 @@ export const apiUrl = rawApiUrl
 
 export const muiLicense = getRuntimeValue('MUI_X_LICENSE');
 
-export const zendeskKey = getRuntimeValue('ZENDESK_KEY');
+export const zendeskKey = '';
 
 export const googleTrackingId = getRuntimeValue('GOOGLE_TRACKING_ID');
 export const oauth2Provider = getRuntimeValue('OAUTH2_PROVIDER') as
