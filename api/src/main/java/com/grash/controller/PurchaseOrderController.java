@@ -55,12 +55,14 @@ public class PurchaseOrderController {
 
     @PostMapping("/search")
     @PreAuthorize("permitAll()")
-    public ResponseEntity<Page<PurchaseOrderShowDTO>> search(@RequestBody SearchCriteria searchCriteria, HttpServletRequest req) {
+    public ResponseEntity<Page<PurchaseOrderShowDTO>> search(@RequestBody SearchCriteria searchCriteria,
+                                                             HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
             if (user.getRole().getViewPermissions().contains(PermissionEntity.PURCHASE_ORDERS)) {
                 searchCriteria.filterCompany(user);
-                boolean canViewOthers = user.getRole().getViewOtherPermissions().contains(PermissionEntity.PURCHASE_ORDERS);
+                boolean canViewOthers =
+                        user.getRole().getViewOtherPermissions().contains(PermissionEntity.PURCHASE_ORDERS);
                 if (!canViewOthers) {
                     searchCriteria.filterCreatedBy(user);
                 }
@@ -92,26 +94,34 @@ public class PurchaseOrderController {
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied")})
-    public PurchaseOrderShowDTO create(@ApiParam("PurchaseOrder") @Valid @RequestBody PurchaseOrder purchaseOrderReq, HttpServletRequest req) {
+    public PurchaseOrderShowDTO create(@ApiParam("PurchaseOrder") @Valid @RequestBody PurchaseOrder purchaseOrderReq,
+                                       HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (user.getRole().getCreatePermissions().contains(PermissionEntity.PURCHASE_ORDERS)
                 && user.getCompany().getSubscription().getSubscriptionPlan().getFeatures().contains(PlanFeatures.PURCHASE_ORDER)) {
             PurchaseOrder savedPurchaseOrder = purchaseOrderService.create(purchaseOrderReq);
-            Collection<Workflow> workflows = workflowService.findByMainConditionAndCompany(WFMainCondition.PURCHASE_ORDER_CREATED, user.getCompany().getId());
+            Collection<Workflow> workflows =
+                    workflowService.findByMainConditionAndCompany(WFMainCondition.PURCHASE_ORDER_CREATED,
+                            user.getCompany().getId());
             workflows.forEach(workflow -> workflowService.runPurchaseOrder(workflow, savedPurchaseOrder));
             PurchaseOrderShowDTO result = setPartQuantities(purchaseOrderMapper.toShowDto(savedPurchaseOrder));
-            long cost = result.getPartQuantities().stream().mapToLong(partQuantityShowDTO -> partQuantityShowDTO.getQuantity() * partQuantityShowDTO.getPart().getCost()).sum();
+            long cost =
+                    result.getPartQuantities().stream().mapToLong(partQuantityShowDTO -> partQuantityShowDTO.getQuantity() * partQuantityShowDTO.getPart().getCost()).sum();
             String title = messageSource.getMessage("new_po", null, Helper.getLocale(user));
-            String message = messageSource.getMessage("notification_new_po_request", new Object[]{result.getName(), cost, user.getCompany().getCompanySettings().getGeneralPreferences().getCurrency().getCode()}, Helper.getLocale(user));
+            String message = messageSource.getMessage("notification_new_po_request", new Object[]{result.getName(),
+                    cost, user.getCompany().getCompanySettings().getGeneralPreferences().getCurrency().getCode()},
+                    Helper.getLocale(user));
             Map<String, Object> mailVariables = new HashMap<String, Object>() {{
                 put("purchaseOrderLink", frontendUrl + "/app/purchase-orders/" + result.getId());
                 put("message", message);
             }};
             Collection<OwnUser> usersToNotify = userService.findByCompany(user.getCompany().getId()).stream()
-                    .filter(user1 -> user1.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS)||
+                    .filter(user1 -> user1.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS) ||
                             user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN)).collect(Collectors.toList());
-            notificationService.createMultiple(usersToNotify.stream().map(user1 -> new Notification(message, user1, NotificationType.PURCHASE_ORDER, result.getId())).collect(Collectors.toList()), true, title);
-            Collection<OwnUser> usersToMail = usersToNotify.stream().filter(user1 -> user1.getUserSettings().isEmailUpdatesForPurchaseOrders()).collect(Collectors.toList());
+            notificationService.createMultiple(usersToNotify.stream().map(user1 -> new Notification(message, user1,
+                    NotificationType.PURCHASE_ORDER, result.getId())).collect(Collectors.toList()), true, title);
+            Collection<OwnUser> usersToMail =
+                    usersToNotify.stream().filter(user1 -> user1.getUserSettings().shouldEmailUpdatesForPurchaseOrders()).collect(Collectors.toList());
             emailService2.sendMessageUsingThymeleafTemplate(usersToMail.stream().map(OwnUser::getEmail).toArray(String[]::new), messageSource.getMessage("new_po", null, Helper.getLocale(user)), mailVariables, "new-purchase-order.html", Helper.getLocale(user));
             return result;
         } else throw new
@@ -135,7 +145,9 @@ public class PurchaseOrderController {
             PurchaseOrder savedPurchaseOrder = optionalPurchaseOrder.get();
             if (user.getRole().getEditOtherPermissions().contains(PermissionEntity.PURCHASE_ORDERS) || savedPurchaseOrder.getCreatedBy().equals(user.getId())) {
                 PurchaseOrder patchedPurchaseOrder = purchaseOrderService.update(id, purchaseOrder);
-                Collection<Workflow> workflows = workflowService.findByMainConditionAndCompany(WFMainCondition.PURCHASE_ORDER_UPDATED, user.getCompany().getId());
+                Collection<Workflow> workflows =
+                        workflowService.findByMainConditionAndCompany(WFMainCondition.PURCHASE_ORDER_UPDATED,
+                                user.getCompany().getId());
                 workflows.forEach(workflow -> workflowService.runPurchaseOrder(workflow, patchedPurchaseOrder));
                 return setPartQuantities(purchaseOrderMapper.toShowDto(patchedPurchaseOrder));
             } else throw new CustomException("Forbidden", HttpStatus.FORBIDDEN);
@@ -148,7 +160,8 @@ public class PurchaseOrderController {
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "PurchaseOrder not found")})
-    public PurchaseOrderShowDTO respond(@ApiParam("approved") @RequestParam("approved") boolean approved, @ApiParam("id") @PathVariable("id") Long id,
+    public PurchaseOrderShowDTO respond(@ApiParam("approved") @RequestParam("approved") boolean approved, @ApiParam(
+            "id") @PathVariable("id") Long id,
                                         HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<PurchaseOrder> optionalPurchaseOrder = purchaseOrderService.findById(id);
@@ -158,7 +171,8 @@ public class PurchaseOrderController {
             if (user.getRole().getEditOtherPermissions().contains(PermissionEntity.PURCHASE_ORDERS)) {
                 if (!savedPurchaseOrder.getStatus().equals(ApprovalStatus.APPROVED)) {
                     if (approved) {
-                        Collection<PartQuantity> partQuantities = partQuantityService.findByPurchaseOrder(savedPurchaseOrder.getId());
+                        Collection<PartQuantity> partQuantities =
+                                partQuantityService.findByPurchaseOrder(savedPurchaseOrder.getId());
                         partQuantities.forEach(partQuantity -> {
                             Part part = partQuantity.getPart();
                             part.setQuantity(part.getQuantity() + partQuantity.getQuantity());
@@ -168,7 +182,8 @@ public class PurchaseOrderController {
                     savedPurchaseOrder.setStatus(approved ? ApprovalStatus.APPROVED : ApprovalStatus.REJECTED);
                     return setPartQuantities(purchaseOrderMapper.toShowDto(purchaseOrderService.save(savedPurchaseOrder)));
                 } else
-                    throw new CustomException("The purchase order has already been approved", HttpStatus.NOT_ACCEPTABLE);
+                    throw new CustomException("The purchase order has already been approved",
+                            HttpStatus.NOT_ACCEPTABLE);
             } else throw new CustomException("Forbidden", HttpStatus.FORBIDDEN);
         } else throw new CustomException("PurchaseOrder not found", HttpStatus.NOT_FOUND);
     }

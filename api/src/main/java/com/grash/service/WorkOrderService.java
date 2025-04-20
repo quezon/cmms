@@ -146,7 +146,7 @@ public class WorkOrderService {
             put("workOrderTitle", workOrder.getTitle());
         }};
         Collection<OwnUser> usersToMail =
-                users.stream().filter(user -> user.getUserSettings().isEmailUpdatesForWorkOrders()).collect(Collectors.toList());
+                users.stream().filter(user -> user.getUserSettings().shouldEmailUpdatesForWorkOrders()).collect(Collectors.toList());
         if (!usersToMail.isEmpty()) {
             emailService2.sendMessageUsingThymeleafTemplate(usersToMail.stream().map(OwnUser::getEmail).toArray(String[]::new), messageSource.getMessage("new_wo", null, locale), mailVariables, "new-work-order.html", Helper.getLocale(users.stream().findFirst().get()));
         }
@@ -166,7 +166,7 @@ public class WorkOrderService {
             put("workOrderTitle", newWorkOrder.getTitle());
         }};
         Collection<OwnUser> usersToMail =
-                usersToNotify.stream().filter(user -> user.getUserSettings().isEmailUpdatesForWorkOrders()).collect(Collectors.toList());
+                usersToNotify.stream().filter(user -> user.getUserSettings().shouldEmailUpdatesForWorkOrders()).collect(Collectors.toList());
         if (!usersToMail.isEmpty()) {
             emailService2.sendMessageUsingThymeleafTemplate(usersToMail.stream().map(OwnUser::getEmail).toArray(String[]::new), messageSource.getMessage("new_wo", null, locale), mailVariables, "new-work-order.html", Helper.getLocale(usersToMail.stream().findFirst().get()));
         }

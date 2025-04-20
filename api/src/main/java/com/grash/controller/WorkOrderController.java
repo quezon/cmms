@@ -293,7 +293,7 @@ public class WorkOrderController {
                         locale);
                 notificationService.create(new Notification(message, userService.findById(requesterId).get(),
                         NotificationType.WORK_ORDER, id));
-                if (requester.getUserSettings().isEmailUpdatesForRequests()) {
+                if (requester.getUserSettings().shouldEmailUpdatesForRequests()) {
                     Map<String, Object> mailVariables = new HashMap<String, Object>() {{
                         put("workOrderLink", frontendUrl + "/app/work-orders/" + id);
                         put("message", message);
