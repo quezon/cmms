@@ -119,7 +119,7 @@ public class ScheduleService {
                                 userService.findWorkersByCompany(preventiveMaintenance.getCompany().getId()).stream().filter(ownUser -> ownUser.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS)).collect(Collectors.toList());
                         List<OwnUser> usersToMail = new ArrayList<>(Stream.concat(
                                         preventiveMaintenance.getUsers().stream(),
-                                        admins.stream())
+                                        admins.stream()).filter(user -> user.getUserSettings().isEmailUpdatesForWorkOrders())
                                 .collect(Collectors.toMap(
                                         OwnUser::getId,  // key by ID
                                         Function.identity(), // value is the user object
