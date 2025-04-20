@@ -18,7 +18,7 @@ import java.util.Collections;
 public class LicenseService {
 
     private final ObjectMapper objectMapper;
-    @Value("${license-key}")
+    @Value("${license-key:#{null}}")
     private String licenseKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
