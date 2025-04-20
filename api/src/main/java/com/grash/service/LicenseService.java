@@ -37,6 +37,7 @@ public class LicenseService {
 
             // Generate fingerprint
             String fingerprint = FingerprintGenerator.generateFingerprint();
+            System.out.println("X-Machine Fingerprint: " + fingerprint);
             // Build the JSON body
             ObjectNode scopeNode = objectMapper.createObjectNode();
             scopeNode.put("fingerprint", fingerprint);
