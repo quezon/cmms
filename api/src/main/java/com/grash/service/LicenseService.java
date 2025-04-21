@@ -38,12 +38,14 @@ public class LicenseService {
             headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
             headers.setAccept(Collections.singletonList(MediaType.valueOf("application/vnd.api+json")));
 
-            // Generate fingerprint
-            String fingerprint = FingerprintGenerator.generateFingerprint();
-            System.out.println("X-Machine Fingerprint: " + fingerprint);
             // Build the JSON body
             ObjectNode scopeNode = objectMapper.createObjectNode();
-            if (licenseFingerprintRequired) scopeNode.put("fingerprint", fingerprint);
+            if (licenseFingerprintRequired) {
+                // Generate fingerprint
+                String fingerprint = FingerprintGenerator.generateFingerprint();
+                System.out.println("X-Machine-Fingerprint: " + fingerprint);
+                scopeNode.put("fingerprint", fingerprint);
+            }
 
             ObjectNode metaNode = objectMapper.createObjectNode();
             metaNode.put("key", licenseKey);

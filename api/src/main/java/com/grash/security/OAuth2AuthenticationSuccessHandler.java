@@ -119,7 +119,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         user.setCreatedViaSso(true);
         user.setSsoProvider(provider);
         user.setSsoProviderId(extractProviderId(attributes, provider));
-        System.out.println("SSO-attributes: " + attributes);
         user.setFirstName(extractFirstName(attributes, provider));
         user.setLastName(extractLastName(attributes, provider));
         user.setUsername(utils.generateStringId());
@@ -184,14 +183,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 break;
             case "microsoft":
                 // Microsoft Entra ID (Azure AD) can return email in different attributes
-                email = (String) attributes.get("mail");
+                email = (String) attributes.get("email");
                 if (email == null) {
                     email = (String) attributes.get("preferred_username");
                 }
-                if (email == null) {
-                    email = (String) attributes.get("userPrincipalName");
-                }
-                log.debug("Microsoft OAuth attributes for email extraction: {}", attributes);
                 break;
             default:
                 throw new CustomException("Unsupported OAuth2 provider", HttpStatus.BAD_REQUEST);
@@ -207,11 +202,10 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String extractProviderId(Map<String, Object> attributes, String registrationId) {
         switch (registrationId) {
             case "google":
+            case "microsoft":
                 return (String) attributes.get("sub");
             case "github":
                 return String.valueOf(attributes.get("id"));
-            case "microsoft":
-                return (String) attributes.get("id");
             default:
                 return "unknown";
         }
@@ -220,12 +214,11 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private String extractFirstName(Map<String, Object> attributes, String registrationId) {
         switch (registrationId) {
             case "google":
+            case "microsoft":
                 return (String) attributes.get("given_name");
             case "github":
                 String name = (String) attributes.get("name");
                 return name != null ? name.split(" ")[0] : "User";
-            case "microsoft":
-                return (String) attributes.get("givenName");
             default:
                 return "User";
         }
@@ -240,9 +233,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 String[] parts = name != null ? name.split(" ") : new String[]{"User"};
                 return parts.length > 1 ? parts[1] : "";
             case "microsoft":
-                String lastName = (String) attributes.get("surname");
+                String lastName = (String) attributes.get("family_name");
                 if (lastName == null) {
-                    log.debug("Microsoft OAuth missing surname attribute: {}", attributes);
                     lastName = "";
                 }
                 return lastName;
