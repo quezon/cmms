@@ -183,11 +183,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 email = (String) attributes.get("email");
                 break;
             case "microsoft":
-                // Microsoft Graph API returns email in a different structure
+                // Microsoft Entra ID (Azure AD) can return email in different attributes
                 email = (String) attributes.get("mail");
+                if (email == null) {
+                    email = (String) attributes.get("preferred_username");
+                }
                 if (email == null) {
                     email = (String) attributes.get("userPrincipalName");
                 }
+                log.debug("Microsoft OAuth attributes for email extraction: {}", attributes);
                 break;
             default:
                 throw new CustomException("Unsupported OAuth2 provider", HttpStatus.BAD_REQUEST);
@@ -236,7 +240,12 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 String[] parts = name != null ? name.split(" ") : new String[]{"User"};
                 return parts.length > 1 ? parts[1] : "";
             case "microsoft":
-                return (String) attributes.get("surname");
+                String lastName = (String) attributes.get("surname");
+                if (lastName == null) {
+                    log.debug("Microsoft OAuth missing surname attribute: {}", attributes);
+                    lastName = "";
+                }
+                return lastName;
             default:
                 return "";
         }
