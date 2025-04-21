@@ -119,7 +119,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         user.setCreatedViaSso(true);
         user.setSsoProvider(provider);
         user.setSsoProviderId(extractProviderId(attributes, provider));
-
+        System.out.println("SSO-attributes: " + attributes);
         user.setFirstName(extractFirstName(attributes, provider));
         user.setLastName(extractLastName(attributes, provider));
         user.setUsername(utils.generateStringId());
