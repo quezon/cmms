@@ -106,4 +106,5 @@ oauth2:
   success-redirect-url: ${PUBLIC_FRONT_URL}/oauth2/success
   failure-redirect-url: ${PUBLIC_FRONT_URL}/oauth2/failure
   provider: ${OAUTH2_PROVIDER}
-license-key: ${LICENSE_KEY}
+license-key: ${LICENSE_KEY:}
+license-fingerprint-required: ${LICENSE_FINGERPRINT_REQUIRED:true}

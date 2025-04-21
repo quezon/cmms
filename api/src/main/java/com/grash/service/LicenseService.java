@@ -21,6 +21,9 @@ public class LicenseService {
     @Value("${license-key:#{null}}")
     private String licenseKey;
 
+    @Value("${license-fingerprint-required}")
+    private boolean licenseFingerprintRequired;
+
     private final RestTemplate restTemplate = new RestTemplate();
 
     public boolean isLicenseValid() {
@@ -40,7 +43,7 @@ public class LicenseService {
             System.out.println("X-Machine Fingerprint: " + fingerprint);
             // Build the JSON body
             ObjectNode scopeNode = objectMapper.createObjectNode();
-            scopeNode.put("fingerprint", fingerprint);
+            if (licenseFingerprintRequired) scopeNode.put("fingerprint", fingerprint);
 
             ObjectNode metaNode = objectMapper.createObjectNode();
             metaNode.put("key", licenseKey);
