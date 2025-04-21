@@ -27,6 +27,7 @@ import Actions from './Actions';
 import i18n from 'i18next';
 import PreventiveMaintenance from 'src/models/owns/preventiveMaintenance';
 import { usePrevious } from '../../../../hooks/usePrevious';
+import { supportedLanguages } from '../../../../i18n/i18n';
 
 const FullCalendarWrapper = styled(Box)(
   ({ theme }) => `
@@ -130,9 +131,9 @@ interface OwnProps {
 }
 
 function ApplicationsCalendar({
-                                handleAddWorkOrder,
-                                handleOpenDetails
-                              }: OwnProps) {
+  handleAddWorkOrder,
+  handleOpenDetails
+}: OwnProps) {
   const theme = useTheme();
 
   const calendarRef = useRef<FullCalendar | null>(null);
@@ -142,7 +143,12 @@ function ApplicationsCalendar({
   const [date, setDate] = useState<Date>(new Date());
   const [view, setView] = useState<View>('timeGridWeek');
   const getLanguage = i18n.language;
-  const viewsOrder: View[] = ['dayGridMonth', 'timeGridWeek', 'listWeek', 'timeGridDay'];
+  const viewsOrder: View[] = [
+    'dayGridMonth',
+    'timeGridWeek',
+    'listWeek',
+    'timeGridDay'
+  ];
   const previousView = usePrevious(view);
   const getColor = (priority: Priority) => {
     switch (priority) {
@@ -158,7 +164,9 @@ function ApplicationsCalendar({
         break;
     }
   };
-  const getEventFromWO = (eventPayload: CalendarEvent<WorkOrder | PreventiveMaintenance>): Event => {
+  const getEventFromWO = (
+    eventPayload: CalendarEvent<WorkOrder | PreventiveMaintenance>
+  ): Event => {
     return {
       id: eventPayload.event.id.toString(),
       allDay: false,
@@ -183,7 +191,12 @@ function ApplicationsCalendar({
   useEffect(() => {
     const calItem = calendarRef.current;
     const newView = calItem.getApi().view;
-    if (previousView && previousView !== view && viewsOrder.findIndex(v => v === previousView) < viewsOrder.findIndex(v => v === view)) {
+    if (
+      previousView &&
+      previousView !== view &&
+      viewsOrder.findIndex((v) => v === previousView) <
+        viewsOrder.findIndex((v) => v === view)
+    ) {
       return;
     }
     const start = newView.currentStart;
@@ -227,7 +240,6 @@ function ApplicationsCalendar({
     dispatch(selectEvent(arg.event.id));
   };
 
-
   return (
     <Grid item xs={12}>
       <Card>
@@ -252,13 +264,23 @@ function ApplicationsCalendar({
             allDayMaintainDuration
             initialDate={date}
             initialView={view}
-            locale={getLanguage === 'fr' ? frLocale : enLocale}
+            locale={
+              supportedLanguages.find(({ code }) => code === getLanguage)
+                .calendarLocale
+            }
             droppable
             eventDisplay="block"
-            eventClick={(arg) => handleOpenDetails(Number(arg.event.id), arg.event.extendedProps.type)}
+            eventClick={(arg) =>
+              handleOpenDetails(
+                Number(arg.event.id),
+                arg.event.extendedProps.type
+              )
+            }
             dateClick={(event) => handleAddWorkOrder(event.date)}
             dayMaxEventRows={4}
-            events={calendar.events.map((eventPayload) => getEventFromWO(eventPayload))}
+            events={calendar.events.map((eventPayload) =>
+              getEventFromWO(eventPayload)
+            )}
             headerToolbar={false}
             height={660}
             ref={calendarRef}

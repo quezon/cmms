@@ -2,7 +2,6 @@ import type { ElementType, FC, ReactNode } from 'react';
 import { format } from 'date-fns';
 import PropTypes from 'prop-types';
 import { Grid, IconButton, Tooltip, Typography } from '@mui/material';
-import { enUS, fr } from 'date-fns/locale';
 
 import ViewAgendaTwoToneIcon from '@mui/icons-material/ViewAgendaTwoTone';
 
@@ -15,6 +14,7 @@ import TodayTwoToneIcon from '@mui/icons-material/TodayTwoTone';
 import ArrowForwardTwoToneIcon from '@mui/icons-material/ArrowForwardTwoTone';
 import ArrowBackTwoToneIcon from '@mui/icons-material/ArrowBackTwoTone';
 import i18n from 'i18next';
+import { supportedLanguages } from '../../../../i18n/i18n';
 
 interface ActionsProps {
   children?: ReactNode;
@@ -58,13 +58,13 @@ const viewOptions: ViewOption[] = [
 ];
 
 const Actions: FC<ActionsProps> = ({
-                                     date,
-                                     onNext,
-                                     onPrevious,
-                                     onToday,
-                                     changeView,
-                                     view
-                                   }) => {
+  date,
+  onNext,
+  onPrevious,
+  onToday,
+  changeView,
+  view
+}) => {
   const { t }: { t: any } = useTranslation();
   const getLanguage = i18n.language;
 
@@ -106,7 +106,8 @@ const Actions: FC<ActionsProps> = ({
       >
         <Typography variant="h3" color="text.primary">
           {format(date, 'MMMM yyyy', {
-            locale: getLanguage === 'fr' ? fr : enUS
+            locale: supportedLanguages.find(({ code }) => code === getLanguage)
+              .dateLocale
           })}
         </Typography>
       </Grid>
@@ -158,16 +159,11 @@ Actions.propTypes = {
 };
 
 Actions.defaultProps = {
-  onNext: () => {
-  },
-  onPrevious: () => {
-  },
-  onToday: () => {
-  },
-  handleCreateEvent: () => {
-  },
-  changeView: () => {
-  }
+  onNext: () => {},
+  onPrevious: () => {},
+  onToday: () => {},
+  handleCreateEvent: () => {},
+  changeView: () => {}
 };
 
 export default Actions;
