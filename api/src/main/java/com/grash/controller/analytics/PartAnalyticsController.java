@@ -11,6 +11,7 @@ import com.grash.service.*;
 import com.grash.utils.Helper;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +41,10 @@ public class PartAnalyticsController {
 
     @PostMapping("/consumptions/overview")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getPartStats",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<PartStats> getPartStats(@ApiIgnore @CurrentUser OwnUser user,
                                                   @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -58,6 +63,10 @@ public class PartAnalyticsController {
 
     @PostMapping("/consumptions/pareto")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getPartPareto",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<List<PartConsumptionsByPart>> getPareto(@ApiIgnore @CurrentUser OwnUser user,
                                                                   @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -81,6 +90,10 @@ public class PartAnalyticsController {
 
     @PostMapping("/consumptions/assets")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getConsumptionByAsset",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<PartConsumptionsByAsset>> getConsumptionByAsset(@ApiIgnore @CurrentUser OwnUser user,
                                                                                      @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -107,6 +120,10 @@ public class PartAnalyticsController {
 
     @PostMapping("/consumptions/parts-category")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getConsumptionByPartCategory",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<PartConsumptionByCategory>> getConsumptionByPartCategory(@ApiIgnore @CurrentUser OwnUser user,
                                                                                               @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -132,6 +149,10 @@ public class PartAnalyticsController {
 
     @PostMapping("/consumptions/work-order-category")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getConsumptionByWOCategory",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<PartConsumptionByWOCategory>> getConsumptionByWOCategory(@ApiIgnore @CurrentUser OwnUser user,
                                                                                               @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -157,6 +178,10 @@ public class PartAnalyticsController {
 
     @PostMapping("/consumptions/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getPartConsumptionsByMonth",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<List<PartConsumptionsByMonth>> getPartConsumptionsByMonth(@ApiIgnore @CurrentUser OwnUser user,
                                                                                     @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {

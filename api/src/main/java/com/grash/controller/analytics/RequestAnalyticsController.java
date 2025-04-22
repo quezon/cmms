@@ -16,6 +16,7 @@ import com.grash.service.WorkOrderCategoryService;
 import com.grash.utils.Helper;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -44,6 +45,10 @@ public class RequestAnalyticsController {
 
     @PostMapping("/overview")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getRequestStats",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<RequestStats> getRequestStats(@ApiIgnore @CurrentUser OwnUser user,
                                                         @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -70,6 +75,10 @@ public class RequestAnalyticsController {
 
     @PostMapping("/priority")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getRequestByPriority",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<RequestStatsByPriority> getByPriority(@ApiIgnore @CurrentUser OwnUser user,
                                                                 @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -101,6 +110,10 @@ public class RequestAnalyticsController {
 
     @PostMapping("/cycle-time/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getCycleTimeByMonth",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<List<RequestsByMonth>> getCycleTimeByMonth(@ApiIgnore @CurrentUser OwnUser user,
                                                                      @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -135,6 +148,10 @@ public class RequestAnalyticsController {
 
     @PostMapping("/counts/category")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getRequestCountsByCategory",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<CountByCategory>> getCountsByCategory(@ApiIgnore @CurrentUser OwnUser user,
                                                                            @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -156,6 +173,10 @@ public class RequestAnalyticsController {
 
     @PostMapping("/received-and-resolved")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getReceivedAndResolvedRequests",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<List<RequestsResolvedByDate>> getReceivedAndResolvedForDateRange(@ApiIgnore @CurrentUser OwnUser user,
                                                                                            @RequestBody DateRange dateRange) {
         LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());

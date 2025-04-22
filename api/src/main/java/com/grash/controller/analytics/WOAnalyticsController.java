@@ -15,6 +15,7 @@ import com.grash.service.*;
 import com.grash.utils.Helper;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
@@ -48,6 +49,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/complete/overview")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getCompleteStats",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<WOStats> getCompleteStats(@ApiIgnore @CurrentUser OwnUser user,
                                                     @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -139,6 +144,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/incomplete/overview")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getIncompleteStats",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<WOIncompleteStats> getIncompleteStats(@ApiIgnore @CurrentUser OwnUser user,
                                                                 @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -160,6 +169,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/incomplete/priority")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getIncompleteByPriority",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<WOStatsByPriority> getIncompleteByPriority(@ApiIgnore @CurrentUser OwnUser user,
                                                                      @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -207,6 +220,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/incomplete/statuses")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOStatuses",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<WOStatuses> getWOStatuses(@ApiIgnore @CurrentUser OwnUser user,
                                                     @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -227,6 +244,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/incomplete/age/assets")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getIncompleteByAsset",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<IncompleteWOByAsset>> getIncompleteByAsset(@ApiIgnore @CurrentUser OwnUser user,
                                                                                 @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -253,6 +274,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/incomplete/age/users")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getIncompleteByUser",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<IncompleteWOByUser>> getIncompleteByUser(@ApiIgnore @CurrentUser OwnUser user,
                                                                               @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -280,6 +305,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/hours")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOHours",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<WOHours> getHours(@ApiIgnore @CurrentUser OwnUser user, @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
             Collection<WorkOrder> workOrders =
@@ -299,6 +328,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/complete/counts/primaryUser")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOCountsByUser",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<WOCountByUser>> getCountsByUser(@ApiIgnore @CurrentUser OwnUser user,
                                                                      @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -321,6 +354,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/complete/counts/completedBy")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOCountsByCompletedBy",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<WOCountByUser>> getCountsByCompletedBy(@ApiIgnore @CurrentUser OwnUser user,
                                                                             @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -343,6 +380,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/complete/counts/priority")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOCountsByPriority",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Map<Priority, Integer>> getCountsByPriority(@ApiIgnore @CurrentUser OwnUser user,
                                                                       @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -360,6 +401,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/complete/counts/category")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOCountsByCategory",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<WOCountByCategory>> getCountsByCategory(@ApiIgnore @CurrentUser OwnUser user,
                                                                              @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -382,6 +427,10 @@ public class WOAnalyticsController {
 
     @GetMapping("/complete/counts/week")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOCompleteByWeek",
+            key = "#user.id"
+    )
     public ResponseEntity<List<WOCountByWeek>> getCompleteByWeek(@ApiIgnore @CurrentUser OwnUser user) {
         if (user.canSeeAnalytics()) {
             List<WOCountByWeek> result = new ArrayList<>();
@@ -408,6 +457,10 @@ public class WOAnalyticsController {
 
     @GetMapping("/complete/time/week")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOCompleteTimeByWeek",
+            key = "#user.id"
+    )
     public ResponseEntity<List<WOTimeByWeek>> getCompleteTimeByWeek(@ApiIgnore @CurrentUser OwnUser user) {
         if (user.canSeeAnalytics()) {
             List<WOTimeByWeek> result = new ArrayList<>();
@@ -436,6 +489,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/complete/costs-time")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOCompleteCostsAndTime",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<WOCostsAndTime> getCompleteCostsAndTime(@ApiIgnore @CurrentUser OwnUser user,
                                                                   @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -460,6 +517,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/complete/costs/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOCompleteCostsByDate",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<List<WOCostsByDate>> getCompleteCostsByDate(@ApiIgnore @CurrentUser OwnUser user,
                                                                       @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
@@ -493,6 +554,10 @@ public class WOAnalyticsController {
 
     @PostMapping("/statuses")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getWOStatusesByDate",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<List<WOStatusesByDate>> getReceivedAndResolvedForDateRange(@ApiIgnore @CurrentUser OwnUser user,
                                                                                      @RequestBody DateRange dateRange) {
         LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());
