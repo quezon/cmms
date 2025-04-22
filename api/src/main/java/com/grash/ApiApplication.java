@@ -15,11 +15,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 import java.util.*;
 
 @SpringBootApplication
 @RequiredArgsConstructor
+@EnableCaching
 public class ApiApplication implements CommandLineRunner {
 
     private final UserService userService;

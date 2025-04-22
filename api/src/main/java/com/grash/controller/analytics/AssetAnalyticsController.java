@@ -18,10 +18,12 @@ import com.grash.utils.AuditComparator;
 import com.grash.utils.Helper;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
@@ -44,9 +46,12 @@ public class AssetAnalyticsController {
 
     @PostMapping("/time-cost")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<TimeCostByAsset>> getTimeCostByAsset(HttpServletRequest req,
+    @Cacheable(
+            value = "getTimeCostByAsset",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<Collection<TimeCostByAsset>> getTimeCostByAsset(@ApiIgnore @CurrentUser OwnUser user,
                                                                           @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
                     dateRange.getEnd());
@@ -65,14 +70,18 @@ public class AssetAnalyticsController {
                         .id(asset.getId())
                         .build());
             });
-            return Helper.withCache(result);
+            return ResponseEntity.ok(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/overview")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<AssetStats> getOverviewStats(HttpServletRequest req, @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
+    @Cacheable(
+            value = "getOverviewStats",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<AssetStats> getOverviewStats(@ApiIgnore @CurrentUser OwnUser user,
+                                                       @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
             Collection<AssetDowntime> downtimes =
                     assetDowntimeService.findByCompanyAndStartsOnBetween(user.getCompany().getId(),
@@ -83,7 +92,7 @@ public class AssetAnalyticsController {
                     dateRange.getEnd());
             long livingTime = assets.stream().mapToLong(asset -> getLivingTime(asset, dateRange)).sum();
             long availability = livingTime == 0 ? 0 : (livingTime - downtimesDuration) * 100 / livingTime;
-            return Helper.withCache(AssetStats.builder()
+            return ResponseEntity.ok(AssetStats.builder()
                     .downtime(downtimesDuration)
                     .availability(availability)
                     .downtimeEvents(downtimes.size())
@@ -93,13 +102,16 @@ public class AssetAnalyticsController {
 
     @PostMapping("/downtimes")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<DowntimesByAsset>> getDowntimesByAsset(HttpServletRequest req,
+    @Cacheable(
+            value = "getDowntimesByAsset",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<Collection<DowntimesByAsset>> getDowntimesByAsset(@ApiIgnore @CurrentUser OwnUser user,
                                                                             @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
                     dateRange.getEnd());
-            return Helper.withCache(assets.stream().map(asset -> {
+            return ResponseEntity.ok(assets.stream().map(asset -> {
                 Collection<AssetDowntime> downtimes =
                         assetDowntimeService.findByAssetAndStartsOnBetween(asset.getId(), dateRange.getStart(),
                                 dateRange.getEnd());
@@ -118,12 +130,16 @@ public class AssetAnalyticsController {
 
     @PostMapping("/mtbf")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getMTBFByAsset",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
     public ResponseEntity<Collection<MTBFByAsset>> getMTBFByAsset(@CurrentUser OwnUser user,
                                                                   @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
             Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
                     dateRange.getEnd());
-            return Helper.withCache(assets.stream().map(asset -> MTBFByAsset.builder()
+            return ResponseEntity.ok(assets.stream().map(asset -> MTBFByAsset.builder()
                     .mtbf(assetService.getMTBF(asset.getId(), dateRange.getStart(), dateRange.getEnd()))
                     .id(asset.getId())
                     .name(asset.getName())
@@ -133,8 +149,12 @@ public class AssetAnalyticsController {
 
     @PostMapping("/meantimes")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Meantimes> getMeantimes(HttpServletRequest req, @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
+    @Cacheable(
+            value = "getMeantimes",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<Meantimes> getMeantimes(@ApiIgnore @CurrentUser OwnUser user,
+                                                  @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
             Collection<AssetDowntime> downtimes =
                     assetDowntimeService.findByCompanyAndStartsOnBetween(user.getCompany().getId(),
@@ -150,7 +170,7 @@ public class AssetAnalyticsController {
                 betweenMaintenances = (Helper.getDateDiff(firstWorkOrder.getCreatedAt(), lastWorkOrder.getCreatedAt()
                         , TimeUnit.HOURS)) / (workOrders.size() - 1);
             }
-            return Helper.withCache(Meantimes.builder()
+            return ResponseEntity.ok(Meantimes.builder()
                     .betweenDowntimes(assetDowntimeService.getDowntimesMeantime(downtimes))
                     .betweenMaintenances(betweenMaintenances)
                     .build());
@@ -159,13 +179,16 @@ public class AssetAnalyticsController {
 
     @PostMapping("/repair-times")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<RepairTimeByAsset>> getRepairTimeByAsset(HttpServletRequest req,
+    @Cacheable(
+            value = "getRepairTimeByAsset",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<Collection<RepairTimeByAsset>> getRepairTimeByAsset(@ApiIgnore @CurrentUser OwnUser user,
                                                                               @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
                     dateRange.getEnd());
-            return Helper.withCache(assets.stream().map(asset -> {
+            return ResponseEntity.ok(assets.stream().map(asset -> {
                 Collection<WorkOrder> completeWO = workOrderService.findByAssetAndCreatedAtBetween(asset.getId(),
                         dateRange.getStart(), dateRange.getEnd()).stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
                 return RepairTimeByAsset.builder()
@@ -179,9 +202,12 @@ public class AssetAnalyticsController {
 
     @PostMapping("/downtimes/meantime/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<List<DowntimesMeantimeByDate>> getDowntimesMeantimeByMonth(HttpServletRequest req,
+    @Cacheable(
+            value = "getDowntimesMeantimeByMonth",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<List<DowntimesMeantimeByDate>> getDowntimesMeantimeByMonth(@ApiIgnore @CurrentUser OwnUser user,
                                                                                      @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());
             List<DowntimesMeantimeByDate> result = new ArrayList<>();
@@ -204,14 +230,18 @@ public class AssetAnalyticsController {
                         .date(Helper.localDateToDate(currentDate)).build());
                 currentDate = nextDate;
             }
-            return Helper.withCache(result);
+            return ResponseEntity.ok(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/costs/overview")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<AssetsCosts> getAssetsCosts(HttpServletRequest req, @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
+    @Cacheable(
+            value = "getAssetsCosts",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<AssetsCosts> getAssetsCosts(@ApiIgnore @CurrentUser OwnUser user,
+                                                      @RequestBody DateRange dateRange) {
         boolean includeLaborCost =
                 user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost();
         if (user.canSeeAnalytics()) {
@@ -223,7 +253,7 @@ public class AssetAnalyticsController {
             long totalWOCosts = getCompleteWOCosts(assets, includeLaborCost, dateRange);
             long rav = assetsWithAcquisitionCost.isEmpty() ? 0 : getCompleteWOCosts(assetsWithAcquisitionCost,
                     includeLaborCost, dateRange) * 100 / totalAcquisitionCost;
-            return Helper.withCache(AssetsCosts.builder()
+            return ResponseEntity.ok(AssetsCosts.builder()
                     .totalWOCosts(totalWOCosts)
                     .totalAcquisitionCost(totalAcquisitionCost)
                     .rav(rav).build());
@@ -232,13 +262,16 @@ public class AssetAnalyticsController {
 
     @PostMapping("/downtimes/costs")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<DowntimesAndCostsByAsset>> getDowntimesAndCosts(HttpServletRequest req,
+    @Cacheable(
+            value = "getDowntimesAndCosts",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<Collection<DowntimesAndCostsByAsset>> getDowntimesAndCosts(@ApiIgnore @CurrentUser OwnUser user,
                                                                                      @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
                     dateRange.getEnd());
-            return Helper.withCache(assets.stream().map(asset -> {
+            return ResponseEntity.ok(assets.stream().map(asset -> {
                 Collection<AssetDowntime> downtimes = assetDowntimeService.findByAsset(asset.getId()).stream()
                         .filter(assetDowntime -> assetDowntime.getDuration() != 0).collect(Collectors.toList());
                 long downtimesDuration =
@@ -258,9 +291,12 @@ public class AssetAnalyticsController {
 
     @PostMapping("/downtimes/costs/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<List<DowntimesByDate>> getDowntimesByMonth(HttpServletRequest req,
+    @Cacheable(
+            value = "getDowntimesByMonth",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)"
+    )
+    public ResponseEntity<List<DowntimesByDate>> getDowntimesByMonth(@ApiIgnore @CurrentUser OwnUser user,
                                                                      @RequestBody DateRange dateRange) {
-        OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             List<DowntimesByDate> result = new ArrayList<>();
             LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());
@@ -278,7 +314,7 @@ public class AssetAnalyticsController {
                 Collection<WorkOrder> completeWorkOrders =
                         workOrderService.findByCompletedOnBetweenAndCompany(Helper.localDateToDate(currentDate),
                                         Helper.localDateToDate(nextDate), user.getCompany().getId())
-                        .stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
+                                .stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
                 Collection<AssetDowntime> downtimes =
                         assetDowntimeService.findByStartsOnBetweenAndCompany(Helper.localDateToDate(currentDate),
                                 Helper.localDateToDate(nextDate), user.getCompany().getId());
@@ -289,15 +325,18 @@ public class AssetAnalyticsController {
                         .date(Helper.localDateToDate(currentDate)).build());
                 currentDate = nextDate;
             }
-            return Helper.withCache(result);
+            return ResponseEntity.ok(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/{id}/overview")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
+    @Cacheable(
+            value = "getDateRangeOverview",
+            key = "T(com.grash.utils.CacheKeyUtils).dateRangeKey(#user.id, #dateRange.start, #dateRange.end)+'_'+#id"
+    )
     public ResponseEntity<AssetOverview> getDateRangeOverview(@PathVariable Long id, @RequestBody DateRange dateRange
-            , HttpServletRequest req) {
-        OwnUser user = userService.whoami(req);
+            , @ApiIgnore @CurrentUser OwnUser user) {
         Asset savedAsset = assetService.findById(id).get();
         Date start = dateRange.getStart();
         Date end = dateRange.getEnd();
@@ -311,7 +350,7 @@ public class AssetAnalyticsController {
                     .totalCost(assetService.getTotalCost(id, start, end,
                             user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost()))
                     .build();
-            return Helper.withCache(result);
+            return ResponseEntity.ok(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
