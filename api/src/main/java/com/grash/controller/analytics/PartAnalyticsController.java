@@ -41,11 +41,13 @@ public class PartAnalyticsController {
     public ResponseEntity<PartStats> getPartStats(HttpServletRequest req, @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<PartConsumption> partConsumptions = partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(), dateRange.getStart(), dateRange.getEnd());
+            Collection<PartConsumption> partConsumptions =
+                    partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(),
+                            dateRange.getStart(), dateRange.getEnd());
             long totalConsumptionCost = partConsumptions.stream().mapToLong(PartConsumption::getCost).sum();
             int consumedCount = partConsumptions.stream().mapToInt(PartConsumption::getQuantity).sum();
 
-            return ResponseEntity.ok(PartStats.builder()
+            return Helper.withCache(PartStats.builder()
                     .consumedCount(consumedCount)
                     .totalConsumptionCost(totalConsumptionCost)
                     .build());
@@ -54,7 +56,8 @@ public class PartAnalyticsController {
 
     @PostMapping("/consumptions/pareto")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<List<PartConsumptionsByPart>> getPareto(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<List<PartConsumptionsByPart>> getPareto(HttpServletRequest req,
+                                                                  @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             Collection<PartConsumption> partConsumptions = partConsumptionService.findByCompanyAndCreatedAtBetween
@@ -64,26 +67,31 @@ public class PartAnalyticsController {
                     .map(PartConsumption::getPart)
                     .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparingLong(Part::getId)))));
             List<PartConsumptionsByPart> result = parts.stream().map(part -> {
-                long cost = partConsumptions.stream().filter(partConsumption -> partConsumption.getPart().getId().equals(part.getId())).mapToLong(PartConsumption::getCost).sum();
+                long cost =
+                        partConsumptions.stream().filter(partConsumption -> partConsumption.getPart().getId().equals(part.getId())).mapToLong(PartConsumption::getCost).sum();
                 return PartConsumptionsByPart.builder()
                         .id(part.getId())
                         .name(part.getName())
                         .cost(cost).build();
             }).sorted(Comparator.comparing(PartConsumptionsByPart::getCost).reversed()).collect(Collectors.toList());
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/consumptions/assets")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<PartConsumptionsByAsset>> getConsumptionByAsset(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<PartConsumptionsByAsset>> getConsumptionByAsset(HttpServletRequest req,
+                                                                                     @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(), dateRange.getEnd());
+            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
+                    dateRange.getEnd());
             Collection<PartConsumptionsByAsset> result = new ArrayList<>();
             for (Asset asset : assets) {
-                Collection<WorkOrder> workOrders = workOrderService.findByAssetAndCreatedAtBetween(asset.getId(), dateRange.getStart(), dateRange.getEnd());
-                List<PartConsumption> partConsumptions = partConsumptionService.findByWorkOrders(workOrders.stream().map(WorkOrder::getId).collect(Collectors.toList()));
+                Collection<WorkOrder> workOrders = workOrderService.findByAssetAndCreatedAtBetween(asset.getId(),
+                        dateRange.getStart(), dateRange.getEnd());
+                List<PartConsumption> partConsumptions =
+                        partConsumptionService.findByWorkOrders(workOrders.stream().map(WorkOrder::getId).collect(Collectors.toList()));
                 long cost = partConsumptions.stream().mapToLong(PartConsumption::getCost).sum();
                 result.add(PartConsumptionsByAsset.builder()
                         .cost(cost)
@@ -91,21 +99,27 @@ public class PartAnalyticsController {
                         .id(asset.getId())
                         .build());
             }
-            result = result.stream().filter(partConsumptionsByAsset -> partConsumptionsByAsset.getCost() != 0).collect(Collectors.toList());
-            return ResponseEntity.ok(result);
+            result =
+                    result.stream().filter(partConsumptionsByAsset -> partConsumptionsByAsset.getCost() != 0).collect(Collectors.toList());
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/consumptions/parts-category")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<PartConsumptionByCategory>> getConsumptionByPartCategory(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<PartConsumptionByCategory>> getConsumptionByPartCategory(HttpServletRequest req,
+                                                                                              @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<PartCategory> partCategories = partCategoryService.findByCompanySettings(user.getCompany().getCompanySettings().getId());
+            Collection<PartCategory> partCategories =
+                    partCategoryService.findByCompanySettings(user.getCompany().getCompanySettings().getId());
             Collection<PartConsumptionByCategory> result = new ArrayList<>();
-            Collection<PartConsumption> partConsumptions = partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(), dateRange.getStart(), dateRange.getEnd());
+            Collection<PartConsumption> partConsumptions =
+                    partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(),
+                            dateRange.getStart(), dateRange.getEnd());
             for (PartCategory category : partCategories) {
-                long cost = partConsumptions.stream().filter(partConsumption -> partConsumption.getPart().getCategory() != null
+                long cost =
+                        partConsumptions.stream().filter(partConsumption -> partConsumption.getPart().getCategory() != null
                         && category.getId().equals(partConsumption.getPart().getCategory().getId())).mapToLong(PartConsumption::getCost).sum();
                 result.add(PartConsumptionByCategory.builder()
                         .cost(cost)
@@ -113,20 +127,25 @@ public class PartAnalyticsController {
                         .id(category.getId())
                         .build());
             }
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/consumptions/work-order-category")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<PartConsumptionByWOCategory>> getConsumptionByWOCategory(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<PartConsumptionByWOCategory>> getConsumptionByWOCategory(HttpServletRequest req,
+                                                                                              @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<WorkOrderCategory> workOrderCategories = workOrderCategoryService.findByCompanySettings(user.getCompany().getCompanySettings().getId());
+            Collection<WorkOrderCategory> workOrderCategories =
+                    workOrderCategoryService.findByCompanySettings(user.getCompany().getCompanySettings().getId());
             Collection<PartConsumptionByWOCategory> result = new ArrayList<>();
-            Collection<PartConsumption> partConsumptions = partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(), dateRange.getStart(), dateRange.getEnd());
+            Collection<PartConsumption> partConsumptions =
+                    partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(),
+                            dateRange.getStart(), dateRange.getEnd());
             for (WorkOrderCategory category : workOrderCategories) {
-                long cost = partConsumptions.stream().filter(partConsumption -> partConsumption.getWorkOrder().getCategory() != null
+                long cost =
+                        partConsumptions.stream().filter(partConsumption -> partConsumption.getWorkOrder().getCategory() != null
                         && category.getId().equals(partConsumption.getWorkOrder().getCategory().getId())).mapToLong(PartConsumption::getCost).sum();
                 result.add(PartConsumptionByWOCategory.builder()
                         .cost(cost)
@@ -134,33 +153,39 @@ public class PartAnalyticsController {
                         .id(category.getId())
                         .build());
             }
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/consumptions/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<List<PartConsumptionsByMonth>> getPartConsumptionsByMonth(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<List<PartConsumptionsByMonth>> getPartConsumptionsByMonth(HttpServletRequest req,
+                                                                                    @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             List<PartConsumptionsByMonth> result = new ArrayList<>();
             LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());
             LocalDate currentDate = Helper.dateToLocalDate(dateRange.getStart());
-            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date in the range
-            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()), endDateExclusive);
+            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date
+            // in the range
+            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()),
+                    endDateExclusive);
             int points = Math.toIntExact(Math.min(15, totalDaysInRange));
 
             for (int i = 0; i < points; i++) {
-                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the range
+                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the
+                // range
                 nextDate = nextDate.isAfter(endDateLocale) ? endDateLocale : nextDate; // Adjust for the end date
-                Collection<PartConsumption> partConsumptions = partConsumptionService.findByCreatedAtBetweenAndCompany(Helper.localDateToDate(currentDate), Helper.localDateToDate(nextDate), user.getCompany().getId());
+                Collection<PartConsumption> partConsumptions =
+                        partConsumptionService.findByCreatedAtBetweenAndCompany(Helper.localDateToDate(currentDate),
+                                Helper.localDateToDate(nextDate), user.getCompany().getId());
                 long cost = partConsumptions.stream().mapToLong(PartConsumption::getCost).sum();
                 result.add(PartConsumptionsByMonth.builder()
                         .cost(cost)
                         .date(Helper.localDateToDate(currentDate)).build());
                 currentDate = nextDate;
             }
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 }

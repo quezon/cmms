@@ -44,16 +44,20 @@ public class AssetAnalyticsController {
 
     @PostMapping("/time-cost")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<TimeCostByAsset>> getTimeCostByAsset(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<TimeCostByAsset>> getTimeCostByAsset(HttpServletRequest req,
+                                                                          @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(), dateRange.getEnd());
+            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
+                    dateRange.getEnd());
             Collection<TimeCostByAsset> result = new ArrayList<>();
             assets.forEach(asset -> {
-                Collection<WorkOrder> completeWO = workOrderService.findByAssetAndCreatedAtBetween(asset.getId(), dateRange.getStart(), dateRange.getEnd())
+                Collection<WorkOrder> completeWO = workOrderService.findByAssetAndCreatedAtBetween(asset.getId(),
+                                dateRange.getStart(), dateRange.getEnd())
                         .stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
                 long time = workOrderService.getLaborCostAndTime(completeWO).getSecond();
-                long cost = workOrderService.getAllCost(completeWO, user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost());
+                long cost = workOrderService.getAllCost(completeWO,
+                        user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost());
                 result.add(TimeCostByAsset.builder()
                         .time(time)
                         .cost(cost)
@@ -61,7 +65,7 @@ public class AssetAnalyticsController {
                         .id(asset.getId())
                         .build());
             });
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -70,12 +74,16 @@ public class AssetAnalyticsController {
     public ResponseEntity<AssetStats> getOverviewStats(HttpServletRequest req, @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<AssetDowntime> downtimes = assetDowntimeService.findByCompanyAndStartsOnBetween(user.getCompany().getId(), dateRange.getStart(), dateRange.getEnd());
-            long downtimesDuration = downtimes.stream().mapToLong(assetDowntime -> assetDowntime.getDateRangeDuration(dateRange)).sum();
-            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(), dateRange.getEnd());
+            Collection<AssetDowntime> downtimes =
+                    assetDowntimeService.findByCompanyAndStartsOnBetween(user.getCompany().getId(),
+                            dateRange.getStart(), dateRange.getEnd());
+            long downtimesDuration =
+                    downtimes.stream().mapToLong(assetDowntime -> assetDowntime.getDateRangeDuration(dateRange)).sum();
+            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
+                    dateRange.getEnd());
             long livingTime = assets.stream().mapToLong(asset -> getLivingTime(asset, dateRange)).sum();
             long availability = livingTime == 0 ? 0 : (livingTime - downtimesDuration) * 100 / livingTime;
-            return ResponseEntity.ok(AssetStats.builder()
+            return Helper.withCache(AssetStats.builder()
                     .downtime(downtimesDuration)
                     .availability(availability)
                     .downtimeEvents(downtimes.size())
@@ -85,13 +93,18 @@ public class AssetAnalyticsController {
 
     @PostMapping("/downtimes")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<DowntimesByAsset>> getDowntimesByAsset(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<DowntimesByAsset>> getDowntimesByAsset(HttpServletRequest req,
+                                                                            @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(), dateRange.getEnd());
-            return ResponseEntity.ok(assets.stream().map(asset -> {
-                Collection<AssetDowntime> downtimes = assetDowntimeService.findByAssetAndStartsOnBetween(asset.getId(), dateRange.getStart(), dateRange.getEnd());
-                long downtimesDuration = downtimes.stream().mapToLong(assetDowntime -> assetDowntime.getDateRangeDuration(dateRange)).sum();
+            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
+                    dateRange.getEnd());
+            return Helper.withCache(assets.stream().map(asset -> {
+                Collection<AssetDowntime> downtimes =
+                        assetDowntimeService.findByAssetAndStartsOnBetween(asset.getId(), dateRange.getStart(),
+                                dateRange.getEnd());
+                long downtimesDuration =
+                        downtimes.stream().mapToLong(assetDowntime -> assetDowntime.getDateRangeDuration(dateRange)).sum();
                 long percent = downtimesDuration * 100 / getLivingTime(asset, dateRange);
                 return DowntimesByAsset.builder()
                         .count(downtimes.size())
@@ -105,10 +118,12 @@ public class AssetAnalyticsController {
 
     @PostMapping("/mtbf")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<MTBFByAsset>> getMTBFByAsset(@CurrentUser OwnUser user, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<MTBFByAsset>> getMTBFByAsset(@CurrentUser OwnUser user,
+                                                                  @RequestBody DateRange dateRange) {
         if (user.canSeeAnalytics()) {
-            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(), dateRange.getEnd());
-            return ResponseEntity.ok(assets.stream().map(asset -> MTBFByAsset.builder()
+            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
+                    dateRange.getEnd());
+            return Helper.withCache(assets.stream().map(asset -> MTBFByAsset.builder()
                     .mtbf(assetService.getMTBF(asset.getId(), dateRange.getStart(), dateRange.getEnd()))
                     .id(asset.getId())
                     .name(asset.getName())
@@ -121,16 +136,21 @@ public class AssetAnalyticsController {
     public ResponseEntity<Meantimes> getMeantimes(HttpServletRequest req, @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<AssetDowntime> downtimes = assetDowntimeService.findByCompanyAndStartsOnBetween(user.getCompany().getId(), dateRange.getStart(), dateRange.getEnd());
+            Collection<AssetDowntime> downtimes =
+                    assetDowntimeService.findByCompanyAndStartsOnBetween(user.getCompany().getId(),
+                            dateRange.getStart(), dateRange.getEnd());
             long betweenMaintenances = 0L;
-            Collection<WorkOrder> workOrders = workOrderService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(), dateRange.getStart(), dateRange.getEnd());
+            Collection<WorkOrder> workOrders =
+                    workOrderService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(), dateRange.getStart()
+                            , dateRange.getEnd());
             if (workOrders.size() > 2) {
                 AuditComparator auditComparator = new AuditComparator();
                 WorkOrder firstWorkOrder = Collections.min(workOrders, auditComparator);
                 WorkOrder lastWorkOrder = Collections.max(workOrders, auditComparator);
-                betweenMaintenances = (Helper.getDateDiff(firstWorkOrder.getCreatedAt(), lastWorkOrder.getCreatedAt(), TimeUnit.HOURS)) / (workOrders.size() - 1);
+                betweenMaintenances = (Helper.getDateDiff(firstWorkOrder.getCreatedAt(), lastWorkOrder.getCreatedAt()
+                        , TimeUnit.HOURS)) / (workOrders.size() - 1);
             }
-            return ResponseEntity.ok(Meantimes.builder()
+            return Helper.withCache(Meantimes.builder()
                     .betweenDowntimes(assetDowntimeService.getDowntimesMeantime(downtimes))
                     .betweenMaintenances(betweenMaintenances)
                     .build());
@@ -139,12 +159,15 @@ public class AssetAnalyticsController {
 
     @PostMapping("/repair-times")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<RepairTimeByAsset>> getRepairTimeByAsset(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<RepairTimeByAsset>> getRepairTimeByAsset(HttpServletRequest req,
+                                                                              @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(), dateRange.getEnd());
-            return ResponseEntity.ok(assets.stream().map(asset -> {
-                Collection<WorkOrder> completeWO = workOrderService.findByAssetAndCreatedAtBetween(asset.getId(), dateRange.getStart(), dateRange.getEnd()).stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
+            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
+                    dateRange.getEnd());
+            return Helper.withCache(assets.stream().map(asset -> {
+                Collection<WorkOrder> completeWO = workOrderService.findByAssetAndCreatedAtBetween(asset.getId(),
+                        dateRange.getStart(), dateRange.getEnd()).stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
                 return RepairTimeByAsset.builder()
                         .id(asset.getId())
                         .name(asset.getName())
@@ -156,26 +179,32 @@ public class AssetAnalyticsController {
 
     @PostMapping("/downtimes/meantime/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<List<DowntimesMeantimeByDate>> getDowntimesMeantimeByMonth(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<List<DowntimesMeantimeByDate>> getDowntimesMeantimeByMonth(HttpServletRequest req,
+                                                                                     @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());
             List<DowntimesMeantimeByDate> result = new ArrayList<>();
             LocalDate currentDate = Helper.dateToLocalDate(dateRange.getStart());
-            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date in the range
-            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()), endDateExclusive);
+            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date
+            // in the range
+            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()),
+                    endDateExclusive);
             int points = Math.toIntExact(Math.min(15, totalDaysInRange));
 
             for (int i = 0; i < points; i++) {
-                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the range
+                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the
+                // range
                 nextDate = nextDate.isAfter(endDateLocale) ? endDateLocale : nextDate; // Adjust for the end date
-                Collection<AssetDowntime> downtimes = assetDowntimeService.findByStartsOnBetweenAndCompany(Helper.localDateToDate(currentDate), Helper.localDateToDate(nextDate), user.getCompany().getId());
+                Collection<AssetDowntime> downtimes =
+                        assetDowntimeService.findByStartsOnBetweenAndCompany(Helper.localDateToDate(currentDate),
+                                Helper.localDateToDate(nextDate), user.getCompany().getId());
                 result.add(DowntimesMeantimeByDate.builder()
                         .meantime(assetDowntimeService.getDowntimesMeantime(downtimes))
                         .date(Helper.localDateToDate(currentDate)).build());
                 currentDate = nextDate;
             }
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
@@ -183,14 +212,18 @@ public class AssetAnalyticsController {
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     public ResponseEntity<AssetsCosts> getAssetsCosts(HttpServletRequest req, @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
-        boolean includeLaborCost = user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost();
+        boolean includeLaborCost =
+                user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost();
         if (user.canSeeAnalytics()) {
-            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(), dateRange.getEnd());
-            Collection<Asset> assetsWithAcquisitionCost = assets.stream().filter(asset -> asset.getAcquisitionCost() != null).collect(Collectors.toList());
+            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
+                    dateRange.getEnd());
+            Collection<Asset> assetsWithAcquisitionCost =
+                    assets.stream().filter(asset -> asset.getAcquisitionCost() != null).collect(Collectors.toList());
             long totalAcquisitionCost = assetsWithAcquisitionCost.stream().mapToLong(Asset::getAcquisitionCost).sum();
             long totalWOCosts = getCompleteWOCosts(assets, includeLaborCost, dateRange);
-            long rav = assetsWithAcquisitionCost.isEmpty() ? 0 : getCompleteWOCosts(assetsWithAcquisitionCost, includeLaborCost, dateRange) * 100 / totalAcquisitionCost;
-            return ResponseEntity.ok(AssetsCosts.builder()
+            long rav = assetsWithAcquisitionCost.isEmpty() ? 0 : getCompleteWOCosts(assetsWithAcquisitionCost,
+                    includeLaborCost, dateRange) * 100 / totalAcquisitionCost;
+            return Helper.withCache(AssetsCosts.builder()
                     .totalWOCosts(totalWOCosts)
                     .totalAcquisitionCost(totalAcquisitionCost)
                     .rav(rav).build());
@@ -199,15 +232,20 @@ public class AssetAnalyticsController {
 
     @PostMapping("/downtimes/costs")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<DowntimesAndCostsByAsset>> getDowntimesAndCosts(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<DowntimesAndCostsByAsset>> getDowntimesAndCosts(HttpServletRequest req,
+                                                                                     @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(), dateRange.getEnd());
-            return ResponseEntity.ok(assets.stream().map(asset -> {
+            Collection<Asset> assets = assetService.findByCompanyAndBefore(user.getCompany().getId(),
+                    dateRange.getEnd());
+            return Helper.withCache(assets.stream().map(asset -> {
                 Collection<AssetDowntime> downtimes = assetDowntimeService.findByAsset(asset.getId()).stream()
                         .filter(assetDowntime -> assetDowntime.getDuration() != 0).collect(Collectors.toList());
-                long downtimesDuration = downtimes.stream().mapToLong(assetDowntime -> assetDowntime.getDateRangeDuration(dateRange)).sum();
-                long totalWOCosts = getCompleteWOCosts(Collections.singleton(asset), user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost(), dateRange);
+                long downtimesDuration =
+                        downtimes.stream().mapToLong(assetDowntime -> assetDowntime.getDateRangeDuration(dateRange)).sum();
+                long totalWOCosts = getCompleteWOCosts(Collections.singleton(asset),
+                        user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost(),
+                        dateRange);
                 return DowntimesAndCostsByAsset.builder()
                         .id(asset.getId())
                         .name(asset.getName())
@@ -220,35 +258,45 @@ public class AssetAnalyticsController {
 
     @PostMapping("/downtimes/costs/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<List<DowntimesByDate>> getDowntimesByMonth(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<List<DowntimesByDate>> getDowntimesByMonth(HttpServletRequest req,
+                                                                     @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             List<DowntimesByDate> result = new ArrayList<>();
             LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());
             LocalDate currentDate = Helper.dateToLocalDate(dateRange.getStart());
-            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date in the range
-            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()), endDateExclusive);
+            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date
+            // in the range
+            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()),
+                    endDateExclusive);
             int points = Math.toIntExact(Math.min(15, totalDaysInRange));
 
             for (int i = 0; i < points; i++) {
-                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the range
+                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the
+                // range
                 nextDate = nextDate.isAfter(endDateLocale) ? endDateLocale : nextDate; // Adjust for the end date
-                Collection<WorkOrder> completeWorkOrders = workOrderService.findByCompletedOnBetweenAndCompany(Helper.localDateToDate(currentDate), Helper.localDateToDate(nextDate), user.getCompany().getId())
+                Collection<WorkOrder> completeWorkOrders =
+                        workOrderService.findByCompletedOnBetweenAndCompany(Helper.localDateToDate(currentDate),
+                                        Helper.localDateToDate(nextDate), user.getCompany().getId())
                         .stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
-                Collection<AssetDowntime> downtimes = assetDowntimeService.findByStartsOnBetweenAndCompany(Helper.localDateToDate(currentDate), Helper.localDateToDate(nextDate), user.getCompany().getId());
+                Collection<AssetDowntime> downtimes =
+                        assetDowntimeService.findByStartsOnBetweenAndCompany(Helper.localDateToDate(currentDate),
+                                Helper.localDateToDate(nextDate), user.getCompany().getId());
                 result.add(DowntimesByDate.builder()
-                        .workOrdersCosts(workOrderService.getAllCost(completeWorkOrders, user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost()))
+                        .workOrdersCosts(workOrderService.getAllCost(completeWorkOrders,
+                                user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost()))
                         .duration(downtimes.stream().mapToLong(AssetDowntime::getDuration).sum())
                         .date(Helper.localDateToDate(currentDate)).build());
                 currentDate = nextDate;
             }
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/{id}/overview")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<AssetOverview> getDateRangeOverview(@PathVariable Long id, @RequestBody DateRange dateRange, HttpServletRequest req) {
+    public ResponseEntity<AssetOverview> getDateRangeOverview(@PathVariable Long id, @RequestBody DateRange dateRange
+            , HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Asset savedAsset = assetService.findById(id).get();
         Date start = dateRange.getStart();
@@ -260,14 +308,16 @@ public class AssetAnalyticsController {
                     .mtbf(assetService.getMTBF(id, start, end))
                     .downtime(assetService.getDowntime(id, start, end))
                     .uptime(assetService.getUptime(id, start, end))
-                    .totalCost(assetService.getTotalCost(id, start, end, user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost()))
+                    .totalCost(assetService.getTotalCost(id, start, end,
+                            user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost()))
                     .build();
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     private long getCompleteWOCosts(Collection<Asset> assets, boolean includeLaborCost, DateRange dateRange) {
-        return assets.stream().map(asset -> workOrderService.findByAssetAndCreatedAtBetween(asset.getId(), dateRange.getStart(), dateRange.getEnd()).stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList())).mapToLong(workOrder -> workOrderService.getAllCost(workOrder, includeLaborCost)).sum();
+        return assets.stream().map(asset -> workOrderService.findByAssetAndCreatedAtBetween(asset.getId(),
+                dateRange.getStart(), dateRange.getEnd()).stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList())).mapToLong(workOrder -> workOrderService.getAllCost(workOrder, includeLaborCost)).sum();
     }
 
     private long getLivingTime(Asset asset, DateRange dateRange) {

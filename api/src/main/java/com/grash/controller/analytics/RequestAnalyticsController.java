@@ -45,13 +45,19 @@ public class RequestAnalyticsController {
     public ResponseEntity<RequestStats> getRequestStats(HttpServletRequest req, @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<Request> requests = requestService.findByCreatedAtBetweenAndCompany(dateRange.getStart(), dateRange.getEnd(), user.getCompany().getId());
-            Collection<Request> approvedRequests = requests.stream().filter(request -> request.getWorkOrder() != null).collect(Collectors.toList());
-            Collection<Request> cancelledRequests = requests.stream().filter(Request::isCancelled).collect(Collectors.toList());
-            Collection<Request> pendingRequests = requests.stream().filter(request -> request.getWorkOrder() == null && !request.isCancelled()).collect(Collectors.toList());
-            Collection<Request> completeRequests = approvedRequests.stream().filter(request -> request.getWorkOrder().getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
-            long cycleTime = WorkOrder.getAverageAge(completeRequests.stream().map(Request::getWorkOrder).collect(Collectors.toList()));
-            return ResponseEntity.ok(RequestStats.builder()
+            Collection<Request> requests = requestService.findByCreatedAtBetweenAndCompany(dateRange.getStart(),
+                    dateRange.getEnd(), user.getCompany().getId());
+            Collection<Request> approvedRequests =
+                    requests.stream().filter(request -> request.getWorkOrder() != null).collect(Collectors.toList());
+            Collection<Request> cancelledRequests =
+                    requests.stream().filter(Request::isCancelled).collect(Collectors.toList());
+            Collection<Request> pendingRequests =
+                    requests.stream().filter(request -> request.getWorkOrder() == null && !request.isCancelled()).collect(Collectors.toList());
+            Collection<Request> completeRequests =
+                    approvedRequests.stream().filter(request -> request.getWorkOrder().getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
+            long cycleTime =
+                    WorkOrder.getAverageAge(completeRequests.stream().map(Request::getWorkOrder).collect(Collectors.toList()));
+            return Helper.withCache(RequestStats.builder()
                     .approved(approvedRequests.size())
                     .pending(pendingRequests.size())
                     .cancelled(cancelledRequests.size())
@@ -62,17 +68,19 @@ public class RequestAnalyticsController {
 
     @PostMapping("/priority")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<RequestStatsByPriority> getByPriority(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<RequestStatsByPriority> getByPriority(HttpServletRequest req,
+                                                                @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<Request> requests = requestService.findByCreatedAtBetweenAndCompany(dateRange.getStart(), dateRange.getEnd(), user.getCompany().getId());
+            Collection<Request> requests = requestService.findByCreatedAtBetweenAndCompany(dateRange.getStart(),
+                    dateRange.getEnd(), user.getCompany().getId());
 
             int highCounts = getCountsByPriority(Priority.HIGH, requests);
             int noneCounts = getCountsByPriority(Priority.NONE, requests);
             int lowCounts = getCountsByPriority(Priority.LOW, requests);
             int mediumCounts = getCountsByPriority(Priority.MEDIUM, requests);
 
-            return ResponseEntity.ok(RequestStatsByPriority.builder()
+            return Helper.withCache(RequestStatsByPriority.builder()
                     .high(RequestStatsByPriority.BasicStats.builder()
                             .count(highCounts)
                             .build())
@@ -92,68 +100,86 @@ public class RequestAnalyticsController {
 
     @PostMapping("/cycle-time/date")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<List<RequestsByMonth>> getCycleTimeByMonth(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<List<RequestsByMonth>> getCycleTimeByMonth(HttpServletRequest req,
+                                                                     @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
             List<RequestsByMonth> result = new ArrayList<>();
             LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());
             LocalDate currentDate = Helper.dateToLocalDate(dateRange.getStart());
-            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date in the range
-            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()), endDateExclusive);
+            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date
+            // in the range
+            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()),
+                    endDateExclusive);
             int points = Math.toIntExact(Math.min(15, totalDaysInRange));
 
             for (int i = 0; i < points; i++) {
-                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the range
+                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the
+                // range
                 nextDate = nextDate.isAfter(endDateLocale) ? endDateLocale : nextDate; // Adjust for the end date
-                Collection<Request> requests = requestService.findByCreatedAtBetweenAndCompany(Helper.localDateToDate(currentDate), Helper.localDateToDate(nextDate), user.getCompany().getId());
-                Collection<Request> completeRequests = requests.stream().filter(request -> request.getWorkOrder() != null && request.getWorkOrder().getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
-                long cycleTime = WorkOrder.getAverageAge(completeRequests.stream().map(Request::getWorkOrder).collect(Collectors.toList()));
+                Collection<Request> requests =
+                        requestService.findByCreatedAtBetweenAndCompany(Helper.localDateToDate(currentDate),
+                                Helper.localDateToDate(nextDate), user.getCompany().getId());
+                Collection<Request> completeRequests =
+                        requests.stream().filter(request -> request.getWorkOrder() != null && request.getWorkOrder().getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
+                long cycleTime =
+                        WorkOrder.getAverageAge(completeRequests.stream().map(Request::getWorkOrder).collect(Collectors.toList()));
                 result.add(RequestsByMonth.builder()
                         .cycleTime(cycleTime)
                         .date(Helper.localDateToDate(currentDate)).build());
                 currentDate = nextDate;
             }
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/counts/category")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<Collection<CountByCategory>> getCountsByCategory(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<Collection<CountByCategory>> getCountsByCategory(HttpServletRequest req,
+                                                                           @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         if (user.canSeeAnalytics()) {
-            Collection<WorkOrderCategory> categories = workOrderCategoryService.findByCompanySettings(user.getCompany().getCompanySettings().getId());
+            Collection<WorkOrderCategory> categories =
+                    workOrderCategoryService.findByCompanySettings(user.getCompany().getCompanySettings().getId());
             Collection<CountByCategory> results = new ArrayList<>();
             categories.forEach(category -> {
-                int count = requestService.findByCategoryAndCreatedAtBetween(category.getId(), dateRange.getStart(), dateRange.getEnd()).size();
+                int count = requestService.findByCategoryAndCreatedAtBetween(category.getId(), dateRange.getStart(),
+                        dateRange.getEnd()).size();
                 results.add(CountByCategory.builder()
                         .name(category.getName())
                         .id(category.getId())
                         .count(count)
                         .build());
             });
-            return ResponseEntity.ok(results);
+            return Helper.withCache(results);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
     @PostMapping("/received-and-resolved")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
-    public ResponseEntity<List<RequestsResolvedByDate>> getReceivedAndResolvedForDateRange(HttpServletRequest req, @RequestBody DateRange dateRange) {
+    public ResponseEntity<List<RequestsResolvedByDate>> getReceivedAndResolvedForDateRange(HttpServletRequest req,
+                                                                                           @RequestBody DateRange dateRange) {
         OwnUser user = userService.whoami(req);
         LocalDate endDateLocale = Helper.dateToLocalDate(dateRange.getEnd());
         if (user.canSeeAnalytics()) {
             List<RequestsResolvedByDate> result = new ArrayList<>();
             LocalDate currentDate = Helper.dateToLocalDate(dateRange.getStart());
-            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date in the range
-            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()), endDateExclusive);
+            LocalDate endDateExclusive = Helper.dateToLocalDate(dateRange.getEnd()).plusDays(1); // Include end date
+            // in the range
+            long totalDaysInRange = ChronoUnit.DAYS.between(Helper.dateToLocalDate(dateRange.getStart()),
+                    endDateExclusive);
             int points = Math.toIntExact(Math.min(15, totalDaysInRange));
 
             for (int i = 0; i < points; i++) {
-                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the range
+                LocalDate nextDate = currentDate.plusDays(totalDaysInRange / points); // Distribute evenly over the
+                // range
                 nextDate = nextDate.isAfter(endDateLocale) ? endDateLocale : nextDate; // Adjust for the end date
-                Collection<Request> notCancelledRequests = requestService.findByCreatedAtBetweenAndCompany(Helper.localDateToDate(currentDate), Helper.localDateToDate(nextDate), user.getCompany().getId())
+                Collection<Request> notCancelledRequests =
+                        requestService.findByCreatedAtBetweenAndCompany(Helper.localDateToDate(currentDate),
+                                        Helper.localDateToDate(nextDate), user.getCompany().getId())
                         .stream().filter(request -> !request.isCancelled()).collect(Collectors.toList());
-                Collection<Request> completeRequests = notCancelledRequests.stream().filter(request -> request.getWorkOrder() != null && request.getWorkOrder().getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
+                Collection<Request> completeRequests =
+                        notCancelledRequests.stream().filter(request -> request.getWorkOrder() != null && request.getWorkOrder().getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
                 int resolved = completeRequests.size();
                 int received = notCancelledRequests.size();
                 result.add(RequestsResolvedByDate.builder()
@@ -163,7 +189,7 @@ public class RequestAnalyticsController {
                         .build());
                 currentDate = nextDate; // Move to the next segment
             }
-            return ResponseEntity.ok(result);
+            return Helper.withCache(result);
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
