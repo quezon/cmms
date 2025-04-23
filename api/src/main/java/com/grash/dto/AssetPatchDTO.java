@@ -61,4 +61,7 @@ public class AssetPatchDTO {
 
     private String model;
 
+    private String description;
+
+    private Date inServiceDate;
 }
