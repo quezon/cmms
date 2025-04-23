@@ -39,7 +39,7 @@ const AssetFiles = ({ asset }: PropsType) => {
       field: 'name',
       headerName: t('name'),
       description: t('name'),
-      width: 150
+      width: 400
     },
     {
       field: 'actions',

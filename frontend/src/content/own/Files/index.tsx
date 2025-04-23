@@ -163,13 +163,13 @@ function Files() {
       field: 'id',
       headerName: t('id'),
       description: t('id'),
-      width: 150
+      flex: 0.5
     },
     {
       field: 'name',
       headerName: t('name'),
       description: t('name'),
-      width: 150,
+      flex: 1.5,
       renderCell: (params: GridRenderCellParams<string>) => (
         <Box sx={{ fontWeight: 'bold' }}>{params.value}</Box>
       )
@@ -179,6 +179,7 @@ function Files() {
       headerName: t('uploaded_by'),
       description: t('uploaded_by'),
       width: 150,
+      flex: 1,
       valueGetter: (params) => getUserNameById(params.value)
     },
     {
@@ -254,8 +255,7 @@ function Files() {
             validation={Yup.object().shape(shape)}
             submitText={t('add')}
             values={{}}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               return dispatch(addFiles(values.files)).then(() =>
                 setOpenAddModal(false)
@@ -294,8 +294,7 @@ function Files() {
             validation={Yup.object().shape(updateShape)}
             submitText={t('save')}
             values={{ ...currentFile }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               return dispatch(
                 editFile(currentFile.id, { ...currentFile, name: values.name })
@@ -364,7 +363,6 @@ function Files() {
                     rowsPerPageOptions={[10, 20, 50]}
                     loading={loadingGet}
                     components={{
-
                       NoRowsOverlay: () => (
                         <NoRowsMessageWrapper
                           message={t('noRows.file.message')}
