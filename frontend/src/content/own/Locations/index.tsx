@@ -262,7 +262,7 @@ function Locations() {
       field: 'name',
       headerName: t('name'),
       description: t('name'),
-      width: 150,
+      flex: 1,
       renderCell: (params: GridRenderCellParams<string>) => (
         <Box sx={{ fontWeight: 'bold' }}>{params.value}</Box>
       )
@@ -271,13 +271,13 @@ function Locations() {
       field: 'address',
       headerName: t('address'),
       description: t('address'),
-      width: 150
+      flex: 1
     },
     {
       field: 'createdAt',
       headerName: t('created_at'),
       description: t('created_at'),
-      width: 150,
+      flex: 0.5,
       valueGetter: (params: GridValueGetterParams<string>) =>
         getFormattedDate(params.value)
     },
@@ -285,7 +285,7 @@ function Locations() {
       field: 'customId',
       headerName: t('id'),
       description: t('id'),
-      width: 150
+      flex: 0.5
     },
     {
       field: 'actions',
@@ -498,7 +498,8 @@ function Locations() {
   );
   const groupingColDef: DataGridProProps['groupingColDef'] = {
     headerName: t('hierarchy'),
-    renderCell: (params) => <GroupingCellWithLazyLoading {...params} />
+    renderCell: (params) => <GroupingCellWithLazyLoading {...params} />,
+    flex: 0.5
   };
   const CustomRow = (props: React.ComponentProps<typeof GridRow>) => {
     const rowNode = apiRef.current.getRowNode(props.rowId);
