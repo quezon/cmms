@@ -1,7 +1,9 @@
 package com.grash.controller;
 
 import com.grash.dto.CompanyPatchDTO;
+import com.grash.dto.CompanyShowDTO;
 import com.grash.exception.CustomException;
+import com.grash.mapper.CompanyMapper;
 import com.grash.model.Company;
 import com.grash.model.OwnUser;
 import com.grash.model.enums.PermissionEntity;
@@ -29,6 +31,7 @@ public class CompanyController {
     private final CompanyService companyService;
 
     private final UserService userService;
+    private final CompanyMapper companyMapper;
 
     @GetMapping("/{id}")
     @PreAuthorize("permitAll()")
@@ -36,12 +39,12 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "Company not found")})
-    public Company getById(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
+    public CompanyShowDTO getById(@ApiParam("id") @PathVariable("id") Long id, HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
 
         Optional<Company> companyOptional = companyService.findById(id);
         if (companyOptional.isPresent()) {
-            return companyService.findById(id).get();
+            return companyMapper.toShowDto(companyService.findById(id).get());
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
     }
 
@@ -51,8 +54,9 @@ public class CompanyController {
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "Company not found")})
-    public Company patch(@ApiParam("Company") @Valid @RequestBody CompanyPatchDTO company, @ApiParam("id") @PathVariable("id") Long id,
-                         HttpServletRequest req) {
+    public CompanyShowDTO patch(@ApiParam("Company") @Valid @RequestBody CompanyPatchDTO company,
+                                @ApiParam("id") @PathVariable("id") Long id,
+                                HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<Company> optionalCompany = companyService.findById(id);
 
@@ -60,7 +64,7 @@ public class CompanyController {
             Company savedCompany = optionalCompany.get();
             if (!user.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS))
                 throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
-            return companyService.update(id, company);
+            return companyMapper.toShowDto(companyService.update(id, company));
         } else throw new CustomException("Company not found", HttpStatus.NOT_FOUND);
     }
 
