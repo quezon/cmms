@@ -14,7 +14,9 @@ const useGridStatePersist = (
   prefix: string
 ) => {
   const stateItem = `${prefix}DataGridState`;
-  const hasRestoredRef = useRef(false);
+  const hasRestoredSortingRef = useRef(false);
+  const columnAttemptCountRef = useRef(0);
+  const MAX_COLUMN_ATTEMPTS = 20;
 
   const saveSnapshot = useCallback(() => {
     if (apiRef?.current?.exportState && localStorage) {
@@ -37,18 +39,34 @@ const useGridStatePersist = (
   }, [saveSnapshot]);
 
   useEffect(() => {
+    // Only proceed if we have columns and API reference
     if (
-      !hasRestoredRef.current &&
-      columns != null &&
-      apiRef?.current?.restoreState != null &&
+      columns?.length > 0 &&
+      apiRef?.current?.restoreState &&
       localStorage?.getItem(stateItem)
     ) {
-      const state = JSON.parse(localStorage.getItem(stateItem));
-      apiRef?.current?.restoreState({
-        columns: state.columns,
-        sorting: state.sorting
-      });
-      hasRestoredRef.current = true;
+      try {
+        const state = JSON.parse(localStorage.getItem(stateItem));
+        if (
+          columnAttemptCountRef.current < MAX_COLUMN_ATTEMPTS &&
+          state.columns
+        ) {
+          apiRef.current.restoreState({
+            columns: state.columns
+          });
+          columnAttemptCountRef.current += 1;
+        }
+
+        // Restore sorting only once
+        if (!hasRestoredSortingRef.current && state.sorting) {
+          apiRef.current.restoreState({
+            sorting: state.sorting
+          });
+          hasRestoredSortingRef.current = true;
+        }
+      } catch (error) {
+        console.error('Error restoring grid state:', error);
+      }
     }
   }, [apiRef, columns, stateItem]);
 };
