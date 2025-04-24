@@ -61,7 +61,8 @@ public class NotificationService {
     public Notification update(Long id, NotificationPatchDTO notificationsPatchDTO) {
         if (notificationRepository.existsById(id)) {
             Notification savedNotification = notificationRepository.findById(id).get();
-            return notificationRepository.save(notificationMapper.updateNotification(savedNotification, notificationsPatchDTO));
+            return notificationRepository.save(notificationMapper.updateNotification(savedNotification,
+                    notificationsPatchDTO));
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
     }
 
@@ -84,15 +85,18 @@ public class NotificationService {
     public Page<Notification> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<Notification> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return notificationRepository.findAll(builder.build(), page);
     }
 
-    public void sendPushNotifications(Collection<OwnUser> users, String title, String message, Map<String, Object> data) throws PushClientException, InterruptedException {
+    public void sendPushNotifications(Collection<OwnUser> users, String title, String message,
+                                      Map<String, Object> data) throws PushClientException, InterruptedException {
 
         List<String> tokens = new ArrayList<>();
         users.forEach(user -> {
-            Optional<PushNotificationToken> optionalPushNotificationToken = pushNotificationTokenService.findByUser(user.getId());
+            Optional<PushNotificationToken> optionalPushNotificationToken =
+                    pushNotificationTokenService.findByUser(user.getId());
             if (optionalPushNotificationToken.isPresent()) {
                 String token = optionalPushNotificationToken.get().getToken();
                 if (PushClient.isExponentPushToken(token))
@@ -128,9 +132,11 @@ public class NotificationService {
             }
         }
 
-        List<ExpoPushMessageTicketPair<ExpoPushMessage>> zippedMessagesTickets = client.zipMessagesTickets(expoPushMessages, allTickets);
+        List<ExpoPushMessageTicketPair<ExpoPushMessage>> zippedMessagesTickets =
+                client.zipMessagesTickets(expoPushMessages, allTickets);
 
-        List<ExpoPushMessageTicketPair<ExpoPushMessage>> okTicketMessages = client.filterAllSuccessfulMessages(zippedMessagesTickets);
+        List<ExpoPushMessageTicketPair<ExpoPushMessage>> okTicketMessages =
+                client.filterAllSuccessfulMessages(zippedMessagesTickets);
         String okTicketMessagesString = okTicketMessages.stream().map(
                 p -> "Title: " + p.message.getTitle() + ", Id:" + p.ticket.getId()
         ).collect(Collectors.joining(","));
@@ -140,7 +146,8 @@ public class NotificationService {
                         " messages: " + okTicketMessagesString
         );
 
-        List<ExpoPushMessageTicketPair<ExpoPushMessage>> errorTicketMessages = client.filterAllMessagesWithError(zippedMessagesTickets);
+        List<ExpoPushMessageTicketPair<ExpoPushMessage>> errorTicketMessages =
+                client.filterAllMessagesWithError(zippedMessagesTickets);
         String errorTicketMessagesString = errorTicketMessages.stream().map(
                 p -> "Title: " + p.message.getTitle() + ", Error: " + p.ticket.getDetails().getError()
         ).collect(Collectors.joining(","));

@@ -98,8 +98,8 @@ public class LocationService {
                 new Notification(message, user, NotificationType.LOCATION, newLocation.getId())).collect(Collectors.toList()), true, title);
     }
 
-    public Collection<Location> findLocationChildren(Long id) {
-        return locationRepository.findByParentLocation_Id(id);
+    public Page<Location> findLocationChildren(Long id, Pageable pageable) {
+        return locationRepository.findByParentLocation_Id(id, pageable);
     }
 
     public void save(Location location) {
@@ -163,7 +163,7 @@ public class LocationService {
         SpecificationBuilder<Location> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
         Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
-                searchCriteria.getDirection(), "id");
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return locationRepository.findAll(builder.build(), page).map(location -> locationMapper.toShowDto(location,
                 this));
     }

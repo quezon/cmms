@@ -14,7 +14,7 @@ public interface LocationRepository extends JpaRepository<Location, Long>, JpaSp
 
     Page<Location> findByCompany_Id(Long id, Pageable pageable);
 
-    Collection<Location> findByParentLocation_Id(Long id);
+    Page<Location> findByParentLocation_Id(Long id, Pageable pageable);
 
     Optional<Location> findByNameIgnoreCaseAndCompany_Id(String locationName, Long companyId);
 

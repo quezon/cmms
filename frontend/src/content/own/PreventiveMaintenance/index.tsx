@@ -34,7 +34,8 @@ import CustomDataGrid, {
 import {
   FilterField,
   SearchCriteria,
-  SearchOperator
+  SearchOperator,
+  SortDirection
 } from '../../../models/owns/page';
 import { GridRenderCellParams, GridValueGetterParams } from '@mui/x-data-grid';
 import AddTwoToneIcon from '@mui/icons-material/AddTwoTone';
@@ -336,6 +337,21 @@ function Files() {
   const apiRef = useGridApiRef();
   useGridStatePersist(apiRef, columns, 'pm');
 
+  // Mapping for column fields to API field names for sorting
+  const fieldMapping: Record<string, string> = {
+    customId: 'customId',
+    name: 'name',
+    title: 'title',
+    priority: 'priority',
+    description: 'description',
+    next: 'schedule.startsOn',
+    primaryUser: 'primaryUser.firstName',
+    assignedTo: 'assignedTo',
+    location: 'location.name',
+    category: 'category.name',
+    asset: 'asset.name'
+  };
+
   const defaultFields: Array<IField> = [
     {
       name: 'triggerConfiguration',
@@ -635,6 +651,35 @@ function Files() {
                   rowCount={preventiveMaintenances.totalElements}
                   pagination
                   paginationMode="server"
+                  sortingMode="server"
+                  onSortModelChange={(model) => {
+                    if (model.length === 0) {
+                      setCriteria((prevState) => ({
+                        ...prevState,
+                        sortField: undefined,
+                        direction: undefined
+                      }));
+                      return;
+                    }
+
+                    const field = model[0].field;
+                    const mappedField = fieldMapping[field];
+
+                    // Only proceed if we have a mapping for this field
+                    if (!mappedField) return;
+
+                    setCriteria({
+                      ...criteria,
+                      sortField: mappedField,
+                      direction: (model[0].sort?.toUpperCase() ||
+                        'ASC') as SortDirection
+                    });
+                  }}
+                  initialState={{
+                    columns: {
+                      columnVisibilityModel: {}
+                    }
+                  }}
                   onPageSizeChange={onPageSizeChange}
                   onPageChange={onPageChange}
                   rowsPerPageOptions={[10, 20, 50]}

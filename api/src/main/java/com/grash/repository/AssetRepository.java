@@ -1,8 +1,11 @@
 package com.grash.repository;
 
 import com.grash.model.Asset;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.security.core.parameters.P;
 
 import java.util.Collection;
 import java.util.Date;
@@ -12,7 +15,9 @@ import java.util.Optional;
 public interface AssetRepository extends JpaRepository<Asset, Long>, JpaSpecificationExecutor<Asset> {
     List<Asset> findByCompany_Id(Long id);
 
-    Collection<Asset> findByParentAsset_Id(Long id);
+    Page<Asset> findByCompany_Id(Long id, Pageable pageable);
+
+    Page<Asset> findByParentAsset_Id(Long id, Pageable pageable);
 
     Integer countByParentAsset_Id(Long id);
 

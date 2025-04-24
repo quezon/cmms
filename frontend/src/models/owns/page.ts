@@ -38,12 +38,13 @@ export interface FilterField {
   values?: any[];
   alternatives?: FilterField[];
 }
-type Direction = 'ASC' | 'DESC';
+export type SortDirection = 'ASC' | 'DESC';
 export interface SearchCriteria {
   filterFields: FilterField[];
-  direction?: Direction;
+  direction?: SortDirection;
   pageNum?: number;
   pageSize?: number;
+  sortField?: string;
 }
 export const getInitialPage = <T>(): Page<T> => {
   return {

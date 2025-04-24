@@ -73,7 +73,12 @@ import { VendorMiniDTO } from '../../../models/owns/vendor';
 import Category from '../../../models/owns/category';
 import { exportEntity } from '../../../slices/exports';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
-import { FilterField, SearchCriteria } from '../../../models/owns/page';
+import {
+  FilterField,
+  Pageable,
+  SearchCriteria,
+  Sort
+} from '../../../models/owns/page';
 import Filters from './Filters';
 import { getRandomColor, onSearchQueryChange } from '../../../utils/overall';
 import SearchInput from '../components/SearchInput';
@@ -114,6 +119,10 @@ function Assets() {
   type ViewType = 'hierarchy' | 'list';
   const theme = useTheme();
   const [view, setView] = useState<ViewType>('hierarchy');
+  const [pageable, setPageable] = useState<Pageable>({
+    page: 0,
+    size: 1000
+  });
   const initialCriteria: SearchCriteria = {
     filterFields: [
       {
@@ -161,11 +170,14 @@ function Assets() {
   const [openFilterDrawer, setOpenFilterDrawer] = useState<boolean>(false);
   useEffect(() => {
     setTitle(t('assets'));
-    if (hasViewPermission(PermissionEntity.ASSETS)) {
-      dispatch(getAssetChildren(0, []));
-    }
   }, []);
 
+  useEffect(() => {
+    if (hasViewPermission(PermissionEntity.ASSETS)) {
+      handleReset(false);
+      dispatch(getAssetChildren(0, [], pageable));
+    }
+  }, [pageable]);
   useEffect(() => {
     if (locationParam) {
       if (locationParam && isNumeric(locationParam)) {
@@ -370,6 +382,27 @@ function Assets() {
     }
   ];
   useGridStatePersist(apiRef, columns, 'asset');
+
+  // Mapping for column fields to API field names for sorting
+  const fieldMapping: Record<string, string> = {
+    customId: 'customId',
+    name: 'name',
+    status: 'status',
+    location: 'location.name',
+    image: 'image',
+    area: 'area',
+    model: 'model',
+    barCode: 'barCode',
+    category: 'category.name',
+    description: 'description',
+    primaryUser: 'primaryUser.firstName',
+    assignedTo: 'assignedTo.firstName',
+    teams: 'teams.name',
+    vendors: 'vendors.name',
+    parentAsset: 'parentAsset.name',
+    createdAt: 'createdAt'
+  };
+
   const onResetFilters = () => {
     setCriteria(initialCriteria);
     setView('hierarchy');
@@ -551,8 +584,8 @@ function Assets() {
   const shape = {
     name: Yup.string().required(t('required_asset_name'))
   };
-  const handleReset = () => {
-    dispatch(resetAssetsHierarchy());
+  const handleReset = (callApi: boolean) => {
+    dispatch(resetAssetsHierarchy(callApi));
   };
   useEffect(() => {
     if (apiRef.current.getRow) {
@@ -578,7 +611,7 @@ function Assets() {
               hierarchy: row.hierarchy
             })
           );
-        dispatch(getAssetChildren(row.id, row.hierarchy));
+        dispatch(getAssetChildren(row.id, row.hierarchy, pageable));
       };
       /**
        * By default, the grid does not toggle the expansion of rows with 0 children
@@ -674,7 +707,8 @@ function Assets() {
                           dispatch(
                             getAssetChildren(
                               deployedAsset.id,
-                              deployedAsset.hierarchy
+                              deployedAsset.hierarchy,
+                              pageable
                             )
                           )
                         );
@@ -743,7 +777,7 @@ function Assets() {
           >
             <SearchInput onChange={debouncedQueryChange} />
             <Stack direction="row" spacing={1}>
-              <IconButton onClick={handleReset} color="primary">
+              <IconButton onClick={() => handleReset(true)} color="primary">
                 <ReplayTwoToneIcon />
               </IconButton>
               <IconButton onClick={handleOpenMenu} color="primary">
@@ -795,6 +829,32 @@ function Assets() {
                     view === 'hierarchy' ? groupingColDef : undefined
                   }
                   paginationMode={view === 'hierarchy' ? undefined : 'server'}
+                  sortingMode={view === 'hierarchy' ? 'client' : undefined}
+                  onSortModelChange={(model) => {
+                    if (view !== 'hierarchy') return;
+
+                    if (model.length === 0) {
+                      setCriteria({
+                        ...criteria,
+                        sortField: undefined,
+                        direction: undefined
+                      });
+                      return;
+                    }
+
+                    const field = model[0].field;
+                    const mappedField = fieldMapping[field];
+
+                    // Only proceed if we have a mapping for this field
+                    if (!mappedField) return;
+
+                    setPageable((prevState) => ({
+                      ...prevState,
+                      sort: model.length
+                        ? [`${mappedField},${model[0].sort}` as Sort]
+                        : []
+                    }));
+                  }}
                   onPageSizeChange={onPageSizeChange}
                   onPageChange={onPageChange}
                   rowsPerPageOptions={

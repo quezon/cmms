@@ -79,7 +79,11 @@ import { getSingleAsset } from '../../../slices/asset';
 import Category from '../../../models/owns/category';
 import File from '../../../models/owns/file';
 import { dayDiff } from '../../../utils/dates';
-import { FilterField, SearchCriteria } from '../../../models/owns/page';
+import {
+  FilterField,
+  SearchCriteria,
+  SortDirection
+} from '../../../models/owns/page';
 import WorkOrderCalendar from './Calendar';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { exportEntity } from '../../../slices/exports';
@@ -182,7 +186,11 @@ function WorkOrders() {
     pageNum: 0,
     direction: 'DESC'
   };
-  const [criteria, setCriteria] = useState<SearchCriteria>(initialCriteria);
+  const [criteria, setCriteria] = useState<SearchCriteria>({
+    ...initialCriteria,
+    sortField: 'updatedAt',
+    direction: 'DESC'
+  });
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const navigate = useNavigate();
@@ -508,6 +516,25 @@ function WorkOrders() {
   // dataGrid state
   const apiRef = useGridApiRef();
   useGridStatePersist(apiRef, columns, 'workOrder');
+
+  // Mapping for column fields to API field names for sorting
+  const fieldMapping: Record<string, string> = {
+    customId: 'customId',
+    status: 'status',
+    title: 'title',
+    priority: 'priority',
+    description: 'description',
+    primaryUser: 'primaryUser.firstName',
+    assignedTo: 'assignedTo',
+    location: 'location.name',
+    category: 'category.name',
+    asset: 'asset.name',
+    daysSinceCreated: 'createdAt',
+    files: 'files',
+    completedOn: 'completedOn',
+    updatedAt: 'updatedAt',
+    createdAt: 'createdAt'
+  };
 
   const defaultFields: Array<IField> = [
     {
@@ -971,6 +998,35 @@ function WorkOrders() {
                   pagination
                   disableColumnFilter
                   paginationMode="server"
+                  sortingMode="server"
+                  initialState={{
+                    columns: {
+                      columnVisibilityModel: {}
+                    }
+                  }}
+                  onSortModelChange={(model) => {
+                    if (model.length === 0) {
+                      setCriteria({
+                        ...criteria,
+                        sortField: undefined,
+                        direction: undefined
+                      });
+                      return;
+                    }
+
+                    const field = model[0].field;
+                    const mappedField = fieldMapping[field];
+
+                    // Only proceed if we have a mapping for this field
+                    if (!mappedField) return;
+
+                    setCriteria({
+                      ...criteria,
+                      sortField: mappedField,
+                      direction: (model[0].sort?.toUpperCase() ||
+                        'ASC') as SortDirection
+                    });
+                  }}
                   onPageSizeChange={onPageSizeChange}
                   onPageChange={onPageChange}
                   rowsPerPageOptions={[10, 20, 50]}

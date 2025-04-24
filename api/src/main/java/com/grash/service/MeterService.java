@@ -84,7 +84,8 @@ public class MeterService {
 
     public void patchNotify(Meter oldMeter, Meter newMeter, Locale locale) {
         String title = messageSource.getMessage("new_assignment", null, locale);
-        String message = messageSource.getMessage("notification_meter_assigned", new Object[]{newMeter.getName()}, locale);
+        String message = messageSource.getMessage("notification_meter_assigned", new Object[]{newMeter.getName()},
+                locale);
         if (newMeter.getUsers() != null) {
             List<OwnUser> newUsers = newMeter.getUsers().stream().filter(
                     user -> oldMeter.getUsers().stream().noneMatch(user1 -> user1.getId().equals(user.getId()))).collect(Collectors.toList());
@@ -110,8 +111,10 @@ public class MeterService {
     public Page<MeterShowDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<Meter> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
-        return meterRepository.findAll(builder.build(), page).map(meter -> meterMapper.toShowDto(meter, readingService));
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), searchCriteria.getSortField());
+        return meterRepository.findAll(builder.build(), page).map(meter -> meterMapper.toShowDto(meter,
+                readingService));
     }
 
     public void importMeter(Meter meter, MeterImportDTO dto, Company company) {
@@ -120,9 +123,11 @@ public class MeterService {
         meter.setName(dto.getName());
         meter.setUnit(dto.getUnit());
         meter.setUpdateFrequency(dto.getUpdateFrequency());
-        Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(), companyId);
+        Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(),
+                companyId);
         optionalLocation.ifPresent(meter::setLocation);
-        Optional<MeterCategory> optionalMeterCategory = meterCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getMeterCategory(), companySettingsId);
+        Optional<MeterCategory> optionalMeterCategory =
+                meterCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getMeterCategory(), companySettingsId);
         optionalMeterCategory.ifPresent(meter::setMeterCategory);
         List<OwnUser> users = new ArrayList<>();
         dto.getUsersEmails().forEach(email -> {

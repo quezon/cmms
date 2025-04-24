@@ -194,7 +194,7 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
       name: 'name',
       type: 'text',
       label: t('customer_name'),
-      placeholder: 'Jonh Doe',
+      placeholder: 'John Doe',
       required: true
     },
     {
@@ -387,8 +387,7 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
             validation={Yup.object().shape(shape)}
             submitText={t('add')}
             values={{}}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               const formattedValues = formatValues(values);
               return dispatch(addCustomer(formattedValues))
@@ -421,7 +420,6 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
         columns={columns}
         loading={loadingGet}
         components={{
-
           NoRowsOverlay: () => (
             <NoRowsMessageWrapper
               message={t('noRows.customer.message')}
@@ -566,7 +564,12 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
 
                 <Typography variant="h5" sx={{ mb: 1 }}>
                   <a
-                    href={currentCustomer.website.toLowerCase().startsWith('https') ? currentCustomer.website : `https://${currentCustomer.website}`}>
+                    href={
+                      currentCustomer.website.toLowerCase().startsWith('https')
+                        ? currentCustomer.website
+                        : `https://${currentCustomer.website}`
+                    }
+                  >
                     {currentCustomer?.website}
                   </a>
                 </Typography>
@@ -583,13 +586,12 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
                 ...currentCustomer,
                 billingCurrency: currentCustomer?.billingCurrency
                   ? {
-                    label: currentCustomer.billingCurrency.name,
-                    value: currentCustomer.billingCurrency.id
-                  }
+                      label: currentCustomer.billingCurrency.name,
+                      value: currentCustomer.billingCurrency.id
+                    }
                   : null
               }}
-              onChange={({ field, e }) => {
-              }}
+              onChange={({ field, e }) => {}}
               onSubmit={async (values) => {
                 const formattedValues = formatValues(values);
                 return dispatch(

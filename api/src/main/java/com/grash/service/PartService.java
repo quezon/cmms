@@ -64,7 +64,9 @@ public class PartService {
         Part part = findById(id).get();
         part.setQuantity(part.getQuantity() - quantity);
         if (quantity < 0) {
-            PartConsumption partConsumption = Collections.max(partConsumptionService.findByWorkOrderAndPart(workOrder.getId(), part.getId()), new AuditComparator());
+            PartConsumption partConsumption =
+                    Collections.max(partConsumptionService.findByWorkOrderAndPart(workOrder.getId(), part.getId()),
+                            new AuditComparator());
             partConsumption.setQuantity(partConsumption.getQuantity() + quantity);
             partRepository.save(part);
             partConsumptionService.save(partConsumption);
@@ -101,14 +103,17 @@ public class PartService {
     public void notify(Part part, Locale locale) {
         String title = messageSource.getMessage("new_assignment", null, locale);
         String message = messageSource.getMessage("notification_part_assigned", new Object[]{part.getName()}, locale);
-        notificationService.createMultiple(part.getUsers().stream().map(user -> new Notification(message, user, NotificationType.PART, part.getId())).collect(Collectors.toList()), true, title);
+        notificationService.createMultiple(part.getUsers().stream().map(user -> new Notification(message, user,
+                NotificationType.PART, part.getId())).collect(Collectors.toList()), true, title);
     }
 
     public void patchNotify(Part oldPart, Part newPart, Locale locale) {
         String title = messageSource.getMessage("new_assignment", null, locale);
-        String message = messageSource.getMessage("notification_part_assigned", new Object[]{newPart.getName()}, locale);
+        String message = messageSource.getMessage("notification_part_assigned", new Object[]{newPart.getName()},
+                locale);
         notificationService.createMultiple(oldPart.getNewUsersToNotify(newPart.getUsers()).stream().map(user ->
-                new Notification(message, user, NotificationType.PART, newPart.getId())).collect(Collectors.toList()), true, title);
+                new Notification(message, user, NotificationType.PART, newPart.getId())).collect(Collectors.toList())
+                , true, title);
     }
 
     public Part save(Part part) {
@@ -128,7 +133,8 @@ public class PartService {
     public Page<PartShowDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<Part> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return partRepository.findAll(builder.build(), page).map(partMapper::toShowDto);
     }
 
@@ -137,7 +143,8 @@ public class PartService {
         Long companySettingsId = company.getCompanySettings().getId();
         part.setName(dto.getName());
         part.setCost(dto.getCost());
-        Optional<PartCategory> optionalPartCategory = partCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getCategory(), companySettingsId);
+        Optional<PartCategory> optionalPartCategory =
+                partCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getCategory(), companySettingsId);
         optionalPartCategory.ifPresent(part::setCategory);
         part.setNonStock(Helper.getBooleanFromString(dto.getCategory()));
         if (dto.getBarcode() != null) {
@@ -152,7 +159,8 @@ public class PartService {
                     }
                 }
                 if (hasError)
-                    throw new CustomException("Part with same barcode exists: " + dto.getBarcode(), HttpStatus.NOT_ACCEPTABLE);
+                    throw new CustomException("Part with same barcode exists: " + dto.getBarcode(),
+                            HttpStatus.NOT_ACCEPTABLE);
             }
         }
         part.setBarcode(dto.getBarcode());
@@ -161,7 +169,8 @@ public class PartService {
         part.setAdditionalInfos(dto.getAdditionalInfos());
         part.setArea(dto.getArea());
         part.setMinQuantity(dto.getMinQuantity());
-//        Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(), companyId);
+//        Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(),
+//        companyId);
 //        optionalLocation.ifPresent(part::setLocation);
         List<OwnUser> users = new ArrayList<>();
         dto.getAssignedToEmails().forEach(email -> {

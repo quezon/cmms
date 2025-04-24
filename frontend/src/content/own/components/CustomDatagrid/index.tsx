@@ -29,7 +29,6 @@ function CustomDataGrid(props: CustomDatagridProps) {
   const [tableHeight, setTableHeight] = useState<number>(500);
   const { user } = useAuth();
 
-  const Component = props.pro ? DataGridPro : DataGrid;
   const getTableHeight = () => {
     if (tableRef.current) {
       const viewportOffset = tableRef.current.getBoundingClientRect();
@@ -55,7 +54,7 @@ function CustomDataGrid(props: CustomDatagridProps) {
   return (
     <div ref={tableRef} style={{ height: tableHeight, width: '100%' }}>
       {/*@ts-ignore*/}
-      <Component
+      <DataGridPro
         sx={{
           ' .MuiDataGrid-columnHeader': {
             fontWeight: 'bold',
