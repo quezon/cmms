@@ -771,10 +771,13 @@ function Locations() {
                         columnVisibilityModel: {}
                       }
                     }}
-                    sortingMode="server"
+                    sortingMode="client"
                     onSortModelChange={(model, details) => {
                       const mapper: Record<string, string[]> = {
-                        name: ['name']
+                        name: ['name'],
+                        address: ['address'],
+                        createdAt: ['createdAt'],
+                        customId: ['customId']
                       };
                       if (
                         model.length &&
