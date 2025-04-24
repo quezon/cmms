@@ -773,11 +773,11 @@ function Locations() {
                     }}
                     sortingMode="client"
                     onSortModelChange={(model, details) => {
-                      const mapper: Record<string, string[]> = {
-                        name: ['name'],
-                        address: ['address'],
-                        createdAt: ['createdAt'],
-                        customId: ['customId']
+                      const mapper: Record<string, string> = {
+                        name: 'name',
+                        address: 'address',
+                        createdAt: 'createdAt',
+                        customId: 'customId'
                       };
                       if (
                         model.length &&
@@ -788,9 +788,11 @@ function Locations() {
                       setPageable((prevState) => ({
                         ...prevState,
                         sort: model.length
-                          ? mapper[model[0].field].map(
-                              (field) => `${field},${model[0].sort}` as Sort
-                            )
+                          ? [
+                              `${mapper[model[0].field]},${
+                                model[0].sort
+                              }` as Sort
+                            ]
                           : []
                       }));
                     }}
