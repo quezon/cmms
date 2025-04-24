@@ -77,6 +77,11 @@ public class LocationService {
         return locationRepository.findByCompany_Id(id);
     }
 
+    public Page<Location> findByCompany(Long id, Pageable pageable) {
+        return locationRepository.findByCompany_Id(id, pageable);
+    }
+
+
     public void notify(Location location, Locale locale) {
         String title = messageSource.getMessage("new_assignment", null, locale);
         String message = messageSource.getMessage("notification_location_assigned", new Object[]{location.getName()},

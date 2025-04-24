@@ -7,6 +7,7 @@ import Location, {
 } from '../models/owns/location';
 import api from '../utils/api';
 import { revertAll } from 'src/utils/redux';
+import { Pageable, pageableToQueryParams } from '../models/owns/page';
 
 interface LocationState {
   locations: Location[];
@@ -102,10 +103,7 @@ const slice = createSlice({
       const { loading } = action.payload;
       state.loadingGet = loading;
     },
-    resetHierarchy(
-      state: LocationState,
-      action: PayloadAction<{ }>
-    ) {
+    resetHierarchy(state: LocationState, action: PayloadAction<{}>) {
       state.locationsHierarchy = [];
     }
   }
@@ -155,10 +153,12 @@ export const deleteLocation =
   };
 
 export const getLocationChildren =
-  (id: number, parents: number[]): AppThunk =>
+  (id: number, parents: number[], pageable: Pageable): AppThunk =>
   async (dispatch) => {
     dispatch(slice.actions.setLoadingGet({ loading: true }));
-    const locations = await api.get<Location[]>(`locations/children/${id}`);
+    const locations = await api.get<Location[]>(
+      `locations/children/${id}?${pageableToQueryParams(pageable)}`
+    );
     dispatch(
       slice.actions.getLocationChildren({
         id,
@@ -170,13 +170,13 @@ export const getLocationChildren =
     dispatch(slice.actions.setLoadingGet({ loading: false }));
   };
 
-  export const resetLocationsHierarchy =
-  (): AppThunk =>
+export const resetLocationsHierarchy =
+  (pageable: Pageable, callApi: boolean): AppThunk =>
   async (dispatch) => {
-    dispatch(
-      slice.actions.resetHierarchy({
-      }));
-      dispatch(getLocationChildren(0,[]))
+    dispatch(slice.actions.resetHierarchy({}));
+    if (callApi) {
+      dispatch(getLocationChildren(0, [], pageable));
+    }
   };
 
 export default slice;

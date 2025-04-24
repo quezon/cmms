@@ -71,6 +71,7 @@ import { exportEntity } from '../../../slices/exports';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { PlanFeature } from '../../../models/owns/subscriptionPlan';
 import useGridStatePersist from '../../../hooks/useGridStatePersist';
+import { Pageable, Sort } from '../../../models/owns/page';
 
 function Locations() {
   const { t }: { t: any } = useTranslation();
@@ -118,6 +119,10 @@ function Locations() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const openMenu = Boolean(anchorEl);
   const navigate = useNavigate();
+  const [pageable, setPageable] = useState<Pageable>({
+    page: 0,
+    size: 1000
+  });
 
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
@@ -174,9 +179,15 @@ function Locations() {
     setTitle(t('locations'));
     if (hasViewPermission(PermissionEntity.LOCATIONS)) {
       dispatch(getLocations());
-      dispatch(getLocationChildren(0, []));
     }
   }, []);
+
+  useEffect(() => {
+    if (hasViewPermission(PermissionEntity.LOCATIONS)) {
+      handleReset(false);
+      dispatch(getLocationChildren(0, [], pageable));
+    }
+  }, [pageable]);
 
   useEffect(() => {
     if (apiRef.current.getRow) {
@@ -204,7 +215,7 @@ function Locations() {
               hierarchy: row.hierarchy
             })
           );
-        dispatch(getLocationChildren(row.id, row.hierarchy));
+        dispatch(getLocationChildren(row.id, row.hierarchy, pageable));
       };
       /**
        * By default, the grid does not toggle the expansion of rows with 0 children
@@ -416,8 +427,8 @@ function Locations() {
     const fieldsClone = [...fields];
     return fieldsClone;
   };
-  const handleReset = () => {
-    dispatch(resetLocationsHierarchy());
+  const handleReset = (callApi: boolean) => {
+    dispatch(resetLocationsHierarchy(pageable, callApi));
   };
   const shape = {
     name: Yup.string().required(t('required_location_name')),
@@ -475,7 +486,8 @@ function Locations() {
                           dispatch(
                             getLocationChildren(
                               deployedLocation.id,
-                              deployedLocation.hierarchy
+                              deployedLocation.hierarchy,
+                              pageable
                             )
                           )
                         );
@@ -701,7 +713,7 @@ function Locations() {
               ))}
             </Tabs>
             <Stack direction={'row'} alignItems="center" spacing={1}>
-              <IconButton onClick={handleReset} color="primary">
+              <IconButton onClick={() => handleReset(true)} color="primary">
                 <ReplayTwoToneIcon />
               </IconButton>
               <IconButton onClick={handleOpenMenu} color="primary">
@@ -758,6 +770,26 @@ function Locations() {
                       columns: {
                         columnVisibilityModel: {}
                       }
+                    }}
+                    sortingMode="server"
+                    onSortModelChange={(model, details) => {
+                      const mapper: Record<string, string[]> = {
+                        name: ['name']
+                      };
+                      if (
+                        model.length &&
+                        !Object.keys(mapper).includes(model[0].field)
+                      )
+                        return;
+                      //model length is at max 1
+                      setPageable((prevState) => ({
+                        ...prevState,
+                        sort: model.length
+                          ? mapper[model[0].field].map(
+                              (field) => `${field},${model[0].sort}` as Sort
+                            )
+                          : []
+                      }));
                     }}
                   />
                 </Box>

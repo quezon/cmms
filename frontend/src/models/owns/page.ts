@@ -59,3 +59,26 @@ export const getInitialPage = <T>(): Page<T> => {
     sort: { empty: true, sorted: true, unsorted: false }
   };
 };
+
+export type Sort = `${string},asc` | `${string},desc`;
+
+export interface Pageable {
+  page: number;
+  size: number;
+  sort?: Sort[];
+}
+
+export function pageableToQueryParams(pageable: Pageable): string {
+  const params: string[] = [];
+
+  params.push(`page=${pageable.page}`);
+  params.push(`size=${pageable.size}`);
+
+  if (pageable.sort) {
+    for (const sortValue of pageable.sort) {
+      params.push(`sort=${sortValue}`); // No encoding here, comma stays as is
+    }
+  }
+
+  return params.join('&');
+}
