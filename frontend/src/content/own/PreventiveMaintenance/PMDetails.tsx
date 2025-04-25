@@ -28,20 +28,24 @@ import ImageViewer from 'react-simple-image-viewer';
 import { CompanySettingsContext } from '../../../contexts/CompanySettingsContext';
 import FilesList from '../components/FilesList';
 import { getTasksByPreventiveMaintenance } from '../../../slices/task';
+import Tasks from '../WorkOrders/Details/Tasks';
+import { Task } from '../../../models/owns/tasks';
 
 interface RequestDetailsProps {
   preventiveMaintenance: PreventiveMaintenance;
   handleOpenUpdate: () => void;
   handleOpenDelete: () => void;
   onClose: () => void;
+  tasks: Task[];
 }
 
 export default function PMDetails({
-                                    preventiveMaintenance,
-                                    handleOpenUpdate,
-                                    handleOpenDelete,
-                                    onClose
-                                  }: RequestDetailsProps) {
+  preventiveMaintenance,
+  handleOpenUpdate,
+  handleOpenDelete,
+  onClose,
+  tasks
+}: RequestDetailsProps) {
   const { t }: { t: any } = useTranslation();
   const dispatch = useDispatch();
   const theme = useTheme();
@@ -58,10 +62,10 @@ export default function PMDetails({
   }, []);
 
   const BasicField = ({
-                        label,
-                        value,
-                        isPriority
-                      }: {
+    label,
+    value,
+    isPriority
+  }: {
     label: string | number;
     value: string | number;
     isPriority?: boolean;
@@ -98,8 +102,8 @@ export default function PMDetails({
         preventiveMaintenance.schedule.dueDateDelay === null
           ? null
           : t('days_count', {
-            days: preventiveMaintenance.schedule.dueDateDelay
-          })
+              days: preventiveMaintenance.schedule.dueDateDelay
+            })
     },
     {
       label: t('estimated_start_date'),
@@ -340,6 +344,16 @@ export default function PMDetails({
                         })
                       );
                     }}
+                  />
+                </Grid>
+              )}
+              {!!tasks.length && (
+                <Grid item xs={12} lg={12}>
+                  <Tasks
+                    tasksProps={tasks}
+                    workOrderId={null}
+                    handleZoomImage={null}
+                    disabled={true}
                   />
                 </Grid>
               )}

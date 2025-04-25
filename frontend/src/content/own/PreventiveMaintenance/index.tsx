@@ -710,6 +710,7 @@ function Files() {
             preventiveMaintenance={currentPM}
             handleOpenUpdate={handleOpenUpdate}
             handleOpenDelete={() => setOpenDelete(true)}
+            tasks={tasks}
           />
         </Drawer>
         <ConfirmDialog
