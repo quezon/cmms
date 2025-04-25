@@ -36,7 +36,7 @@ import { GridEnrichedColDef } from '@mui/x-data-grid/models/colDef/gridColDef';
 import CustomDataGrid, {
   CustomDatagridColumn
 } from '../components/CustomDatagrid';
-import { SearchCriteria } from '../../../models/owns/page';
+import { SearchCriteria, SortDirection } from '../../../models/owns/page';
 import {
   GridRenderCellParams,
   GridToolbar,
@@ -605,9 +605,42 @@ function Meters() {
                     rowCount={meters.totalElements}
                     pagination
                     paginationMode="server"
+                    sortingMode="server"
                     onPageSizeChange={onPageSizeChange}
                     onPageChange={onPageChange}
                     rowsPerPageOptions={[10, 20, 50]}
+                    onSortModelChange={(model) => {
+                      if (model.length === 0) {
+                        setCriteria({
+                          ...criteria,
+                          sortField: undefined,
+                          direction: undefined
+                        });
+                        return;
+                      }
+
+                      const fieldMapping = {
+                        name: 'name',
+                        unit: 'unit',
+                        asset: 'asset.name',
+                        location: 'location.name',
+                        customId: 'customId',
+                        createdAt: 'createdAt',
+                        createdBy: 'createdBy'
+                      };
+
+                      const field = model[0].field;
+                      const mappedField = fieldMapping[field];
+
+                      if (!mappedField) return;
+
+                      setCriteria({
+                        ...criteria,
+                        sortField: mappedField,
+                        direction: (model[0].sort?.toUpperCase() ||
+                          'ASC') as SortDirection
+                      });
+                    }}
                     onRowClick={({ id }) => handleOpenDetails(Number(id))}
                     components={{
                       NoRowsOverlay: () => (

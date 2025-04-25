@@ -42,7 +42,7 @@ import { CustomSnackBarContext } from '../../../contexts/CustomSnackBarContext';
 import useAuth from '../../../hooks/useAuth';
 import { PermissionEntity } from '../../../models/owns/role';
 import NoRowsMessage from '../components/NoRowsMessage';
-import { SearchCriteria } from '../../../models/owns/page';
+import { SearchCriteria, SortDirection } from '../../../models/owns/page';
 import { onSearchQueryChange } from '../../../utils/overall';
 import SearchInput from '../components/SearchInput';
 import { getUserUrl } from '../../../utils/urlPaths';
@@ -264,10 +264,39 @@ const Teams = ({ openModal, handleCloseModal }: PropsType) => {
           rowCount={teams.totalElements}
           pagination
           paginationMode="server"
+          sortingMode="server"
           onPageSizeChange={onPageSizeChange}
           onPageChange={onPageChange}
           rowsPerPageOptions={[10, 20, 50]}
           columns={columns}
+          onSortModelChange={(model) => {
+            if (model.length === 0) {
+              setCriteria({
+                ...criteria,
+                sortField: undefined,
+                direction: undefined
+              });
+              return;
+            }
+
+            const fieldMapping = {
+              name: 'name',
+              description: 'description',
+              users: 'users.firstName'
+            };
+
+            const field = model[0].field;
+            const mappedField = fieldMapping[field];
+
+            if (!mappedField) return;
+
+            setCriteria({
+              ...criteria,
+              sortField: mappedField,
+              direction: (model[0].sort?.toUpperCase() ||
+                'ASC') as SortDirection
+            });
+          }}
           components={{
             Toolbar: GridToolbar
           }}

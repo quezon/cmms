@@ -51,7 +51,11 @@ import { PermissionEntity } from '../../../models/owns/role';
 import PermissionErrorMessage from '../components/PermissionErrorMessage';
 import NoRowsMessageWrapper from '../components/NoRowsMessageWrapper';
 import { getImageAndFiles, onSearchQueryChange } from '../../../utils/overall';
-import { FilterField, SearchCriteria } from '../../../models/owns/page';
+import {
+  FilterField,
+  SearchCriteria,
+  SortDirection
+} from '../../../models/owns/page';
 import { useGridApiRef } from '@mui/x-data-grid-pro';
 import useGridStatePersist from '../../../hooks/useGridStatePersist';
 import _ from 'lodash';
@@ -546,6 +550,38 @@ function Files() {
                       />
                     )
                   }}
+                  onSortModelChange={(model) => {
+                    if (model.length === 0) {
+                      setCriteria({
+                        ...criteria,
+                        sortField: undefined,
+                        direction: undefined
+                      });
+                      return;
+                    }
+
+                    const fieldMapping = {
+                      customId: 'customId',
+                      title: 'title',
+                      description: 'description',
+                      priority: 'priority',
+                      // status: 'status',
+                      createdAt: 'createdAt'
+                    };
+
+                    const field = model[0].field;
+                    const mappedField = fieldMapping[field];
+
+                    if (!mappedField) return;
+
+                    setCriteria({
+                      ...criteria,
+                      sortField: mappedField,
+                      direction: (model[0].sort?.toUpperCase() ||
+                        'ASC') as SortDirection
+                    });
+                  }}
+                  sortingMode={'server'}
                   initialState={{
                     columns: {
                       columnVisibilityModel: {}

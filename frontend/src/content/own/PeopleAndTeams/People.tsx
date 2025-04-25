@@ -44,7 +44,7 @@ import * as Yup from 'yup';
 import { IField } from '../type';
 import { formatSelect } from '../../../utils/formatters';
 import { CompanySettingsContext } from '../../../contexts/CompanySettingsContext';
-import { SearchCriteria } from '../../../models/owns/page';
+import { SearchCriteria, SortDirection } from '../../../models/owns/page';
 import { onSearchQueryChange } from '../../../utils/overall';
 import SearchInput from '../components/SearchInput';
 import CancelIcon from '@mui/icons-material/Cancel';
@@ -366,10 +366,40 @@ const People = ({ openModal, handleCloseModal }: PropsType) => {
       rowCount={users.totalElements}
       pagination
       paginationMode="server"
+      sortingMode="server"
       onPageSizeChange={onPageSizeChange}
       onPageChange={onPageChange}
       rowsPerPageOptions={[10, 20, 50]}
       loading={loadingGet}
+      onSortModelChange={(model) => {
+        if (model.length === 0) {
+          setCriteria({
+            ...criteria,
+            sortField: undefined,
+            direction: undefined
+          });
+          return;
+        }
+
+        const fieldMapping = {
+          firstName: 'firstName',
+          lastName: 'lastName',
+          email: 'email',
+          rate: 'rate',
+          role: 'role.name'
+        };
+
+        const field = model[0].field;
+        const mappedField = fieldMapping[field];
+
+        if (!mappedField) return;
+
+        setCriteria({
+          ...criteria,
+          sortField: mappedField,
+          direction: (model[0].sort?.toUpperCase() || 'ASC') as SortDirection
+        });
+      }}
       columns={columns}
       components={{
         Toolbar: GridToolbar
