@@ -199,8 +199,8 @@ function ApplicationsCalendar({
     ) {
       return;
     }
-    const start = newView.currentStart;
-    const end = newView.currentEnd;
+    const start = newView.activeStart;
+    const end = newView.activeEnd;
     dispatch(getWorkOrderEvents(start, end));
   }, [date, view]);
   const changeView = (changedView: View): void => {
