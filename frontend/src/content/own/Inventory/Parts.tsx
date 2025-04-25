@@ -53,7 +53,7 @@ import { CompanySettingsContext } from '../../../contexts/CompanySettingsContext
 import useAuth from '../../../hooks/useAuth';
 import NoRowsMessageWrapper from '../components/NoRowsMessageWrapper';
 import { getImageAndFiles, onSearchQueryChange } from '../../../utils/overall';
-import { SearchCriteria } from '../../../models/owns/page';
+import { SearchCriteria, SortDirection } from '../../../models/owns/page';
 import { exportEntity } from '../../../slices/exports';
 import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { PermissionEntity } from '../../../models/owns/role';
@@ -72,7 +72,9 @@ const Parts = ({ setAction }: PropsType) => {
   const [currentTab, setCurrentTab] = useState<string>('list');
   const [openUpdateModal, setOpenUpdateModal] = useState<boolean>(false);
   const [openDrawer, setOpenDrawer] = useState<boolean>(false);
-  const { getFormattedDate, uploadFiles, getFormattedCurrency } = useContext(CompanySettingsContext);
+  const { getFormattedDate, uploadFiles, getFormattedCurrency } = useContext(
+    CompanySettingsContext
+  );
   const { parts, loadingGet, singlePart } = useSelector((state) => state.parts);
   const [openDrawerFromUrl, setOpenDrawerFromUrl] = useState<boolean>(false);
   const [criteria, setCriteria] = useState<SearchCriteria>({
@@ -263,7 +265,8 @@ const Parts = ({ setAction }: PropsType) => {
       field: 'category',
       headerName: t('category'),
       description: t('category'),
-      valueGetter: (params: GridValueGetterParams<CategoryMiniDTO>) => params.value?.name,
+      valueGetter: (params: GridValueGetterParams<CategoryMiniDTO>) =>
+        params.value?.name,
       width: 150
     },
     {
@@ -440,8 +443,7 @@ const Parts = ({ setAction }: PropsType) => {
             validation={Yup.object().shape(shape)}
             submitText={t('create_part')}
             values={{}}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
               return new Promise<void>((resolve, rej) => {
@@ -470,9 +472,9 @@ const Parts = ({ setAction }: PropsType) => {
     </Dialog>
   );
   const BasicField = ({
-                        label,
-                        value
-                      }: {
+    label,
+    value
+  }: {
     label: string | number;
     value: string | number;
   }) => {
@@ -570,8 +572,7 @@ const Parts = ({ setAction }: PropsType) => {
                 };
               })
             }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               let formattedValues = formatValues(values);
               return new Promise<void>((resolve, rej) => {
@@ -683,12 +684,44 @@ const Parts = ({ setAction }: PropsType) => {
           rowCount={parts.totalElements}
           pagination
           paginationMode="server"
+          sortingMode="server"
           onPageSizeChange={onPageSizeChange}
           onPageChange={onPageChange}
           rowsPerPageOptions={[10, 20, 50]}
           loading={loadingGet}
-          components={{
+          onSortModelChange={(model) => {
+            if (model.length === 0) {
+              setCriteria({
+                ...criteria,
+                sortField: undefined,
+                direction: undefined
+              });
+              return;
+            }
 
+            const fieldMapping = {
+              name: 'name',
+              cost: 'cost',
+              category: 'category',
+              quantity: 'quantity',
+              description: 'description',
+              minQuantity: 'minQuantity',
+              customId: 'customId'
+            };
+
+            const field = model[0].field;
+            const mappedField = fieldMapping[field];
+
+            if (!mappedField) return;
+
+            setCriteria({
+              ...criteria,
+              sortField: mappedField,
+              direction: (model[0].sort?.toUpperCase() ||
+                'ASC') as SortDirection
+            });
+          }}
+          components={{
             NoRowsOverlay: () => (
               <NoRowsMessageWrapper
                 message={t('noRows.part.message')}

@@ -65,7 +65,7 @@ public class AssetService {
         Company company = user.getCompany();
         Long nextSequence = customSequenceService.getNextAssetSequence(company);
         asset.setCustomId("A" + String.format("%06d", nextSequence));
-        
+
         Asset savedAsset = assetRepository.saveAndFlush(asset);
         em.refresh(savedAsset);
         return savedAsset;
@@ -105,12 +105,16 @@ public class AssetService {
         return assetRepository.findByCompany_Id(id);
     }
 
+    public Page<Asset> findByCompany(Long id, Pageable pageable) {
+        return assetRepository.findByCompany_Id(id, pageable);
+    }
+
     public List<Asset> findByCompanyAndBefore(Long id, Date date) {
         return assetRepository.findByCompany_IdAndCreatedAtBefore(id, date);
     }
 
-    public Collection<Asset> findAssetChildren(Long id) {
-        return assetRepository.findByParentAsset_Id(id);
+    public Page<Asset> findAssetChildren(Long id, Pageable pageable) {
+        return assetRepository.findByParentAsset_Id(id, pageable);
     }
 
     public void notify(Asset asset, String title, String message) {
@@ -178,7 +182,7 @@ public class AssetService {
         SpecificationBuilder<Asset> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
         Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
-                searchCriteria.getDirection(), "id");
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return assetRepository.findAll(builder.build(), page).map(asset -> assetMapper.toShowDto(asset, this));
     }
 

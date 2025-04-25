@@ -43,7 +43,7 @@ import { useParams } from 'react-router-dom';
 import useAuth from '../../../hooks/useAuth';
 import { PermissionEntity } from '../../../models/owns/role';
 import NoRowsMessageWrapper from '../components/NoRowsMessageWrapper';
-import { SearchCriteria } from '../../../models/owns/page';
+import { SearchCriteria, SortDirection } from '../../../models/owns/page';
 import { onSearchQueryChange } from '../../../utils/overall';
 import SearchInput from '../components/SearchInput';
 import { useGridApiRef } from '@mui/x-data-grid-pro';
@@ -365,8 +365,7 @@ const Vendors = ({ openModal, handleCloseModal }: PropsType) => {
             validation={Yup.object().shape(shape)}
             submitText={t('add')}
             values={{}}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               const formattedValues = {
                 ...values,
@@ -396,13 +395,44 @@ const Vendors = ({ openModal, handleCloseModal }: PropsType) => {
         rowCount={vendors.totalElements}
         pagination
         paginationMode="server"
+        sortingMode="server"
         onPageSizeChange={onPageSizeChange}
         onPageChange={onPageChange}
         rowsPerPageOptions={[10, 20, 50]}
         columns={columns}
         loading={loadingGet}
-        components={{
+        onSortModelChange={(model) => {
+          if (model.length === 0) {
+            setCriteria({
+              ...criteria,
+              sortField: undefined,
+              direction: undefined
+            });
+            return;
+          }
 
+          const fieldMapping = {
+            companyName: 'companyName',
+            name: 'name',
+            vendorType: 'vendorType',
+            email: 'email',
+            phone: 'phone',
+            website: 'website',
+            rate: 'rate'
+          };
+
+          const field = model[0].field;
+          const mappedField = fieldMapping[field];
+
+          if (!mappedField) return;
+
+          setCriteria({
+            ...criteria,
+            sortField: mappedField,
+            direction: (model[0].sort?.toUpperCase() || 'ASC') as SortDirection
+          });
+        }}
+        components={{
           NoRowsOverlay: () => (
             <NoRowsMessageWrapper
               message={t('noRows.vendor.message')}
@@ -514,7 +544,14 @@ const Vendors = ({ openModal, handleCloseModal }: PropsType) => {
                 <Typography variant="subtitle1">{t('website')}</Typography>
                 <Typography variant="h5" sx={{ mb: 1 }}>
                   <a
-                    href={currentVendor.website.toLowerCase().startsWith('https') ? currentVendor.website : `https://${currentVendor.website}`}>{currentVendor.website}</a>
+                    href={
+                      currentVendor.website.toLowerCase().startsWith('https')
+                        ? currentVendor.website
+                        : `https://${currentVendor.website}`
+                    }
+                  >
+                    {currentVendor.website}
+                  </a>
                 </Typography>
               </>
             )}
@@ -526,14 +563,13 @@ const Vendors = ({ openModal, handleCloseModal }: PropsType) => {
               validation={Yup.object().shape(shape)}
               submitText={t('save')}
               values={currentVendor || {}}
-              onChange={({ field, e }) => {
-              }}
+              onChange={({ field, e }) => {}}
               onSubmit={async (values) => {
                 const formattedValues = values.rate
                   ? {
-                    ...values,
-                    rate: Number(values.rate)
-                  }
+                      ...values,
+                      rate: Number(values.rate)
+                    }
                   : values;
                 return dispatch(editVendor(currentVendor.id, formattedValues))
                   .then(onEditSuccess)

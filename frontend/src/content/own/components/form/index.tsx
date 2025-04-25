@@ -90,7 +90,7 @@ export default (props: PropsType) => {
     dispatch(getRoles());
   };
   const fetchRootLocations = async () => {
-    dispatch(getLocationChildren(0, []));
+    dispatch(getLocationChildren(0, [], { page: 0, size: 1000 }));
   };
   const fetchCategories = async (category: string) => {
     dispatch(getCategories(category));
@@ -205,7 +205,8 @@ export default (props: PropsType) => {
           });
         onOpen = () => {
           if (field.relatedFields) {
-            const locationId = formik.values[field.relatedFields[0].field]?.value ?? null;
+            const locationId =
+              formik.values[field.relatedFields[0].field]?.value ?? null;
             fetchAssets(locationId);
           } else fetchAssets(null);
         };
@@ -243,17 +244,17 @@ export default (props: PropsType) => {
             <Box display="flex" flexDirection="column">
               {values?.length
                 ? values.map(({ label, value }) => (
-                  <Link
-                    sx={{ mb: 1 }}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    href={`/app/inventory/parts/${value}`}
-                    key={value}
-                    variant="h4"
-                  >
-                    {label}
-                  </Link>
-                ))
+                    <Link
+                      sx={{ mb: 1 }}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      href={`/app/inventory/parts/${value}`}
+                      key={value}
+                      variant="h4"
+                    >
+                      {label}
+                    </Link>
+                  ))
                 : null}
             </Box>
             <SelectParts
@@ -338,14 +339,22 @@ export default (props: PropsType) => {
   };
   const filterRelatedFields = (fields: IField[], formik): IField[] => {
     const fieldsClone = [...fields];
-    const withRelatedFields = fields.filter(field => field.relatedFields?.length);
+    const withRelatedFields = fields.filter(
+      (field) => field.relatedFields?.length
+    );
     withRelatedFields.forEach(({ relatedFields, name, type }) => {
-      relatedFields.forEach(relatedField => {
-        if (formik.values[name] === relatedField.value
-          || (type === 'switch' && (formik.values[name] && (formik.values[name][0] === 'on') === relatedField.value))
-          || (formik.values[name] === undefined && !relatedField.value)) {
+      relatedFields.forEach((relatedField) => {
+        if (
+          formik.values[name] === relatedField.value ||
+          (type === 'switch' &&
+            formik.values[name] &&
+            (formik.values[name][0] === 'on') === relatedField.value) ||
+          (formik.values[name] === undefined && !relatedField.value)
+        ) {
           if (relatedField.hide) {
-            const fieldToDeleteIndex = fieldsClone.findIndex(field => field.name === relatedField.field);
+            const fieldToDeleteIndex = fieldsClone.findIndex(
+              (field) => field.name === relatedField.field
+            );
             fieldsClone.splice(fieldToDeleteIndex, 1);
           }
         }

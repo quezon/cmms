@@ -28,7 +28,9 @@ public class FileService {
     private LocationService locationService;
 
     @Autowired
-    public void setDeps(@Lazy AssetService assetService, @Lazy PartService partService, @Lazy RequestService requestService, @Lazy LocationService locationService, @Lazy WorkOrderService workOrderService
+    public void setDeps(@Lazy AssetService assetService, @Lazy PartService partService,
+                        @Lazy RequestService requestService, @Lazy LocationService locationService,
+                        @Lazy WorkOrderService workOrderService
     ) {
         this.assetService = assetService;
         this.partService = partService;
@@ -64,7 +66,8 @@ public class FileService {
     public Page<File> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<File> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return fileRepository.findAll(builder.build(), page);
     }
 }

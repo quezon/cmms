@@ -114,7 +114,7 @@ const Sets = ({ setAction }: PropsType) => {
       field: 'name',
       headerName: t('name'),
       description: t('name'),
-      width: 150,
+      flex: 1,
       renderCell: (params: GridRenderCellParams<string>) => (
         <Box sx={{ fontWeight: 'bold' }}>{params.value}</Box>
       )
@@ -123,7 +123,7 @@ const Sets = ({ setAction }: PropsType) => {
       field: 'parts',
       headerName: t('parts'),
       description: t('parts'),
-      width: 150,
+      flex: 1,
       valueGetter: (params: GridValueGetterParams<Part[]>) =>
         params.value.length
     },
@@ -131,7 +131,7 @@ const Sets = ({ setAction }: PropsType) => {
       field: 'cost',
       headerName: t('total_cost'),
       description: t('total_cost'),
-      width: 150,
+      flex: 1,
       valueGetter: (params) =>
         params.row.parts.reduce((acc, part) => acc + part.cost, 0)
     },
@@ -139,7 +139,7 @@ const Sets = ({ setAction }: PropsType) => {
       field: 'createdAt',
       headerName: t('created_at'),
       description: t('created_at'),
-      width: 150,
+      flex: 1,
       valueGetter: (params) => getFormattedDate(params.row.createdAt)
     }
   ];
@@ -204,9 +204,9 @@ const Sets = ({ setAction }: PropsType) => {
     }
   ];
   const BasicField = ({
-                        label,
-                        value
-                      }: {
+    label,
+    value
+  }: {
     label: string | number;
     value: string | number;
   }) => {
@@ -250,8 +250,7 @@ const Sets = ({ setAction }: PropsType) => {
             validation={Yup.object().shape(shape)}
             submitText={t('create_set')}
             values={{}}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               const formattedValues = formatValues(values);
               return dispatch(addMultiParts(formattedValues))
@@ -300,8 +299,7 @@ const Sets = ({ setAction }: PropsType) => {
                 };
               })
             }}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               const formattedValues = formatValues(values);
               return dispatch(editMultiParts(currentSet.id, formattedValues))
@@ -338,13 +336,12 @@ const Sets = ({ setAction }: PropsType) => {
             rows={multiParts}
             loading={loadingGet}
             components={{
-
               NoRowsOverlay: () => (
                 <NoRowsMessageWrapper
                   message={t(
                     'Manage your inventory by combining inventory part items into a single item which can be a kit, bundle or package'
                   )}
-                  action={t('Press the \'+\' button to create a Set')}
+                  action={t("Press the '+' button to create a Set")}
                 />
               )
             }}

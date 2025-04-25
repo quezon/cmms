@@ -121,7 +121,8 @@ public class TeamService {
     public Page<TeamShowDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<Team> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return teamRepository.findAll(builder.build(), page).map(teamMapper::toShowDto);
     }
 

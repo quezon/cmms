@@ -41,7 +41,9 @@ public class PurchaseOrderService {
     public PurchaseOrder update(Long id, PurchaseOrderPatchDTO purchaseOrder) {
         if (purchaseOrderRepository.existsById(id)) {
             PurchaseOrder savedPurchaseOrder = purchaseOrderRepository.findById(id).get();
-            PurchaseOrder updatedPurchaseOrder = purchaseOrderRepository.saveAndFlush(purchaseOrderMapper.updatePurchaseOrder(savedPurchaseOrder, purchaseOrder));
+            PurchaseOrder updatedPurchaseOrder =
+                    purchaseOrderRepository.saveAndFlush(purchaseOrderMapper.updatePurchaseOrder(savedPurchaseOrder,
+                            purchaseOrder));
             em.refresh(updatedPurchaseOrder);
             return updatedPurchaseOrder;
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
@@ -69,7 +71,8 @@ public class PurchaseOrderService {
 
     public boolean isPurchaseOrderInCompany(PurchaseOrder purchaseOrder, long companyId, boolean optional) {
         if (optional) {
-            Optional<PurchaseOrder> optionalPurchaseOrder = purchaseOrder == null ? Optional.empty() : findById(purchaseOrder.getId());
+            Optional<PurchaseOrder> optionalPurchaseOrder = purchaseOrder == null ? Optional.empty() :
+                    findById(purchaseOrder.getId());
             return purchaseOrder == null || (optionalPurchaseOrder.isPresent() && optionalPurchaseOrder.get().getCompany().getId().equals(companyId));
         } else {
             Optional<PurchaseOrder> optionalPurchaseOrder = findById(purchaseOrder.getId());
@@ -80,7 +83,8 @@ public class PurchaseOrderService {
     public Page<PurchaseOrderShowDTO> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<PurchaseOrder> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return purchaseOrderRepository.findAll(builder.build(), page).map(purchaseOrderMapper::toShowDto);
     }
 }

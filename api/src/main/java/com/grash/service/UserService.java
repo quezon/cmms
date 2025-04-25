@@ -315,7 +315,7 @@ public class UserService {
         SpecificationBuilder<OwnUser> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
         Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
-                searchCriteria.getDirection(), "id");
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return userRepository.findAll(builder.build(), page);
     }
 

@@ -4,7 +4,13 @@ import type { AppThunk } from 'src/store';
 import { AssetDTO, AssetMiniDTO, AssetRow } from '../models/owns/asset';
 import api from '../utils/api';
 import WorkOrder from '../models/owns/workOrder';
-import { getInitialPage, Page, SearchCriteria } from 'src/models/owns/page';
+import {
+  getInitialPage,
+  Page,
+  Pageable,
+  pageableToQueryParams,
+  SearchCriteria
+} from 'src/models/owns/page';
 import { revertAll } from 'src/utils/redux';
 
 const basePath = 'assets';
@@ -125,10 +131,7 @@ const slice = createSlice({
       const { assets, id } = action.payload;
       state.assetsByPart[id] = assets;
     },
-    resetHierarchy(
-      state: AssetState,
-      action: PayloadAction<{ }>
-    ) {
+    resetHierarchy(state: AssetState, action: PayloadAction<{}>) {
       state.assetsHierarchy = [];
     }
   }
@@ -150,10 +153,14 @@ export const getAssets =
       dispatch(slice.actions.setLoadingGet({ loading: false }));
     }
   };
-export const getAssetsMini = (locationId?: number): AppThunk => async (dispatch) => {
-  const assets = await api.get<AssetMiniDTO[]>(`${basePath}/mini?locationId=${locationId??""}`);
-  dispatch(slice.actions.getAssetsMini({ assets }));
-};
+export const getAssetsMini =
+  (locationId?: number): AppThunk =>
+  async (dispatch) => {
+    const assets = await api.get<AssetMiniDTO[]>(
+      `${basePath}/mini?locationId=${locationId ?? ''}`
+    );
+    dispatch(slice.actions.getAssetsMini({ assets }));
+  };
 export const addAsset =
   (asset): AppThunk =>
   async (dispatch) => {
@@ -185,10 +192,12 @@ export const deleteAsset =
   };
 
 export const getAssetChildren =
-  (id: number, parents: number[]): AppThunk =>
+  (id: number, parents: number[], pageable: Pageable): AppThunk =>
   async (dispatch) => {
     dispatch(slice.actions.setLoadingGet({ loading: true }));
-    const assets = await api.get<AssetDTO[]>(`${basePath}/children/${id}`);
+    const assets = await api.get<AssetDTO[]>(
+      `${basePath}/children/${id}?${pageableToQueryParams(pageable)}`
+    );
     dispatch(
       slice.actions.getAssetChildren({
         id,
@@ -247,13 +256,10 @@ export const getAssetsByPart =
     );
   };
 
-  
 export const resetAssetsHierarchy =
-(): AppThunk =>
-async (dispatch) => {
-  dispatch(
-    slice.actions.resetHierarchy({
-    }));
-    dispatch(getAssetChildren(0,[]))
-};
+  (callApi: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(slice.actions.resetHierarchy({}));
+    if (callApi) dispatch(getAssetChildren(0, [], { page: 0, size: 1000 }));
+  };
 export default slice;

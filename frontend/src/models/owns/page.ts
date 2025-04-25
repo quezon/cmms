@@ -38,12 +38,13 @@ export interface FilterField {
   values?: any[];
   alternatives?: FilterField[];
 }
-type Direction = 'ASC' | 'DESC';
+export type SortDirection = 'ASC' | 'DESC';
 export interface SearchCriteria {
   filterFields: FilterField[];
-  direction?: Direction;
+  direction?: SortDirection;
   pageNum?: number;
   pageSize?: number;
+  sortField?: string;
 }
 export const getInitialPage = <T>(): Page<T> => {
   return {
@@ -59,3 +60,26 @@ export const getInitialPage = <T>(): Page<T> => {
     sort: { empty: true, sorted: true, unsorted: false }
   };
 };
+
+export type Sort = `${string},asc` | `${string},desc`;
+
+export interface Pageable {
+  page: number;
+  size: number;
+  sort?: Sort[];
+}
+
+export function pageableToQueryParams(pageable: Pageable): string {
+  const params: string[] = [];
+
+  params.push(`page=${pageable.page}`);
+  params.push(`size=${pageable.size}`);
+
+  if (pageable.sort) {
+    for (const sortValue of pageable.sort) {
+      params.push(`sort=${sortValue}`); // No encoding here, comma stays as is
+    }
+  }
+
+  return params.join('&');
+}

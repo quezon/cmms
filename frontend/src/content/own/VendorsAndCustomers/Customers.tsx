@@ -46,7 +46,7 @@ import { PermissionEntity } from '../../../models/owns/role';
 import NoRowsMessageWrapper from '../components/NoRowsMessageWrapper';
 import { formatSelect } from '../../../utils/formatters';
 import Currency from '../../../models/owns/currency';
-import { SearchCriteria } from '../../../models/owns/page';
+import { SearchCriteria, SortDirection } from '../../../models/owns/page';
 import { onSearchQueryChange } from '../../../utils/overall';
 import SearchInput from '../components/SearchInput';
 import { useGridApiRef } from '@mui/x-data-grid-pro';
@@ -194,7 +194,7 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
       name: 'name',
       type: 'text',
       label: t('customer_name'),
-      placeholder: 'Jonh Doe',
+      placeholder: 'John Doe',
       required: true
     },
     {
@@ -387,8 +387,7 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
             validation={Yup.object().shape(shape)}
             submitText={t('add')}
             values={{}}
-            onChange={({ field, e }) => {
-            }}
+            onChange={({ field, e }) => {}}
             onSubmit={async (values) => {
               const formattedValues = formatValues(values);
               return dispatch(addCustomer(formattedValues))
@@ -415,13 +414,44 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
         rowCount={customers.totalElements}
         pagination
         paginationMode="server"
+        sortingMode="server"
         onPageSizeChange={onPageSizeChange}
         onPageChange={onPageChange}
+        onSortModelChange={(model) => {
+          if (model.length === 0) {
+            setCriteria({
+              ...criteria,
+              sortField: undefined,
+              direction: undefined
+            });
+            return;
+          }
+
+          const fieldMapping = {
+            companyName: 'companyName',
+            name: 'name',
+            customerType: 'customerType',
+            email: 'email',
+            phone: 'phone',
+            website: 'website',
+            billingCurrency: 'billingCurrency.name'
+          };
+
+          const field = model[0].field;
+          const mappedField = fieldMapping[field];
+
+          if (!mappedField) return;
+
+          setCriteria({
+            ...criteria,
+            sortField: mappedField,
+            direction: (model[0].sort?.toUpperCase() || 'ASC') as SortDirection
+          });
+        }}
         rowsPerPageOptions={[10, 20, 50]}
         columns={columns}
         loading={loadingGet}
         components={{
-
           NoRowsOverlay: () => (
             <NoRowsMessageWrapper
               message={t('noRows.customer.message')}
@@ -566,7 +596,12 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
 
                 <Typography variant="h5" sx={{ mb: 1 }}>
                   <a
-                    href={currentCustomer.website.toLowerCase().startsWith('https') ? currentCustomer.website : `https://${currentCustomer.website}`}>
+                    href={
+                      currentCustomer.website.toLowerCase().startsWith('https')
+                        ? currentCustomer.website
+                        : `https://${currentCustomer.website}`
+                    }
+                  >
                     {currentCustomer?.website}
                   </a>
                 </Typography>
@@ -583,13 +618,12 @@ const Customers = ({ openModal, handleCloseModal }: PropsType) => {
                 ...currentCustomer,
                 billingCurrency: currentCustomer?.billingCurrency
                   ? {
-                    label: currentCustomer.billingCurrency.name,
-                    value: currentCustomer.billingCurrency.id
-                  }
+                      label: currentCustomer.billingCurrency.name,
+                      value: currentCustomer.billingCurrency.id
+                    }
                   : null
               }}
-              onChange={({ field, e }) => {
-              }}
+              onChange={({ field, e }) => {}}
               onSubmit={async (values) => {
                 const formattedValues = formatValues(values);
                 return dispatch(

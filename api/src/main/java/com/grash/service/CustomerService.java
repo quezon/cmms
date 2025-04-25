@@ -32,7 +32,8 @@ public class CustomerService {
     private final CustomerMapper customerMapper;
 
     @Autowired
-    public void setDeps(@Lazy PartService partService, @Lazy LocationService locationService, @Lazy AssetService assetService
+    public void setDeps(@Lazy PartService partService, @Lazy LocationService locationService,
+                        @Lazy AssetService assetService
     ) {
         this.partService = partService;
         this.locationService = locationService;
@@ -69,7 +70,8 @@ public class CustomerService {
     public Page<Customer> findBySearchCriteria(SearchCriteria searchCriteria) {
         SpecificationBuilder<Customer> builder = new SpecificationBuilder<>();
         searchCriteria.getFilterFields().forEach(builder::with);
-        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(), searchCriteria.getDirection(), "id");
+        Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return customerRepository.findAll(builder.build(), page);
     }
 

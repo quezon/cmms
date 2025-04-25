@@ -21,6 +21,7 @@ public class SearchCriteria implements Cloneable {
     private Direction direction = Direction.ASC;
     private int pageNum = 0;
     private int pageSize = 10;
+    private String sortField = "id";
 
     public void filterCompany(OwnUser user) {
         this.filterFields.add(FilterField.builder()

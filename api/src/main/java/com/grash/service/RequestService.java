@@ -144,7 +144,7 @@ public class RequestService {
                         "priority"));
         searchCriteria.getFilterFields().forEach(builder::with);
         Pageable page = PageRequest.of(searchCriteria.getPageNum(), searchCriteria.getPageSize(),
-                searchCriteria.getDirection(), "id");
+                searchCriteria.getDirection(), searchCriteria.getSortField());
         return requestRepository.findAll(builder.build(), page).map(requestMapper::toShowDto);
     }
 
