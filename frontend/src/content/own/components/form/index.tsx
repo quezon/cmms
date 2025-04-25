@@ -43,6 +43,7 @@ import { getCurrencies } from '../../../../slices/currency';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
+import useAuth from '../../../../hooks/useAuth';
 
 interface PropsType {
   fields: Array<IField>;
@@ -66,6 +67,9 @@ export default (props: PropsType) => {
   const { locationsMini, locationsHierarchy } = useSelector(
     (state) => state.locations
   );
+  const {
+    companySettings: { generalPreferences }
+  } = useAuth();
   const { categories } = useSelector((state) => state.categories);
   const { usersMini } = useSelector((state) => state.users);
   const { assetsMini } = useSelector((state) => state.assets);
@@ -437,6 +441,11 @@ export default (props: PropsType) => {
                         onChange={(newValue) => {
                           handleChange(formik, field.name, newValue);
                         }}
+                        inputFormat={
+                          generalPreferences.dateFormat === 'MMDDYY'
+                            ? 'MM/dd/yyyy hh:mm'
+                            : 'dd/MM/yyyy hh:mm'
+                        }
                         ampm={false}
                         renderInput={(params) => (
                           <TextField
