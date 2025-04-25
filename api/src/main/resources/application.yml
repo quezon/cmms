@@ -49,8 +49,8 @@ spring:
       mode: always
 
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: ${SMTP_HOST:smtp.gmail.com}
+    port: ${SMTP_PORT:587}
     username: ${SMTP_USER:}
     password: ${SMTP_PWD:}
     protocol: smtp
@@ -58,7 +58,7 @@ spring:
     properties.mail.smtp:
       auth: true
       starttls.enable: true
-      ssl.trust: smtp.gmail.com
+      ssl.trust: ${SMTP_HOST:smtp.gmail.com}
   cache:
     type: caffeine
     caffeine:
