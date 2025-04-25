@@ -212,6 +212,7 @@ public class WorkOrderService {
         workOrder.setLocation(workOrderBase.getLocation());
         workOrder.setPrimaryUser(workOrderBase.getPrimaryUser());
         workOrder.setTeam(workOrderBase.getTeam());
+        workOrder.setCategory(workOrderBase.getCategory());
         workOrder.getAssignedTo().addAll(workOrderBase.getAssignedTo());
         workOrder.setEstimatedDuration(workOrder.getEstimatedDuration());
         return workOrder;
