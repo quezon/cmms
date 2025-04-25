@@ -4,6 +4,7 @@ import {
   Card,
   CircularProgress,
   Grid,
+  IconButton,
   MenuItem,
   Select,
   Stack,
@@ -62,6 +63,7 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 
 interface UICondition {
   type: WorkflowConditionType;
@@ -717,91 +719,101 @@ function Workflows() {
       showSnackBar(t('condition_value_missing'), 'error');
     }
   };
+  const onRemoveCondition = (index: number) => {
+    const newConditions = [...currentConditions];
+    newConditions.splice(index, 1);
+    setCurrentConditions(newConditions);
+  };
   const renderSingleCondition = (condition: UICondition, index: number) => {
     const config = conditionsConfig[condition.type];
     return (
-      <Box>
-        <Select
-          value={condition.type}
-          onChange={(event) =>
-            handleConditionTypeChange(
-              event.target.value as WorkflowConditionType,
-              index
-            )
-          }
-        >
-          {mainConfig[currentMainCondition].conditions.map(
-            (condition, index) => (
-              <MenuItem key={index} value={condition}>
-                {t(condition)}
-              </MenuItem>
-            )
-          )}
-        </Select>
-        <Box sx={{ mt: 1 }}>
-          {['text', 'number'].includes(config.type) ? (
-            <TextField
-              value={condition.value}
-              onChange={(event) =>
-                handleConditionValueChange(event.target.value, index)
-              }
-              type={config.type}
-            />
-          ) : config.type === 'select' ? (
-            <Select
-              value={condition.value}
-              onChange={(event) =>
-                handleConditionValueChange(event.target.value, index)
-              }
-              onOpen={config.onOpen}
-            >
-              {config.items.map((item, index) => (
-                <MenuItem key={index} value={config.formatter(item).value}>
-                  {config.formatter(item).label}
+      <Stack direction={'row'} spacing={1} alignItems={'flex-start'}>
+        <Box>
+          <Select
+            value={condition.type}
+            onChange={(event) =>
+              handleConditionTypeChange(
+                event.target.value as WorkflowConditionType,
+                index
+              )
+            }
+          >
+            {mainConfig[currentMainCondition].conditions.map(
+              (condition, index) => (
+                <MenuItem key={index} value={condition}>
+                  {t(condition)}
                 </MenuItem>
-              ))}
-            </Select>
-          ) : config.type === 'date' ? (
-            <DateTimePicker
-              value={condition.value}
-              onChange={(newValue) =>
-                handleConditionValueChange(newValue, index)
-              }
-              renderInput={(params) => (
-                <TextField
-                  fullWidth
-                  placeholder={t('select_date')}
-                  required={true}
-                  {...params}
-                />
-              )}
-            />
-          ) : config.type === 'dateRange' ? (
-            <LocalizationProvider
-              localeText={{ start: t('start'), end: t('end') }}
-              dateAdapter={AdapterDayjs}
-            >
-              <DateRangePicker
-                value={
-                  condition.values?.length > 1
-                    ? [condition.values[0], condition.values[1]]
-                    : [null, null]
+              )
+            )}
+          </Select>
+          <Box sx={{ mt: 1 }}>
+            {['text', 'number'].includes(config.type) ? (
+              <TextField
+                value={condition.value}
+                onChange={(event) =>
+                  handleConditionValueChange(event.target.value, index)
                 }
-                onChange={(newValues) => {
-                  handleConditionValuesChange(newValues as string[], index);
-                }}
-                renderInput={(startProps, endProps) => (
-                  <>
-                    <TextField {...startProps} />
-                    <Box sx={{ mx: 2 }}> {t('to')} </Box>
-                    <TextField {...endProps} />
-                  </>
+                type={config.type}
+              />
+            ) : config.type === 'select' ? (
+              <Select
+                value={condition.value}
+                onChange={(event) =>
+                  handleConditionValueChange(event.target.value, index)
+                }
+                onOpen={config.onOpen}
+              >
+                {config.items.map((item, index) => (
+                  <MenuItem key={index} value={config.formatter(item).value}>
+                    {config.formatter(item).label}
+                  </MenuItem>
+                ))}
+              </Select>
+            ) : config.type === 'date' ? (
+              <DateTimePicker
+                value={condition.value}
+                onChange={(newValue) =>
+                  handleConditionValueChange(newValue, index)
+                }
+                renderInput={(params) => (
+                  <TextField
+                    fullWidth
+                    placeholder={t('select_date')}
+                    required={true}
+                    {...params}
+                  />
                 )}
               />
-            </LocalizationProvider>
-          ) : null}
+            ) : config.type === 'dateRange' ? (
+              <LocalizationProvider
+                localeText={{ start: t('start'), end: t('end') }}
+                dateAdapter={AdapterDayjs}
+              >
+                <DateRangePicker
+                  value={
+                    condition.values?.length > 1
+                      ? [condition.values[0], condition.values[1]]
+                      : [null, null]
+                  }
+                  onChange={(newValues) => {
+                    handleConditionValuesChange(newValues as string[], index);
+                  }}
+                  renderInput={(startProps, endProps) => (
+                    <>
+                      <TextField {...startProps} />
+                      <Box sx={{ mx: 2 }}> {t('to')} </Box>
+                      <TextField {...endProps} />
+                    </>
+                  )}
+                />
+              </LocalizationProvider>
+            ) : null}
+          </Box>
         </Box>
-      </Box>
+        <IconButton onClick={() => onRemoveCondition(index)}>
+          <DeleteTwoToneIcon color={'error'} />
+        </IconButton>
+      </Stack>
     );
   };
   const renderActionField = (action: UIAction) => {
