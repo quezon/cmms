@@ -42,17 +42,17 @@ interface SingleTaskProps {
 }
 
 export default function SingleTask({
-                                     task,
-                                     handleChange,
-                                     handleNoteChange,
-                                     handleSaveNotes,
-                                     preview,
-                                     toggleNotes,
-                                     notes,
-                                     handleSelectImages,
-                                     handleZoomImage,
-                                     disabled
-                                   }: SingleTaskProps) {
+  task,
+  handleChange,
+  handleNoteChange,
+  handleSaveNotes,
+  preview,
+  toggleNotes,
+  notes,
+  handleSelectImages,
+  handleZoomImage,
+  disabled
+}: SingleTaskProps) {
   const theme = useTheme();
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
@@ -118,15 +118,20 @@ export default function SingleTask({
             <Select
               value={
                 preview
-                  ? getOptions(task.taskBase.taskType, task.taskBase.options)[0]
-                    .value
-                  : task.value
+                  ? getOptions(
+                      task.taskBase.taskType,
+                      task.taskBase.options
+                    )?.[0]?.value
+                  : task?.value
               }
               onChange={(event) =>
                 !preview && handleChange(event.target.value, task.id)
               }
               sx={{ backgroundColor: 'white' }}
-              disabled={(task.taskBase.user && task.taskBase.user.id !== user.id) || disabled}
+              disabled={
+                (task.taskBase.user && task.taskBase.user.id !== user.id) ||
+                disabled
+              }
             >
               {getOptions(task.taskBase.taskType, task.taskBase.options).map(
                 (option) => (
@@ -143,7 +148,8 @@ export default function SingleTask({
                 defaultValue={task.value}
                 label={t('value')}
                 disabled={
-                  (task.taskBase.user && task.taskBase.user.id !== user.id) || disabled
+                  (task.taskBase.user && task.taskBase.user.id !== user.id) ||
+                  disabled
                 }
                 type={
                   task.taskBase.taskType === 'METER'
@@ -179,7 +185,7 @@ export default function SingleTask({
             placement="top"
             title={t(
               hasCreatePermission(PermissionEntity.FILES) &&
-              hasFeature(PlanFeature.FILE)
+                hasFeature(PlanFeature.FILE)
                 ? 'Attach Images'
                 : 'Upgrade to attach Images'
             )}
@@ -188,7 +194,8 @@ export default function SingleTask({
               <IconButton
                 onClick={() => handleSelectImages(task.id)}
                 disabled={
-                  preview || disabled ||
+                  preview ||
+                  disabled ||
                   !(
                     hasCreatePermission(PermissionEntity.FILES) &&
                     hasFeature(PlanFeature.FILE)
