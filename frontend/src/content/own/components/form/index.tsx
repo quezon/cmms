@@ -443,8 +443,8 @@ export default (props: PropsType) => {
                         }}
                         inputFormat={
                           generalPreferences.dateFormat === 'MMDDYY'
-                            ? 'MM/dd/yyyy hh:mm'
-                            : 'dd/MM/yyyy hh:mm'
+                            ? 'MM/dd/yyyy HH:mm'
+                            : 'dd/MM/yyyy HH:mm'
                         }
                         ampm={false}
                         renderInput={(params) => (
