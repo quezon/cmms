@@ -16,6 +16,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -77,8 +78,8 @@ public class LocationService {
         return locationRepository.findByCompany_Id(id);
     }
 
-    public Page<Location> findByCompany(Long id, Pageable pageable) {
-        return locationRepository.findByCompany_Id(id, pageable);
+    public List<Location> findByCompany(Long id, Sort sort) {
+        return locationRepository.findByCompany_Id(id, sort);
     }
 
 
@@ -98,8 +99,8 @@ public class LocationService {
                 new Notification(message, user, NotificationType.LOCATION, newLocation.getId())).collect(Collectors.toList()), true, title);
     }
 
-    public Page<Location> findLocationChildren(Long id, Pageable pageable) {
-        return locationRepository.findByParentLocation_Id(id, pageable);
+    public List<Location> findLocationChildren(Long id, Sort sort) {
+        return locationRepository.findByParentLocation_Id(id, sort);
     }
 
     public void save(Location location) {

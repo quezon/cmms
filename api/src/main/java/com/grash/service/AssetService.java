@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -105,16 +106,16 @@ public class AssetService {
         return assetRepository.findByCompany_Id(id);
     }
 
-    public Page<Asset> findByCompany(Long id, Pageable pageable) {
-        return assetRepository.findByCompany_Id(id, pageable);
+    public List<Asset> findByCompany(Long id, Sort sort) {
+        return assetRepository.findByCompany_Id(id, sort);
     }
 
     public List<Asset> findByCompanyAndBefore(Long id, Date date) {
         return assetRepository.findByCompany_IdAndCreatedAtBefore(id, date);
     }
 
-    public Page<Asset> findAssetChildren(Long id, Pageable pageable) {
-        return assetRepository.findByParentAsset_Id(id, pageable);
+    public List<Asset> findAssetChildren(Long id, Sort sort) {
+        return assetRepository.findByParentAsset_Id(id, sort);
     }
 
     public void notify(Asset asset, String title, String message) {

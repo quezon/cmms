@@ -156,18 +156,18 @@ public class AssetController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "Asset not found")})
-    public Collection<AssetShowDTO> getChildrenById(@ApiParam("id") @PathVariable("id") Long id,
-                                                    Pageable pageable,
-                                                    HttpServletRequest req) {
+    public List<AssetShowDTO> getChildrenById(@ApiParam("id") @PathVariable("id") Long id,
+                                              Pageable pageable,
+                                              HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         if (id.equals(0L) && user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
-            return assetService.findByCompany(user.getCompany().getId(), pageable).stream().filter(asset -> asset.getParentAsset() == null).map(asset -> assetMapper.toShowDto(asset, assetService)).collect(Collectors.toList());
+            return assetService.findByCompany(user.getCompany().getId(), pageable.getSort()).stream().filter(asset -> asset.getParentAsset() == null).map(asset -> assetMapper.toShowDto(asset, assetService)).collect(Collectors.toList());
         }
         Optional<Asset> optionalAsset = assetService.findById(id);
         if (optionalAsset.isPresent()) {
             Asset savedAsset = optionalAsset.get();
             if (user.getRole().getViewPermissions().contains(PermissionEntity.ASSETS)) {
-                return assetService.findAssetChildren(id, pageable).stream().map(asset -> assetMapper.toShowDto(asset,
+                return assetService.findAssetChildren(id, pageable.getSort()).stream().map(asset -> assetMapper.toShowDto(asset,
                         assetService)).collect(Collectors.toList());
             } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
 

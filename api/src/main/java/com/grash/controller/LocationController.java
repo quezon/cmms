@@ -21,6 +21,7 @@ import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -92,15 +93,16 @@ public class LocationController {
     public Collection<LocationShowDTO> getChildrenById(@ApiParam("id") @PathVariable("id") Long id,
                                                        Pageable pageable,
                                                        HttpServletRequest req) {
+        //only sort is used
         OwnUser user = userService.whoami(req);
         if (id.equals(0L) && user.getRole().getRoleType().equals(RoleType.ROLE_CLIENT)) {
-            return locationService.findByCompany(user.getCompany().getId(), pageable).stream().filter(location -> location.getParentLocation() == null).map(location -> locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
+            return locationService.findByCompany(user.getCompany().getId(), pageable.getSort()).stream().filter(location -> location.getParentLocation() == null).map(location -> locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
         }
         Optional<Location> optionalLocation = locationService.findById(id);
         if (optionalLocation.isPresent()) {
             Location savedLocation = optionalLocation.get();
             if (user.getRole().getViewPermissions().contains(PermissionEntity.LOCATIONS)) {
-                return locationService.findLocationChildren(id, pageable).stream().map(location -> locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
+                return locationService.findLocationChildren(id, pageable.getSort()).stream().map(location -> locationMapper.toShowDto(location, locationService)).collect(Collectors.toList());
             } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
 
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
