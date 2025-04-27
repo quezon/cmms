@@ -11,13 +11,12 @@ import javax.persistence.Id;
 
 @Entity
 @NoArgsConstructor
+@Data
 public class UserSettings {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Getter
     private Long id;
 
-    @Getter
     private boolean emailNotified = true;
     private boolean emailUpdatesForWorkOrders = true;
     private boolean emailUpdatesForRequests = true;
