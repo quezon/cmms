@@ -109,14 +109,15 @@ public class PurchaseOrderController {
                     result.getPartQuantities().stream().mapToLong(partQuantityShowDTO -> partQuantityShowDTO.getQuantity() * partQuantityShowDTO.getPart().getCost()).sum();
             String title = messageSource.getMessage("new_po", null, Helper.getLocale(user));
             String message = messageSource.getMessage("notification_new_po_request", new Object[]{result.getName(),
-                    cost, user.getCompany().getCompanySettings().getGeneralPreferences().getCurrency().getCode()},
+                            cost,
+                            user.getCompany().getCompanySettings().getGeneralPreferences().getCurrency().getCode()},
                     Helper.getLocale(user));
             Map<String, Object> mailVariables = new HashMap<String, Object>() {{
                 put("purchaseOrderLink", frontendUrl + "/app/purchase-orders/" + result.getId());
                 put("message", message);
             }};
             Collection<OwnUser> usersToNotify = userService.findByCompany(user.getCompany().getId()).stream()
-                    .filter(user1 -> user1.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS) ||
+                    .filter(user1 -> user1.isEnabled() && user1.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS) ||
                             user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN)).collect(Collectors.toList());
             notificationService.createMultiple(usersToNotify.stream().map(user1 -> new Notification(message, user1,
                     NotificationType.PURCHASE_ORDER, result.getId())).collect(Collectors.toList()), true, title);
@@ -161,7 +162,7 @@ public class PurchaseOrderController {
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "PurchaseOrder not found")})
     public PurchaseOrderShowDTO respond(@ApiParam("approved") @RequestParam("approved") boolean approved, @ApiParam(
-            "id") @PathVariable("id") Long id,
+                                                "id") @PathVariable("id") Long id,
                                         HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<PurchaseOrder> optionalPurchaseOrder = purchaseOrderService.findById(id);

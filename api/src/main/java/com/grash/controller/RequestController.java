@@ -108,7 +108,7 @@ public class RequestController {
             String title = messageSource.getMessage("new_request", null, Helper.getLocale(user));
             String message = messageSource.getMessage("notification_new_request", null, Helper.getLocale(user));
             List<OwnUser> usersToNotify = userService.findByCompany(user.getCompany().getId()).stream()
-                    .filter(user1 -> user1.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS)
+                    .filter(user1 -> user1.isEnabled() && user1.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS)
                             || user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN)).collect(Collectors.toList());
             notificationService.createMultiple(usersToNotify
                     .stream().map(user1 -> new Notification(message, user1, NotificationType.REQUEST,
@@ -204,7 +204,7 @@ public class RequestController {
             }};
             List<OwnUser> usersToMail =
                     userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN))
-                            .filter(user1 -> user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
+                            .filter(user1 -> user1.isEnabled() && user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
             usersToMail.add(requester);
             emailService2.sendMessageUsingThymeleafTemplate(usersToMail.stream().map(OwnUser::getEmail)
                     .toArray(String[]::new), title, mailVariables, "approved-request.html", Helper.getLocale(user));
@@ -261,7 +261,7 @@ public class RequestController {
             }};
             List<OwnUser> usersToMail =
                     userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole().getCode().equals(RoleCode.LIMITED_ADMIN))
-                            .filter(user1 -> user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
+                            .filter(user1 -> user1.isEnabled() && user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
             usersToMail.add(requester);
             emailService2.sendMessageUsingThymeleafTemplate(usersToMail.stream().map(OwnUser::getEmail)
                     .toArray(String[]::new), title, mailVariables, "rejected-request.html", Helper.getLocale(user));

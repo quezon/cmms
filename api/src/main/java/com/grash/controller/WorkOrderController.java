@@ -293,7 +293,7 @@ public class WorkOrderController {
                         locale);
                 notificationService.create(new Notification(message, userService.findById(requesterId).get(),
                         NotificationType.WORK_ORDER, id));
-                if (requester.getUserSettings().shouldEmailUpdatesForRequests()) {
+                if (requester.getUserSettings().shouldEmailUpdatesForRequests() && requester.isEnabled()) {
                     Map<String, Object> mailVariables = new HashMap<String, Object>() {{
                         put("workOrderLink", frontendUrl + "/app/work-orders/" + id);
                         put("message", message);
@@ -333,7 +333,7 @@ public class WorkOrderController {
                 List<OwnUser> usersToMail =
                         userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.getRole()
                                         .getViewPermissions().contains(PermissionEntity.SETTINGS))
-                                .filter(user1 -> user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
+                                .filter(user1 -> user1.isEnabled() && user1.getUserSettings().isEmailNotified()).collect(Collectors.toList());
 
                 emailService2.sendMessageUsingThymeleafTemplate(usersToMail.stream().map(OwnUser::getEmail)
                                 .toArray(String[]::new), title, mailVariables, "deleted-work-order.html",
