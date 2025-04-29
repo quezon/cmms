@@ -37,6 +37,8 @@ import FilesList from '../components/FilesList';
 import { getAssetsByPart } from '../../../slices/asset';
 import { useNavigate } from 'react-router-dom';
 import { getWorkOrdersByPart } from '../../../slices/workOrder';
+import { getFormattedQuantityWithUnit } from './Parts';
+import { getFormattedCostPerUnit } from '../../../utils/formatters';
 
 interface PartDetailsProps {
   part: Part;
@@ -66,7 +68,6 @@ export default function PartDetails(props: PartDetailsProps) {
     { value: 'workOrders', label: t('work_orders') }
     //TODO events
   ];
-
   const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value);
     if (value === 'assets' && !assets.length) {
@@ -114,15 +115,15 @@ export default function PartDetails(props: PartDetailsProps) {
     },
     {
       label: t('cost'),
-      value: getFormattedCurrency(part.cost)
+      value: getFormattedCostPerUnit(part.cost, part.unit, getFormattedCurrency)
     },
     {
       label: t('quantity'),
-      value: part.quantity
+      value: getFormattedQuantityWithUnit(part.quantity, part.unit)
     },
     {
       label: t('minimum_quantity'),
-      value: part.minQuantity
+      value: getFormattedQuantityWithUnit(part.minQuantity, part.unit)
     },
     {
       label: t('barcode'),

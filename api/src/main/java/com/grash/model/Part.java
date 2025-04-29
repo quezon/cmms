@@ -26,7 +26,7 @@ public class Part extends CompanyAudit {
     @NotNull
     private String name;
 
-    private long cost;
+    private double cost;
 
 
     @ManyToMany
@@ -47,7 +47,7 @@ public class Part extends CompanyAudit {
     @ManyToOne
     private PartCategory category;
 
-    private int quantity;
+    private double quantity;
 
     private String area;
 
@@ -95,7 +95,7 @@ public class Part extends CompanyAudit {
     @JsonIgnore
     private List<PreventiveMaintenance> preventiveMaintenances = new ArrayList<>();
 
-    private int minQuantity;
+    private double minQuantity;
 
     @ManyToMany
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
@@ -130,6 +130,8 @@ public class Part extends CompanyAudit {
             })
     private List<MultiParts> multiParts = new ArrayList<>();
 
+    private String unit;
+
     @JsonIgnore
     public Collection<OwnUser> getUsers() {
         Collection<OwnUser> users = new ArrayList<>();
@@ -157,12 +159,15 @@ public class Part extends CompanyAudit {
     //TODO
     //Location
 
-    public void setQuantity(int quantity){
-        if(quantity<0) throw new CustomException("The quantity should not be negative", HttpStatus.NOT_ACCEPTABLE);
-        this.quantity=quantity;
+    public void setQuantity(double quantity) {
+        if (quantity < 0) throw new CustomException("The quantity should not be negative", HttpStatus.NOT_ACCEPTABLE);
+        this.quantity = quantity;
     }
-    public void setMinQuantity(int minQuantity){
-        if(minQuantity<0) throw new CustomException("The quantity should not be negative", HttpStatus.NOT_ACCEPTABLE);
-        this.minQuantity=minQuantity;
+
+    public void setMinQuantity(double minQuantity) {
+        if (minQuantity < 0)
+            throw new CustomException("The quantity should not be negative", HttpStatus.NOT_ACCEPTABLE);
+        this.minQuantity = minQuantity;
     }
+
 }

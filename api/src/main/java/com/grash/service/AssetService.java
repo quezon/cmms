@@ -362,7 +362,7 @@ public class AssetService {
         return asset.getAge() - getDowntime(assetId, start, end);
     }
 
-    public long getTotalCost(Long assetId, Date start, Date end, Boolean includeLaborCost) {
+    public double getTotalCost(Long assetId, Date start, Date end, Boolean includeLaborCost) {
         Collection<WorkOrder> workOrders = workOrderService.findByAssetAndCreatedAtBetween(assetId, start, end);
         return workOrderService.getAllCost(workOrders, includeLaborCost);
     }

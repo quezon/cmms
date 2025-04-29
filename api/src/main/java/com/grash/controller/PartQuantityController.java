@@ -47,7 +47,8 @@ public class PartQuantityController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "PartQuantityCategory not found")})
-    public Collection<PartQuantityShowDTO> getByWorkOrder(HttpServletRequest req, @ApiParam("id") @PathVariable("id") Long id) {
+    public Collection<PartQuantityShowDTO> getByWorkOrder(HttpServletRequest req,
+                                                          @ApiParam("id") @PathVariable("id") Long id) {
         OwnUser user = userService.whoami(req);
         Optional<WorkOrder> optionalWorkOrder = workOrderService.findById(id);
         if (optionalWorkOrder.isPresent()) {
@@ -61,7 +62,8 @@ public class PartQuantityController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "Purchase not found")})
-    public Collection<PartQuantityShowDTO> getByPurchaseOrder(HttpServletRequest req, @ApiParam("id") @PathVariable("id") Long id) {
+    public Collection<PartQuantityShowDTO> getByPurchaseOrder(HttpServletRequest req, @ApiParam("id") @PathVariable(
+            "id") Long id) {
         OwnUser user = userService.whoami(req);
         Optional<PurchaseOrder> optionalPurchaseOrder = purchaseOrderService.findById(id);
         if (optionalPurchaseOrder.isPresent()) {
@@ -94,7 +96,8 @@ public class PartQuantityController {
                     if (!partQuantityMappedPartIds.contains(partId)) {
                         Optional<Part> optionalPart = partService.findById(partId);
                         if (optionalPart.isPresent()) {
-                            partService.consumePart(optionalPart.get().getId(), 1, savedWorkOrder, Helper.getLocale(user));
+                            partService.consumePart(optionalPart.get().getId(), 1, savedWorkOrder,
+                                    Helper.getLocale(user));
                             PartQuantity partQuantity = new PartQuantity(optionalPart.get(), savedWorkOrder, null, 1);
                             partQuantityService.create(partQuantity);
                         } else throw new CustomException("Part not found", HttpStatus.NOT_FOUND);
@@ -134,14 +137,16 @@ public class PartQuantityController {
             partQuantitiesReq.forEach(partQuantityReq -> {
                 if (savedPartQuantitiesMappedPartIds.contains(partQuantityReq.getPart().getId())) {
                     //existing parts
-                    PartQuantity savedPartQuantity = savedPartQuantities.stream().filter(partQuantity -> partQuantity.getPart().getId().equals(partQuantityReq.getPart().getId())).findFirst().get();
+                    PartQuantity savedPartQuantity =
+                            savedPartQuantities.stream().filter(partQuantity -> partQuantity.getPart().getId().equals(partQuantityReq.getPart().getId())).findFirst().get();
                     savedPartQuantity.setQuantity(partQuantityReq.getQuantity());
                     partQuantityService.save(savedPartQuantity);
                 } else {
                     //new Parts
                     Optional<Part> optionalPart = partService.findById(partQuantityReq.getPart().getId());
                     if (optionalPart.isPresent()) {
-                        PartQuantity partQuantity = new PartQuantity(optionalPart.get(), null, savedPurchaseOrder, partQuantityReq.getQuantity());
+                        PartQuantity partQuantity = new PartQuantity(optionalPart.get(), null, savedPurchaseOrder,
+                                partQuantityReq.getQuantity());
                         partQuantityService.create(partQuantity);
                     } else throw new CustomException("Part not found", HttpStatus.NOT_FOUND);
                 }
@@ -177,7 +182,8 @@ public class PartQuantityController {
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied")})
-    public PartQuantityShowDTO create(@ApiParam("PartQuantity") @Valid @RequestBody PartQuantity partQuantityReq, HttpServletRequest req) {
+    public PartQuantityShowDTO create(@ApiParam("PartQuantity") @Valid @RequestBody PartQuantity partQuantityReq,
+                                      HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         PartQuantity savedPartQuantity = partQuantityService.create(partQuantityReq);
         return partQuantityMapper.toShowDto(savedPartQuantity);
@@ -189,14 +195,20 @@ public class PartQuantityController {
             @ApiResponse(code = 500, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 404, message = "PartQuantity not found")})
-    public PartQuantityShowDTO patch(@ApiParam("PartQuantity") @Valid @RequestBody PartQuantityPatchDTO partQuantity, @ApiParam("id") @PathVariable("id") Long id,
+    public PartQuantityShowDTO patch(@ApiParam("PartQuantity") @Valid @RequestBody PartQuantityPatchDTO partQuantity,
+                                     @ApiParam("id") @PathVariable("id") Long id,
                                      HttpServletRequest req) {
         OwnUser user = userService.whoami(req);
         Optional<PartQuantity> optionalPartQuantity = partQuantityService.findById(id);
         if (optionalPartQuantity.isPresent()) {
             PartQuantity savedPartQuantity = optionalPartQuantity.get();
+            if (savedPartQuantity.getPart().getUnit() == null) {
+                partQuantity.setQuantity((int) partQuantity.getQuantity());
+            }
             if (savedPartQuantity.getWorkOrder() != null) {
-                partService.consumePart(savedPartQuantity.getPart().getId(), partQuantity.getQuantity() - savedPartQuantity.getQuantity(), savedPartQuantity.getWorkOrder(), Helper.getLocale(user));
+                partService.consumePart(savedPartQuantity.getPart().getId(),
+                        partQuantity.getQuantity() - savedPartQuantity.getQuantity(),
+                        savedPartQuantity.getWorkOrder(), Helper.getLocale(user));
             }
             PartQuantity patchedPartQuantity = partQuantityService.update(id, partQuantity);
             return partQuantityMapper.toShowDto(patchedPartQuantity);

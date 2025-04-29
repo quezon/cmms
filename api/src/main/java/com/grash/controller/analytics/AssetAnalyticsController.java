@@ -61,7 +61,7 @@ public class AssetAnalyticsController {
                                 dateRange.getStart(), dateRange.getEnd())
                         .stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
                 long time = workOrderService.getLaborCostAndTime(completeWO).getSecond();
-                long cost = workOrderService.getAllCost(completeWO,
+                double cost = workOrderService.getAllCost(completeWO,
                         user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost());
                 result.add(TimeCostByAsset.builder()
                         .time(time)
@@ -249,9 +249,10 @@ public class AssetAnalyticsController {
                     dateRange.getEnd());
             Collection<Asset> assetsWithAcquisitionCost =
                     assets.stream().filter(asset -> asset.getAcquisitionCost() != null).collect(Collectors.toList());
-            long totalAcquisitionCost = assetsWithAcquisitionCost.stream().mapToLong(Asset::getAcquisitionCost).sum();
-            long totalWOCosts = getCompleteWOCosts(assets, includeLaborCost, dateRange);
-            long rav = assetsWithAcquisitionCost.isEmpty() ? 0 : getCompleteWOCosts(assetsWithAcquisitionCost,
+            double totalAcquisitionCost =
+                    assetsWithAcquisitionCost.stream().mapToDouble(Asset::getAcquisitionCost).sum();
+            double totalWOCosts = getCompleteWOCosts(assets, includeLaborCost, dateRange);
+            double rav = assetsWithAcquisitionCost.isEmpty() ? 0 : getCompleteWOCosts(assetsWithAcquisitionCost,
                     includeLaborCost, dateRange) * 100 / totalAcquisitionCost;
             return ResponseEntity.ok(AssetsCosts.builder()
                     .totalWOCosts(totalWOCosts)
@@ -276,7 +277,7 @@ public class AssetAnalyticsController {
                         .filter(assetDowntime -> assetDowntime.getDuration() != 0).collect(Collectors.toList());
                 long downtimesDuration =
                         downtimes.stream().mapToLong(assetDowntime -> assetDowntime.getDateRangeDuration(dateRange)).sum();
-                long totalWOCosts = getCompleteWOCosts(Collections.singleton(asset),
+                double totalWOCosts = getCompleteWOCosts(Collections.singleton(asset),
                         user.getCompany().getCompanySettings().getGeneralPreferences().isLaborCostInTotalCost(),
                         dateRange);
                 return DowntimesAndCostsByAsset.builder()
@@ -354,9 +355,9 @@ public class AssetAnalyticsController {
         } else throw new CustomException("Access Denied", HttpStatus.FORBIDDEN);
     }
 
-    private long getCompleteWOCosts(Collection<Asset> assets, boolean includeLaborCost, DateRange dateRange) {
+    private double getCompleteWOCosts(Collection<Asset> assets, boolean includeLaborCost, DateRange dateRange) {
         return assets.stream().map(asset -> workOrderService.findByAssetAndCreatedAtBetween(asset.getId(),
-                dateRange.getStart(), dateRange.getEnd()).stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList())).mapToLong(workOrder -> workOrderService.getAllCost(workOrder, includeLaborCost)).sum();
+                dateRange.getStart(), dateRange.getEnd()).stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList())).mapToDouble(workOrder -> workOrderService.getAllCost(workOrder, includeLaborCost)).sum();
     }
 
     private long getLivingTime(Asset asset, DateRange dateRange) {

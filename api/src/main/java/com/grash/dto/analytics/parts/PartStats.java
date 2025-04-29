@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartStats {
-    private long totalConsumptionCost;
+    private double totalConsumptionCost;
     private int consumedCount;
 }

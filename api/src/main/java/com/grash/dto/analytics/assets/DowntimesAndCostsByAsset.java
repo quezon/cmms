@@ -12,5 +12,5 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 public class DowntimesAndCostsByAsset extends AssetMiniDTO {
     private long duration;
-    private long workOrdersCosts;
+    private double workOrdersCosts;
 }

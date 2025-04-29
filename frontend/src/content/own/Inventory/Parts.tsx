@@ -45,7 +45,11 @@ import { IField } from '../type';
 import PartDetails from './PartDetails';
 import { useNavigate, useParams } from 'react-router-dom';
 import { isNumeric } from '../../../utils/validators';
-import { formatSelect, formatSelectMultiple } from '../../../utils/formatters';
+import {
+  formatSelect,
+  formatSelectMultiple,
+  getFormattedCostPerUnit
+} from '../../../utils/formatters';
 import { UserMiniDTO } from '../../../models/user';
 import UserAvatars from '../components/UserAvatars';
 import { CustomSnackBarContext } from '../../../contexts/CustomSnackBarContext';
@@ -67,6 +71,12 @@ interface PropsType {
   setAction: (p: () => () => void) => void;
 }
 
+export const getFormattedQuantityWithUnit = (
+  quantity: number,
+  unit: string
+) => {
+  return unit ? quantity + ' ' + unit : quantity;
+};
 const Parts = ({ setAction }: PropsType) => {
   const { t }: { t: any } = useTranslation();
   const [currentTab, setCurrentTab] = useState<string>('list');
@@ -221,7 +231,7 @@ const Parts = ({ setAction }: PropsType) => {
     // values.files = formatSelect(values.files);
     return newValues;
   };
-  const columns: GridEnrichedColDef[] = [
+  const columns: GridEnrichedColDef<Part>[] = [
     {
       field: 'name',
       headerName: t('name'),
@@ -235,6 +245,12 @@ const Parts = ({ setAction }: PropsType) => {
       field: 'cost',
       headerName: t('cost'),
       description: t('cost'),
+      valueGetter: (params) =>
+        getFormattedCostPerUnit(
+          params.value,
+          params.row.unit,
+          getFormattedCurrency
+        ),
       width: 150
     },
     {
@@ -242,9 +258,9 @@ const Parts = ({ setAction }: PropsType) => {
       headerName: t('quantity'),
       description: t('quantity'),
       width: 150,
-      renderCell: (params: GridRenderCellParams<number>) => (
+      renderCell: (params: GridRenderCellParams<number, Part>) => (
         <Box sx={params.value < params.row.minQuantity ? { color: 'red' } : {}}>
-          {params.value}{' '}
+          {getFormattedQuantityWithUnit(params.value, params.row.unit)}{' '}
           {params.value < params.row.minQuantity && t('(Running Low !)')}
         </Box>
       )
@@ -333,6 +349,12 @@ const Parts = ({ setAction }: PropsType) => {
       type: 'number',
       label: t('quantity'),
       placeholder: t('enter_part_quantity')
+    },
+    {
+      name: 'unit',
+      type: 'text',
+      label: t('unit'),
+      placeholder: t('unit_of_measurement')
     },
     {
       name: 'minQuantity',
@@ -500,7 +522,7 @@ const Parts = ({ setAction }: PropsType) => {
     },
     {
       label: t('quantity'),
-      value: part.quantity
+      value: getFormattedQuantityWithUnit(part.quantity, part.unit)
     },
     {
       label: t('cost'),

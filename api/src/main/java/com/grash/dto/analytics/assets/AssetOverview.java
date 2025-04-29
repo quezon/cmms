@@ -14,5 +14,5 @@ public class AssetOverview {
     private long mttr;
     private long downtime;
     private long uptime;
-    private long totalCost;
+    private double totalCost;
 }

@@ -11,5 +11,6 @@ public class PartMiniDTO {
     private Long id;
     private String name;
     private String description;
-    private long cost;
+    private double cost;
+    private String unit;
 }

@@ -11,6 +11,7 @@ import { PartQuantityMiniDTO } from '../../../models/owns/partQuantity';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { CompanySettingsContext } from '../../../contexts/CompanySettingsContext';
+import { getFormattedCostPerUnit } from '../../../utils/formatters';
 
 interface PartQuantityListProps {
   partQuantities: PartQuantityMiniDTO[];
@@ -47,7 +48,11 @@ export default function PartQuantitiesList({
               />
               <Typography variant="h6">
                 {' * '}
-                {getFormattedCurrency(partQuantity.part.cost)}
+                {getFormattedCostPerUnit(
+                  partQuantity.part.cost,
+                  partQuantity.part.unit,
+                  getFormattedCurrency
+                )}
               </Typography>
             </Box>
           }
@@ -64,9 +69,17 @@ export default function PartQuantitiesList({
                 {partQuantity.part.name}
               </Link>
             }
-            secondary={<div style={{overflow: "hidden", textOverflow: "ellipsis", width: '11rem'}}>
-              <Typography noWrap>{partQuantity.part.description}</Typography>
-              </div>}
+            secondary={
+              <div
+                style={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  width: '11rem'
+                }}
+              >
+                <Typography noWrap>{partQuantity.part.description}</Typography>
+              </div>
+            }
           />
         </ListItem>
       ))}

@@ -13,7 +13,7 @@ public class PartShowDTO extends AuditShowDTO {
 
     private String name;
 
-    private long cost;
+    private double cost;
 
     private PartCategory category;
 
@@ -23,13 +23,13 @@ public class PartShowDTO extends AuditShowDTO {
 
     private String description;
 
-    private int quantity;
+    private double quantity;
 
     private String additionalInfos;
 
     private String area;
 
-    private int minQuantity;
+    private double minQuantity;
 
     private LocationMiniDTO location;
 
@@ -44,4 +44,6 @@ public class PartShowDTO extends AuditShowDTO {
     private Collection<VendorMiniDTO> vendors;
 
     private Collection<TeamMiniDTO> teams;
+
+    private String unit;
 }

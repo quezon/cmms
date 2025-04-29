@@ -85,3 +85,13 @@ export const getHMSString = (duration: number): string => {
   const [hrs, mins, secs] = getHoursAndMinutesAndSeconds(duration);
   return `${hrs}h ${mins}m ${secs}s`;
 };
+
+export const getFormattedCostPerUnit = (
+  cost: number,
+  unit: string,
+  getFormattedCurrency: (cost: number) => string
+) => {
+  return unit
+    ? `${getFormattedCurrency(cost)}/ ${unit}`
+    : getFormattedCurrency(cost);
+};

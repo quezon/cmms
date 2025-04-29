@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PartQuantityShowDTO extends AuditShowDTO {
 
-    private int quantity;
+    private double quantity;
     private PartMiniDTO part;
 }

@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public abstract class Cost extends Audit {
 
     @NotNull
-    private long cost;
+    private double cost;
 
     @ManyToOne
     private CostCategory category;

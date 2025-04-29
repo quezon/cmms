@@ -105,8 +105,8 @@ public class PurchaseOrderController {
                             user.getCompany().getId());
             workflows.forEach(workflow -> workflowService.runPurchaseOrder(workflow, savedPurchaseOrder));
             PurchaseOrderShowDTO result = setPartQuantities(purchaseOrderMapper.toShowDto(savedPurchaseOrder));
-            long cost =
-                    result.getPartQuantities().stream().mapToLong(partQuantityShowDTO -> partQuantityShowDTO.getQuantity() * partQuantityShowDTO.getPart().getCost()).sum();
+            double cost =
+                    result.getPartQuantities().stream().mapToDouble(partQuantityShowDTO -> partQuantityShowDTO.getQuantity() * partQuantityShowDTO.getPart().getCost()).sum();
             String title = messageSource.getMessage("new_po", null, Helper.getLocale(user));
             String message = messageSource.getMessage("notification_new_po_request", new Object[]{result.getName(),
                             cost,

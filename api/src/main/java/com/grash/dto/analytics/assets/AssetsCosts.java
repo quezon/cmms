@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AssetsCosts {
     //percent
-    private long rav;
-    private long totalWOCosts;
-    private long totalAcquisitionCost;
+    private double rav;
+    private double totalWOCosts;
+    private double totalAcquisitionCost;
 }

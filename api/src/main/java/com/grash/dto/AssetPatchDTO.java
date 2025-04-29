@@ -53,7 +53,7 @@ public class AssetPatchDTO {
 
     private AssetStatus status;
 
-    private Long acquisitionCost;
+    private Double acquisitionCost;
 
     private String power;
 

@@ -12,6 +12,6 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PartConsumptionsByMonth {
-    private long cost;
+    private double cost;
     private Date date;
 }

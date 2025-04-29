@@ -12,7 +12,7 @@ public class PartPatchDTO {
 
     private String name;
 
-    private long cost;
+    private double cost;
 
     private PartCategory category;
 
@@ -22,13 +22,13 @@ public class PartPatchDTO {
 
     private String description;
 
-    private int quantity;
+    private double quantity;
 
     private String additionalInfos;
 
     private String area;
 
-    private int minQuantity;
+    private double minQuantity;
 
     private Location location;
 
@@ -43,4 +43,7 @@ public class PartPatchDTO {
     private Collection<Vendor> vendors;
 
     private Collection<Team> teams;
+
+    private String unit;
+    
 }

@@ -14,6 +14,6 @@ import java.util.Date;
 public class DowntimesByDate {
     //seconds
     private long duration;
-    private long workOrdersCosts;
+    private double workOrdersCosts;
     private Date date;
 }

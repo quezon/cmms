@@ -498,11 +498,11 @@ public class WOAnalyticsController {
         if (user.canSeeAnalytics()) {
             Collection<WorkOrder> completeWorkOrders = workOrderService.findByCompanyAndCreatedAtBetween(
                     user.getCompany().getId(), dateRange.getStart(), dateRange.getEnd()).stream().filter(workOrder -> workOrder.getStatus().equals(Status.COMPLETE)).collect(Collectors.toList());
-            long additionalCost = workOrderService.getAdditionalCost(completeWorkOrders);
+            double additionalCost = workOrderService.getAdditionalCost(completeWorkOrders);
             long laborCost = workOrderService.getLaborCostAndTime(completeWorkOrders).getFirst();
             long laborTime = workOrderService.getLaborCostAndTime(completeWorkOrders).getSecond();
-            long partCost = workOrderService.getPartCost(completeWorkOrders);
-            long total = laborCost + partCost + additionalCost;
+            double partCost = workOrderService.getPartCost(completeWorkOrders);
+            double total = laborCost + partCost + additionalCost;
 
             return ResponseEntity.ok(WOCostsAndTime.builder()
                     .total(total)

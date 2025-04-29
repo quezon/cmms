@@ -269,26 +269,26 @@ public class WorkOrderService {
         return Pair.of(laborCost, laborTimes);
     }
 
-    public long getAdditionalCost(Collection<WorkOrder> workOrders) {
-        Collection<Long> costs = workOrders.stream().map(workOrder -> {
+    public double getAdditionalCost(Collection<WorkOrder> workOrders) {
+        Collection<Double> costs = workOrders.stream().map(workOrder -> {
                     Collection<AdditionalCost> additionalCosts =
                             additionalCostService.findByWorkOrder(workOrder.getId());
-                    return additionalCosts.stream().mapToLong(Cost::getCost).sum();
+                    return additionalCosts.stream().mapToDouble(Cost::getCost).sum();
                 }
         ).collect(Collectors.toList());
-        return costs.stream().mapToLong(value -> value).sum();
+        return costs.stream().mapToDouble(value -> value).sum();
     }
 
-    public long getPartCost(Collection<WorkOrder> workOrders) {
-        Collection<Long> costs = workOrders.stream().map(workOrder -> {
+    public double getPartCost(Collection<WorkOrder> workOrders) {
+        Collection<Double> costs = workOrders.stream().map(workOrder -> {
                     Collection<PartQuantity> partQuantities = partQuantityService.findByWorkOrder(workOrder.getId());
-                    return partQuantities.stream().mapToLong(partQuantity -> partQuantity.getPart().getCost() * partQuantity.getQuantity()).sum();
+                    return partQuantities.stream().mapToDouble(partQuantity -> partQuantity.getPart().getCost() * partQuantity.getQuantity()).sum();
                 }
         ).collect(Collectors.toList());
-        return costs.stream().mapToLong(value -> value).sum();
+        return costs.stream().mapToDouble(value -> value).sum();
     }
 
-    public long getAllCost(Collection<WorkOrder> workOrders, boolean includeLaborCost) {
+    public double getAllCost(Collection<WorkOrder> workOrders, boolean includeLaborCost) {
         return getPartCost(workOrders) + getAdditionalCost(workOrders) + (includeLaborCost ?
                 getLaborCostAndTime(workOrders).getFirst() : 0);
     }

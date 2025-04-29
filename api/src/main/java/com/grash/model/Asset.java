@@ -25,7 +25,7 @@ import static java.util.stream.Collectors.toCollection;
 public class Asset extends CompanyAudit {
 
     private String customId;
-    
+
     private boolean archived;
 
     private boolean hasChildren;
@@ -55,7 +55,7 @@ public class Asset extends CompanyAudit {
     @ManyToOne
     private OwnUser primaryUser;
 
-    private Long acquisitionCost;
+    private Double acquisitionCost;
 
     private String nfcId;
 

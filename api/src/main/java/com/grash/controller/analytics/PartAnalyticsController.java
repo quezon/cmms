@@ -51,8 +51,9 @@ public class PartAnalyticsController {
             Collection<PartConsumption> partConsumptions =
                     partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(),
                             dateRange.getStart(), dateRange.getEnd());
-            long totalConsumptionCost = partConsumptions.stream().mapToLong(PartConsumption::getCost).sum();
-            int consumedCount = partConsumptions.stream().mapToInt(PartConsumption::getQuantity).sum();
+            double totalConsumptionCost = partConsumptions.stream().mapToDouble(PartConsumption::getCost).sum();
+            int consumedCount = partConsumptions.stream()
+                    .filter(partConsumption -> partConsumption.getPart().getUnit() == null).mapToInt(partConsumption -> (int) partConsumption.getQuantity()).sum();
 
             return ResponseEntity.ok(PartStats.builder()
                     .consumedCount(consumedCount)
@@ -77,8 +78,8 @@ public class PartAnalyticsController {
                     .map(PartConsumption::getPart)
                     .collect(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparingLong(Part::getId)))));
             List<PartConsumptionsByPart> result = parts.stream().map(part -> {
-                long cost =
-                        partConsumptions.stream().filter(partConsumption -> partConsumption.getPart().getId().equals(part.getId())).mapToLong(PartConsumption::getCost).sum();
+                double cost =
+                        partConsumptions.stream().filter(partConsumption -> partConsumption.getPart().getId().equals(part.getId())).mapToDouble(PartConsumption::getCost).sum();
                 return PartConsumptionsByPart.builder()
                         .id(part.getId())
                         .name(part.getName())
@@ -105,7 +106,7 @@ public class PartAnalyticsController {
                         dateRange.getStart(), dateRange.getEnd());
                 List<PartConsumption> partConsumptions =
                         partConsumptionService.findByWorkOrders(workOrders.stream().map(WorkOrder::getId).collect(Collectors.toList()));
-                long cost = partConsumptions.stream().mapToLong(PartConsumption::getCost).sum();
+                double cost = partConsumptions.stream().mapToDouble(PartConsumption::getCost).sum();
                 result.add(PartConsumptionsByAsset.builder()
                         .cost(cost)
                         .name(asset.getName())
@@ -134,9 +135,9 @@ public class PartAnalyticsController {
                     partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(),
                             dateRange.getStart(), dateRange.getEnd());
             for (PartCategory category : partCategories) {
-                long cost =
+                double cost =
                         partConsumptions.stream().filter(partConsumption -> partConsumption.getPart().getCategory() != null
-                                && category.getId().equals(partConsumption.getPart().getCategory().getId())).mapToLong(PartConsumption::getCost).sum();
+                                && category.getId().equals(partConsumption.getPart().getCategory().getId())).mapToDouble(PartConsumption::getCost).sum();
                 result.add(PartConsumptionByCategory.builder()
                         .cost(cost)
                         .name(category.getName())
@@ -163,9 +164,9 @@ public class PartAnalyticsController {
                     partConsumptionService.findByCompanyAndCreatedAtBetween(user.getCompany().getId(),
                             dateRange.getStart(), dateRange.getEnd());
             for (WorkOrderCategory category : workOrderCategories) {
-                long cost =
+                double cost =
                         partConsumptions.stream().filter(partConsumption -> partConsumption.getWorkOrder().getCategory() != null
-                                && category.getId().equals(partConsumption.getWorkOrder().getCategory().getId())).mapToLong(PartConsumption::getCost).sum();
+                                && category.getId().equals(partConsumption.getWorkOrder().getCategory().getId())).mapToDouble(PartConsumption::getCost).sum();
                 result.add(PartConsumptionByWOCategory.builder()
                         .cost(cost)
                         .name(category.getName())
@@ -201,7 +202,7 @@ public class PartAnalyticsController {
                 Collection<PartConsumption> partConsumptions =
                         partConsumptionService.findByCreatedAtBetweenAndCompany(Helper.localDateToDate(currentDate),
                                 Helper.localDateToDate(nextDate), user.getCompany().getId());
-                long cost = partConsumptions.stream().mapToLong(PartConsumption::getCost).sum();
+                double cost = partConsumptions.stream().mapToDouble(PartConsumption::getCost).sum();
                 result.add(PartConsumptionsByMonth.builder()
                         .cost(cost)
                         .date(Helper.localDateToDate(currentDate)).build());

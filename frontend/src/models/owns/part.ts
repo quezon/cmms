@@ -25,8 +25,10 @@ export default interface Part extends Audit {
   customers: CustomerMiniDTO[];
   teams: TeamMiniDTO[];
   openWorkOrders: number;
+  unit: string;
 }
 export interface PartMiniDTO {
+  unit: string;
   name: string;
   id: number;
   cost: number;

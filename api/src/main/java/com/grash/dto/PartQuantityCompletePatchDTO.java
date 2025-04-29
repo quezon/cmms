@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class PartQuantityCompletePatchDTO {
     @NotNull
     @Min(value = 0L, message = "The value must be positive")
-    private int quantity;
+    private double quantity;
 
     @NotNull
     private Part part;

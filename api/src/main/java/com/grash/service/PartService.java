@@ -60,7 +60,7 @@ public class PartService {
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
     }
 
-    public void consumePart(Long id, int quantity, WorkOrder workOrder, Locale locale) {
+    public void consumePart(Long id, double quantity, WorkOrder workOrder, Locale locale) {
         Part part = findById(id).get();
         part.setQuantity(part.getQuantity() - quantity);
         if (quantity < 0) {
@@ -112,7 +112,7 @@ public class PartService {
         String message = messageSource.getMessage("notification_part_assigned", new Object[]{newPart.getName()},
                 locale);
         notificationService.createMultiple(oldPart.getNewUsersToNotify(newPart.getUsers()).stream().map(user ->
-                new Notification(message, user, NotificationType.PART, newPart.getId())).collect(Collectors.toList())
+                        new Notification(message, user, NotificationType.PART, newPart.getId())).collect(Collectors.toList())
                 , true, title);
     }
 

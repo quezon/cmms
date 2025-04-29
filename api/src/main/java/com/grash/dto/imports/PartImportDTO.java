@@ -12,7 +12,7 @@ public class PartImportDTO {
     private Long id;
     private String name;
 
-    private long cost;
+    private double cost;
 
     private String category;
 
@@ -22,13 +22,13 @@ public class PartImportDTO {
 
     private String description;
 
-    private int quantity;
+    private double quantity;
 
     private String additionalInfos;
 
     private String area;
 
-    private int minQuantity;
+    private double minQuantity;
 
     private String locationName;
 

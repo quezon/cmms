@@ -18,7 +18,7 @@ public class PartQuantity extends CompanyAudit {
 
     @NotNull
     @Min(value = 0L, message = "The value must be positive")
-    private int quantity;
+    private double quantity;
 
     @ManyToOne
     @NotNull
@@ -33,11 +33,11 @@ public class PartQuantity extends CompanyAudit {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private WorkOrder workOrder;
 
-    public long getCost() {
+    public double getCost() {
         return quantity * part.getCost();
     }
 
-    public PartQuantity(Part part, WorkOrder workOrder, PurchaseOrder purchaseOrder, int quantity) {
+    public PartQuantity(Part part, WorkOrder workOrder, PurchaseOrder purchaseOrder, double quantity) {
         this.part = part;
         this.workOrder = workOrder;
         this.purchaseOrder = purchaseOrder;
