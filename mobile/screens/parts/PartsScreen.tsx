@@ -20,7 +20,12 @@ import { onSearchQueryChange } from '../../utils/overall';
 import { RootStackScreenProps } from '../../types';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 import { Asset } from 'expo-asset';
-
+export const getFormattedQuantityWithUnit = (
+  quantity: number,
+  unit: string
+) => {
+  return unit ? quantity + ' ' + unit : quantity;
+};
 export default function PartsScreen({
   navigation,
   route
@@ -163,7 +168,10 @@ export default function PartsScreen({
                         : 'black'
                   }}
                   description={t('remaining_parts', {
-                    quantity: part.quantity
+                    quantity: getFormattedQuantityWithUnit(
+                      part.quantity,
+                      part.unit
+                    )
                   })}
                 />
               </Card.Content>

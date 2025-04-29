@@ -21,18 +21,20 @@ import { editPartQuantity } from '../slices/partQuantity';
 import { useDispatch } from '../store';
 import { CustomSnackBarContext } from '../contexts/CustomSnackBarContext';
 import { IconSource } from 'react-native-paper/src/components/Icon';
+import { getFormattedCostPerUnit } from '../utils/formatters';
 
 export default function PartQuantities({
-                                         partQuantities,
-                                         rootId,
-                                         navigation,
-                                         isPO, disabled
-                                       }: {
+  partQuantities,
+  rootId,
+  navigation,
+  isPO,
+  disabled
+}: {
   partQuantities: PartQuantity[];
   rootId: number;
   isPO: boolean;
   navigation: any;
-  disabled?: boolean
+  disabled?: boolean;
 }) {
   const { getFormattedCurrency } = useContext(CompanySettingsContext);
   const theme = useTheme();
@@ -41,7 +43,7 @@ export default function PartQuantities({
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const [openModal, setOpenModal] = React.useState(false);
-  const [quantity, setQuantity] = useState<number>(0);
+  const [quantity, setQuantity] = useState<string>('0');
   const [currentPartQuantity, setCurrentPartQuantity] =
     useState<PartQuantity>();
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,7 +52,8 @@ export default function PartQuantities({
     setOpenModal(true);
   };
   useEffect(() => {
-    if (currentPartQuantity) setQuantity(currentPartQuantity.quantity);
+    if (currentPartQuantity)
+      setQuantity(currentPartQuantity.quantity.toString());
   }, [currentPartQuantity]);
 
   const hideModal = () => setOpenModal(false);
@@ -113,17 +116,15 @@ export default function PartQuantities({
     return (
       <Portal theme={theme}>
         <Modal visible={openModal} onDismiss={hideModal} style={styles.modal}>
-          <Text variant='titleLarge' style={{ fontWeight: 'bold' }}>
+          <Text variant="titleLarge" style={{ fontWeight: 'bold' }}>
             {t('quantity')}
           </Text>
           <TextInput
             style={{ width: '100%', marginTop: 15 }}
-            mode='outlined'
+            mode="outlined"
             label={t('quantity')}
-            onChangeText={(newQuantity) =>
-              setQuantity(Number(newQuantity.replace(/[^0-9]/g, '')))
-            }
-            value={quantity.toString()}
+            onChangeText={(newQuantity) => setQuantity(newQuantity)}
+            value={quantity}
           />
           <Button
             disabled={loading}
@@ -132,7 +133,7 @@ export default function PartQuantities({
             mode={'contained'}
             buttonColor={theme.colors.primary}
             onPress={() =>
-              onPartQuantityChange(quantity, currentPartQuantity.id)
+              onPartQuantityChange(Number(quantity), currentPartQuantity.id)
             }
           >
             {t('save')}
@@ -165,7 +166,7 @@ export default function PartQuantities({
                 fontWeight: 'bold',
                 color: 'white'
               }}
-            >{`${partQuantity.quantity}x`}</Text>
+            >{`${partQuantity.quantity}${partQuantity.part.unit ?? 'x'}`}</Text>
             <TouchableOpacity
               onPress={() =>
                 navigation.push('PartDetails', { id: partQuantity.part.id })
@@ -176,10 +177,16 @@ export default function PartQuantities({
                 marginLeft: 5
               }}
             >
-              <Text style={{ fontWeight: 'bold' }} variant='bodyLarge'>
+              <Text style={{ fontWeight: 'bold' }} variant="bodyLarge">
                 {partQuantity.part.name}
               </Text>
-              <Text>{getFormattedCurrency(partQuantity.part.cost)}</Text>
+              <Text>
+                {getFormattedCostPerUnit(
+                  partQuantity.part.cost,
+                  partQuantity.part.unit,
+                  getFormattedCurrency
+                )}
+              </Text>
             </TouchableOpacity>
             <IconButton
               disabled={disabled}
@@ -187,7 +194,7 @@ export default function PartQuantities({
                 setCurrentPartQuantity(partQuantity);
                 actionSheetRef.current.show();
               }}
-              icon='dots-vertical'
+              icon="dots-vertical"
             />
           </View>
         ))

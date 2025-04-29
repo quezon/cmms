@@ -18,6 +18,8 @@ import {
 } from '../../../utils/urlPaths';
 import ListField from '../../../components/ListField';
 import BasicField from '../../../components/BasicField';
+import { getFormattedCostPerUnit } from '../../../utils/formatters';
+import { getFormattedQuantityWithUnit } from '../PartsScreen';
 
 export default function PartDetails({ part }: { part: Part }) {
   const { t } = useTranslation();
@@ -45,15 +47,15 @@ export default function PartDetails({ part }: { part: Part }) {
     },
     {
       label: t('cost'),
-      value: getFormattedCurrency(part.cost)
+      value: getFormattedCostPerUnit(part.cost, part.unit, getFormattedCurrency)
     },
     {
       label: t('quantity'),
-      value: part.quantity
+      value: getFormattedQuantityWithUnit(part.quantity, part.unit)
     },
     {
       label: t('minimum_quantity'),
-      value: part.minQuantity
+      value: getFormattedQuantityWithUnit(part.minQuantity, part.unit)
     },
     {
       label: t('barcode'),
@@ -71,13 +73,9 @@ export default function PartDetails({ part }: { part: Part }) {
       {part.image && (
         <Image style={{ height: 200 }} source={{ uri: part.image.url }} />
       )}
-      {fieldsToRender.map((field) =>
-        <BasicField
-          key={field.label}
-          label={field.label}
-          value={field.value}
-        />
-      )}
+      {fieldsToRender.map((field) => (
+        <BasicField key={field.label} label={field.label} value={field.value} />
+      ))}
       <ListField
         values={part?.assignedTo}
         label={t('assigned_to')}

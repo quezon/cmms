@@ -551,6 +551,12 @@ export const getPartFields = (t): IField[] => {
       placeholder: t('enter_part_quantity')
     },
     {
+      name: 'unit',
+      type: 'text',
+      label: t('unit'),
+      placeholder: t('unit_of_measurement')
+    },
+    {
       name: 'minQuantity',
       type: 'number',
       label: t('minimum_quantity'),
