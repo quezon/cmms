@@ -12,7 +12,13 @@ const Guest: FC<GuestProps> = ({ children }) => {
   const { isAuthenticated, user } = useAuth();
 
   if (isAuthenticated) {
-    return <Navigate to={user.role.code === 'REQUESTER' ? "app/requests" : "/app/work-orders"} />;
+    return (
+      <Navigate
+        to={
+          user.role.code === 'REQUESTER' ? '/app/requests' : '/app/work-orders'
+        }
+      />
+    );
   }
 
   return <>{children}</>;
