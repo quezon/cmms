@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -12,7 +13,7 @@ public class ChecklistPatchDTO {
 
     private String description;
 
-    private Collection<TaskBaseDTO> taskBases;
+    private List<TaskBaseDTO> taskBases;
 
     private String category;
 
