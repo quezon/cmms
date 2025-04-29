@@ -9,7 +9,6 @@ import com.grash.exception.CustomException;
 import com.grash.mapper.UserMapper;
 import com.grash.model.*;
 import com.grash.model.enums.RoleCode;
-import lombok.extern.slf4j.Slf4j;
 import com.grash.repository.UserRepository;
 import com.grash.repository.VerificationTokenRepository;
 import com.grash.security.JwtTokenProvider;
@@ -157,7 +156,8 @@ public class UserService {
                         put("verifyTokenLink", link);
                         put("featuresLink", frontendUrl + "/#key-features");
                     }};
-                    VerificationToken newUserToken = new VerificationToken(token, user);
+                    user = userRepository.save(user);
+                    VerificationToken newUserToken = new VerificationToken(token, user, null);
                     verificationTokenRepository.save(newUserToken);
                     emailService2.sendMessageUsingThymeleafTemplate(new String[]{user.getEmail()},
                             messageSource.getMessage("confirmation_email", null, Helper.getLocale(user)), variables,
@@ -217,20 +217,21 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public SuccessResponse resetPassword(String email) {
+    public SuccessResponse resetPasswordRequest(String email) {
         throwIfEmailNotificationsNotEnabled();
         email = email.toLowerCase();
         OwnUser user = findByEmail(email).get();
         Helper helper = new Helper();
         String password = helper.generateString().replace("-", "").substring(0, 8).toUpperCase();
-        user.setPassword(passwordEncoder.encode(password));
-        userRepository.save(user);
-        String finalEmail = email;
+
+        String token = UUID.randomUUID().toString();
         Map<String, Object> variables = new HashMap<String, Object>() {{
-            put("loginLink", frontendUrl + "/account/login?email=" + finalEmail);
             put("featuresLink", frontendUrl + "/#key-features");
+            put("resetConfirmLink", PUBLIC_API_URL + "/auth/reset-pwd-confirm?token=" + token);
             put("password", password);
         }};
+        VerificationToken newUserToken = new VerificationToken(token, user, password);
+        verificationTokenRepository.save(newUserToken);
         emailService2.sendMessageUsingThymeleafTemplate(new String[]{email}, messageSource.getMessage("password_reset"
                 , null, Helper.getLocale(user)), variables, "reset-password.html", Helper.getLocale(user));
         return new SuccessResponse(true, "Password changed successfully");

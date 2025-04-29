@@ -19,7 +19,9 @@ public class VerificationToken {
 
     private String token;
 
-    @OneToOne(targetEntity = OwnUser.class, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    private String payload;
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private OwnUser user;
 
@@ -31,15 +33,17 @@ public class VerificationToken {
         super();
     }
 
-    public VerificationToken(final String token, final OwnUser user) {
+    public VerificationToken(final String token, final OwnUser user, final String payload) {
         super();
         Calendar calendar = Calendar.getInstance();
 
         this.token = token;
         this.user = user;
         this.createdAt = new Date(calendar.getTime().getTime());
+        this.payload = payload;
         this.expiryDate = calculateExpiryDate(EXPIRATION);
     }
+
     private Date calculateExpiryDate(int expiryTimeInMinutes) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));

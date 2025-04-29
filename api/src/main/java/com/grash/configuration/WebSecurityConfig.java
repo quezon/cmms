@@ -62,6 +62,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/ws/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/newsLetters").permitAll()
                 .antMatchers("/auth/activate-account**").permitAll()//
+                .antMatchers("/auth/reset-pwd-confirm**").permitAll()//
                 .antMatchers("/h2-console/**/**").permitAll()
                 // Disallow everything else..
                 .anyRequest().authenticated();

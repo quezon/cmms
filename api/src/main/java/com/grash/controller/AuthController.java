@@ -112,6 +112,20 @@ public class AuthController {
         httpServletResponse.setStatus(302);
     }
 
+    @GetMapping("/reset-pwd-confirm")
+    public void resetPasswordConfirm(
+            @RequestParam String token,
+            HttpServletResponse httpServletResponse
+    ) {
+        try {
+            OwnUser user = verificationTokenService.confirmResetPassword(token);
+            httpServletResponse.setHeader("Location", frontendUrl + "/account/login?email=" + user.getEmail());
+        } catch (Exception ex) {
+            httpServletResponse.setHeader("Location", frontendUrl + "/account/register");
+        }
+        httpServletResponse.setStatus(302);
+    }
+
     @DeleteMapping(value = "/{username}")
     @PreAuthorize("hasRole('ROLE_SUPER_ADMIN')")
     @ApiOperation(value = "${AuthController.delete}", authorizations = {@Authorization(value = "apiKey")})
@@ -159,7 +173,7 @@ public class AuthController {
     @PreAuthorize("permitAll()")
     @GetMapping(value = "/resetpwd", produces = "application/json")
     public SuccessResponse resetPassword(@RequestParam String email) {
-        return userService.resetPassword(email);
+        return userService.resetPasswordRequest(email);
     }
 
     @PreAuthorize("permitAll()")
