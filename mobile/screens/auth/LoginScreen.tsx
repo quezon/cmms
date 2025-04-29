@@ -35,7 +35,7 @@ export default function LoginScreen({
         contentContainerStyle={{ alignItems: 'center' }}
       >
         <Image
-          style={{ height: 200, width: 200 }}
+          style={{ height: 180, width: 180 }}
           source={Asset.fromModule(require('../../assets/images/icon.png'))}
         />
         <Formik
@@ -127,7 +127,7 @@ export default function LoginScreen({
               >
                 {t('register_here')}
               </Button>
-              
+
               <Button
                 mode={'text'}
                 onPress={() => navigation.navigate('CustomServer')}
