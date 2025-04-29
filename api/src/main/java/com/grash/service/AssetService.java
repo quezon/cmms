@@ -24,6 +24,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -135,38 +136,66 @@ public class AssetService {
         return assetRepository.findByLocation_Id(id);
     }
 
-    public void stopDownTime(Long id, Locale locale) {
-        Asset savedAsset = findById(id).get();
-        Collection<AssetDowntime> assetDowntimes = assetDowntimeService.findByAsset(id);
+    private void stopAssetDowntime(Asset asset) {
+        Collection<AssetDowntime> assetDowntimes = assetDowntimeService.findByAsset(asset.getId());
         Optional<AssetDowntime> optionalRunningDowntime =
-                assetDowntimes.stream().filter(assetDowntime -> assetDowntime.getDuration() == 0).findFirst();
+                assetDowntimes.stream().filter(downtime -> downtime.getDuration() == 0).findFirst();
+
         if (optionalRunningDowntime.isPresent()) {
             AssetDowntime runningDowntime = optionalRunningDowntime.get();
             runningDowntime.setDuration(Helper.getDateDiff(runningDowntime.getStartsOn(), new Date(),
                     TimeUnit.SECONDS));
             assetDowntimeService.save(runningDowntime);
         }
-        savedAsset.setStatus(AssetStatus.OPERATIONAL);
-        save(savedAsset);
+
+        asset.setStatus(AssetStatus.OPERATIONAL);
+        save(asset);
+    }
+
+    private void recursivelyStopChildrenDowntime(Asset parentAsset) {
+        List<Asset> children = findAssetChildren(parentAsset.getId(), null);
+        for (Asset child : children) {
+            stopAssetDowntime(child);
+            recursivelyStopChildrenDowntime(child);
+        }
+    }
+
+    public void stopDownTime(Long id, Locale locale) {
+        Asset savedAsset = findById(id).orElseThrow(() -> new EntityNotFoundException("Asset not found"));
+        stopAssetDowntime(savedAsset);
+        recursivelyStopChildrenDowntime(savedAsset);
         String message = messageSource.getMessage("notification_asset_operational",
                 new Object[]{savedAsset.getName()}, locale);
         notify(savedAsset, message, messageSource.getMessage("asset_status_change", null, locale));
     }
 
     public void triggerDownTime(Long id, Locale locale, AssetStatus status) {
+        Date now = new Date();
         Asset asset = findById(id).get();
-        AssetDowntime assetDowntime = AssetDowntime
-                .builder()
-                .startsOn(new Date())
-                .asset(asset)
-                .build();
-        assetDowntime.setCompany(asset.getCompany());
-        assetDowntimeService.create(assetDowntime);
+        createAssetDowntime(asset, now, asset.getCompany());
+        Asset parentAsset = asset.getParentAsset();
+        while (parentAsset != null) {
+            createAssetDowntime(parentAsset, now, asset.getCompany());
+            if (!parentAsset.getStatus().isReallyDown()) {
+                parentAsset.setStatus(status);
+                save(parentAsset);
+            }
+            parentAsset = parentAsset.getParentAsset();
+        }
         asset.setStatus(status);
         save(asset);
         String message = messageSource.getMessage("notification_asset_down", new Object[]{asset.getName()}, locale);
         notify(asset, message, messageSource.getMessage("asset_status_change", null, locale));
 
+    }
+
+    private void createAssetDowntime(Asset asset, Date startsOn, Company company) {
+        AssetDowntime downtime = AssetDowntime.builder()
+                .startsOn(startsOn)
+                .asset(asset)
+                .build();
+        downtime.setCompany(company);
+        assetDowntimeService.create(downtime);
     }
 
     public boolean isAssetInCompany(Asset asset, long companyId, boolean optional) {
