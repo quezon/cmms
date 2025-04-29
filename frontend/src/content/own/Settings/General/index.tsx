@@ -186,12 +186,14 @@ function GeneralSettings() {
                         as={Select}
                         name="currency"
                       >
-                        {currencies.map((currency) => (
-                          <MenuItem
-                            key={currency.id}
-                            value={currency.id}
-                          >{`${currency.name} - ${currency.code}`}</MenuItem>
-                        ))}
+                        {[...currencies]
+                          .sort((a, b) => a.name.localeCompare(b.name))
+                          .map((currency) => (
+                            <MenuItem
+                              key={currency.id}
+                              value={currency.id}
+                            >{`${currency.name} - ${currency.code}`}</MenuItem>
+                          ))}
                       </Field>
                     </Grid>
                     <Grid item xs={12}>
