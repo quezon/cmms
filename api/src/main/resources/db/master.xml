@@ -132,4 +132,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2025_04_29_0045037504_verification_token_payload.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2025_04_29_1745944996_currencies.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>
