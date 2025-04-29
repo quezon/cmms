@@ -24,6 +24,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -181,7 +182,8 @@ public class WorkOrderService {
     }
 
     public Page<WorkOrder> findLastByPM(Long id, int count) {
-        return workOrderRepository.findByParentPreventiveMaintenance_Id(id, PageRequest.of(0, count));
+        return workOrderRepository.findByParentPreventiveMaintenance_Id(id, PageRequest.of(0, count,
+                Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     public Collection<WorkOrder> findByLocation(Long id) {
