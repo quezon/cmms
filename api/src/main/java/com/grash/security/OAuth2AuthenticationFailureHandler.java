@@ -17,9 +17,10 @@ public class OAuth2AuthenticationFailureHandler extends SimpleUrlAuthenticationF
     private final OAuth2Properties oAuth2Properties;
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
+    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                        AuthenticationException exception) throws IOException {
         String targetUrl = oAuth2Properties.getFailureRedirectUrl();
-        
+        exception.printStackTrace();
         targetUrl = UriComponentsBuilder.fromUriString(targetUrl)
                 .queryParam("error", exception.getLocalizedMessage())
                 .build().toUriString();
