@@ -51,6 +51,7 @@ public class OAuth2ClientRegistrationConfig {
                         .tokenUri("https://login.microsoftonline.com/common/oauth2/v2.0/token")
                         .jwkSetUri("https://login.microsoftonline.com/common/discovery/v2.0/keys")
                         .userInfoUri("https://graph.microsoft.com/oidc/userinfo")
+                        .userNameAttributeName("sub")
                         .build();
                 break;
             default:
