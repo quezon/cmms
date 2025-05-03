@@ -9,12 +9,14 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import { Formik, FormikProps } from 'formik';
+import { ErrorMessage, Formik, FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 import FormikErrorFocus from 'formik-error-focus';
 import * as Yup from 'yup';
 import { ObjectSchema } from 'yup';
 import { IField, IHash } from '../../type';
+import { InputAdornment } from '@mui/material'; // Added InputAdornment
+import SearchIcon from '@mui/icons-material/Search'; // Added SearchIcon
 import CheckBoxForm from './CheckBoxForm';
 import Field from './Field';
 import SelectForm from './SelectForm';
@@ -25,6 +27,7 @@ import { useDispatch, useSelector } from '../../../../store';
 import CustomSwitch from './CustomSwitch';
 import SelectTasksModal from './SelectTasks';
 import SelectMapCoordinates from './SelectMapCoordinates';
+import SelectAssetModal from './SelectAssetModal'; // Import the new modal
 import { getCustomersMini } from '../../../../slices/customer';
 import { getVendorsMini } from '../../../../slices/vendor';
 import { getLocationChildren, getLocationsMini } from 'src/slices/location';
@@ -44,6 +47,8 @@ import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import useAuth from '../../../../hooks/useAuth';
+import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import ClearTwoToneIcon from '@mui/icons-material/ClearTwoTone';
 
 interface PropsType {
   fields: Array<IField>;
@@ -60,6 +65,7 @@ interface PropsType {
 export default (props: PropsType) => {
   const { t }: { t: any } = useTranslation();
   const shape: IHash<any> = {};
+  const [assetModalOpen, setAssetModalOpen] = useState(false);
   const [openTask, setOpenTask] = useState(false);
   const dispatch = useDispatch();
   const { customersMini } = useSelector((state) => state.customers);
@@ -117,7 +123,7 @@ export default (props: PropsType) => {
 
   const validationSchema = Yup.object().shape(shape);
 
-  const handleChange = (formik: FormikProps<IHash<any>>, field, e) => {
+  const handleChange = (formik: FormikProps<IHash<any>>, field: string, e) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     props.onChange && props.onChange({ field, e });
     if (props.fields.length == 1) {
@@ -198,23 +204,77 @@ export default (props: PropsType) => {
         });
         onOpen = fetchRootLocations;
         break;
-      case 'asset':
-        options = assetsMini
-          .filter((asset) => asset.id !== excluded)
-          .map((asset) => {
-            return {
-              label: asset.name,
-              value: asset.id
-            };
-          });
-        onOpen = () => {
-          if (field.relatedFields) {
-            const locationId =
-              formik.values[field.relatedFields[0].field]?.value ?? null;
-            fetchAssets(locationId);
-          } else fetchAssets(null);
-        };
-        break;
+      case 'asset': {
+        return (
+          <>
+            <TextField
+              fullWidth={field.fullWidth || true}
+              label={field.label}
+              value={formik.values[field.name]?.label ?? ''}
+              placeholder={field.placeholder}
+              required={field.required}
+              disabled={formik.isSubmitting}
+              error={!!formik.errors[field.name] || field.error}
+              key={field.name}
+              helperText={formik.errors[field.name]}
+              onClick={() => {
+                setAssetModalOpen(true);
+              }}
+              InputProps={{
+                readOnly: true,
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <IconButton
+                      size="small"
+                      edge="start" // Added edge for better spacing
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent TextField onClick from firing again
+                        setAssetModalOpen(true);
+                      }}
+                    >
+                      <SearchIcon />
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                endAdornment: formik.values[field.name] && (
+                  <InputAdornment position="end">
+                    <IconButton
+                      size="small"
+                      edge="end" // Added edge for better spacing
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent TextField onClick from firing again
+                        handleChange(formik, field.name, null);
+                      }}
+                    >
+                      <ClearTwoToneIcon color={'error'} />
+                    </IconButton>
+                  </InputAdornment>
+                )
+              }}
+              sx={{ cursor: 'pointer' }}
+            />
+            <SelectAssetModal
+              open={assetModalOpen}
+              onClose={() => setAssetModalOpen(false)}
+              excludedAssetId={excluded}
+              locationId={
+                field.relatedFields?.length
+                  ? formik.values[field.relatedFields[0].field]?.value ?? null
+                  : null
+              }
+              onSelect={(selectedAsset) => {
+                if (selectedAsset) {
+                  handleChange(formik, field.name, {
+                    label: selectedAsset.name,
+                    value: selectedAsset.id
+                  });
+                }
+                setAssetModalOpen(false); // Close the modal
+              }}
+            />
+          </>
+        );
+      }
       case 'role':
         options = roles.map((role) => {
           return {
