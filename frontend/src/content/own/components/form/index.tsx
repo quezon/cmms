@@ -1,4 +1,5 @@
 import {
+  Autocomplete,
   Box,
   Button,
   Card,
@@ -9,7 +10,7 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import { ErrorMessage, Formik, FormikProps } from 'formik';
+import { ErrorMessage, Formik, FormikProps, useFormikContext } from 'formik';
 import { useTranslation } from 'react-i18next';
 import FormikErrorFocus from 'formik-error-focus';
 import * as Yup from 'yup';
@@ -49,6 +50,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import useAuth from '../../../../hooks/useAuth';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
 import ClearTwoToneIcon from '@mui/icons-material/ClearTwoTone';
+import { CustomSelect } from './CustomSelect2';
 
 interface PropsType {
   fields: Array<IField>;
@@ -65,55 +67,10 @@ interface PropsType {
 export default (props: PropsType) => {
   const { t }: { t: any } = useTranslation();
   const shape: IHash<any> = {};
-  const [assetModalOpen, setAssetModalOpen] = useState(false);
-  const [openTask, setOpenTask] = useState(false);
-  const dispatch = useDispatch();
-  const { customersMini } = useSelector((state) => state.customers);
-  const { vendorsMini } = useSelector((state) => state.vendors);
-  const { locationsMini, locationsHierarchy } = useSelector(
-    (state) => state.locations
-  );
   const {
     companySettings: { generalPreferences }
   } = useAuth();
-  const { categories } = useSelector((state) => state.categories);
-  const { usersMini } = useSelector((state) => state.users);
-  const { assetsMini } = useSelector((state) => state.assets);
-  const { teamsMini } = useSelector((state) => state.teams);
-  const { roles } = useSelector((state) => state.roles);
-  const { currencies } = useSelector((state) => state.currencies);
 
-  const fetchCustomers = async () => {
-    dispatch(getCustomersMini());
-  };
-
-  const fetchVendors = async () => {
-    dispatch(getVendorsMini());
-  };
-  const fetchUsers = async () => {
-    dispatch(getUsersMini());
-  };
-  const fetchLocations = async () => {
-    dispatch(getLocationsMini());
-  };
-  const fetchRoles = async () => {
-    dispatch(getRoles());
-  };
-  const fetchRootLocations = async () => {
-    dispatch(getLocationChildren(0, [], { page: 0, size: 1000 }));
-  };
-  const fetchCategories = async (category: string) => {
-    dispatch(getCategories(category));
-  };
-  const fetchAssets = async (locationId: number) => {
-    dispatch(getAssetsMini(locationId));
-  };
-  const fetchTeams = async () => {
-    dispatch(getTeamsMini());
-  };
-  const fetchCurrencies = async () => {
-    if (!currencies.length) dispatch(getCurrencies());
-  };
   props.fields.forEach((f) => {
     shape[f.name] = Yup.string();
     if (f.required) {
@@ -133,274 +90,6 @@ export default (props: PropsType) => {
     return formik.handleChange(field);
   };
 
-  const renderSelect = (formik, field: IField) => {
-    let options = field.items;
-    let loading = field.loading;
-    let onOpen = field.onPress;
-    let values = formik.values[field.name];
-    const excluded = field.excluded;
-
-    switch (field.type2) {
-      case 'customer':
-        options = customersMini.map((customer) => {
-          return {
-            label: customer.name,
-            value: customer.id
-          };
-        });
-        onOpen = fetchCustomers;
-        break;
-      case 'vendor':
-        options = vendorsMini.map((vendor) => {
-          return {
-            label: vendor.companyName,
-            value: vendor.id
-          };
-        });
-        onOpen = fetchVendors;
-        break;
-      case 'user':
-        options = usersMini.map((user) => {
-          return {
-            label: `${user.firstName} ${user.lastName}`,
-            value: user.id
-          };
-        });
-        onOpen = fetchUsers;
-        break;
-      case 'team':
-        options = teamsMini.map((team) => {
-          return {
-            label: team.name,
-            value: team.id
-          };
-        });
-        onOpen = fetchTeams;
-        break;
-      case 'location':
-        options = locationsMini.map((location) => {
-          return {
-            label: location.name,
-            value: location.id
-          };
-        });
-        onOpen = fetchLocations;
-        break;
-      case 'currency':
-        options = currencies.map((currency) => {
-          return {
-            label: currency.name,
-            value: currency.id
-          };
-        });
-        onOpen = fetchCurrencies;
-        break;
-      case 'parentLocation':
-        options = locationsHierarchy.map((location) => {
-          return {
-            label: location.name,
-            value: location.id
-          };
-        });
-        onOpen = fetchRootLocations;
-        break;
-      case 'asset': {
-        return (
-          <>
-            <TextField
-              fullWidth={field.fullWidth || true}
-              label={field.label}
-              value={formik.values[field.name]?.label ?? ''}
-              placeholder={field.placeholder}
-              required={field.required}
-              disabled={formik.isSubmitting}
-              error={!!formik.errors[field.name] || field.error}
-              key={field.name}
-              helperText={formik.errors[field.name]}
-              onClick={() => {
-                setAssetModalOpen(true);
-              }}
-              InputProps={{
-                readOnly: true,
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton
-                      size="small"
-                      edge="start" // Added edge for better spacing
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent TextField onClick from firing again
-                        setAssetModalOpen(true);
-                      }}
-                    >
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                endAdornment: formik.values[field.name] && (
-                  <InputAdornment position="end">
-                    <IconButton
-                      size="small"
-                      edge="end" // Added edge for better spacing
-                      onClick={(e) => {
-                        e.stopPropagation(); // Prevent TextField onClick from firing again
-                        handleChange(formik, field.name, null);
-                      }}
-                    >
-                      <ClearTwoToneIcon color={'error'} />
-                    </IconButton>
-                  </InputAdornment>
-                )
-              }}
-              sx={{ cursor: 'pointer' }}
-            />
-            <SelectAssetModal
-              open={assetModalOpen}
-              onClose={() => setAssetModalOpen(false)}
-              excludedAssetId={excluded}
-              locationId={
-                field.relatedFields?.length
-                  ? formik.values[field.relatedFields[0].field]?.value ?? null
-                  : null
-              }
-              onSelect={(selectedAsset) => {
-                if (selectedAsset) {
-                  handleChange(formik, field.name, {
-                    label: selectedAsset.name,
-                    value: selectedAsset.id
-                  });
-                }
-                setAssetModalOpen(false); // Close the modal
-              }}
-            />
-          </>
-        );
-      }
-      case 'role':
-        options = roles.map((role) => {
-          return {
-            label: role.name,
-            value: role.id
-          };
-        });
-        onOpen = fetchRoles;
-        break;
-      case 'category':
-        options =
-          categories[field.category]?.map((category) => {
-            return {
-              label: category.name,
-              value: category.id
-            };
-          }) ?? [];
-        onOpen = () => fetchCategories(field.category);
-        break;
-      case 'priority':
-        options = ['NONE', 'LOW', 'MEDIUM', 'HIGH'].map((value) => {
-          return {
-            label: getPriorityLabel(value, t),
-            value
-          };
-        });
-        break;
-      case 'part':
-        return (
-          <>
-            <Box display="flex" flexDirection="column">
-              {values?.length
-                ? values.map(({ label, value }) => (
-                    <Link
-                      sx={{ mb: 1 }}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      href={`/app/inventory/parts/${value}`}
-                      key={value}
-                      variant="h4"
-                    >
-                      {label}
-                    </Link>
-                  ))
-                : null}
-            </Box>
-            <SelectParts
-              selected={values?.map(({ label, value }) => Number(value)) ?? []}
-              onChange={(newParts) => {
-                handleChange(
-                  formik,
-                  field.name,
-                  newParts.map((part) => {
-                    return { label: part.name, value: part.id };
-                  })
-                );
-              }}
-            />
-          </>
-        );
-      case 'task':
-        return (
-          <>
-            <SelectTasksModal
-              open={openTask}
-              onClose={() => setOpenTask(false)}
-              selected={values ?? []}
-              onSelect={(tasks) => {
-                handleChange(formik, field.name, tasks);
-                return Promise.resolve();
-              }}
-            />
-            <Card onClick={() => setOpenTask(true)} sx={{ cursor: 'pointer' }}>
-              <Box
-                sx={{
-                  p: 2,
-                  display: 'flex',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center'
-                }}
-              >
-                <AssignmentTwoToneIcon />
-                <Box>
-                  <Typography variant="h4" color="primary">
-                    {values ? values.length : null} {t('tasks')}
-                  </Typography>
-                  <Typography variant="subtitle1">
-                    {t('assign_tasks_description')}
-                  </Typography>
-                </Box>
-                <IconButton>
-                  {values?.length ? (
-                    <EditTwoToneIcon color="primary" />
-                  ) : (
-                    <AddCircleTwoToneIcon color="primary" />
-                  )}
-                </IconButton>
-              </Box>
-            </Card>
-          </>
-        );
-      default:
-        break;
-    }
-    return (
-      <SelectForm
-        options={options}
-        value={values}
-        label={field.label}
-        onChange={(e, values) => {
-          handleChange(formik, field.name, values);
-        }}
-        disabled={formik.isSubmitting}
-        loading={loading}
-        required={field?.required}
-        error={!!formik.errors[field.name] || field.error}
-        errorMessage={formik.errors[field.name]}
-        onOpen={onOpen}
-        placeholder={field.placeholder}
-        multiple={field.multiple}
-        fullWidth={field.fullWidth}
-        key={field.name}
-      />
-    );
-  };
   const filterRelatedFields = (fields: IField[], formik): IField[] => {
     const fieldsClone = [...fields];
     const withRelatedFields = fields.filter(
@@ -451,7 +140,7 @@ export default (props: PropsType) => {
               return (
                 <Grid item xs={12} lg={field.midWidth ? 6 : 12} key={index}>
                   {field.type === 'select' ? (
-                    renderSelect(formik, field)
+                    <CustomSelect field={field} handleChange={handleChange} />
                   ) : field.type === 'checkbox' ? (
                     <CheckBoxForm
                       label={field.label}
