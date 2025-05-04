@@ -7,7 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Atlas CMMS',
   slug: 'atlas-cmms',
-  version: '1.0.25',
+  version: '1.0.26',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   scheme: 'atlascmms',
@@ -37,7 +37,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       foregroundImage: './assets/images/adaptive-icon.png',
       backgroundColor: '#ffffff'
     },
-    versionCode: 25,
+    versionCode: 26,
     package: 'com.atlas.cmms',
     googleServicesFile: './google-services.json',
     runtimeVersion: '1.0.0'
