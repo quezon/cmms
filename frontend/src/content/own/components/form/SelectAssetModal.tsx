@@ -60,6 +60,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   const { assetsHierarchy, loadingGet } = useSelector((state) => state.assets);
   const [pageable, setPageable] = useState<Pageable>({ page: 0, size: 1000 });
   const initialized = useRef<boolean>(false);
+  const single = maxSelections === 1;
   const [deployedAssets, setDeployedAssets] = useState<
     { id: number; hierarchy: number[] }[]
   >([{ id: 0, hierarchy: [] }]);
@@ -100,6 +101,12 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
     }
   }, [open, initialSelectedAssets, previousInitialSelectedAssets]);
 
+  useEffect(() => {
+    if (single && open) {
+      setSelectedAssets([]);
+      setSelectionModel([]);
+    }
+  }, [open]);
   useEffect(() => {
     if (apiRef.current.getRow) {
       const handleRowExpansionChange: GridEventListener<
@@ -235,15 +242,13 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
 
     // Update the selected assets array
     const updatedSelectedAssets = currentSelectionModel.map((id) => {
-      const row = apiRef.current.getRow(id) as AssetRow;
-      return {
-        id: row.id,
-        name: row.name,
-        customId: row.customId
-      };
+      return apiRef.current.getRow(id) as AssetRow;
     });
-
     setSelectedAssets(updatedSelectedAssets);
+    if (single) {
+      onSelect(updatedSelectedAssets);
+      onClose();
+    }
   };
 
   const handleConfirmSelection = () => {
@@ -315,7 +320,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
             getTreeDataPath={(row) => row.hierarchy.map(String)}
             groupingColDef={groupingColDef}
             disableColumnFilter
-            checkboxSelection
+            checkboxSelection={!single}
             selectionModel={selectionModel}
             onSelectionModelChange={(newSelectionModel) => {
               if (loadingGet) return;
@@ -350,19 +355,21 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
           />
         </Box>
       </DialogContent>
-      <DialogActions sx={{ p: 2 }}>
-        <Button onClick={onClose} color="secondary">
-          {t('cancel')}
-        </Button>
-        <Button
-          onClick={handleConfirmSelection}
-          color="primary"
-          variant="contained"
-          disabled={selectedAssets.length === 0}
-        >
-          {t('select')} ({selectedAssets.length})
-        </Button>
-      </DialogActions>
+      {!single && (
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={onClose} color="secondary">
+            {t('cancel')}
+          </Button>
+          <Button
+            onClick={handleConfirmSelection}
+            color="primary"
+            variant="contained"
+            disabled={selectedAssets.length === 0}
+          >
+            {t('select')} ({selectedAssets.length})
+          </Button>
+        </DialogActions>
+      )}
     </Dialog>
   );
 };

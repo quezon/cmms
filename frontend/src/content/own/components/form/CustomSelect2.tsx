@@ -225,6 +225,7 @@ export const CustomSelect = ({
             onClose={() => setAssetModalOpen(false)}
             excludedAssetIds={[excluded]}
             locationId={locationId}
+            maxSelections={field.multiple ? 10 : 1}
             onSelect={(selectedAssets) => {
               handleChange(
                 formik,
