@@ -14,4 +14,6 @@ public class AssetMiniDTO {
 
     private String customId;
 
+    private Long parentId;
+
 }
