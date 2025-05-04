@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -32,6 +32,7 @@ import { GroupingCellWithLazyLoading } from '../../Assets/GroupingCellWithLazyLo
 import ReplayTwoToneIcon from '@mui/icons-material/ReplayTwoTone';
 import { Pageable } from '../../../../models/owns/page';
 import NoRowsMessageWrapper from '../NoRowsMessageWrapper';
+import { usePrevious } from '../../../../hooks/usePrevious';
 
 interface SelectAssetModalProps {
   open: boolean;
@@ -58,6 +59,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   const theme = useTheme();
   const { assetsHierarchy, loadingGet } = useSelector((state) => state.assets);
   const [pageable, setPageable] = useState<Pageable>({ page: 0, size: 1000 });
+  const initialized = useRef<boolean>(false);
   const [deployedAssets, setDeployedAssets] = useState<
     { id: number; hierarchy: number[] }[]
   >([{ id: 0, hierarchy: [] }]);
@@ -69,6 +71,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   const [selectionModel, setSelectionModel] = useState<GridSelectionModel>(
     initialSelectedAssets.map((asset) => asset.id)
   );
+  const previousInitialSelectedAssets = usePrevious(initialSelectedAssets);
 
   const handleReset = (callApi: boolean) => {
     dispatch(resetAssetsHierarchy(callApi));
@@ -79,9 +82,14 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   };
 
   useEffect(() => {
-    if (open) {
+    if (
+      open &&
+      (!initialized.current ||
+        JSON.stringify(previousInitialSelectedAssets) !==
+          JSON.stringify(initialSelectedAssets))
+    ) {
+      initialized.current = true;
       handleReset(true);
-      // Initialize selections if provided
       if (initialSelectedAssets?.length) {
         setSelectedAssets(initialSelectedAssets);
         setSelectionModel(initialSelectedAssets.map((asset) => asset.id));
@@ -90,7 +98,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
         setSelectionModel([]);
       }
     }
-  }, [open]);
+  }, [open, initialSelectedAssets, previousInitialSelectedAssets]);
 
   useEffect(() => {
     if (apiRef.current.getRow) {
@@ -223,7 +231,6 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
     } else {
       currentSelectionModel.splice(selectedIndex, 1);
     }
-
     setSelectionModel(currentSelectionModel);
 
     // Update the selected assets array
@@ -311,22 +318,12 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
             checkboxSelection
             selectionModel={selectionModel}
             onSelectionModelChange={(newSelectionModel) => {
-              // Filter out any excluded assets or loading rows
-              const validSelections = newSelectionModel.filter(
-                (id) =>
-                  !excludedAssetIds.includes(id as number) &&
-                  !(typeof id === 'string' && id.startsWith('loading_'))
-              );
-
-              // Check maximum selections limit if applicable
-              if (maxSelections && validSelections.length > maxSelections) {
-                return; // Do not update if exceeding max
+              if (loadingGet) return;
+              if (maxSelections && newSelectionModel.length > maxSelections) {
+                return;
               }
-
-              setSelectionModel(validSelections);
-
-              // Update the selected assets array
-              const updatedSelectedAssets = validSelections.map((id) => {
+              setSelectionModel(newSelectionModel);
+              const updatedSelectedAssets = newSelectionModel.map((id) => {
                 const row = apiRef.current.getRow(id) as AssetRow;
                 return {
                   id: row.id,

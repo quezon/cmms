@@ -92,7 +92,7 @@ export const CustomSelect = ({
   let options = field.items;
   let loading = field.loading;
   let onOpen = field.onPress;
-  let values = formik.values[field.name];
+  let fieldValue = formik.values[field.name];
   const excluded = field.excluded;
 
   switch (field.type2) {
@@ -213,8 +213,8 @@ export const CustomSelect = ({
               //@ts-ignore
               option.value == value.value
             }
-            multiple={true}
-            value={formik.values[field.name] ?? []}
+            multiple={field.multiple}
+            value={field.multiple ? fieldValue ?? [] : fieldValue ?? null}
             options={options}
             onChange={(event, newValue) => {
               handleChange(formik, field.name, newValue);
@@ -229,14 +229,28 @@ export const CustomSelect = ({
               handleChange(
                 formik,
                 field.name,
-                selectedAssets.map((asset) => ({
-                  label: asset.name,
-                  value: asset.id
-                }))
+                field.multiple
+                  ? selectedAssets.map((asset) => ({
+                      label: asset.name,
+                      value: asset.id
+                    }))
+                  : selectedAssets.length
+                  ? {
+                      label: selectedAssets[0].name,
+                      value: selectedAssets[0].id
+                    }
+                  : null
               );
               setAssetModalOpen(false); // Close the modal
             }}
-            initialSelectedAssets={formik.values[field.name] ?? []}
+            initialSelectedAssets={assetsMini.filter((asset) =>
+              (field.multiple
+                ? fieldValue ?? []
+                : fieldValue
+                ? [fieldValue]
+                : []
+              ).some((a) => Number(a.value) === asset.id)
+            )}
           />
         </>
       );
@@ -272,8 +286,8 @@ export const CustomSelect = ({
       return (
         <>
           <Box display="flex" flexDirection="column">
-            {values?.length
-              ? values.map(({ label, value }) => (
+            {fieldValue?.length
+              ? fieldValue.map(({ label, value }) => (
                   <Link
                     sx={{ mb: 1 }}
                     target="_blank"
@@ -288,7 +302,9 @@ export const CustomSelect = ({
               : null}
           </Box>
           <SelectParts
-            selected={values?.map(({ label, value }) => Number(value)) ?? []}
+            selected={
+              fieldValue?.map(({ label, value }) => Number(value)) ?? []
+            }
             onChange={(newParts) => {
               handleChange(
                 formik,
@@ -307,7 +323,7 @@ export const CustomSelect = ({
           <SelectTasksModal
             open={openTask}
             onClose={() => setOpenTask(false)}
-            selected={values ?? []}
+            selected={fieldValue ?? []}
             onSelect={(tasks) => {
               handleChange(formik, field.name, tasks);
               return Promise.resolve();
@@ -326,14 +342,14 @@ export const CustomSelect = ({
               <AssignmentTwoToneIcon />
               <Box>
                 <Typography variant="h4" color="primary">
-                  {values ? values.length : null} {t('tasks')}
+                  {fieldValue ? fieldValue.length : null} {t('tasks')}
                 </Typography>
                 <Typography variant="subtitle1">
                   {t('assign_tasks_description')}
                 </Typography>
               </Box>
               <IconButton>
-                {values?.length ? (
+                {fieldValue?.length ? (
                   <EditTwoToneIcon color="primary" />
                 ) : (
                   <AddCircleTwoToneIcon color="primary" />
@@ -349,7 +365,7 @@ export const CustomSelect = ({
   return (
     <SelectForm
       options={options}
-      value={values}
+      value={fieldValue}
       label={field.label}
       onChange={(e, values) => {
         handleChange(formik, field.name, values);
