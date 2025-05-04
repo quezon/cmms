@@ -160,12 +160,14 @@ export const CustomSelect = ({
       onOpen = fetchRootLocations;
       break;
     case 'asset': {
-      options = assetsMini.map((asset) => {
-        return {
-          label: asset.name,
-          value: asset.id
-        };
-      });
+      options = assetsMini
+        .filter((asset) => asset.id !== excluded)
+        .map((asset) => {
+          return {
+            label: asset.name,
+            value: asset.id
+          };
+        });
       const locationId = field.relatedFields?.length
         ? formik.values[field.relatedFields[0].field]?.value ?? null
         : null;
@@ -190,7 +192,6 @@ export const CustomSelect = ({
                     <InputAdornment position="end">
                       <IconButton
                         size="small"
-                        edge="end" // Added edge for better spacing
                         onClick={(e) => {
                           e.stopPropagation(); // Prevent TextField onClick from firing again
                           setAssetModalOpen(true);
