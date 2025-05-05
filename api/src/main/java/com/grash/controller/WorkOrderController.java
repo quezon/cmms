@@ -273,7 +273,7 @@ public class WorkOrderController {
                 Collection<Labor> primaryTimes = labors.stream().filter(Labor::isLogged).collect(Collectors.toList());
                 primaryTimes.forEach(laborService::stop);
             }
-            WorkOrder patchedWorkOrder = workOrderService.save(savedWorkOrder);
+            WorkOrder patchedWorkOrder = workOrderService.saveAndFlush(savedWorkOrder);
 
             if (patchedWorkOrder.getStatus().equals(Status.COMPLETE) && !savedWorkOrderStatusBefore.equals(Status.COMPLETE)) {
                 Collection<Workflow> workflows =

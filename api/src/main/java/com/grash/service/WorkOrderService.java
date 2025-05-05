@@ -198,8 +198,14 @@ public class WorkOrderService {
         return workOrderRepository.findAll(builder.build(), page);
     }
 
-    public WorkOrder save(WorkOrder workOrder) {
-        return workOrderRepository.save(workOrder);
+    public void save(WorkOrder workOrder) {
+        workOrderRepository.save(workOrder);
+    }
+
+    public WorkOrder saveAndFlush(WorkOrder workOrder) {
+        WorkOrder updatedWorkOrder = workOrderRepository.saveAndFlush(workOrder);
+        em.refresh(updatedWorkOrder);
+        return updatedWorkOrder;
     }
 
     public WorkOrder getWorkOrderFromWorkOrderBase(WorkOrderBase workOrderBase) {
