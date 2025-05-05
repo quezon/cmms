@@ -17,7 +17,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 
-@Mapper(componentModel = "spring", uses = {CustomerMapper.class, VendorMapper.class, UserMapper.class, TeamMapper.class, FileMapper.class, PartMapper.class, FileMapper.class})
+@Mapper(componentModel = "spring", uses = {CustomerMapper.class, VendorMapper.class, UserMapper.class,
+        TeamMapper.class, FileMapper.class, PartMapper.class, FileMapper.class})
 public interface AssetMapper {
     Asset updateAsset(@MappingTarget Asset entity, AssetPatchDTO dto);
 
@@ -26,10 +27,12 @@ public interface AssetMapper {
 
     AssetShowDTO toShowDto(Asset model, @Context AssetService assetService);
 
+    @Mapping(target = "parentId", source = "parentAsset.id")
     AssetMiniDTO toMiniDto(Asset model);
 
     @AfterMapping
-    default AssetShowDTO toShowDto(Asset model, @MappingTarget AssetShowDTO target, @Context AssetService assetService) {
+    default AssetShowDTO toShowDto(Asset model, @MappingTarget AssetShowDTO target,
+                                   @Context AssetService assetService) {
         target.setHasChildren(assetService.hasChildren(model.getId()));
         return target;
     }

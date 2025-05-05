@@ -1391,7 +1391,13 @@ const locale = {
   server_url_saved: 'تم حفظ عنوان URL للخادم بنجاح',
   error_saving_url: 'حدث خطأ أثناء حفظ عنوان URL للخادم',
   server_url_reset: 'إعادة تعيين عنوان URL للخادم إلى الوضع الافتراضي',
-  reset_to_default: 'إعادة التعيين إلى الوضع الافتراضي'
+  reset_to_default: 'إعادة التعيين إلى الوضع الافتراضي',
+  list: 'قائمة',
+  back_to: 'الرجوع إلى',
+  top_level: 'المستوى الأعلى',
+  no_results_found: 'لم يتم العثور على نتائج',
+  no_sub_assets: 'لا توجد أصول فرعية',
+  no_assets_available: 'لا توجد أصول متاحة'
 };
 
 export default locale;

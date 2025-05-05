@@ -1526,6 +1526,12 @@ const trJSON = {
   EMERGENCY_SHUTDOWN: 'Acil Kapanış',
   select_asset_status: 'Varlık durumunu seçin',
   asset_status: 'Varlık durumu',
-  custom_server: 'Özel Sunucu'
+  custom_server: 'Özel Sunucu',
+  list: 'Liste',
+  back_to: 'Geri dön',
+  top_level: 'En üst seviye',
+  no_results_found: 'Sonuç bulunamadı',
+  no_sub_assets: 'Alt varlık yok',
+  no_assets_available: 'Mevcut varlık yok'
 };
 export default trJSON;

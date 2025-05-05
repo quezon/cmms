@@ -1525,7 +1525,13 @@ const deJSON = {
   server_url_saved: 'Server-URL wurde erfolgreich gespeichert',
   error_saving_url: 'Fehler beim Speichern der Server-URL',
   server_url_reset: 'Server-URL wurde auf die Standardwerte zurückgesetzt',
-  reset_to_default: 'Auf Standard zurücksetzen'
+  reset_to_default: 'Auf Standard zurücksetzen',
+  list: 'Liste',
+  back_to: 'Zurück zu',
+  top_level: 'Oberste Ebene',
+  no_results_found: 'Keine Ergebnisse gefunden',
+  no_sub_assets: 'Keine Unter-Assets',
+  no_assets_available: 'Keine verfügbaren Assets'
 };
 
 export default deJSON;

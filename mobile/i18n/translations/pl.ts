@@ -1459,7 +1459,13 @@ const plJSON = {
   server_url_saved: 'Adres URL serwera został pomyślnie zapisany',
   error_saving_url: 'Wystąpił błąd podczas zapisywania adresu URL serwera',
   server_url_reset: 'Adres URL serwera został zresetowany do domyślnego',
-  reset_to_default: 'Przywróć domyślne'
+  reset_to_default: 'Przywróć domyślne',
+  list: 'Lista',
+  back_to: 'Powrót do',
+  top_level: 'Poziom główny',
+  no_results_found: 'Nie znaleziono wyników',
+  no_sub_assets: 'Brak podzasobów',
+  no_assets_available: 'Brak dostępnych zasobów'
 };
 
 export default plJSON;

@@ -1496,7 +1496,13 @@ const ptBRJSON = {
   server_url_saved: 'A URL do servidor foi salva com sucesso',
   error_saving_url: 'Ocorreu um erro ao salvar a URL do servidor',
   server_url_reset: 'A URL do servidor foi redefinida para o padrão',
-  reset_to_default: 'Redefinir para o padrão'
+  reset_to_default: 'Redefinir para o padrão',
+  list: 'Lista',
+  back_to: 'Voltar para',
+  top_level: 'Nível superior',
+  no_results_found: 'Nenhum resultado encontrado',
+  no_sub_assets: 'Sem subativos',
+  no_assets_available: 'Nenhum ativo disponível'
 };
 
 export default ptBRJSON;
