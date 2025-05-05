@@ -4,32 +4,28 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  ActivityIndicator // Added
+  ActivityIndicator
 } from 'react-native';
 import { View } from '../../components/Themed';
 import { RootStackScreenProps } from '../../types';
 import { useTranslation } from 'react-i18next';
 import * as React from 'react';
-import { useEffect, useState, useMemo } from 'react'; // Added useMemo
+import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from '../../store';
 import { AssetMiniDTO } from '../../models/asset';
-// TODO: Replace getAssetsMini with a new action like getAssetsHierarchy if needed
 import { getAssetsMini } from '../../slices/asset';
 import {
   Checkbox,
-  Divider,
   Searchbar,
   Text,
   useTheme,
-  SegmentedButtons, // Added
-  IconButton // Added
+  SegmentedButtons,
+  IconButton
 } from 'react-native-paper';
 
-// TODO: Define this interface based on the actual API response for hierarchy
-// Assuming it includes fields necessary for display and selection (like AssetMiniDTO) plus hierarchy info
+// Interface extending AssetMiniDTO to explicitly include derived 'hasChildren'
 interface AssetHierarchyNode extends AssetMiniDTO {
   hasChildren: boolean;
-  // Add any other fields returned by the hierarchy endpoint if different from AssetMiniDTO
 }
 
 export default function SelectAssetsModal({
@@ -41,39 +37,43 @@ export default function SelectAssetsModal({
   const { t }: { t: any } = useTranslation();
   const dispatch = useDispatch();
   const { assetsMini, loadingGet } = useSelector((state) => state.assets);
-
+  // Derive the hierarchy structure and 'hasChildren' property from the flat list
   const assetsHierarchy: AssetHierarchyNode[] = useMemo(() => {
+    const assetMap = new Map(assetsMini.map((asset) => [asset.id, asset]));
+    const childrenMap = new Map<number, boolean>();
+    assetsMini.forEach((asset) => {
+      if (asset.parentId !== null && assetMap.has(asset.parentId)) {
+        childrenMap.set(asset.parentId, true);
+      }
+    });
     return assetsMini.map((asset) => ({
       ...asset,
-      hasChildren: assetsMini.some((child) => child.parentId === asset.id)
+      hasChildren: childrenMap.has(asset.id) || false
     }));
   }, [assetsMini]);
-  const loadingHierarchy = loadingGet; // Use loadingGet as placeholder
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [view, setView] = useState<'list' | 'hierarchy'>('list');
   const [currentHierarchyLevel, setCurrentHierarchyLevel] = useState<
     AssetHierarchyNode[]
   >([]);
+  // currentHierarchyParent holds the node the user navigated into (null for top level)
   const [currentHierarchyParent, setCurrentHierarchyParent] =
     useState<AssetHierarchyNode | null>(null);
-  const findAssetById = (
-    id: number
-  ): AssetHierarchyNode | AssetMiniDTO | undefined => {
-    // Search in both lists until hierarchy data source is finalized
-    return (
-      assetsHierarchy.find((a) => a.id === id) ||
-      assetsMini.find((a) => a.id === id)
-    );
-  };
 
+  // Find an asset by ID in the derived hierarchy list
+  const findAssetById = (id: number): AssetHierarchyNode | undefined => {
+    return assetsHierarchy.find((a) => a.id === id);
+  };
   // Initialize selected IDs from route params
   useEffect(() => {
-    if (!selectedIds.length && selected) {
+    if (selected) {
+      // Check if selected prop has value
       setSelectedIds(selected);
     }
-  }, [selected]);
+  }, [selected]); // Depend only on selected prop
 
+  // Fetch initial asset data
   useEffect(() => {
     dispatch(getAssetsMini(locationId));
   }, [locationId, dispatch]);
@@ -83,13 +83,14 @@ export default function SelectAssetsModal({
     if (multiple) {
       const currentlySelectedAssets = selectedIds
         .map((id) => findAssetById(id))
-        .filter((asset): asset is AssetMiniDTO => !!asset); // Ensure we pass AssetMiniDTO or compatible type
+        .filter((asset): asset is AssetHierarchyNode => !!asset); // Use AssetHierarchyNode here
 
       navigation.setOptions({
         headerRight: () => (
           <Pressable
             disabled={!currentlySelectedAssets.length}
             onPress={() => {
+              // Pass back the selected assets (ensure format matches onChange expectation)
               onChange(currentlySelectedAssets);
               navigation.goBack();
             }}
@@ -105,24 +106,26 @@ export default function SelectAssetsModal({
         )
       });
     }
+    // Re-run when selectedIds or assetsHierarchy changes (needed if assets load after initial render)
   }, [
     selectedIds,
     multiple,
     navigation,
     onChange,
     assetsHierarchy,
-    assetsMini
+    theme.colors.primary,
+    t
   ]);
 
   // Update hierarchy view when hierarchy data or parent changes
   useEffect(() => {
-    if (view === 'hierarchy') {
-      const children = assetsHierarchy.filter(
-        (asset) => asset.parentId === (currentHierarchyParent?.id ?? null)
-      );
-      setCurrentHierarchyLevel(children);
-    }
-  }, [view, assetsHierarchy, currentHierarchyParent]);
+    // This effect runs when view is 'hierarchy' OR when assetsHierarchy/currentHierarchyParent changes
+    // Filter assetsHierarchy to find children of the current parent (or top-level items if parent is null)
+    const children = assetsHierarchy.filter(
+      (asset) => asset.parentId === (currentHierarchyParent?.id ?? null)
+    );
+    setCurrentHierarchyLevel(children);
+  }, [assetsHierarchy, currentHierarchyParent]); // Removed view dependency, logic now depends only on data/parent
 
   // --- Event Handlers ---
 
@@ -153,7 +156,7 @@ export default function SelectAssetsModal({
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
-    // If user starts searching, switch back to list view
+    // If user starts searching, always switch back to list view
     if (query) {
       setView('list');
     }
@@ -161,16 +164,10 @@ export default function SelectAssetsModal({
 
   const handleViewChange = (newView: 'list' | 'hierarchy') => {
     setView(newView);
-    // Clear search when switching to hierarchy view
+    // Clear search and reset hierarchy navigation when switching views
+    setSearchQuery('');
     if (newView === 'hierarchy') {
-      setSearchQuery('');
-      // Reset to top level when switching to hierarchy view
-      setCurrentHierarchyParent(null);
-    } else {
-      // Ensure list data is loaded when switching to list view
-      if (!assetsMini.length) {
-        dispatch(getAssetsMini(locationId));
-      }
+      setCurrentHierarchyParent(null); // Reset to top level
     }
   };
 
@@ -180,28 +177,34 @@ export default function SelectAssetsModal({
 
   const navigateHierarchyUp = () => {
     if (!currentHierarchyParent) return;
-    const grandparentId = currentHierarchyParent.parentId;
-    const grandparent = grandparentId
-      ? assetsHierarchy.find((a) => a.id === grandparentId)
+    // Find the parent of the current parent using the derived assetsHierarchy list
+    const grandparent = currentHierarchyParent.parentId
+      ? findAssetById(currentHierarchyParent.parentId)
       : null;
-    setCurrentHierarchyParent(grandparent); // Sets to null if grandparentId is null (top level)
+    setCurrentHierarchyParent(grandparent || null); // Set to null if no grandparent (i.e., moving to top level)
+  };
+
+  // --- Refresh Handler ---
+  const onRefresh = () => {
+    // Always refresh the base data
+    dispatch(getAssetsMini(locationId));
+    // Reset hierarchy navigation if in hierarchy view
+    if (view === 'hierarchy') {
+      setCurrentHierarchyParent(null);
+    }
   };
 
   // --- Rendering ---
 
+  // Reusable function to render an item in either list or hierarchy view
   const renderListItem = (
-    asset: AssetMiniDTO | AssetHierarchyNode,
+    asset: AssetHierarchyNode,
     isHierarchyView = false
   ) => (
     <TouchableOpacity
       onPress={() => {
-        // In hierarchy view, clicking the item selects it, unless it has children, then it navigates
-        if (isHierarchyView && (asset as AssetHierarchyNode).hasChildren) {
-          // Allow selection even if it has children
-          toggle(asset.id);
-        } else {
-          toggle(asset.id);
-        }
+        // Always allow selection by clicking the item body
+        toggle(asset.id);
       }}
       key={asset.id}
       style={styles.itemContainer}
@@ -210,31 +213,36 @@ export default function SelectAssetsModal({
         {multiple && (
           <Checkbox
             status={selectedIds.includes(asset.id) ? 'checked' : 'unchecked'}
-            onPress={() => toggle(asset.id)}
+            onPress={() => toggle(asset.id)} // Checkbox also toggles selection
           />
         )}
         <Text style={styles.itemText} variant={'titleMedium'}>
           {asset.name}
         </Text>
       </View>
-      {isHierarchyView && (asset as AssetHierarchyNode).hasChildren && (
+      {/* Show drill-down icon only in hierarchy view if the item has children */}
+      {isHierarchyView && asset.hasChildren && (
         <IconButton
           icon="chevron-right"
           size={24}
           onPress={(e) => {
             e.stopPropagation(); // Prevent triggering the main TouchableOpacity onPress
-            navigateHierarchyDown(asset as AssetHierarchyNode);
+            navigateHierarchyDown(asset); // Navigate down when chevron is pressed
           }}
         />
       )}
     </TouchableOpacity>
   );
 
+  // Filtered list for the 'list' view based on search query
   const filteredListAssets = useMemo(() => {
-    return assetsMini.filter((mini) =>
-      mini.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
+    if (!searchQuery) {
+      return assetsHierarchy; // Use derived hierarchy list for consistency if no search
+    }
+    return assetsHierarchy.filter((asset) =>
+      asset.name.toLowerCase().includes(searchQuery.toLowerCase().trim())
     );
-  }, [assetsMini, searchQuery]);
+  }, [assetsHierarchy, searchQuery]);
 
   return (
     <View
@@ -258,53 +266,43 @@ export default function SelectAssetsModal({
         style={styles.segmentedButtons}
       />
 
+      {/* Back button for hierarchy navigation */}
       {view === 'hierarchy' && currentHierarchyParent && (
         <TouchableOpacity
           onPress={navigateHierarchyUp}
           style={styles.backButton}
         >
           <IconButton icon="arrow-left" size={20} />
+          {/* Find the name of the parent's parent for the back button label */}
           <Text variant="titleMedium">
             {t('back_to')}{' '}
-            {currentHierarchyParent.parentId
-              ? assetsHierarchy.find(
-                  (a) => a.id === currentHierarchyParent.parentId
-                )?.name
-              : t('top_level')}
+            {findAssetById(currentHierarchyParent.parentId ?? -1)?.name ??
+              t('top_level')}
           </Text>
         </TouchableOpacity>
       )}
 
       <ScrollView
         refreshControl={
-          <RefreshControl
-            refreshing={view === 'list' ? loadingGet : loadingHierarchy}
-            onRefresh={() => {
-              if (view === 'list') {
-                dispatch(getAssetsMini(locationId));
-              } else {
-                // TODO: Dispatch refresh for hierarchy data
-                // dispatch(getAssetsHierarchy(locationId)); // Example
-                dispatch(getAssetsMini(locationId)); // Placeholder refresh
-                setCurrentHierarchyParent(null); // Reset hierarchy view on refresh
-              }
-            }}
-          />
+          <RefreshControl refreshing={loadingGet} onRefresh={onRefresh} />
         }
         style={styles.scrollView}
       >
+        {/* Conditional rendering based on view state */}
         {view === 'list' &&
           (loadingGet && !filteredListAssets.length ? (
             <ActivityIndicator animating={true} style={{ marginTop: 20 }} />
           ) : (
-            filteredListAssets.map((asset) => renderListItem(asset))
+            // Render the filtered list (which might be the full list if no search)
+            filteredListAssets.map((asset) => renderListItem(asset, false)) // Pass false for isHierarchyView
           ))}
 
         {view === 'hierarchy' &&
-          (loadingHierarchy && !currentHierarchyLevel.length ? (
+          (loadingGet && !currentHierarchyLevel.length ? (
             <ActivityIndicator animating={true} style={{ marginTop: 20 }} />
           ) : (
-            currentHierarchyLevel.map((asset) => renderListItem(asset, true))
+            // Render the current level of the hierarchy
+            currentHierarchyLevel.map((asset) => renderListItem(asset, true)) // Pass true for isHierarchyView
           ))}
 
         {view === 'list' &&
@@ -318,11 +316,6 @@ export default function SelectAssetsModal({
           !filteredListAssets.length &&
           !searchQuery && (
             <Text style={styles.noResultsText}>{t('no_assets_available')}</Text>
-          )}
-        {view === 'hierarchy' &&
-          !loadingHierarchy &&
-          !currentHierarchyLevel.length && (
-            <Text style={styles.noResultsText}>{t('no_sub_assets')}</Text>
           )}
       </ScrollView>
     </View>
@@ -344,7 +337,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginVertical: 4,
     borderRadius: 5,
-    paddingVertical: 10, // Reduced vertical padding
+    paddingVertical: 10,
     paddingHorizontal: 15,
     backgroundColor: 'white',
     flexDirection: 'row',
@@ -355,18 +348,17 @@ const styles = StyleSheet.create({
   itemContent: {
     flexDirection: 'row',
     alignItems: 'center',
-    flexShrink: 1 // Allow text to shrink
+    flexShrink: 1
   },
   itemText: {
-    marginLeft: 10, // Add margin if checkbox is present
-    flexShrink: 1 // Allow text to shrink
+    marginLeft: 10,
+    flexShrink: 1
   },
   backButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 10,
     paddingVertical: 5
-    // Add background or border if needed
   },
   noResultsText: {
     textAlign: 'center',

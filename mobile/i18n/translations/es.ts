@@ -1479,7 +1479,13 @@ const locale = {
   error_saving_url: 'Se produjo un error al guardar la URL del servidor',
   server_url_reset:
     'La URL del servidor se restableció a los valores predeterminados',
-  reset_to_default: 'Restablecer a valores predeterminados'
+  reset_to_default: 'Restablecer a valores predeterminados',
+  list: 'Lista',
+  back_to: 'Volver a',
+  top_level: 'Nivel superior',
+  no_results_found: 'No se encontraron resultados',
+  no_sub_assets: 'Sin subactivos',
+  no_assets_available: 'No hay activos disponibles'
 };
 
 export default locale;

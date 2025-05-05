@@ -586,6 +586,7 @@ const frJSON = {
     'Remplissez les champs ci-dessous pour modifier cet équipement',
   confirm_delete_asset: 'Etes-vous sûrs de vouloir supprimer cet équipement ?',
   no_content: 'Pas de contenu',
+  no_assets_available: 'Aucun équipement disponible',
   no_result_criteria: 'Aucun résultat pour vos critères de recherche',
   loading_assets: 'Chargement des équipements enfants de {{name}} #{{id}}',
   //location
@@ -1600,7 +1601,11 @@ const frJSON = {
     "Une erreur est survenue lors de l'enregistrement de l'URL du serveur",
   server_url_reset:
     "L'URL du serveur a été réinitialisée aux valeurs par défaut",
-  reset_to_default: 'Réinitialiser par défaut'
+  reset_to_default: 'Réinitialiser par défaut',
+  list: 'Liste',
+  back_to: 'Retour à',
+  top_level: 'Niveau supérieur',
+  no_results_found: 'Aucun résultat trouvé',
+  no_sub_assets: 'Aucun sous-équipement'
 };
-
 export default frJSON;

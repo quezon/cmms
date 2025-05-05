@@ -1448,7 +1448,12 @@ const locale = {
   server_url_saved: 'Server URL successfully saved',
   error_saving_url: 'Error occurred while saving the Server URL',
   server_url_reset: 'Server URL reset to default',
-  reset_to_default: 'Reset to default'
+  reset_to_default: 'Reset to default',
+  list: 'List',
+  back_to: 'Back to',
+  top_level: 'Top Level',
+  no_results_found: 'No results found',
+  no_sub_assets: 'No sub-assets',
+  no_assets_available: 'No assets available'
 };
-
 export default locale;
