@@ -1,4 +1,10 @@
-import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  View,
+  Image
+} from 'react-native';
 import { useDispatch, useSelector } from '../../store';
 import * as React from 'react';
 import { useEffect, useState } from 'react';
@@ -6,22 +12,96 @@ import useAuth from '../../hooks/useAuth';
 import { PermissionEntity } from '../../models/role';
 import { getAssetChildren, getAssets, getMoreAssets } from '../../slices/asset';
 import { FilterField, SearchCriteria } from '../../models/page';
-import {
-  Button,
-  Card,
-  IconButton,
-  Searchbar,
-  Text,
-  useTheme
-} from 'react-native-paper';
+import { Button, Card, Searchbar, Text, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import { AssetDTO, AssetRow } from '../../models/asset';
-import { IconSource } from 'react-native-paper/src/components/Icon';
 import { onSearchQueryChange } from '../../utils/overall';
 import { RootStackScreenProps } from '../../types';
 import Tag from '../../components/Tag';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 import { IconWithLabel } from '../../components/IconWithLabel';
+import { Asset } from 'expo-asset';
+
+const AssetCard = ({
+  asset,
+  navigation,
+  showChildrenButton = false,
+  onViewChildren
+}: {
+  asset: AssetDTO;
+  navigation: RootStackScreenProps<'Assets'>['navigation'];
+  showChildrenButton?: boolean;
+  onViewChildren?: () => void;
+}) => {
+  const { t } = useTranslation();
+  const theme = useTheme();
+
+  return (
+    <Card
+      style={{
+        padding: 5,
+        marginVertical: 5,
+        backgroundColor: 'white'
+      }}
+      key={asset.id}
+      onPress={() =>
+        navigation.push('AssetDetails', {
+          id: asset.id,
+          assetProp: asset
+        })
+      }
+    >
+      <Card.Content>
+        <View style={{ ...styles.row, justifyContent: 'space-between' }}>
+          <View style={{ ...styles.row, justifyContent: 'space-between' }}>
+            <View style={{ marginRight: 10 }}>
+              <Tag
+                text={`#${asset.customId}`}
+                color="white"
+                backgroundColor="#545454"
+              />
+            </View>
+            <Tag
+              text={
+                asset?.status === 'OPERATIONAL' ? t('operational') : t('down')
+              }
+              backgroundColor={
+                asset.status === 'OPERATIONAL'
+                  ? theme.colors.success
+                  : theme.colors.error
+              }
+              color="white"
+            />
+          </View>
+        </View>
+        <View style={{ ...styles.row, marginTop: 5 }}>
+          <Image
+            style={{ height: 70, width: 70, borderRadius: 35, marginRight: 10 }}
+            source={
+              asset.image
+                ? {
+                    uri: asset.image.url
+                  }
+                : Asset.fromModule(require('../../assets/images/no-image.png'))
+            }
+          />
+          <Text variant="titleMedium">{asset.name}</Text>
+        </View>
+        {asset.location && (
+          <IconWithLabel
+            label={asset.location.name}
+            icon="map-marker-outline"
+          />
+        )}
+      </Card.Content>
+      {showChildrenButton && asset.hasChildren && (
+        <Card.Actions>
+          <Button onPress={onViewChildren}>{t('view_children')}</Button>
+        </Card.Actions>
+      )}
+    </Card>
+  );
+};
 
 export default function AssetsScreen({
   navigation,
@@ -130,6 +210,13 @@ export default function AssetsScreen({
     setCurrentAssets(result);
   }, [assetsHierarchy]);
 
+  const handleViewChildren = (asset) => {
+    navigation.push('Assets', {
+      id: asset.id,
+      hierarchy: asset.hierarchy
+    });
+  };
+
   return (
     <View
       style={{ ...styles.container, backgroundColor: theme.colors.background }}
@@ -161,59 +248,7 @@ export default function AssetsScreen({
         >
           {!!assets.content.length ? (
             assets.content.map((asset) => (
-              <Card
-                style={{
-                  padding: 5,
-                  marginVertical: 5,
-                  backgroundColor: 'white'
-                }}
-                key={asset.id}
-                onPress={() =>
-                  navigation.push('AssetDetails', {
-                    id: asset.id,
-                    assetProp: asset
-                  })
-                }
-              >
-                <Card.Content>
-                  <View
-                    style={{ ...styles.row, justifyContent: 'space-between' }}
-                  >
-                    <View
-                      style={{ ...styles.row, justifyContent: 'space-between' }}
-                    >
-                      <View style={{ marginRight: 10 }}>
-                        <Tag
-                          text={`#${asset.customId}`}
-                          color="white"
-                          backgroundColor="#545454"
-                        />
-                      </View>
-                      <Tag
-                        text={
-                          asset?.status === 'OPERATIONAL'
-                            ? t('operational')
-                            : t('down')
-                        }
-                        backgroundColor={
-                          asset.status === 'OPERATIONAL'
-                            ? //@ts-ignore
-                              theme.colors.success
-                            : theme.colors.error
-                        }
-                        color="white"
-                      />
-                    </View>
-                  </View>
-                  <Text variant="titleMedium">{asset.name}</Text>
-                  {asset.location && (
-                    <IconWithLabel
-                      label={asset.location.name}
-                      icon="map-marker-outline"
-                    />
-                  )}
-                </Card.Content>
-              </Card>
+              <AssetCard key={asset.id} asset={asset} navigation={navigation} />
             ))
           ) : loadingGet ? null : (
             <View
@@ -241,73 +276,13 @@ export default function AssetsScreen({
         >
           {!!currentAssets.length &&
             currentAssets.map((asset) => (
-              <Card
-                style={{
-                  padding: 5,
-                  marginVertical: 5,
-                  backgroundColor: 'white'
-                }}
+              <AssetCard
                 key={asset.id}
-                onPress={() =>
-                  navigation.push('AssetDetails', {
-                    id: asset.id,
-                    assetProp: asset
-                  })
-                }
-              >
-                <Card.Content>
-                  <View
-                    style={{ ...styles.row, justifyContent: 'space-between' }}
-                  >
-                    <View
-                      style={{ ...styles.row, justifyContent: 'space-between' }}
-                    >
-                      <View style={{ marginRight: 10 }}>
-                        <Tag
-                          text={`#${asset.customId}`}
-                          color="white"
-                          backgroundColor="#545454"
-                        />
-                      </View>
-                      <Tag
-                        text={
-                          asset?.status === 'OPERATIONAL'
-                            ? t('operational')
-                            : t('down')
-                        }
-                        backgroundColor={
-                          asset.status === 'OPERATIONAL'
-                            ? //@ts-ignore
-                              theme.colors.success
-                            : theme.colors.error
-                        }
-                        color="white"
-                      />
-                    </View>
-                  </View>
-                  <Text variant="titleMedium">{asset.name}</Text>
-                  {asset.location && (
-                    <IconWithLabel
-                      label={asset.location.name}
-                      icon="map-marker-outline"
-                    />
-                  )}
-                </Card.Content>
-                <Card.Actions>
-                  {asset.hasChildren && (
-                    <Button
-                      onPress={() => {
-                        navigation.push('Assets', {
-                          id: asset.id,
-                          hierarchy: asset.hierarchy
-                        });
-                      }}
-                    >
-                      {t('view_children')}
-                    </Button>
-                  )}
-                </Card.Actions>
-              </Card>
+                asset={asset}
+                navigation={navigation}
+                showChildrenButton={true}
+                onViewChildren={() => handleViewChildren(asset)}
+              />
             ))}
         </ScrollView>
       )}
