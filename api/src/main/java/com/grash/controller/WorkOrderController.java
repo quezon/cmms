@@ -362,9 +362,14 @@ public class WorkOrderController {
                 thymeleafContext.setLocale(Helper.getLocale(user));
                 Optional<OwnUser> creator = savedWorkOrder.getCreatedBy() == null ? Optional.empty() :
                         userService.findById(savedWorkOrder.getCreatedBy());
-                List<Pair<String, String>> tasks =
-                        taskService.findByWorkOrder(id).stream().map(task -> Pair.of(task.getTaskBase().getLabel(),
-                                translateTaskValue(task.getValue(), Helper.getLocale(user)))).collect(Collectors.toList());
+                List<Task> tasks = taskService.findByWorkOrder(id);
+                Map<Long, String[]> tasksImagesUrls = tasks.stream()
+                        .collect(Collectors.toMap(
+                                Task::getId,
+                                task -> task.getImages().stream()
+                                        .map(image -> storageService.generateSignedUrl(image, 5))
+                                        .toArray(String[]::new)
+                        ));
                 Collection<PartQuantity> partQuantities = partQuantityService.findByWorkOrder(id);
                 Collection<Labor> labors = laborService.findByWorkOrder(id);
                 Collection<Relation> relations = relationService.findByWorkOrder(id);
@@ -390,6 +395,9 @@ public class WorkOrderController {
                     put("workOrderHistories", workOrderHistories);
                     put("partQuantities", partQuantities);
                     put("environment", environment);
+                    put("tasksImagesUrls", tasksImagesUrls);
+                    put("messageSource", messageSource);
+                    put("locale", Helper.getLocale(user));
                 }};
                 thymeleafContext.setVariables(variables);
 
@@ -449,13 +457,6 @@ public class WorkOrderController {
             workOrderService.save(savedWorkOrder);
             return savedWorkOrder.getFiles();
         } else throw new CustomException("Not found", HttpStatus.NOT_FOUND);
-    }
-
-    private String translateTaskValue(String value, Locale locale) {
-        List<String> taskOptions = Arrays.asList("OPEN", "ON_HOLD", "IN_PROGRESS", "COMPLETE", "PASS", "FLAG", "FAIL");
-        if (taskOptions.contains(value)) {
-            return messageSource.getMessage(value, null, locale);
-        } else return value;
     }
 
 }

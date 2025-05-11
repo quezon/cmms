@@ -1,5 +1,6 @@
 package com.grash.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.grash.model.abstracts.CompanyAudit;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.context.MessageSource;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,7 +17,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 @Entity
 @Data
@@ -49,5 +53,13 @@ public class Task extends CompanyAudit {
         this.workOrder = workOrder;
         this.value = value;
         this.preventiveMaintenance = preventiveMaintenance;
+    }
+
+    @JsonIgnore
+    public String getTranslatedValue(Locale locale, MessageSource messageSource) {
+        List<String> taskOptions = Arrays.asList("OPEN", "ON_HOLD", "IN_PROGRESS", "COMPLETE", "PASS", "FLAG", "FAIL");
+        if (taskOptions.contains(value)) {
+            return messageSource.getMessage(value, null, locale);
+        } else return value;
     }
 }

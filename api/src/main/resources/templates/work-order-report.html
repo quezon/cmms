@@ -14,7 +14,8 @@
 <!--@thymesVar id="workOrder" type="com.grash.model.WorkOrder"-->
 <!--@thymesVar id="companyName" type="java.lang.String"-->
 <!--/*@thymesVar id="relations" type="java.util.List<com.grash.model.Relation>"*/-->
-<!--/*@thymesVar id="tasks" type="java.util.List<org.springframework.data.util.Pair<java.lang.String, java.lang.String>>"*/-->
+<!--/*@thymesVar id="tasks" type="java.util.List<com.grash.model.Task>"*/-->
+<!--/*@thymesVar id="tasksImagesUrls" type="java.util.Map<java.lang.Long, java.lang.String[]>"*/-->
 <!--/*@thymesVar id="assignedTo" type="java.lang.String"*/-->
 <!--/*@thymesVar id="customers" type="java.lang.String"*/-->
 <!--/*@thymesVar id="companyPhone" type="java.lang.String"*/-->
@@ -24,6 +25,8 @@
 <!--/*@thymesVar id="workOrderHistories" type="java.util.List<com.grash.model.WorkOrderHistory>"*/-->
 <!--/*@thymesVar id="partQuantities" type="java.util.List<com.grash.model.PartQuantity>"*/-->
 <!--/*@thymesVar id="labors" type="java.util.List<com.grash.model.Labor>"*/-->
+<!--/*@thymesVar id="messageSource" type="org.springframework.context.MessageSource"*/-->
+<!--/*@thymesVar id="locale" type="java.util.Locale"*/-->
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
@@ -179,8 +182,14 @@
                 </div>
                 <div class="panel-body">
                     <th:block th:each="task : ${tasks}">
-                        <strong th:text="${task.getFirst()}"></strong>
-                        <div th:text="${task.getSecond()}"></div>
+                        <div>
+                            <strong th:text="${task.getTaskBase().getLabel()}"></strong>
+                            <div th:text="${task.getTranslatedValue(locale, messageSource)}"></div>
+                            <div style="font-size: 10px" th:text="${task.getNotes()}"></div>
+                            <th:block th:each="imageUrl : ${tasksImagesUrls.get(task.getId())}">
+                                <img th:src="${imageUrl}" height="250"/>
+                            </th:block>
+                        </div>
                     </th:block>
                 </div>
             </div>

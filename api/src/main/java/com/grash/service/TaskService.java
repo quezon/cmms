@@ -54,7 +54,7 @@ public class TaskService {
         return taskRepository.findById(id);
     }
 
-    public Collection<Task> findByWorkOrder(Long id) {
+    public List<Task> findByWorkOrder(Long id) {
         return taskRepository.findByWorkOrder_Id(id);
     }
 
