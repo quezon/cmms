@@ -134,4 +134,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2025_04_29_1745944996_currencies.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2025_05_11_1746974527_description_type.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -64,6 +64,10 @@ const AssetDetails = ({ asset }: PropsType) => {
   ];
   const moreInfosFields = [
     {
+      label: t('additional_information'),
+      value: asset?.additionalInfos
+    },
+    {
       label: t('placed_in_service'),
       value: getFormattedDate(asset?.inServiceDate)
     },
