@@ -124,7 +124,7 @@ public class MeterService {
         meter.setUnit(dto.getUnit());
         meter.setUpdateFrequency(dto.getUpdateFrequency());
         Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(),
-                companyId);
+                companyId).stream().findFirst();
         optionalLocation.ifPresent(meter::setLocation);
         Optional<MeterCategory> optionalMeterCategory =
                 meterCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getMeterCategory(), companySettingsId);

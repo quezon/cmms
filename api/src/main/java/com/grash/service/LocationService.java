@@ -117,7 +117,7 @@ public class LocationService {
         }
     }
 
-    public Optional<Location> findByNameIgnoreCaseAndCompany(String locationName, Long companyId) {
+    public List<Location> findByNameIgnoreCaseAndCompany(String locationName, Long companyId) {
         return locationRepository.findByNameIgnoreCaseAndCompany_Id(locationName, companyId);
     }
 
@@ -127,7 +127,8 @@ public class LocationService {
         location.setAddress(dto.getAddress());
         location.setLongitude(dto.getLongitude());
         location.setLatitude(dto.getLatitude());
-        Optional<Location> optionalLocation = findByNameIgnoreCaseAndCompany(dto.getParentLocationName(), companyId);
+        Optional<Location> optionalLocation =
+                findByNameIgnoreCaseAndCompany(dto.getParentLocationName(), companyId).stream().findFirst();
         optionalLocation.ifPresent(location::setParentLocation);
         List<OwnUser> workers = new ArrayList<>();
         dto.getWorkersEmails().forEach(email -> {

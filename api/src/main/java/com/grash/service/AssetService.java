@@ -248,7 +248,7 @@ public class AssetService {
         asset.setPower(dto.getPower());
         asset.setManufacturer(dto.getManufacturer());
         Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(),
-                companyId);
+                companyId).stream().findFirst();
         optionalLocation.ifPresent(asset::setLocation);
         Optional<Asset> optionalAsset =
                 findByNameIgnoreCaseAndCompany(dto.getParentAssetName(), companyId).stream().findFirst();

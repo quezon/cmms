@@ -18,7 +18,7 @@ public interface LocationRepository extends JpaRepository<Location, Long>, JpaSp
 
     List<Location> findByParentLocation_Id(Long id, Sort sort);
 
-    Optional<Location> findByNameIgnoreCaseAndCompany_Id(String locationName, Long companyId);
+    List<Location> findByNameIgnoreCaseAndCompany_Id(String locationName, Long companyId);
 
     Optional<Location> findByIdAndCompany_Id(Long id, Long companyId);
 

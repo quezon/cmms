@@ -332,7 +332,7 @@ public class WorkOrderService {
                 workOrderCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getCategory(), companySettingsId);
         optionalWorkOrderCategory.ifPresent(workOrder::setCategory);
         Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(),
-                companyId);
+                companyId).stream().findFirst();
         optionalLocation.ifPresent(workOrder::setLocation);
         Optional<Team> optionalTeam = teamService.findByNameIgnoreCaseAndCompany(dto.getTeamName(), companyId);
         optionalTeam.ifPresent(workOrder::setTeam);
