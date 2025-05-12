@@ -344,7 +344,8 @@ public class WorkOrderService {
             optionalUser1.ifPresent(assignedTo::add);
         });
         workOrder.setAssignedTo(assignedTo);
-        Optional<Asset> optionalAsset = assetService.findByNameIgnoreCaseAndCompany(dto.getAssetName(), companyId);
+        Optional<Asset> optionalAsset =
+                assetService.findByNameIgnoreCaseAndCompany(dto.getAssetName(), companyId).stream().findFirst();
         optionalAsset.ifPresent(workOrder::setAsset);
         Optional<OwnUser> optionalCompletedBy = userService.findByEmailAndCompany(dto.getCompletedByEmail(), companyId);
         optionalCompletedBy.ifPresent(workOrder::setCompletedBy);

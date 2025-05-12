@@ -216,7 +216,7 @@ public class AssetService {
         return assetRepository.findAll(builder.build(), page).map(asset -> assetMapper.toShowDto(asset, this));
     }
 
-    public Optional<Asset> findByNameIgnoreCaseAndCompany(String assetName, Long companyId) {
+    public List<Asset> findByNameIgnoreCaseAndCompany(String assetName, Long companyId) {
         return assetRepository.findByNameIgnoreCaseAndCompany_Id(assetName, companyId);
     }
 
@@ -250,7 +250,8 @@ public class AssetService {
         Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(),
                 companyId);
         optionalLocation.ifPresent(asset::setLocation);
-        Optional<Asset> optionalAsset = findByNameIgnoreCaseAndCompany(dto.getParentAssetName(), companyId);
+        Optional<Asset> optionalAsset =
+                findByNameIgnoreCaseAndCompany(dto.getParentAssetName(), companyId).stream().findFirst();
         optionalAsset.ifPresent(asset::setParentAsset);
         Optional<AssetCategory> optionalAssetCategory =
                 assetCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getCategory(), companySettingsId);
@@ -306,37 +307,65 @@ public class AssetService {
         return assetRepository.findByBarCodeAndCompany_Id(data, id);
     }
 
-
     public static List<AssetImportDTO> orderAssets(List<AssetImportDTO> assets) {
         Map<String, List<AssetImportDTO>> assetMap = new HashMap<>();
-        List<AssetImportDTO> topLevelAssets = new ArrayList<>();
+        List<AssetImportDTO> identifiedTopLevelAssets = new ArrayList<>();
 
-        // Group assets by parent name
+        Set<String> allAssetNames = new HashSet<>();
         for (AssetImportDTO asset : assets) {
-            String parentName = asset.getParentAssetName();
-            assetMap.computeIfAbsent(parentName, k -> new ArrayList<>()).add(asset);
-            if (parentName == null || assets.stream().noneMatch(assetImportDTO -> assetImportDTO.getName().equals(parentName))) {
-                topLevelAssets.add(asset);
+            if (asset.getName() != null) { // Guard against assets with null names if possible
+                allAssetNames.add(asset.getName());
             }
         }
 
-        // Order assets recursively
+        // Group assets by parent name and identify top-level assets
+        // Using a HashSet here to ensure we only consider each unique asset object once
+        // for building the map and topLevelAssets, in case the input list has duplicate object references.
+        Set<AssetImportDTO> distinctInputAssets = new HashSet<>(assets);
+
+        for (AssetImportDTO asset : distinctInputAssets) { // Iterate over unique asset objects
+            String parentName = asset.getParentAssetName();
+            assetMap.computeIfAbsent(parentName, k -> new ArrayList<>()).add(asset);
+
+            // An asset is top-level if it has no parent,
+            // or its declared parent doesn't exist in the provided list of assets.
+            if (parentName == null || !allAssetNames.contains(parentName)) {
+                identifiedTopLevelAssets.add(asset);
+            }
+        }
+
         List<AssetImportDTO> orderedAssets = new ArrayList<>();
-        orderAssetsRecursive(assetMap, topLevelAssets, orderedAssets);
+        Set<AssetImportDTO> visited = new HashSet<>(); // Keep track of visited assets
+
+        // Process identified top-level assets.
+        // The `visited` set will ensure each asset is added only once,
+        // even if it appears multiple times in `identifiedTopLevelAssets`
+        // (e.g., multiple distinct orphan objects point to the same non-existent parent)
+        // or if children of different top-level assets overlap due to same names.
+        orderAssetsRecursive(assetMap, identifiedTopLevelAssets, orderedAssets, visited);
 
         return orderedAssets;
     }
 
-    private static void orderAssetsRecursive(Map<String, List<AssetImportDTO>> assetMap, List<AssetImportDTO> assets,
-                                             List<AssetImportDTO> orderedAssets) {
-        for (AssetImportDTO asset : assets) {
-            orderedAssets.add(asset);
-            List<AssetImportDTO> children = assetMap.get(asset.getName());
-            if (children != null) {
-                orderAssetsRecursive(assetMap, children, orderedAssets);
+    private static void orderAssetsRecursive(Map<String, List<AssetImportDTO>> assetMap,
+                                             List<AssetImportDTO> currentLevelAssets,
+                                             List<AssetImportDTO> orderedAssets,
+                                             Set<AssetImportDTO> visited) {
+        if (currentLevelAssets == null) {
+            return;
+        }
+        for (AssetImportDTO asset : currentLevelAssets) {
+            // Only process and add the asset if it hasn't been visited yet
+            if (visited.add(asset)) { // .add() returns true if the element was new to the set
+                orderedAssets.add(asset);
+                List<AssetImportDTO> children = assetMap.get(asset.getName());
+                if (children != null) {
+                    orderAssetsRecursive(assetMap, children, orderedAssets, visited);
+                }
             }
         }
     }
+
 
     public Boolean hasChildren(Long assetId) {
         return assetRepository.countByParentAsset_Id(assetId) > 0;
