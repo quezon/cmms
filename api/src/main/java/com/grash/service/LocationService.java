@@ -171,32 +171,59 @@ public class LocationService {
 
     public static List<LocationImportDTO> orderLocations(List<LocationImportDTO> locations) {
         Map<String, List<LocationImportDTO>> locationMap = new HashMap<>();
-        List<LocationImportDTO> topLevelLocations = new ArrayList<>();
+        List<LocationImportDTO> identifiedTopLevelLocations = new ArrayList<>();
 
-        // Group locations by parent name
+        Set<String> allLocationNames = new HashSet<>();
         for (LocationImportDTO location : locations) {
-            String parentName = location.getParentLocationName();
-            locationMap.computeIfAbsent(parentName, k -> new ArrayList<>()).add(location);
-            if (parentName == null || locations.stream().noneMatch(locationImportDTO -> locationImportDTO.getName().equals(parentName))) {
-                topLevelLocations.add(location);
+            if (location.getName() != null) { // Guard against locations with null names if possible
+                allLocationNames.add(location.getName());
             }
         }
 
-        // Order locations recursively
+        // Group locations by parent name and identify top-level locations
+        // Using a HashSet here to ensure we only consider each unique location object once
+        // for building the map and topLevelLocations, in case the input list has duplicate object references.
+        Set<LocationImportDTO> distinctInputLocations = new HashSet<>(locations);
+
+        for (LocationImportDTO location : distinctInputLocations) { // Iterate over unique location objects
+            String parentName = location.getParentLocationName();
+            locationMap.computeIfAbsent(parentName, k -> new ArrayList<>()).add(location);
+
+            // An location is top-level if it has no parent,
+            // or its declared parent doesn't exist in the provided list of locations.
+            if (parentName == null || !allLocationNames.contains(parentName)) {
+                identifiedTopLevelLocations.add(location);
+            }
+        }
+
         List<LocationImportDTO> orderedLocations = new ArrayList<>();
-        orderLocationsRecursive(locationMap, topLevelLocations, orderedLocations);
+        Set<LocationImportDTO> visited = new HashSet<>(); // Keep track of visited locations
+
+        // Process identified top-level locations.
+        // The `visited` set will ensure each location is added only once,
+        // even if it appears multiple times in `identifiedTopLevelLocations`
+        // (e.g., multiple distinct orphan objects point to the same non-existent parent)
+        // or if children of different top-level locations overlap due to same names.
+        orderLocationsRecursive(locationMap, identifiedTopLevelLocations, orderedLocations, visited);
 
         return orderedLocations;
     }
 
     private static void orderLocationsRecursive(Map<String, List<LocationImportDTO>> locationMap,
-                                                List<LocationImportDTO> locations,
-                                                List<LocationImportDTO> orderedLocations) {
-        for (LocationImportDTO location : locations) {
-            orderedLocations.add(location);
-            List<LocationImportDTO> children = locationMap.get(location.getName());
-            if (children != null) {
-                orderLocationsRecursive(locationMap, children, orderedLocations);
+                                                List<LocationImportDTO> currentLevelLocations,
+                                                List<LocationImportDTO> orderedLocations,
+                                                Set<LocationImportDTO> visited) {
+        if (currentLevelLocations == null) {
+            return;
+        }
+        for (LocationImportDTO location : currentLevelLocations) {
+            // Only process and add the location if it hasn't been visited yet
+            if (visited.add(location)) { // .add() returns true if the element was new to the set
+                orderedLocations.add(location);
+                List<LocationImportDTO> children = locationMap.get(location.getName());
+                if (children != null) {
+                    orderLocationsRecursive(locationMap, children, orderedLocations, visited);
+                }
             }
         }
     }
