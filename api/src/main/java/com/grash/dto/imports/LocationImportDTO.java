@@ -27,18 +27,4 @@ public class LocationImportDTO {
     private Collection<String> customersNames;
 
     private Collection<String> vendorsNames;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LocationImportDTO that = (LocationImportDTO) o;
-        return java.util.Objects.equals(name, that.name) &&
-                java.util.Objects.equals(parentLocationName, that.parentLocationName);
-    }
-
-    @Override
-    public int hashCode() {
-        return java.util.Objects.hash(name, parentLocationName);
-    }
 }

@@ -50,18 +50,4 @@ public class AssetImportDTO {
     private String model;
     private String manufacturer;
     private String power;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AssetImportDTO that = (AssetImportDTO) o;
-        return java.util.Objects.equals(name, that.name) &&
-                java.util.Objects.equals(parentAssetName, that.parentAssetName);
-    }
-
-    @Override
-    public int hashCode() {
-        return java.util.Objects.hash(name, parentAssetName);
-    }
 }
