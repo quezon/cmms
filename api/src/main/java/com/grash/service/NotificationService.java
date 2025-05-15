@@ -53,7 +53,7 @@ public class NotificationService {
                             put("type", notifications.get(0).getNotificationType());
                             put("id", notifications.get(0).getResourceId());
                         }});
-            } catch (PushClientException | InterruptedException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
     }
