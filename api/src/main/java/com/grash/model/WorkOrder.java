@@ -35,7 +35,7 @@ public class WorkOrder extends WorkOrderBase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
     @Audited(withModifiedFlag = true)
     private String customId;
 
@@ -67,12 +67,6 @@ public class WorkOrder extends WorkOrderBase {
 
     @NotAudited
     private Date firstTimeToReact;
-
-
-    public boolean isAssignedTo(OwnUser user) {
-        Collection<OwnUser> users = getUsers();
-        return users.stream().anyMatch(user1 -> user1.getId().equals(user.getId()));
-    }
 
     @JsonIgnore
     public boolean isCompliant() {

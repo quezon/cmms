@@ -98,4 +98,9 @@ public abstract class WorkOrderBase extends CompanyAudit {
             throw new CustomException("Estimated duration should not be negative", HttpStatus.NOT_ACCEPTABLE);
         this.estimatedDuration = estimatedDuration;
     }
+
+    public boolean isAssignedTo(OwnUser user) {
+        Collection<OwnUser> users = getUsers();
+        return users.stream().anyMatch(user1 -> user1.getId().equals(user.getId()));
+    }
 }

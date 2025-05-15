@@ -97,10 +97,10 @@ public class PreventiveMaintenanceService {
         }
     }
 
-    public List<CalendarEvent> getEvents(Date end, Long companyId) {
+    public List<CalendarEvent<PreventiveMaintenance>> getEvents(Date end, Long companyId) {
         List<PreventiveMaintenance> preventiveMaintenances =
                 preventiveMaintenanceRepository.findByCreatedAtBeforeAndCompany_Id(end, companyId);
-        List<CalendarEvent> result = new ArrayList<>();
+        List<CalendarEvent<PreventiveMaintenance>> result = new ArrayList<>();
         for (PreventiveMaintenance preventiveMaintenance : preventiveMaintenances) {
             Schedule schedule = preventiveMaintenance.getSchedule();
             if (schedule.isDisabled()) continue;
@@ -126,8 +126,8 @@ public class PreventiveMaintenanceService {
                 }
             }
 
-            result.addAll(dates.stream().map(date -> new CalendarEvent("PREVENTIVE_MAINTENANCE",
-                    preventiveMaintenanceMapper.toBaseMiniDto(preventiveMaintenance), date)).collect(Collectors.toList()));
+            result.addAll(dates.stream().map(date -> new CalendarEvent<>("PREVENTIVE_MAINTENANCE",
+                    preventiveMaintenance, date)).collect(Collectors.toList()));
         }
         return result;
     }

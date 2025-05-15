@@ -9,8 +9,8 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CalendarEvent {
+public class CalendarEvent<T> {
     private String type;
-    private WorkOrderBaseMiniDTO event;
+    private T event;
     private Date date;
 }
