@@ -12,6 +12,7 @@ interface UserState {
   users: Page<User>;
   userInfos: { [key: number]: { user?: User } };
   usersMini: UserMiniDTO[];
+  allUsersMini: UserMiniDTO[];
   disabledUsersMini: UserMiniDTO[];
   currentPageNum: number;
   lastPage: boolean;
@@ -22,6 +23,7 @@ const initialState: UserState = {
   users: getInitialPage<User>(),
   userInfos: {},
   usersMini: [],
+  allUsersMini: [],
   disabledUsersMini: [],
   currentPageNum: 0,
   lastPage: true,
@@ -80,6 +82,13 @@ const slice = createSlice({
     ) {
       const { users } = action.payload;
       state.usersMini = users;
+    },
+    getAllUsersMini(
+      state: UserState,
+      action: PayloadAction<{ users: UserMiniDTO[] }>
+    ) {
+      const { users } = action.payload;
+      state.allUsersMini = users;
     },
     getDisabledUsersMini(
       state: UserState,
@@ -158,12 +167,20 @@ export const getSingleUserMini =
     const user = await api.get<User>(`users/${id}`);
     dispatch(slice.actions.getSingleUserMini({ user, id }));
   };
-export const getUsersMini = (): AppThunk => async (dispatch) => {
-  dispatch(slice.actions.setLoadingGet({ loading: true }));
-  const users = await api.get<UserMiniDTO[]>('users/mini');
-  dispatch(slice.actions.getUsersMini({ users }));
-  dispatch(slice.actions.setLoadingGet({ loading: false }));
-};
+export const getUsersMini =
+  (withRequesters?: boolean): AppThunk =>
+  async (dispatch) => {
+    dispatch(slice.actions.setLoadingGet({ loading: true }));
+    const query =
+      withRequesters !== undefined ? `?withRequesters=${withRequesters}` : '';
+    const users = await api.get<UserMiniDTO[]>(`users/mini${query}`);
+    dispatch(
+      withRequesters
+        ? slice.actions.getAllUsersMini({ users })
+        : slice.actions.getUsersMini({ users })
+    );
+    dispatch(slice.actions.setLoadingGet({ loading: false }));
+  };
 export const getDisabledUsersMini = (): AppThunk => async (dispatch) => {
   const users = await api.get<UserMiniDTO[]>('users/mini/disabled');
   dispatch(slice.actions.getDisabledUsersMini({ users }));

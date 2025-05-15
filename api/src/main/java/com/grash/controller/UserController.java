@@ -83,8 +83,12 @@ public class UserController {
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "AssetCategory not found")})
-    public Collection<UserMiniDTO> getMini(@ApiIgnore @CurrentUser OwnUser user) {
-        return userService.findWorkersByCompany(user.getCompany().getId()).stream()
+    public Collection<UserMiniDTO> getMini(@ApiIgnore @CurrentUser OwnUser user,
+                                           @RequestParam(required = false) Boolean withRequesters) {
+        return withRequesters ?
+                userService.findByCompany(user.getCompany().getId()).stream()
+                        .filter(OwnUser::isEnabled).map(userMapper::toMiniDto).collect(Collectors.toList()) :
+                userService.findWorkersByCompany(user.getCompany().getId()).stream()
                 .filter(OwnUser::isEnabledInSubscription)
                 .filter(OwnUser::isEnabled)
                 .map(userMapper::toMiniDto).collect(Collectors.toList());

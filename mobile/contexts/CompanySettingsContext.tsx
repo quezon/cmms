@@ -39,7 +39,7 @@ export const CompanySettingsProvider: FC<{ children: ReactNode }> = (props) => {
       dateFormat: 'DDMMYY',
       currency: { code: '$' }
     };
-  const { usersMini } = useSelector((state) => state.users);
+  const { allUsersMini } = useSelector((state) => state.users);
   const { workOrderConfiguration } = companySettings ?? {
     workOrderFieldConfigurations: []
   };
@@ -103,7 +103,7 @@ export const CompanySettingsProvider: FC<{ children: ReactNode }> = (props) => {
   };
 
   const getUserNameById = (id: number) => {
-    const user = usersMini.find((user) => user.id === id);
+    const user = allUsersMini.find((user) => user.id === id);
     return user ? `${user.firstName} ${user.lastName}` : null;
   };
   const getWOFieldsAndShapes = (
@@ -232,7 +232,7 @@ export const CompanySettingsProvider: FC<{ children: ReactNode }> = (props) => {
     return [fields, shape];
   };
   useEffect(() => {
-    if (isAuthenticated) dispatch(getUsersMini());
+    if (isAuthenticated) dispatch(getUsersMini(true));
   }, [isAuthenticated]);
   return (
     <CompanySettingsContext.Provider

@@ -39,7 +39,7 @@ export const CompanySettingsProvider: FC = ({ children }) => {
     dateFormat: 'DDMMYY',
     currency: { code: '$' }
   };
-  const { usersMini } = useSelector((state) => state.users);
+  const { allUsersMini } = useSelector((state) => state.users);
   const { workOrderConfiguration } = companySettings ?? {
     workOrderFieldConfigurations: []
   };
@@ -108,7 +108,7 @@ export const CompanySettingsProvider: FC = ({ children }) => {
   };
 
   const getUserNameById = (id: number) => {
-    const user = usersMini.find((user) => user.id === id);
+    const user = allUsersMini.find((user) => user.id === id);
     return user ? `${user.firstName} ${user.lastName}` : null;
   };
   const getWOFieldsAndShapes = (
@@ -214,7 +214,7 @@ ${company.name}
     );
   };
   useEffect(() => {
-    if (isAuthenticated) dispatch(getUsersMini());
+    if (isAuthenticated) dispatch(getUsersMini(true));
   }, [isAuthenticated]);
   return (
     <CompanySettingsContext.Provider

@@ -12,6 +12,7 @@ interface UserState {
   users: Page<UserResponseDTO>;
   singleUser: UserResponseDTO;
   usersMini: UserMiniDTO[];
+  allUsersMini: UserMiniDTO[];
   disabledUsersMini: UserMiniDTO[];
   loadingGet: boolean;
 }
@@ -20,6 +21,7 @@ const initialState: UserState = {
   users: getInitialPage<UserResponseDTO>(),
   singleUser: null,
   usersMini: [],
+  allUsersMini: [],
   disabledUsersMini: [],
   loadingGet: false
 };
@@ -78,6 +80,13 @@ export const slice = createSlice({
     ) {
       const { users } = action.payload;
       state.usersMini = users;
+    },
+    getAllUsersMini(
+      state: UserState,
+      action: PayloadAction<{ users: UserMiniDTO[] }>
+    ) {
+      const { users } = action.payload;
+      state.allUsersMini = users;
     },
     getDisabledUsersMini(
       state: UserState,
@@ -171,10 +180,19 @@ export const getSingleUserMini =
     const user = await api.get<UserResponseDTO>(`users/${id}`);
     dispatch(slice.actions.getSingleUserMini({ user, id }));
   };
-export const getUsersMini = (): AppThunk => async (dispatch) => {
-  const users = await api.get<UserMiniDTO[]>('users/mini');
-  dispatch(slice.actions.getUsersMini({ users }));
-};
+export const getUsersMini =
+  (withRequesters?: boolean): AppThunk =>
+  async (dispatch) => {
+    const query =
+      withRequesters !== undefined ? `?withRequesters=${withRequesters}` : '';
+    const users = await api.get<UserMiniDTO[]>(`users/mini${query}`);
+    dispatch(
+      withRequesters
+        ? slice.actions.getAllUsersMini({ users })
+        : slice.actions.getUsersMini({ users })
+    );
+  };
+
 export const getDisabledUsersMini = (): AppThunk => async (dispatch) => {
   const users = await api.get<UserMiniDTO[]>('users/mini/disabled');
   dispatch(slice.actions.getDisabledUsersMini({ users }));

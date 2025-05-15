@@ -8,6 +8,7 @@ import { useEffect } from 'react';
 import { getUrgentWorkOrdersCount } from '../../../../slices/workOrder';
 import { useDispatch, useSelector } from '../../../../store';
 import { getPendingRequestsCount } from '../../../../slices/request';
+import { PermissionEntity } from '../../../../models/owns/role';
 
 const MenuWrapper = styled(Box)(
   ({ theme }) => `
@@ -234,14 +235,14 @@ function SidebarMenu() {
   const location = useLocation();
   const { t }: { t: any } = useTranslation();
   const dispatch = useDispatch();
-  const { hasViewPermission, hasFeature, user } = useAuth();
+  const { hasViewPermission, hasFeature, hasViewOtherPermission, user } = useAuth();
   const { urgentCount } = useSelector((state) => state.workOrders);
   const { pendingCount } = useSelector((state) => state.requests);
 
   useEffect(() => {
     if (user.id) {
       dispatch(getUrgentWorkOrdersCount());
-      dispatch(getPendingRequestsCount());
+     if(hasViewOtherPermission(PermissionEntity.REQUESTS)) dispatch(getPendingRequestsCount());
     }
   }, [user.id]);
   return (
