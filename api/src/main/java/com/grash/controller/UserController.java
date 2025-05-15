@@ -85,13 +85,13 @@ public class UserController {
             @ApiResponse(code = 404, message = "AssetCategory not found")})
     public Collection<UserMiniDTO> getMini(@ApiIgnore @CurrentUser OwnUser user,
                                            @RequestParam(required = false) Boolean withRequesters) {
-        return withRequesters ?
+        return Boolean.TRUE.equals(withRequesters) ?
                 userService.findByCompany(user.getCompany().getId()).stream()
                         .filter(OwnUser::isEnabled).map(userMapper::toMiniDto).collect(Collectors.toList()) :
                 userService.findWorkersByCompany(user.getCompany().getId()).stream()
-                .filter(OwnUser::isEnabledInSubscription)
-                .filter(OwnUser::isEnabled)
-                .map(userMapper::toMiniDto).collect(Collectors.toList());
+                        .filter(OwnUser::isEnabledInSubscription)
+                        .filter(OwnUser::isEnabled)
+                        .map(userMapper::toMiniDto).collect(Collectors.toList());
     }
 
     @GetMapping("/mini/disabled")
