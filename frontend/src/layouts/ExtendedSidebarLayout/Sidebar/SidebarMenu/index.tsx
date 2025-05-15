@@ -235,14 +235,14 @@ function SidebarMenu() {
   const location = useLocation();
   const { t }: { t: any } = useTranslation();
   const dispatch = useDispatch();
-  const { hasViewPermission, hasFeature, hasViewOtherPermission, user } = useAuth();
+  const { hasViewPermission, hasFeature, user } = useAuth();
   const { urgentCount } = useSelector((state) => state.workOrders);
   const { pendingCount } = useSelector((state) => state.requests);
 
   useEffect(() => {
     if (user.id) {
       dispatch(getUrgentWorkOrdersCount());
-     if(hasViewOtherPermission(PermissionEntity.REQUESTS)) dispatch(getPendingRequestsCount());
+      if (user.role.code !== 'REQUESTER') dispatch(getPendingRequestsCount());
     }
   }, [user.id]);
   return (
