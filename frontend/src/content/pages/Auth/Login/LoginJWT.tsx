@@ -97,8 +97,8 @@ const LoginJWT: FC = () => {
             value={values.password}
             variant="outlined"
             InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
+              endAdornment: (
+                <InputAdornment position="end">
                   <IconButton onClick={() => setShowPassword(!showPassword)}>
                     <VisibilityIcon />
                   </IconButton>
