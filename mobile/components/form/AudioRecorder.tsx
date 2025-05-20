@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, View, Text, TouchableOpacity } from 'react-native';
+import { Button, View, Text, TouchableOpacity, Alert } from 'react-native';
 import { Audio } from 'expo-av';
-import * as Permissions from 'expo-permissions';
 import { IFile } from '../../models/file';
 import { IconButton, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 
-export default function AudioRecordingExample({
+export default function AudioRecorder({
   title,
   onChange
 }: {
@@ -22,11 +21,17 @@ export default function AudioRecordingExample({
   const { t } = useTranslation();
   const startRecording = async () => {
     try {
-      const response = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-      if (response.status !== 'granted') {
-        alert('Permission to access microphone is required!');
+      const permissionResponse = await Audio.requestPermissionsAsync();
+
+      if (permissionResponse.status !== 'granted') {
+        Alert.alert(
+          'Permission Required',
+          'Permission to access microphone is required!'
+        );
+        return;
       }
-      await Audio.requestPermissionsAsync();
+
+      // Set audio mode
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true

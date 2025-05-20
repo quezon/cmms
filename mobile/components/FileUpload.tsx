@@ -1,29 +1,25 @@
 import { View } from './Themed';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
-import { DocumentResult } from 'expo-document-picker';
 import * as React from 'react';
-import * as FileSystem from 'expo-file-system';
 import { useContext, useRef, useState } from 'react';
-import * as Permissions from 'expo-permissions';
+import * as FileSystem from 'expo-file-system';
 import {
   Alert,
   Image,
+  Linking,
   PermissionsAndroid,
+  Platform,
   ScrollView,
   Text,
   TouchableOpacity
 } from 'react-native';
-import { Divider, IconButton, List, useTheme } from 'react-native-paper';
+import { IconButton, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import mime from 'mime';
-import { IconSource } from 'react-native-paper/src/components/Icon';
-import ActionSheet, {
-  ActionSheetRef,
-  SheetManager
-} from 'react-native-actions-sheet';
+import { ActionSheetRef, SheetManager } from 'react-native-actions-sheet';
 import { CustomSnackBarContext } from '../contexts/CustomSnackBarContext';
-import { files, IFile } from '../models/file';
+import { IFile } from '../models/file';
 
 interface OwnProps {
   title: string;
@@ -46,38 +42,59 @@ export default function FileUpload({
   const { t } = useTranslation();
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const maxFileSize: number = 7;
-  const checkPermissions = async () => {
+  const checkStoragePermission = async () => {
+    // For Android 13+ (API level 33+), we need to use the newer permissions
+    const permissionName =
+      Platform.Version >= 33
+        ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
+        : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+
     try {
-      const result = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
-      );
+      // Check if permission is already granted
+      const hasPermission = await PermissionsAndroid.check(permissionName);
 
-      if (!result) {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          {
-            title:
-              'You need to give storage permission to download and save the file',
-            message: 'App needs access to your camera ',
-            buttonNeutral: 'Ask Me Later',
-            buttonNegative: 'Cancel',
-            buttonPositive: 'OK'
-          }
-        );
-        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          console.log('You can use the camera');
-          return true;
-        } else {
-          Alert.alert(t('error'), t('PERMISSION_ACCESS_FILE'));
-
-          console.log('Camera permission denied');
-          return false;
-        }
-      } else {
+      if (hasPermission) {
         return true;
       }
+
+      // Request permission
+      const granted = await PermissionsAndroid.request(permissionName, {
+        title: 'Storage Permission Required',
+        message:
+          'This app needs access to your storage to download and save files',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK'
+      });
+
+      if (granted === 'granted') {
+        console.log('Storage permission granted');
+        return true;
+      } else if (granted === 'never_ask_again') {
+        // Handle "Never ask again" state by directing user to app settings
+        Alert.alert(
+          'Permission Required',
+          'Storage access is required to download files. Please enable it in app settings.',
+          [
+            { text: 'Cancel', style: 'cancel' },
+            {
+              text: 'Open Settings',
+              onPress: () => Linking.openSettings()
+            }
+          ]
+        );
+        return false;
+      } else {
+        // Permission denied
+        Alert.alert(
+          'Permission Denied',
+          'Storage access is required to download files.',
+          [{ text: 'OK' }]
+        );
+        return false;
+      }
     } catch (err) {
-      console.warn(err);
+      console.warn('Permission check error:', err);
       return false;
     }
   };
@@ -97,33 +114,115 @@ export default function FileUpload({
     return fileSize / 1024 / 1024 > limit;
   };
   const takePhoto = async () => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
-    if (status === 'granted') {
-      try {
-        const result = await ImagePicker.launchCameraAsync({
-          allowsEditing: true,
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsMultipleSelection: multiple,
-          selectionLimit: 10,
-          quality: 1
-        });
-        await onImagePicked(result);
-      } catch (e) {
-        console.error(e);
+    try {
+      // Request camera permissions using modern API directly from ImagePicker
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+
+      if (status === 'granted') {
+        try {
+          const result = await ImagePicker.launchCameraAsync({
+            allowsEditing: true,
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsMultipleSelection: multiple,
+            selectionLimit: 10,
+            quality: 1
+          });
+
+          // Handle both new and old API response formats
+          // New versions use 'canceled', old versions use 'cancelled'
+          if (result.canceled === true) {
+            console.log('Camera was canceled');
+            return;
+          }
+
+          await onImagePicked(result);
+        } catch (e) {
+          console.error('Error taking photo:', e);
+          Alert.alert('Error', 'Failed to take photo. Please try again.');
+        }
+      } else {
+        // Check if we can ask again
+        const { canAskAgain } = await ImagePicker.getCameraPermissionsAsync();
+
+        if (!canAskAgain) {
+          // User selected "Don't ask again" or "Deny" on Android
+          Alert.alert(
+            'Permission Required',
+            'Camera access is needed to take photos. Please enable it in app settings.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: 'Open Settings',
+                onPress: () => Linking.openSettings()
+              }
+            ]
+          );
+        } else {
+          // First-time denial
+          Alert.alert(
+            'Permission Denied',
+            'Camera access is needed to take photos.',
+            [{ text: 'OK' }]
+          );
+        }
       }
+    } catch (error) {
+      console.error('Error requesting camera permission:', error);
     }
   };
   const pickImage = async () => {
-    // No permissions request is necessary for launching the image library
-    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
-    if (status === 'granted') {
-      let result = await ImagePicker.launchImageLibraryAsync({
+    try {
+      const permissionResult =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (permissionResult.granted === false) {
+        // Permission denied
+        if (permissionResult.canAskAgain === false) {
+          // User selected "Don't ask again" or "Deny" on Android
+          Alert.alert(
+            'Permission Required',
+            'Media library access is needed to select images. Please enable it in app settings.',
+            [
+              { text: 'Cancel', style: 'cancel' },
+              {
+                text: 'Open Settings',
+                onPress: () => Linking.openSettings()
+              }
+            ]
+          );
+        } else {
+          // First-time denial
+          Alert.alert(
+            'Permission Denied',
+            'Media library access is needed to select images.',
+            [{ text: 'OK' }]
+          );
+        }
+        return;
+      }
+
+      // Launch image picker
+      const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsMultipleSelection: multiple,
-        selectionLimit: 10,
+        selectionLimit: multiple ? 10 : 1,
         quality: 1
       });
+
+      // ImagePicker.launchImageLibraryAsync now returns { canceled: boolean } in newer versions
+      // and { cancelled: boolean } in older versions, so handle both cases
+      if (result.canceled === true) {
+        console.log('Image picker was canceled');
+        return;
+      }
+
+      // Process selected images
       await onImagePicked(result);
+
+      return result;
+    } catch (error) {
+      console.error('Error picking image:', error);
+      Alert.alert('Error', 'Failed to pick image. Please try again.');
     }
   };
   const checkSize = async (uri: string) => {
@@ -159,7 +258,7 @@ export default function FileUpload({
     }
   };
   const pickFile = async () => {
-    const hasPermissions = await checkPermissions();
+    const hasPermissions = await checkStoragePermission();
     if (hasPermissions) {
       let result = await DocumentPicker.getDocumentAsync({});
       if (result.type !== 'cancel') {

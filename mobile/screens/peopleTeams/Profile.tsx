@@ -23,9 +23,7 @@ import UserSettings from '../../models/userSettings';
 import { getUserInitials } from '../../utils/displayers';
 import * as Yup from 'yup';
 import { CustomSnackBarContext } from '../../contexts/CustomSnackBarContext';
-import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-import mime from 'mime';
 import { CompanySettingsContext } from '../../contexts/CompanySettingsContext';
 import { OwnUser } from '../../models/user';
 import { formatImages } from '../../utils/overall';
@@ -117,8 +115,8 @@ export default function UserProfile({
     fetchUserSettings();
   }, []);
   const onPictureChange = async () => {
-    // No permissions request is necessary for launching the image library
-    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,

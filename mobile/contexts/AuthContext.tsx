@@ -34,7 +34,6 @@ import { IField } from '../models/form';
 import WorkOrder from '../models/workOrder';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
-import * as Permissions from 'expo-permissions';
 import { useTranslation } from 'react-i18next';
 import analytics from '@react-native-firebase/analytics';
 import { useDispatch } from '../store';
@@ -612,33 +611,39 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   }
 
   const checkPushNotificationState = async () => {
-    let { status: existingStatus } = await Permissions.getAsync(
-      Permissions.NOTIFICATIONS
-    );
+    // Get the current permission status using expo-notifications
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
 
     if (existingStatus !== 'granted') {
-      const status = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      existingStatus = status.status;
-    }
-    if (existingStatus === 'granted') {
-      registerForPushNotificationsAsync().then((token) => savePushToken(token));
-    } else {
-      Alert.alert(
-        t('no_notification_permission'),
-        t('no_notification_permission_description'),
-        [
-          { text: t('cancel'), onPress: () => console.log('cancel') },
-          {
-            text: t('allow'),
-            onPress: () => {
-              Linking.openSettings();
-              setOpenedSettings(true);
+      const { status } = await Notifications.requestPermissionsAsync();
+
+      if (status === 'granted') {
+        registerForPushNotificationsAsync().then((token) =>
+          savePushToken(token)
+        );
+      } else {
+        // Permission denied
+        Alert.alert(
+          t('no_notification_permission'),
+          t('no_notification_permission_description'),
+          [
+            { text: t('cancel'), onPress: () => console.log('cancel') },
+            {
+              text: t('allow'),
+              onPress: () => {
+                Linking.openSettings();
+                setOpenedSettings(true);
+              }
             }
-          }
-        ],
-        { cancelable: false }
-      );
-      return;
+          ],
+          { cancelable: false }
+        );
+        return;
+      }
+    } else {
+      // Permission was already granted
+      registerForPushNotificationsAsync().then((token) => savePushToken(token));
     }
   };
   const savePushToken = (token: string) => {

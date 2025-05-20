@@ -8,16 +8,15 @@ import { ScrollView, StyleSheet } from 'react-native';
 import SingleTask from '../../components/SingleTask';
 import { RootStackScreenProps } from '../../types';
 import { addFiles } from '../../slices/file';
-import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import { formatImages } from '../../utils/overall';
 import ImageView from 'react-native-image-viewing';
 import { SheetManager } from 'react-native-actions-sheet';
 
 export default function TasksScreen({
-                                      navigation,
-                                      route
-                                    }: RootStackScreenProps<'Tasks'>) {
+  navigation,
+  route
+}: RootStackScreenProps<'Tasks'>) {
   const { t }: { t: any } = useTranslation();
   const { tasksProps, workOrderId } = route.params;
   const [isImageViewerOpen, setIsImageViewerOpen] = useState<boolean>(false);
@@ -89,7 +88,7 @@ export default function TasksScreen({
   };
 
   const uploadImage = async (taskId: number) => {
-    const { status } = await Permissions.askAsync(Permissions.MEDIA_LIBRARY);
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status === 'granted') {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -100,7 +99,7 @@ export default function TasksScreen({
     }
   };
   const takePhoto = async (taskId: number) => {
-    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status === 'granted') {
       try {
         const result = await ImagePicker.launchCameraAsync({
@@ -116,7 +115,10 @@ export default function TasksScreen({
       }
     }
   };
-  const onImagePicked = async (result: ImagePicker.ImagePickerResult, taskId: number) => {
+  const onImagePicked = async (
+    result: ImagePicker.ImagePickerResult,
+    taskId: number
+  ) => {
     if (!result.canceled) {
       return dispatch(addFiles(formatImages(result), 'IMAGE', taskId))
         .then(onImageUploadSuccess)
