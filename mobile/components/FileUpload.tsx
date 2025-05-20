@@ -6,15 +6,24 @@ import * as React from 'react';
 import * as FileSystem from 'expo-file-system';
 import { useContext, useRef, useState } from 'react';
 import * as Permissions from 'expo-permissions';
-import { Alert, Image, PermissionsAndroid, ScrollView, Text, TouchableOpacity } from 'react-native';
+import {
+  Alert,
+  Image,
+  PermissionsAndroid,
+  ScrollView,
+  Text,
+  TouchableOpacity
+} from 'react-native';
 import { Divider, IconButton, List, useTheme } from 'react-native-paper';
 import { useTranslation } from 'react-i18next';
 import mime from 'mime';
 import { IconSource } from 'react-native-paper/src/components/Icon';
-import ActionSheet, { ActionSheetRef, SheetManager } from 'react-native-actions-sheet';
+import ActionSheet, {
+  ActionSheetRef,
+  SheetManager
+} from 'react-native-actions-sheet';
 import { CustomSnackBarContext } from '../contexts/CustomSnackBarContext';
 import { files, IFile } from '../models/file';
-
 
 interface OwnProps {
   title: string;
@@ -25,11 +34,11 @@ interface OwnProps {
 }
 
 export default function FileUpload({
-                                     title,
-                                     type,
-                                     multiple,
-                                     onChange
-                                   }: OwnProps) {
+  title,
+  type,
+  multiple,
+  onChange
+}: OwnProps) {
   const theme = useTheme();
   const actionSheetRef = useRef<ActionSheetRef>(null);
   const [images, setImages] = useState<IFile[]>([]);
@@ -119,9 +128,9 @@ export default function FileUpload({
   };
   const checkSize = async (uri: string) => {
     const fileInfo = await getFileInfo(uri);
-
+    if (!('size' in fileInfo)) return;
     if (!fileInfo?.size) {
-      Alert.alert('Can\'t select this file as the size is unknown.');
+      Alert.alert("Can't select this file as the size is unknown.");
       throw new Error();
     }
     if (isMoreThanTheMB(fileInfo.size, maxFileSize)) {
@@ -135,15 +144,18 @@ export default function FileUpload({
         const { uri } = asset;
         await checkSize(uri);
       }
-      onChangeInternal(result.assets.map((asset) => {
-        const fileName =
-          asset.uri.split('/')[asset.uri.split('/').length - 1];
-        return {
-          uri: asset.uri,
-          name: fileName,
-          type: mime.getType(fileName)
-        };
-      }), 'image');
+      onChangeInternal(
+        result.assets.map((asset) => {
+          const fileName =
+            asset.uri.split('/')[asset.uri.split('/').length - 1];
+          return {
+            uri: asset.uri,
+            name: fileName,
+            type: mime.getType(fileName)
+          };
+        }),
+        'image'
+      );
     }
   };
   const pickFile = async () => {
@@ -152,13 +164,16 @@ export default function FileUpload({
       let result = await DocumentPicker.getDocumentAsync({});
       if (result.type !== 'cancel') {
         await checkSize(result.uri);
-        onChangeInternal([
-          {
-            uri: result.uri,
-            name: result.name,
-            type: mime.getType(result.name)
-          }
-        ], 'file');
+        onChangeInternal(
+          [
+            {
+              uri: result.uri,
+              name: result.name,
+              type: mime.getType(result.name)
+            }
+          ],
+          'file'
+        );
       }
     }
   };
@@ -186,7 +201,10 @@ export default function FileUpload({
               <IconButton
                 style={{ position: 'absolute', top: 10, right: 10 }}
                 onPress={() => {
-                  onChangeInternal(images.filter((item) => item.uri !== image.uri), 'image');
+                  onChangeInternal(
+                    images.filter((item) => item.uri !== image.uri),
+                    'image'
+                  );
                 }}
                 icon={'close-circle'}
                 iconColor={theme.colors.error}
@@ -194,12 +212,14 @@ export default function FileUpload({
             </View>
           ))}
         {type === 'file' && !!files.length && (
-          <View style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between'
-          }}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}
+          >
             <Text style={{ color: theme.colors.primary }}>{files[0].name}</Text>
             <IconButton
               onPress={() => {
@@ -207,7 +227,8 @@ export default function FileUpload({
               }}
               icon={'close-circle'}
               iconColor={theme.colors.error}
-            /></View>
+            />
+          </View>
         )}
       </ScrollView>
     </View>
