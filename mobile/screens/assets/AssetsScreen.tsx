@@ -21,6 +21,7 @@ import Tag from '../../components/Tag';
 import { useDebouncedEffect } from '../../hooks/useDebouncedEffect';
 import { IconWithLabel } from '../../components/IconWithLabel';
 import { Asset } from 'expo-asset';
+import { useAppTheme } from '../../custom-theme';
 
 const AssetCard = ({
   asset,
@@ -34,7 +35,7 @@ const AssetCard = ({
   onViewChildren?: () => void;
 }) => {
   const { t } = useTranslation();
-  const theme = useTheme();
+  const theme = useAppTheme();
 
   return (
     <Card

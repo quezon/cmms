@@ -249,6 +249,3 @@ export const CompanySettingsProvider: FC<{ children: ReactNode }> = (props) => {
     </CompanySettingsContext.Provider>
   );
 };
-CompanySettingsProvider.propTypes = {
-  children: PropTypes.node.isRequired
-};

@@ -322,22 +322,25 @@ export default function WODetailsScreen({
     dispatch(getPDFReport(id))
       .then(async (uri: string) => {
         if (Platform.OS === 'ios') {
-          actualDownload(uri);
+          await actualDownload(uri);
         } else {
-          try {
-            const granted = await PermissionsAndroid.request(
-              PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
-            );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-              actualDownload(uri);
-            } else {
-              Alert.alert(
-                t('error'),
-                t('storage_permission_needed_description')
+          if (Platform.Version >= 29) await actualDownload(uri);
+          else {
+            try {
+              const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
               );
+              if (granted === 'granted') {
+                await actualDownload(uri);
+              } else {
+                Alert.alert(
+                  t('error'),
+                  t('storage_permission_needed_description')
+                );
+              }
+            } catch (err) {
+              console.error(err);
             }
-          } catch (err) {
-            console.error(err);
           }
         }
       })
