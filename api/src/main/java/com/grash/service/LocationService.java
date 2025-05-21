@@ -43,8 +43,7 @@ public class LocationService {
 
     @Transactional
     public Location create(Location location, Company company) {
-        Long nextSequence = customSequenceService.getNextLocationSequence(company);
-        location.setCustomId("L" + String.format("%06d", nextSequence));
+        location.setCustomId(getLocationNumber(company));
 
         Location savedLocation = locationRepository.saveAndFlush(location);
         em.refresh(savedLocation);
@@ -103,6 +102,11 @@ public class LocationService {
         return locationRepository.findByParentLocation_Id(id, sort);
     }
 
+    private String getLocationNumber(Company company) {
+        Long nextSequence = customSequenceService.getNextLocationSequence(company);
+        return "L" + String.format("%06d", nextSequence);
+    }
+
     public void save(Location location) {
         locationRepository.save(location);
     }
@@ -142,6 +146,7 @@ public class LocationService {
             optionalTeam.ifPresent(teams::add);
         });
         location.setTeams(teams);
+        location.setCustomId(getLocationNumber(company));
         List<Customer> customers = new ArrayList<>();
         dto.getCustomersNames().forEach(name -> {
             Optional<Customer> optionalCustomer = customerService.findByNameIgnoreCaseAndCompany(name, companyId);

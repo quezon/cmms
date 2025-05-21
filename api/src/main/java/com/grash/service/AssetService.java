@@ -65,12 +65,16 @@ public class AssetService {
     public Asset create(Asset asset, OwnUser user) {
         // Generate custom ID
         Company company = user.getCompany();
-        Long nextSequence = customSequenceService.getNextAssetSequence(company);
-        asset.setCustomId("A" + String.format("%06d", nextSequence));
+        asset.setCustomId(getAssetNumber(company));
 
         Asset savedAsset = assetRepository.saveAndFlush(asset);
         em.refresh(savedAsset);
         return savedAsset;
+    }
+
+    private String getAssetNumber(Company company) {
+        Long nextSequence = customSequenceService.getNextAssetSequence(company);
+        return "A" + String.format("%06d", nextSequence);
     }
 
     @Transactional
@@ -246,6 +250,7 @@ public class AssetService {
         asset.setDescription(dto.getDescription());
         asset.setModel(dto.getModel());
         asset.setPower(dto.getPower());
+        asset.setCustomId(getAssetNumber(company));
         asset.setManufacturer(dto.getManufacturer());
         Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(),
                 companyId).stream().findFirst();

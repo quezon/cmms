@@ -78,9 +78,7 @@ public class WorkOrderService {
                 assetService.save(asset);
             }
         }
-
-        Long nextSequence = customSequenceService.getNextWorkOrderSequence(company);
-        workOrder.setCustomId("WO" + String.format("%06d", nextSequence));
+        workOrder.setCustomId(getWorkOrderNumber(company));
 
         WorkOrder savedWorkOrder = workOrderRepository.saveAndFlush(workOrder);
         em.refresh(savedWorkOrder);
@@ -90,6 +88,11 @@ public class WorkOrderService {
         workflows.forEach(workflow -> workflowService.runWorkOrder(workflow, savedWorkOrder));
 
         return savedWorkOrder;
+    }
+
+    private String getWorkOrderNumber(Company company) {
+        Long nextSequence = customSequenceService.getNextWorkOrderSequence(company);
+        return "WO" + String.format("%06d", nextSequence);
     }
 
     @Autowired
@@ -327,6 +330,7 @@ public class WorkOrderService {
         workOrder.setEstimatedDuration(dto.getEstimatedDuration());
         workOrder.setDescription(dto.getDescription());
         workOrder.setTitle(dto.getTitle());
+        workOrder.setCustomId(getWorkOrderNumber(company));
         workOrder.setRequiredSignature(Helper.getBooleanFromString(dto.getRequiredSignature()));
         Optional<WorkOrderCategory> optionalWorkOrderCategory =
                 workOrderCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getCategory(), companySettingsId);
