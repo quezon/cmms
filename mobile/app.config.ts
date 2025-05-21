@@ -7,7 +7,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
   name: 'Atlas CMMS',
   slug: 'atlas-cmms',
-  version: '1.0.27',
+  version: '1.0.28',
   orientation: 'portrait',
   icon: './assets/images/icon.png',
   scheme: 'atlascmms',
