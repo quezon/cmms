@@ -6,7 +6,7 @@ RUN mvn clean package -DskipTests
 
 
 # Runtime Stage
-FROM openjdk:8-jdk-slim
+FROM openjdk:8-jdk-alpine
 
 # Set the working directory in the container
 WORKDIR /app
