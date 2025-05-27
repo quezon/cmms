@@ -13,6 +13,7 @@ import com.grash.model.OwnUser;
 import com.grash.model.Part;
 import com.grash.model.enums.AssetStatus;
 import com.grash.model.enums.PermissionEntity;
+import com.grash.model.enums.RoleCode;
 import com.grash.model.enums.RoleType;
 import com.grash.security.CurrentUser;
 import com.grash.service.AssetService;
@@ -166,7 +167,7 @@ public class AssetController {
         Optional<Asset> optionalAsset = assetService.findById(id);
         if (optionalAsset.isPresent()) {
             Asset savedAsset = optionalAsset.get();
-            if (user.getRole().getViewPermissions().contains(PermissionEntity.ASSETS)) {
+            if (user.getRole().getViewPermissions().contains(PermissionEntity.ASSETS) || user.getRole().getCode().equals(RoleCode.REQUESTER)) {//TODO use assets mini for requesters in front
                 return assetService.findAssetChildren(id, pageable.getSort()).stream().map(asset -> assetMapper.toShowDto(asset,
                         assetService)).collect(Collectors.toList());
             } else throw new CustomException("Access denied", HttpStatus.FORBIDDEN);
