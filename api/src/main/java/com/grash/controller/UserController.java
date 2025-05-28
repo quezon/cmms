@@ -61,7 +61,8 @@ public class UserController {
             @ApiResponse(code = 404, message = "TeamCategory not found")})
     public SuccessResponse invite(@RequestBody UserInvitationDTO invitation, @ApiIgnore @CurrentUser OwnUser user) {
         if (user.getRole().getCreatePermissions().contains(PermissionEntity.PEOPLE_AND_TEAMS)) {
-            int companyUsersCount = userService.findByCompany(user.getCompany().getId()).size();
+            int companyUsersCount =
+                    (int) userService.findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.isEnabled() && user1.isEnabledInSubscriptionAndPaid()).count();
             Optional<Role> optionalRole = roleService.findById(invitation.getRole().getId());
             if (optionalRole.isPresent() && user.getCompany().getCompanySettings().getId().equals(optionalRole.get().getCompanySettings().getId())) {
                 if (companyUsersCount + invitation.getEmails().size() <= user.getCompany().getSubscription().getUsersCount() || !optionalRole.get().isPaid()) {
