@@ -213,10 +213,12 @@ public class UserService {
 
     public void enableUser(String email) {
         OwnUser user = userRepository.findByEmailIgnoreCase(email).get();
-        int companyUsersCount =
-                (int) findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.isEnabled() && user1.isEnabledInSubscriptionAndPaid()).count();
-        if (user.getRole().isPaid() && companyUsersCount + 1 > user.getCompany().getSubscription().getUsersCount())
-            throw new CustomException("You can't add more users to this company", HttpStatus.NOT_ACCEPTABLE);
+        if (user.getRole().isPaid()) {
+            int companyUsersCount =
+                    (int) findByCompany(user.getCompany().getId()).stream().filter(user1 -> user1.isEnabled() && user1.isEnabledInSubscriptionAndPaid()).count();
+            if (companyUsersCount + 1 > user.getCompany().getSubscription().getUsersCount())
+                throw new CustomException("You can't add more users to this company", HttpStatus.NOT_ACCEPTABLE);
+        }
         user.setEnabled(true);
         userRepository.save(user);
     }
