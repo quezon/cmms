@@ -72,6 +72,7 @@ import MoreVertTwoToneIcon from '@mui/icons-material/MoreVertTwoTone';
 import { PlanFeature } from '../../../models/owns/subscriptionPlan';
 import useGridStatePersist from '../../../hooks/useGridStatePersist';
 import { Pageable, Sort } from '../../../models/owns/page';
+import { googleMapsConfig } from '../../../config';
 
 function Locations() {
   const { t }: { t: any } = useTranslation();
@@ -80,6 +81,8 @@ function Locations() {
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const { getFormattedDate } = useContext(CompanySettingsContext);
   const [openDelete, setOpenDelete] = useState<boolean>(false);
+  const { apiKey } = googleMapsConfig;
+
   const { locationsHierarchy, locations, loadingGet } = useSelector(
     (state) => state.locations
   );
@@ -96,7 +99,7 @@ function Locations() {
   const apiRef = useGridApiRef();
   const tabs = [
     { value: 'list', label: t('list_view') },
-    { value: 'map', label: t('map_view') }
+    ...(apiKey ? [{ value: 'map', label: t('map_view') }] : [])
   ];
   const handleTabsChange = (_event: ChangeEvent<{}>, value: string): void => {
     setCurrentTab(value);
@@ -389,25 +392,24 @@ function Locations() {
       label: t('customers'),
       placeholder: 'Select customers'
     },
-    {
-      name: 'mapSwitch',
-      type: 'checkbox',
-      label: t('put_location_in_map'),
-      relatedFields: [
-        { field: 'mapTitle', value: false, hide: true },
-        { field: 'coordinates', value: false, hide: true }
-      ]
-    },
-    {
-      name: 'mapTitle',
-      type: 'titleGroupField',
-      label: t('map_coordinates')
-    },
-    {
-      name: 'coordinates',
-      type: 'coordinates',
-      label: t('map_coordinates')
-    },
+    ...(apiKey
+      ? ([
+          {
+            name: 'mapSwitch',
+            type: 'checkbox',
+            label: t('put_location_in_map'),
+            relatedFields: [
+              { field: 'mapTitle', value: false, hide: true },
+              { field: 'coordinates', value: false, hide: true }
+            ]
+          },
+          {
+            name: 'mapTitle',
+            type: 'titleGroupField',
+            label: t('map_coordinates')
+          }
+        ] as IField[])
+      : []),
     {
       name: 'image',
       type: 'file',
@@ -691,6 +693,7 @@ function Locations() {
           alignItems="stretch"
           spacing={1}
           paddingX={4}
+          pt={1}
         >
           <Grid
             item
@@ -700,18 +703,20 @@ function Locations() {
             justifyContent="space-between"
             alignItems="center"
           >
-            <Tabs
-              onChange={handleTabsChange}
-              value={currentTab}
-              variant="scrollable"
-              scrollButtons="auto"
-              textColor="primary"
-              indicatorColor="primary"
-            >
-              {tabs.map((tab) => (
-                <Tab key={tab.value} label={tab.label} value={tab.value} />
-              ))}
-            </Tabs>
+            {tabs.length > 1 && (
+              <Tabs
+                onChange={handleTabsChange}
+                value={currentTab}
+                variant="scrollable"
+                scrollButtons="auto"
+                textColor="primary"
+                indicatorColor="primary"
+              >
+                {tabs.map((tab) => (
+                  <Tab key={tab.value} label={tab.label} value={tab.value} />
+                ))}
+              </Tabs>
+            )}
             <Stack direction={'row'} alignItems="center" spacing={1}>
               <IconButton onClick={() => handleReset(true)} color="primary">
                 <ReplayTwoToneIcon />
