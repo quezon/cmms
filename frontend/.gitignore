@@ -26,5 +26,3 @@ yarn-debug.log*
 yarn-error.log*
 
 public/runtime-env.js
-public/static/images/logo/custom-logo.png
-public/static/images/logo/custom-logo-white.png

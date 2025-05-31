@@ -17,6 +17,8 @@ services:
     depends_on:
       - postgres
       - minio
+    volumes:
+      - ./logo:/app/static/images
     environment:
       DB_URL: postgres/atlas
       DB_USER: ${POSTGRES_USER}

@@ -19,7 +19,9 @@ public class LogoSetupComponent implements ApplicationRunner {
     @Value("${white-labeling.logo-paths:}")
     private String customLogoPaths;
 
-    private static final String STATIC_LOGO_PATH = "src/main/resources/static/images/custom-logo.png";
+    // Path inside the container where the app can read static files at runtime
+    private static final String STATIC_LOGO_PATH = "/app/static/images/custom-logo.png";
+    private static final String STATIC_LOGO_WHITE_PATH = "/app/static/images/custom-logo-white.png";
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -32,14 +34,23 @@ public class LogoSetupComponent implements ApplicationRunner {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             JsonNode jsonNode = objectMapper.readTree(customLogoPaths);
-            Path source = Paths.get(jsonNode.get("white").asText());
+
+            // Source path inside container (must be accessible, mounted from host or included in container)
+            Path source = Paths.get(jsonNode.get("dark").asText());
             Path target = Paths.get(STATIC_LOGO_PATH);
 
             Files.createDirectories(target.getParent());
-            // Copy the file
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
 
-            System.out.println("Custom logo copied to static resources");
+            //white
+            Path sourceWhite = Paths.get(jsonNode.get("white").asText());
+            Path targetWhite = Paths.get(STATIC_LOGO_WHITE_PATH);
+
+            Files.createDirectories(targetWhite.getParent());
+            Files.copy(sourceWhite, targetWhite, StandardCopyOption.REPLACE_EXISTING);
+
+
+            System.out.println("Custom logo copied to static resources at " + target.toString());
         } catch (IOException e) {
             e.printStackTrace();
             System.err.println("Failed to copy custom logo: " + e.getMessage());

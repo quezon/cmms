@@ -120,9 +120,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "format": "prettier --write \"./**/*.{ts,tsx,js,jsx,json}\" --config ./.prettierrc",
-    "prepare": "cd .. && husky install frontend/.husky",
-    "prebuild": "node scripts/copy-logo.js",
-    "prestart": "node scripts/copy-logo.js"
+    "prepare": "cd .. && husky install frontend/.husky"
   },
   "browserslist": {
     "production": [
