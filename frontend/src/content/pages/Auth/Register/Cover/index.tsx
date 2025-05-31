@@ -25,7 +25,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import ChevronRightTwoToneIcon from '@mui/icons-material/ChevronRightTwoTone';
 import ChevronLeftTwoToneIcon from '@mui/icons-material/ChevronLeftTwoTone';
-import { useLogo } from '../../../../../hooks/useLogo';
+import { useBrand } from '../../../../../hooks/useBrand';
 
 const Content = styled(Box)(
   () => `
@@ -154,9 +154,9 @@ const SwiperWrapper = styled(Box)(
 function RegisterCover() {
   const { t }: { t: any } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const logoSrc = useLogo();
+  const { logo } = useBrand();
   const icons = {
-    Atlas: logoSrc.dark,
+    Atlas: logo.dark,
     FirebaseAuth: '/static/images/logo/firebase.svg',
     JWT: '/static/images/logo/jwt.svg',
     Amplify: '/static/images/logo/amplify.svg'

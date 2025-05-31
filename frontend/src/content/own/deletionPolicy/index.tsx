@@ -12,6 +12,7 @@ import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
 import Logo from 'src/components/LogoSign';
 import LanguageSwitcher from 'src/layouts/ExtendedSidebarLayout/Header/Buttons/LanguageSwitcher';
+import { useBrand } from '../../../hooks/useBrand';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -24,11 +25,12 @@ const HeaderWrapper = styled(Card)(
 
 function DeletionPolicy() {
   const { t }: { t: any } = useTranslation();
+  const brandConfig = useBrand();
 
   return (
     <Box>
       <Helmet>
-        <title>{t('account_deletion')}</title>
+        <title>{t('account_deletion', { brandName: brandConfig.name })}</title>
       </Helmet>
       <HeaderWrapper>
         <Container maxWidth="lg">
@@ -80,7 +82,9 @@ function DeletionPolicy() {
         </Container>
       </HeaderWrapper>
       <Box sx={{ mx: 10, padding: 2 }}>
-        <Typography variant={'h1'}>{t('account_deletion')}</Typography>
+        <Typography variant={'h1'}>
+          {t('account_deletion', { brandName: brandConfig.name })}
+        </Typography>
       </Box>
       <Card sx={{ mx: 10, padding: 2 }}>
         <Typography>

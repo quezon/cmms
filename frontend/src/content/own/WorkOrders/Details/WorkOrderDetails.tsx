@@ -93,6 +93,7 @@ import FilesList from '../../components/FilesList';
 import { PlanFeature } from '../../../../models/owns/subscriptionPlan';
 import PartQuantitiesList from '../../components/PartQuantitiesList';
 import AddFileModal from './AddFileModal';
+import { useBrand } from '../../../../hooks/useBrand';
 
 const LabelWrapper = styled(Box)(
   ({ theme }) => `
@@ -120,7 +121,7 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
     useContext(CompanySettingsContext);
   const { t }: { t: any } = useTranslation();
   const { user, hasEditPermission, hasDeletePermission } = useAuth();
-
+  const brandConfig = useBrand();
   const [openAddTimeModal, setOpenAddTimeModal] = useState<boolean>(false);
   const [openAddFileModal, setOpenAddFileModal] = useState<boolean>(false);
   const [openAddCostModal, setOpenAddCostModal] = useState<boolean>(false);
@@ -929,7 +930,7 @@ export default function WorkOrderDetails(props: WorkOrderDetailsProps) {
                 </Stack>
               ) : !labors.filter((labor) => !labor.logged).length ? (
                 <Typography sx={{ color: theme.colors.alpha.black[70] }}>
-                  {t('no_labor')}
+                  {t('no_labor', { shortBrandName: brandConfig.shortName })}
                 </Typography>
               ) : (
                 <List>

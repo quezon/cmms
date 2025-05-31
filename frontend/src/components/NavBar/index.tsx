@@ -98,14 +98,16 @@ export default function NavBar() {
               >
                 {t('Pricing')}
               </Button>
-              <Button
-                component={'a'}
-                target={'_blank'}
-                href={'https://github.com/Grashjs/cmms'}
-                startIcon={<GitHub />}
-              >
-                GitHub
-              </Button>
+              {!isWhiteLabeled && (
+                <Button
+                  component={'a'}
+                  target={'_blank'}
+                  href={'https://github.com/Grashjs/cmms'}
+                  startIcon={<GitHub />}
+                >
+                  GitHub
+                </Button>
+              )}
               <LanguageSwitcher />
               <Button
                 component={RouterLink}

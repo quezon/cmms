@@ -36,7 +36,6 @@ public class LicenseController {
     private final LicenseService licenseService;
 
     @GetMapping("/validity")
-    @PreAuthorize("permitAll()")
     public SuccessResponse getValidity(HttpServletRequest req) {
         return new SuccessResponse(licenseService.isLicenseValid(), "");
     }

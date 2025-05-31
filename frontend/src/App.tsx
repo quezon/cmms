@@ -11,14 +11,17 @@ import ThemeProvider from './theme/ThemeProvider';
 import AppInit from './components/AppInit';
 import { CustomSnackBarProvider } from './contexts/CustomSnackBarContext';
 import ReactGA from 'react-ga4';
-import { googleTrackingId, IS_LOCALHOST } from './config';
+import { googleTrackingId, IS_LOCALHOST, isWhiteLabeled } from './config';
 import { useEffect } from 'react';
 import { CompanySettingsProvider } from './contexts/CompanySettingsContext';
+import { getAtlasLicenseValidity } from './slices/license';
+import { useDispatch } from './store';
 
 if (!IS_LOCALHOST && googleTrackingId) ReactGA.initialize(googleTrackingId);
 function App() {
   const content = useRoutes(router);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { isInitialized, company, isAuthenticated, user } = useAuth();
   let location = useLocation();
   useEffect(() => {
@@ -53,7 +56,9 @@ function App() {
         navigate('/app/switch-account');
       }
   }, [user, isInitialized, isAuthenticated, location]);
-
+  useEffect(() => {
+    if (isWhiteLabeled) dispatch(getAtlasLicenseValidity());
+  }, []);
   return (
     <ThemeProvider>
       <LocalizationProvider dateAdapter={AdapterDateFns}>

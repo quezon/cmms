@@ -30,10 +30,12 @@ import { useNavigate } from 'react-router-dom';
 import { CompanySettingsContext } from '../../../../contexts/CompanySettingsContext';
 import { Order } from '../../../../models/owns/fastspring';
 import api from '../../../../utils/api';
+import { useBrand } from '../../../../hooks/useBrand';
 
 function SubscriptionPlans() {
   const { t }: { t: any } = useTranslation();
   const { company, user, patchSubscription } = useAuth();
+  const brandConfig = useBrand();
   const subscription = company.subscription;
   const theme = useTheme();
   const [item, setItem] = useState(null);
@@ -243,7 +245,9 @@ function SubscriptionPlans() {
                 <Box>
                   <Box>
                     <Typography variant="h4" gutterBottom>
-                      {t('number_users_who_will_use_grash')}
+                      {t('number_users_who_will_use_grash', {
+                        shortBrandName: brandConfig.shortName
+                      })}
                     </Typography>
                     <Typography variant="subtitle2">
                       <Trans

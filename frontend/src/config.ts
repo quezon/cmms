@@ -69,4 +69,17 @@ export const customColors: ThemeColors = getRuntimeValue('CUSTOM_COLORS')
   ? JSON.parse(getRuntimeValue('CUSTOM_COLORS'))
   : null;
 
-export const isWhiteLabeled: boolean = !!customLogoPaths;
+export interface BrandRawConfig {
+  name: string;
+  shortName: string;
+  website: string;
+  mail: string;
+  addressStreet: string;
+  phone: string;
+  addressCity: string;
+}
+export const brandRawConfig: BrandRawConfig = getRuntimeValue('BRAND_CONFIG')
+  ? JSON.parse(getRuntimeValue('BRAND_CONFIG'))
+  : null;
+
+export const isWhiteLabeled: boolean = !!(customLogoPaths || brandRawConfig);

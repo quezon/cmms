@@ -15,9 +15,12 @@ import { useTranslation } from 'react-i18next';
 import Logo from 'src/components/LogoSign';
 import LanguageSwitcher from 'src/layouts/ExtendedSidebarLayout/Header/Buttons/LanguageSwitcher';
 import NavBar from '../../components/NavBar';
+import { useBrand } from '../../hooks/useBrand';
+import { isCloudVersion, isWhiteLabeled } from '../../config';
 
 function TermsOfService() {
   const { t }: { t: any } = useTranslation();
+  const brandConfig = useBrand();
 
   return (
     <Box>
@@ -40,16 +43,18 @@ function TermsOfService() {
           <Typography variant="h3" sx={{ mb: 2, fontWeight: 'bold' }}>
             1. Introduction
           </Typography>
-          <Typography paragraph>
-            This Terms of Service Agreement ("Agreement") is a legal agreement
-            between you as an individual or entity ("You" or "Customer") and
-            Intelloop s.a.r.l located at 410, Boulevard Zerktouni, Hamad, N°1-
-            Casablanca-Morocco 20040, Trade Register: 585917, Tax Id: 53800712,
-            ICE: 003298628000019 ("Company", "we", "us" or "our"), a
-            Morocco-based management consultancy specializing in industrial
-            Projects launch, Maintenance and Reliability, governing your use of
-            the Atlas CMMS software and services (the "Software").
-          </Typography>
+          {!isWhiteLabeled && isCloudVersion && (
+            <Typography paragraph>
+              This Terms of Service Agreement ("Agreement") is a legal agreement
+              between you as an individual or entity ("You" or "Customer") and
+              Intelloop s.a.r.l located at 410, Boulevard Zerktouni, Hamad, N°1-
+              Casablanca-Morocco 20040, Trade Register: 585917, Tax Id:
+              53800712, ICE: 003298628000019 ("Company", "we", "us" or "our"), a
+              Morocco-based management consultancy specializing in industrial
+              Projects launch, Maintenance and Reliability, governing your use
+              of the {brandConfig.name} software and services (the "Software").
+            </Typography>
+          )}
           <Typography paragraph sx={{ fontWeight: 'bold' }}>
             BY ACCEPTING THIS AGREEMENT OR BY ACCESSING OR USING THE SOFTWARE,
             YOU AGREE TO BE BOUND BY THE TERMS OF THIS AGREEMENT. IF YOU ARE
@@ -62,11 +67,11 @@ function TermsOfService() {
             2. Service Description
           </Typography>
           <Typography paragraph>
-            Atlas CMMS is a solution developed and provided by Intelloop s.a.r.l
-            as part of its ADDAPTIVE Tech services, which guide companies
-            through digital transformation in maintenance and reliability. The
-            Software is offered as a service that may be deployed through
-            self-hosted, cloud-based, or hybrid models.
+            {brandConfig.name} is a solution developed and provided by Intelloop
+            s.a.r.l as part of its ADDAPTIVE Tech services, which guide
+            companies through digital transformation in maintenance and
+            reliability. The Software is offered as a service that may be
+            deployed through self-hosted, cloud-based, or hybrid models.
           </Typography>
 
           <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>
@@ -150,8 +155,8 @@ function TermsOfService() {
           <List sx={{ pl: 4, listStyleType: 'disc' }}>
             <ListItem sx={{ display: 'list-item' }}>
               <Typography>
-                <strong>Self-Hosted:</strong> Deploy Atlas CMMS on your own
-                servers with complete control over your data and environment
+                <strong>Self-Hosted:</strong> Deploy {brandConfig.name} on your
+                own servers with complete control over your data and environment
               </Typography>
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
@@ -280,13 +285,13 @@ function TermsOfService() {
             7.1 Ownership
           </Typography>
           <Typography paragraph>
-            The Software, Atlas CMMS Logo, and all worldwide intellectual
-            property rights therein are the exclusive property of Company.
-            Intelloop s.a.r.l owns all intellectual property rights to Atlas
-            CMMS, including its codebase, design, and documentation, except for
-            open source components which are governed by their respective
-            licenses. While Atlas CMMS is open source, your use is subject to
-            the terms of this Agreement.
+            The Software, {brandConfig.name} Logo, and all worldwide
+            intellectual property rights therein are the exclusive property of
+            Company. Intelloop s.a.r.l owns all intellectual property rights to
+            {brandConfig.name}, including its codebase, design, and
+            documentation, except for open source components which are governed
+            by their respective licenses. While {brandConfig.name} is open
+            source, your use is subject to the terms of this Agreement.
           </Typography>
 
           <Typography variant="h4" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>
@@ -631,13 +636,18 @@ function TermsOfService() {
           </Typography>
           <Typography paragraph>
             Any disputes arising out of or relating to this Agreement shall be
-            resolved through binding arbitration in Casablanca, Morocco,
-            administered by the Moroccan Arbitration Center under its Commercial
-            Arbitration Rules. The arbitration panel shall consist of one
-            arbitrator selected in accordance with these rules. The arbitration
-            must be commenced within one year after the dispute arises. Nothing
-            in this section prevents either party from seeking injunctive relief
-            in a court of competent jurisdiction.
+            resolved through binding arbitration in ${brandConfig.addressCity},
+            {!isWhiteLabeled && isCloudVersion && (
+              <>
+                administered by the Moroccan Arbitration Center under its
+                Commercial Arbitration Rules. The arbitration panel shall
+                consist of one arbitrator selected in accordance with these
+                rules. The arbitration must be commenced within one year after
+                the dispute arises. Nothing in this section prevents either
+                party from seeking injunctive relief in a court of competent
+                jurisdiction.
+              </>
+            )}
           </Typography>
 
           <Typography variant="h4" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>
@@ -696,30 +706,35 @@ function TermsOfService() {
           <Typography paragraph>
             Any notices required under this Agreement shall be provided to users
             by email or through the Software interface. Users shall send any
-            notices to Company at contact@atlas-cmms.com.
+            notices to Company at {brandConfig.mail}.
           </Typography>
+          {!isWhiteLabeled && isCloudVersion && (
+            <>
+              <Typography
+                variant="h3"
+                sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}
+              >
+                16. Contact Information
+              </Typography>
+              <Typography paragraph>
+                If you have any questions about this Agreement, please contact
+                us at:
+              </Typography>
+              <Typography sx={{ mb: 1 }}>
+                <strong>Intelloop s.a.r.l</strong>
+              </Typography>
+              <Typography>410, Boulevard Zerktouni, Hamad, №1</Typography>
+              <Typography>Casablanca-Morocco 20040</Typography>
+              <Typography>Email: {brandConfig.mail}</Typography>
+              <Typography sx={{ mb: 3 }}>Phone: +212 6 30 69 00 50</Typography>
 
-          <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>
-            16. Contact Information
-          </Typography>
-          <Typography paragraph>
-            If you have any questions about this Agreement, please contact us
-            at:
-          </Typography>
-          <Typography sx={{ mb: 1 }}>
-            <strong>Intelloop s.a.r.l</strong>
-          </Typography>
-          <Typography>410, Boulevard Zerktouni, Hamad, №1</Typography>
-          <Typography>Casablanca-Morocco 20040</Typography>
-          <Typography>
-            Email: med.labiad@intel-loop.com/contact@atlas-cmms.com
-          </Typography>
-          <Typography sx={{ mb: 3 }}>Phone: +212 6 30 69 00 50</Typography>
-
-          <Typography paragraph sx={{ mt: 4, fontStyle: 'italic' }}>
-            By using the Atlas CMMS software, you acknowledge that you have
-            read, understood and agree to be bound by this Agreement.
-          </Typography>
+              <Typography paragraph sx={{ mt: 4, fontStyle: 'italic' }}>
+                By using the {brandConfig.name} software, you acknowledge that
+                you have read, understood and agree to be bound by this
+                Agreement.
+              </Typography>
+            </>
+          )}
         </Card>
       </Container>
     </Box>

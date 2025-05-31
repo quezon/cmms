@@ -64,6 +64,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers-pro';
 import { AdapterDayjs } from '@mui/x-date-pickers-pro/AdapterDayjs';
 import { DateRangePicker } from '@mui/x-date-pickers-pro/DateRangePicker';
 import DeleteTwoToneIcon from '@mui/icons-material/DeleteTwoTone';
+import { useBrand } from '../../../../hooks/useBrand';
 
 interface UICondition {
   type: WorkflowConditionType;
@@ -160,6 +161,7 @@ function Workflows() {
   const { usersMini } = useSelector((state) => state.users);
   const { assetsMini } = useSelector((state) => state.assets);
   const { teamsMini } = useSelector((state) => state.teams);
+  const brandConfig = useBrand();
   const { partsMini } = useSelector((state) => state.parts);
   const fetchVendors = async () => {
     if (!vendorsMini.length) dispatch(getVendorsMini());
@@ -888,7 +890,11 @@ function Workflows() {
     >
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography variant="h6">{t('workflow_description')}</Typography>
+          <Typography variant="h6">
+            {t('workflow_description', {
+              shortBrandName: brandConfig.shortName
+            })}
+          </Typography>
         </Grid>
         <Grid item xs={12}>
           {view === 'list' && (

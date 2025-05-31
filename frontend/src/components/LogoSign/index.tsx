@@ -11,7 +11,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { customLogoPaths } from '../../config';
 import { useEffect, useState } from 'react';
-import { useLogo } from '../../hooks/useLogo';
+import { useBrand } from '../../hooks/useBrand';
 
 const LogoWrapper = styled(Link)(
   ({ theme }) => `
@@ -58,13 +58,13 @@ function Logo({ white }: OwnProps) {
   const width = 60;
   const height = 60;
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const logoSrc = useLogo();
+  const { logo } = useBrand();
   return (
     <TooltipWrapper title="Atlas" arrow>
       <LogoWrapper to="/overview">
         <LogoSignWrapper>
           <img
-            src={white ? logoSrc.white : logoSrc.dark}
+            src={white ? logo.white : logo.dark}
             width={`${width * (mobile ? 0.7 : 1)}px`}
             height={`${height * (mobile ? 0.7 : 1)}px`}
           />

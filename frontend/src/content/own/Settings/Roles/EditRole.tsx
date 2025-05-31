@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
 import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
 import { useDispatch } from '../../../../store';
+import { useBrand } from '../../../../hooks/useBrand';
 
 interface EditRoleProps {
   role: Role;
@@ -31,6 +32,7 @@ interface EditRoleProps {
 function EditRole({ role, open, onClose, formatValues }: EditRoleProps) {
   const { t }: { t: any } = useTranslation();
   const dispatch = useDispatch();
+  const brandConfig = useBrand();
   const { showSnackBar } = useContext(CustomSnackBarContext);
   const onEditSuccess = () => {
     onClose();
@@ -190,7 +192,9 @@ function EditRole({ role, open, onClose, formatValues }: EditRoleProps) {
                         {t('permissions')}
                       </Typography>
                       <Typography variant="subtitle2">
-                        {t('create_role_description')}
+                        {t('create_role_description', {
+                          brandName: brandConfig.name
+                        })}
                       </Typography>
                     </Box>
 
