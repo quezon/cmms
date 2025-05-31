@@ -48,3 +48,23 @@ export const IS_LOCALHOST =
   apiHostName === 'localhost' || apiHostName === '127.0.0.1';
 
 export const isSSOEnabled = getRuntimeValue('ENABLE_SSO') === 'true';
+
+export const customLogoPaths: { white?: string; dark: string } =
+  getRuntimeValue('LOGO_PATHS')
+    ? JSON.parse(getRuntimeValue('LOGO_PATHS'))
+    : null;
+type ThemeColors = {
+  primary: string;
+  secondary: string;
+  success: string;
+  warning: string;
+  error: string;
+  info: string;
+  black: string;
+  white: string;
+  primaryAlt: string;
+};
+
+export const customColors: ThemeColors = getRuntimeValue('CUSTOM_COLORS')
+  ? JSON.parse(getRuntimeValue('CUSTOM_COLORS'))
+  : null;

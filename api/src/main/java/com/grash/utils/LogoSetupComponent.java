@@ -1,5 +1,7 @@
 package com.grash.utils;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,21 +16,23 @@ import java.nio.file.StandardCopyOption;
 @Component
 public class LogoSetupComponent implements ApplicationRunner {
 
-    @Value("${white-labeling.logo-path:}")
-    private String customLogoPath;
+    @Value("${white-labeling.logo-paths:}")
+    private String customLogoPaths;
 
     private static final String STATIC_LOGO_PATH = "src/main/resources/static/images/custom-logo.png";
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if (customLogoPath != null && !customLogoPath.isEmpty()) {
+        if (customLogoPaths != null && !customLogoPaths.isEmpty()) {
             copyLogoToStaticResources();
         }
     }
 
     private void copyLogoToStaticResources() {
         try {
-            Path source = Paths.get(customLogoPath);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(customLogoPaths);
+            Path source = Paths.get(jsonNode.get("white").asText());
             Path target = Paths.get(STATIC_LOGO_PATH);
 
             // Copy the file

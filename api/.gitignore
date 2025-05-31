@@ -33,6 +33,7 @@ build/
 .vscode/
 src/main/resources/liquibase/*.properties
 src/main/resources/liquibase-outputChangeLog.xml
+src/main/resources/static/images/custom-logo.png
 
 gcp.json
 .codebuddy
