@@ -25,41 +25,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import ChevronRightTwoToneIcon from '@mui/icons-material/ChevronRightTwoTone';
 import ChevronLeftTwoToneIcon from '@mui/icons-material/ChevronLeftTwoTone';
-
-const icons = {
-  Atlas: '/static/images/logo/logo.png',
-  FirebaseAuth: '/static/images/logo/firebase.svg',
-  JWT: '/static/images/logo/jwt.svg',
-  Amplify: '/static/images/logo/amplify.svg'
-};
-
-const sliders = [
-  {
-    title: 'request_system',
-    description: 'work-requests.checks.0',
-    image: icons.Atlas
-  },
-  {
-    title: 'eam.title',
-    description: 'eam.description.short',
-    image: icons.Atlas
-  },
-  {
-    title: 'preventive_maintenance',
-    description: 'pm.descriptions.0',
-    image: icons.Atlas
-  },
-  {
-    title: 'work_orders',
-    description: 'work-orders.description.short',
-    image: icons.Atlas
-  },
-  {
-    title: 'parts_inventory',
-    description: 'part.description.short',
-    image: icons.Atlas
-  }
-];
+import { useLogo } from '../../../../../hooks/useLogo';
 
 const Content = styled(Box)(
   () => `
@@ -188,6 +154,41 @@ const SwiperWrapper = styled(Box)(
 function RegisterCover() {
   const { t }: { t: any } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const logoSrc = useLogo();
+  const icons = {
+    Atlas: logoSrc.dark,
+    FirebaseAuth: '/static/images/logo/firebase.svg',
+    JWT: '/static/images/logo/jwt.svg',
+    Amplify: '/static/images/logo/amplify.svg'
+  };
+
+  const sliders = [
+    {
+      title: 'request_system',
+      description: 'work-requests.checks.0',
+      image: icons.Atlas
+    },
+    {
+      title: 'eam.title',
+      description: 'eam.description.short',
+      image: icons.Atlas
+    },
+    {
+      title: 'preventive_maintenance',
+      description: 'pm.descriptions.0',
+      image: icons.Atlas
+    },
+    {
+      title: 'work_orders',
+      description: 'work-orders.description.short',
+      image: icons.Atlas
+    },
+    {
+      title: 'parts_inventory',
+      description: 'part.description.short',
+      image: icons.Atlas
+    }
+  ];
   return (
     <>
       <Helmet>

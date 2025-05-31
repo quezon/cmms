@@ -10,7 +10,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 @Service
@@ -26,10 +25,26 @@ public class LicenseService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public boolean isLicenseValid() {
+    private boolean lastLicenseValidity = false;
+    private long lastCheckedTime = 0; // in milliseconds
+    private static final long TWELVE_HOUR_MILLIS = 12 * 60 * 60 * 1000;
+
+    public synchronized boolean isLicenseValid() {
+        long now = System.currentTimeMillis();
+
+        // Return cached result if checked within the 12 past hours
+        if ((now - lastCheckedTime) < TWELVE_HOUR_MILLIS) {
+            return lastLicenseValidity;
+        }
+
+        boolean isValid = false;
+
         if (licenseKey == null || licenseKey.isEmpty()) {
+            lastLicenseValidity = false;
+            lastCheckedTime = now;
             return false;
         }
+
         try {
             String apiUrl = "https://api.keygen.sh/v1/accounts/1ca3e517-f3d8-473f-a45c-81069900acb7/licenses/actions" +
                     "/validate-key";
@@ -38,10 +53,8 @@ public class LicenseService {
             headers.setContentType(MediaType.valueOf("application/vnd.api+json"));
             headers.setAccept(Collections.singletonList(MediaType.valueOf("application/vnd.api+json")));
 
-            // Build the JSON body
             ObjectNode scopeNode = objectMapper.createObjectNode();
             if (licenseFingerprintRequired) {
-                // Generate fingerprint
                 String fingerprint = FingerprintGenerator.generateFingerprint();
                 System.out.println("X-Machine-Fingerprint: " + fingerprint);
                 scopeNode.put("fingerprint", fingerprint);
@@ -61,15 +74,16 @@ public class LicenseService {
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 JsonNode json = objectMapper.readTree(response.getBody());
-                return json.path("meta").path("valid").asBoolean(false);
+                isValid = json.path("meta").path("valid").asBoolean(false);
             }
         } catch (Exception e) {
-            return false;
+            isValid = false;
         }
 
-        return false;
+        lastLicenseValidity = isValid;
+        lastCheckedTime = now;
+        return isValid;
     }
-
 
     public boolean isSSOEnabled() {
         return isLicenseValid();

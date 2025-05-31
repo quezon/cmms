@@ -1,5 +1,6 @@
 import { alpha, createTheme, lighten, darken } from '@mui/material';
 import '@mui/lab/themeAugmentation';
+import { customColors } from '../../config';
 
 // import i18n from 'src/i18n/i18n';
 
@@ -12,7 +13,8 @@ const themeColors = {
   info: '#33C2FF',
   black: '#223354',
   white: '#ffffff',
-  primaryAlt: '#000C57'
+  primaryAlt: '#000C57',
+  ...customColors
 };
 
 const colors = {

@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { customLogoPaths } from '../../config';
 import { useEffect, useState } from 'react';
+import { useLogo } from '../../hooks/useLogo';
 
 const LogoWrapper = styled(Link)(
   ({ theme }) => `
@@ -50,61 +51,14 @@ const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
 interface OwnProps {
   white?: boolean;
 }
-const DEFAULT_WHITE_LOGO = '/static/images/logo/logo-white.png';
-const DEFAULT_DARK_LOGO = '/static/images/logo/logo.png';
+
 function Logo({ white }: OwnProps) {
   const { t }: { t: any } = useTranslation();
   const theme = useTheme();
   const width = 60;
   const height = 60;
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [logoSrc, setLogoSrc] = useState<{ white?: string; dark: string }>({
-    white: customLogoPaths ? null : DEFAULT_WHITE_LOGO,
-    dark: customLogoPaths ? null : DEFAULT_DARK_LOGO
-  });
-
-  useEffect(() => {
-    const checkCustomLogo = async () => {
-      if (!customLogoPaths) return;
-      try {
-        let isDarkLogoPresent = false;
-        const customDarkLogoPath = '/static/images/logo/custom-logo.png';
-        const response = await fetch(customDarkLogoPath);
-        if (response.ok) {
-          isDarkLogoPresent = true;
-          setLogoSrc((prevState) => ({
-            ...prevState,
-            dark: customDarkLogoPath
-          }));
-        }
-        if (isDarkLogoPresent) {
-          const customWhiteLogoPath =
-            '/static/images/logo/custom-logo-white.png';
-          const whiteResponse = await fetch(customWhiteLogoPath);
-          if (whiteResponse.ok) {
-            setLogoSrc((prevState) => ({
-              ...prevState,
-              white: customWhiteLogoPath
-            }));
-          } else
-            setLogoSrc((prevState) => ({
-              ...prevState,
-              white: prevState.dark
-            }));
-        } else {
-          setLogoSrc({
-            white: DEFAULT_WHITE_LOGO,
-            dark: DEFAULT_DARK_LOGO
-          });
-        }
-      } catch (error) {
-        console.log('Using default logo');
-      }
-    };
-
-    checkCustomLogo();
-  }, []);
-
+  const logoSrc = useLogo();
   return (
     <TooltipWrapper title="Atlas" arrow>
       <LogoWrapper to="/overview">

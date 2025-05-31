@@ -68,3 +68,5 @@ type ThemeColors = {
 export const customColors: ThemeColors = getRuntimeValue('CUSTOM_COLORS')
   ? JSON.parse(getRuntimeValue('CUSTOM_COLORS'))
   : null;
+
+export const isWhiteLabeled: boolean = !!customLogoPaths;

@@ -32,6 +32,7 @@ import { useZendesk } from 'react-use-zendesk';
 import { UiConfiguration } from 'src/models/owns/uiConfiguration';
 import { googleTrackingId, IS_LOCALHOST } from '../config';
 import ReactGA from 'react-ga4';
+import { getAtlasLicenseValidity } from '../slices/license';
 
 interface AuthState {
   isInitialized: boolean;
@@ -512,6 +513,8 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         const user = await updateUserInfos();
         const company = await api.get<Company>(`companies/${user.companyId}`);
         await setupUser(company.companySettings);
+        //@ts-ignore
+        globalDispatch(getAtlasLicenseValidity());
         dispatch({
           type: 'INITIALIZE',
           payload: {

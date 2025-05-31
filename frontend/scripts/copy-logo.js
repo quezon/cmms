@@ -1,8 +1,11 @@
 const fs = require('fs');
 const path = require('path');
-
-const customLogoPaths = process.env.REACT_APP_LOGO_PATHS
-  ? JSON.parse(process.env.REACT_APP_LOGO_PATHS)
+const getRuntimeValue = (key, defaultValue = '') => {
+  const envValue = process.env[`REACT_APP_${key}`] || process.env[key];
+  return envValue || defaultValue;
+};
+const customLogoPaths = getRuntimeValue('LOGO_PATHS')
+  ? JSON.parse(getRuntimeValue('LOGO_PATHS'))
   : null;
 const basePath = '../public/static/images/logo';
 const publicLogoWhitePath = path.join(
