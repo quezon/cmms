@@ -1,5 +1,7 @@
 package com.grash.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grash.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +45,9 @@ public class EmailService2 {
 
     @Value("${spring.mail.password:#{null}}")
     private String smtpPassword;
+
+    @Value("${white-labeling.custom-colors:#{null}}")
+    private String customColors;
 
     private final SpringTemplateEngine thymeleafTemplateEngine;
 
@@ -101,6 +106,17 @@ public class EmailService2 {
         thymeleafContext.setLocale(locale);
         thymeleafContext.setVariables(templateModel);
         thymeleafContext.setVariable("environment", environment);
+        String backgroundColor = "white";
+        if (customColors != null && !customColors.isEmpty()) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                JsonNode node = mapper.readTree(customColors);
+                backgroundColor = node.get("emailColors").asText();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        thymeleafContext.setVariable("backgroundColor", backgroundColor);
         String htmlBody = thymeleafTemplateEngine.process(template, thymeleafContext);
 
         try {

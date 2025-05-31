@@ -67,8 +67,8 @@ services:
         NODE_ENV: production
         ENABLE_SSO: ${ENABLE_SSO:-false}
         OAUTH2_PROVIDER: ${OAUTH2_PROVIDER:- }
-        LOGO_PATH: ${LOGO_PATH}
-        CUSTOM_COLORS: ${CUSTOM_COLORS}
+        LOGO_PATH: ${LOGO_PATH:- }
+        CUSTOM_COLORS: ${CUSTOM_COLORS:- }
     ports:
       - "3000:3000"
     depends_on:
