@@ -35,11 +35,13 @@ public class LogoSetupComponent implements ApplicationRunner {
             Path source = Paths.get(jsonNode.get("white").asText());
             Path target = Paths.get(STATIC_LOGO_PATH);
 
+            Files.createDirectories(target.getParent());
             // Copy the file
             Files.copy(source, target, StandardCopyOption.REPLACE_EXISTING);
 
             System.out.println("Custom logo copied to static resources");
         } catch (IOException e) {
+            e.printStackTrace();
             System.err.println("Failed to copy custom logo: " + e.getMessage());
         }
     }

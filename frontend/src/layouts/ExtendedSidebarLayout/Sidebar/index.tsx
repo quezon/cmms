@@ -124,15 +124,17 @@ function Sidebar() {
               >
                 <Box>
                   <Logo white />
-                  <Typography
-                    style={{ cursor: 'pointer', color: 'white' }}
-                    fontSize={13}
-                    onClick={() => {
-                      window.open('https://www.intel-loop.com/', '_blank');
-                    }}
-                  >
-                    Powered by Intelloop
-                  </Typography>
+                  {!isWhiteLabeled && (
+                    <Typography
+                      style={{ cursor: 'pointer', color: 'white' }}
+                      fontSize={13}
+                      onClick={() => {
+                        window.open('https://www.intel-loop.com/', '_blank');
+                      }}
+                    >
+                      Powered by Intelloop
+                    </Typography>
+                  )}
                 </Box>
               </Box>
             </Box>

@@ -572,6 +572,8 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     const user = await updateUserInfos();
     const company = await api.get<Company>(`companies/${user.companyId}`);
     await setupUser(company.companySettings);
+    //@ts-ignore
+    globalDispatch(getAtlasLicenseValidity());
     dispatch({
       type: 'LOGIN',
       payload: {

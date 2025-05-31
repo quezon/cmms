@@ -7,16 +7,22 @@ const DEFAULT_DARK_LOGO = '/static/images/logo/logo.png';
 export function useLogo(): { white: string; dark: string } {
   const { isLicenseValid } = useSelector((state) => state.license);
   const [logoSrc, setLogoSrc] = useState<{ white: string; dark: string }>({
-    white: isLicenseValid
-      ? customLogoPaths
+    white:
+      isLicenseValid === null && customLogoPaths
         ? null
-        : DEFAULT_WHITE_LOGO
-      : DEFAULT_WHITE_LOGO,
-    dark: isLicenseValid
-      ? customLogoPaths
+        : isLicenseValid
+        ? customLogoPaths
+          ? null
+          : DEFAULT_WHITE_LOGO
+        : DEFAULT_WHITE_LOGO,
+    dark:
+      isLicenseValid === null && customLogoPaths
         ? null
+        : isLicenseValid
+        ? customLogoPaths
+          ? null
+          : DEFAULT_DARK_LOGO
         : DEFAULT_DARK_LOGO
-      : DEFAULT_DARK_LOGO
   });
 
   useEffect(() => {
@@ -59,7 +65,7 @@ export function useLogo(): { white: string; dark: string } {
     };
 
     checkCustomLogo();
-  }, []);
+  }, [isLicenseValid]);
 
   return logoSrc;
 }

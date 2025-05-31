@@ -6,11 +6,11 @@ import { revertAll } from 'src/utils/redux';
 
 const basePath = 'license';
 interface LicenseState {
-  isLicenseValid: boolean;
+  isLicenseValid: boolean | null;
 }
 
 const initialState: LicenseState = {
-  isLicenseValid: false
+  isLicenseValid: null
 };
 
 const slice = createSlice({
