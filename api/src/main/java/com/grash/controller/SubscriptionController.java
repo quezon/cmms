@@ -6,6 +6,7 @@ import com.grash.model.OwnUser;
 import com.grash.model.Subscription;
 import com.grash.model.SubscriptionChangeRequest;
 import com.grash.repository.SubscriptionChangeRequestRepository;
+import com.grash.service.BrandingService;
 import com.grash.service.EmailService2;
 import com.grash.service.SubscriptionService;
 import com.grash.service.UserService;
@@ -33,6 +34,7 @@ public class SubscriptionController {
     private final UserService userService;
     private final EmailService2 emailService2;
     private final SubscriptionChangeRequestRepository subscriptionChangeRequestRepository;
+    private final BrandingService brandingService;
     @Value("${mail.recipients:#{null}}")
     private String[] recipients;
 
@@ -103,7 +105,8 @@ public class SubscriptionController {
         if (user.isOwnsCompany()) {
             subscriptionChangeRequestRepository.save(subscriptionChangeRequest);
             try {
-                emailService2.sendHtmlMessage(recipients, "New Atlas subscription change request",
+                emailService2.sendHtmlMessage(recipients, "New " + brandingService.getBrandConfig().getShortName() +
+                                " subscription change request",
                         user.getFirstName() + " " + user.getLastName() + " just requested a subscription change for " +
                                 "company " + user.getCompany().getName() + "\nUsers count: " + subscriptionChangeRequest.getUsersCount() + "\nCode: " + subscriptionChangeRequest.getCode() + "\nPeriod: " + (subscriptionChangeRequest.getMonthly() ? "Monthly" : "Annually") + "\nEmail: " + user.getEmail() + "\nPhone: " + user.getPhone());
             } catch (MessagingException exception) {

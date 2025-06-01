@@ -154,13 +154,14 @@ public class FileController {
         } else throw new CustomException("File not found", HttpStatus.NOT_FOUND);
     }
 
-    @GetMapping("/download/tos")
-    public byte[] downloadTOS() {
-        return storageServiceFactory.getStorageService().download("terms and privacy/Atlas CMMS Terms of service.pdf");
-    }
-
-    @GetMapping("/download/privacy-policy")
-    public byte[] downloadPrivacyPolicy() {
-        return storageServiceFactory.getStorageService().download("terms and privacy/Atlas CMMS privacy policy.pdf");
-    }
+//    @GetMapping("/download/tos")
+//    public byte[] downloadTOS() {
+//        return storageServiceFactory.getStorageService().download("terms and privacy/Atlas CMMS Terms of service
+//        .pdf");
+//    }
+//
+//    @GetMapping("/download/privacy-policy")
+//    public byte[] downloadPrivacyPolicy() {
+//        return storageServiceFactory.getStorageService().download("terms and privacy/Atlas CMMS privacy policy.pdf");
+//    }
 }

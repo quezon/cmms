@@ -337,8 +337,10 @@ public class UserService {
 //            throw new CustomException("MAIL_RECIPIENTS env variable not set", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
-            emailService2.sendHtmlMessage(recipients, userSignupRequest.getSubscriptionPlanId() == null ? "New Atlas " +
-                            "registration" : "Atlas plan " + userSignupRequest.getSubscriptionPlanId() + " used",
+            emailService2.sendHtmlMessage(recipients, userSignupRequest.getSubscriptionPlanId() == null ?
+                            "New " + brandingService.getBrandConfig().getShortName() + " " +
+                                    "registration" :
+                            brandingService.getBrandConfig().getShortName() + " plan " + userSignupRequest.getSubscriptionPlanId() + " used",
                     user.getFirstName() + " " + user.getLastName() + " just created an account from company "
                             + user.getCompany().getName() + " with " + userSignupRequest.getEmployeesCount() + " " +
                             "employees.\nEmail: " + user.getEmail()

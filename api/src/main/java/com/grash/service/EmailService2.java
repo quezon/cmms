@@ -124,7 +124,8 @@ public class EmailService2 {
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             try {
-                helper.setFrom(new InternetAddress(mailProperties.getUsername(), "Atlas CMMS"));
+                helper.setFrom(new InternetAddress(mailProperties.getUsername(),
+                        brandingService.getBrandConfig().getName()));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }

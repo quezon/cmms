@@ -48,6 +48,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     @Autowired
     @Lazy
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private BrandingService brandingService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -153,7 +155,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 try {
                     emailService2.sendHtmlMessage(
                             recipients,
-                            "New Atlas SSO registration",
+                            "New " + brandingService.getBrandConfig().getShortName() + " SSO registration",
                             user.getFirstName() + " " + user.getLastName() +
                                     " just created an account via SSO from company " + company.getName() +
                                     ".\nEmail: " + user.getEmail()
