@@ -32,6 +32,7 @@ import { useZendesk } from 'react-use-zendesk';
 import { UiConfiguration } from 'src/models/owns/uiConfiguration';
 import { googleTrackingId, IS_LOCALHOST } from '../config';
 import ReactGA from 'react-ga4';
+import { getLicenseValidity } from '../slices/license';
 
 interface AuthState {
   isInitialized: boolean;
@@ -569,6 +570,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     const user = await updateUserInfos();
     const company = await api.get<Company>(`companies/${user.companyId}`);
     await setupUser(company.companySettings);
+    //@ts-ignore
     dispatch({
       type: 'LOGIN',
       payload: {

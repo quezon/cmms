@@ -15,9 +15,13 @@ import { useTranslation } from 'react-i18next';
 import Logo from 'src/components/LogoSign';
 import LanguageSwitcher from 'src/layouts/ExtendedSidebarLayout/Header/Buttons/LanguageSwitcher';
 import NavBar from '../../components/NavBar';
+import { useBrand } from '../../hooks/useBrand';
+import { isCloudVersion, isWhiteLabeled } from '../../config';
 
 function Overview() {
   const { t }: { t: any } = useTranslation();
+  const brandConfig = useBrand();
+  const IS_ORIGINAL_CLOUD = !isWhiteLabeled && isCloudVersion;
 
   return (
     <Box>
@@ -40,18 +44,23 @@ function Overview() {
             1. Introduction
           </Typography>
           <Typography paragraph>
-            Welcome to Atlas CMMS, a solution developed and provided by
-            Intelloop s.a.r.l ("Intelloop", "we", "us", or "our"), located at
-            410, Boulevard Zerktouni, Hamad, №1- Casablanca-Morocco 20040 (Trade
-            Register: 585917, Tax ID: 53800712, ICE: 003298628000019). Intelloop
-            s.a.r.l Au
+            Welcome to {brandConfig.name}{' '}
+            {IS_ORIGINAL_CLOUD && (
+              <>
+                , a solution developed and provided by Intelloop s.a.r.l
+                ("Intelloop", "we", "us", or "our"), located at 410, Boulevard
+                Zerktouni, Hamad, №1- Casablanca-Morocco 20040 (Trade Register:
+                585917, Tax ID: 53800712, ICE: 003298628000019). Intelloop
+                s.a.r.l Au
+              </>
+            )}
           </Typography>
           <Typography paragraph>
             Our commitment is to your privacy and the protection of your
             information. This Privacy Policy outlines how we collect, use,
-            disclose, and safeguard your information when you visit our website
-            www.atlas-cmms.com (the "Site") or use our Atlas CMMS software and
-            services (collectively, "Services").
+            disclose, and safeguard your information when you visit our website{' '}
+            {brandConfig.website} (the "Site") or use our {brandConfig.name}{' '}
+            software and services (collectively, "Services").
           </Typography>
           <Typography paragraph>
             By accessing or using our Services, you signify your agreement to
@@ -123,8 +132,8 @@ function Overview() {
             <ListItem sx={{ display: 'list-item' }}>
               <Typography>
                 <strong>Contractual Necessity</strong>: When processing is
-                necessary for performing our contract with you when you use
-                Atlas CMMS.
+                necessary for performing our contract with you when you use{' '}
+                {brandConfig.name}.
               </Typography>
             </ListItem>
             <ListItem sx={{ display: 'list-item' }}>
@@ -134,13 +143,15 @@ function Overview() {
                 improvement of our Services.
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
-              <Typography>
-                <strong>Legal Obligations</strong>: When we need to comply with
-                legal obligations under Moroccan law and other applicable
-                regulations.
-              </Typography>
-            </ListItem>
+            {IS_ORIGINAL_CLOUD && (
+              <ListItem sx={{ display: 'list-item' }}>
+                <Typography>
+                  <strong>Legal Obligations</strong>: When we need to comply
+                  with legal obligations under Moroccan law and other applicable
+                  regulations.
+                </Typography>
+              </ListItem>
+            )}
           </List>
 
           <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>
@@ -229,12 +240,14 @@ function Overview() {
                 communication
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
-              <Typography>
-                <strong>Billing Information</strong>: For 10 years as required
-                by Moroccan tax law
-              </Typography>
-            </ListItem>
+            {IS_ORIGINAL_CLOUD && (
+              <ListItem sx={{ display: 'list-item' }}>
+                <Typography>
+                  <strong>Billing Information</strong>: For 10 years as required
+                  by Moroccan tax law
+                </Typography>
+              </ListItem>
+            )}
           </List>
           <Typography paragraph>
             After these periods expire, we will securely delete or anonymize
@@ -292,7 +305,7 @@ function Overview() {
           </List>
           <Typography paragraph>
             For a complete and up-to-date list of our subprocessors, please
-            visit: www.atlas-cmms.com/subprocessors
+            visit: {brandConfig.website}/subprocessors
           </Typography>
 
           <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>
@@ -305,8 +318,10 @@ function Overview() {
             laws of your country.
           </Typography>
           <Typography paragraph>
-            When transferring your data outside Morocco, we implement the
-            following safeguards:
+            {IS_ORIGINAL_CLOUD
+              ? 'When transferring your data outside Morocco,'
+              : ''}{' '}
+            We implement the following safeguards:
           </Typography>
           <List sx={{ pl: 4, listStyleType: 'disc' }}>
             <ListItem sx={{ display: 'list-item' }}>
@@ -327,8 +342,8 @@ function Overview() {
             </ListItem>
           </List>
           <Typography paragraph>
-            You may request a copy of these safeguards by contacting
-            contact@atlas-cmms.com.
+            You may request a copy of these safeguards by contacting{' '}
+            {brandConfig.mail}.
           </Typography>
 
           <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>
@@ -372,8 +387,10 @@ function Overview() {
             9. Your Rights
           </Typography>
           <Typography paragraph>
-            Under Moroccan Law 09-08 and other applicable data protection laws,
-            you have certain rights regarding your Personal Information,
+            {IS_ORIGINAL_CLOUD
+              ? 'Under Moroccan Law 09-08 and other applicable data protection laws,'
+              : ''}{' '}
+            You have certain rights regarding your Personal Information,
             including:
           </Typography>
           <List sx={{ pl: 4, listStyleType: 'disc' }}>
@@ -418,9 +435,7 @@ function Overview() {
           <Typography paragraph>To exercise these rights, please:</Typography>
           <List sx={{ pl: 4 }}>
             <ListItem>
-              <Typography>
-                Email your request to contact@atlas-cmms.com
-              </Typography>
+              <Typography>Email your request to {brandConfig.mail}</Typography>
             </ListItem>
             <ListItem>
               <Typography>
@@ -489,8 +504,8 @@ function Overview() {
             Our Services are not intended for children under the age of 16. We
             do not knowingly collect personal information from children under
             16. If you are a parent or guardian and believe your child has
-            provided us with Personal Information, please contact us at
-            contact@atlas-cmms.com, and we will take steps to delete such
+            provided us with Personal Information, please contact us at{' '}
+            {brandConfig.mail}, and we will take steps to delete such
             information.
           </Typography>
 
@@ -523,24 +538,31 @@ function Overview() {
             constitutes acceptance of the updated Privacy Policy.
           </Typography>
 
-          <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>
-            13. Contact Us
-          </Typography>
-          <Typography paragraph>
-            If you have any questions about this Privacy Policy, please contact
-            us at:
-          </Typography>
-          <Typography sx={{ mb: 1 }}>
-            <strong>Intelloop s.a.r.l</strong>
-          </Typography>
-          <Typography>410, Boulevard Zerktouni, Hamad, №1</Typography>
-          <Typography>Casablanca-Morocco 20040</Typography>
-          <Typography>Email: med.labiad@intel-loop.com</Typography>
-          <Typography sx={{ mb: 3 }}>Phone: +212 6 30 69 00 50</Typography>
-          <Typography>
-            You also have the right to lodge a complaint with the CNDP if you
-            believe that we have violated your data protection rights.
-          </Typography>
+          {IS_ORIGINAL_CLOUD && (
+            <>
+              <Typography
+                variant="h3"
+                sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}
+              >
+                13. Contact Us
+              </Typography>
+              <Typography paragraph>
+                If you have any questions about this Privacy Policy, please
+                contact us at:
+              </Typography>
+              <Typography sx={{ mb: 1 }}>
+                <strong>Intelloop s.a.r.l</strong>
+              </Typography>
+              <Typography>410, Boulevard Zerktouni, Hamad, №1</Typography>
+              <Typography>Casablanca-Morocco 20040</Typography>
+              <Typography>Email: med.labiad@intel-loop.com</Typography>
+              <Typography sx={{ mb: 3 }}>Phone: +212 6 30 69 00 50</Typography>
+              <Typography>
+                You also have the right to lodge a complaint with the CNDP if
+                you believe that we have violated your data protection rights.
+              </Typography>
+            </>
+          )}
         </Card>
       </Container>
     </Box>

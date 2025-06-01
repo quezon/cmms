@@ -48,3 +48,38 @@ export const IS_LOCALHOST =
   apiHostName === 'localhost' || apiHostName === '127.0.0.1';
 
 export const isSSOEnabled = getRuntimeValue('ENABLE_SSO') === 'true';
+
+export const customLogoPaths: { white?: string; dark: string } =
+  getRuntimeValue('LOGO_PATHS')
+    ? JSON.parse(getRuntimeValue('LOGO_PATHS'))
+    : null;
+type ThemeColors = {
+  primary: string;
+  secondary: string;
+  success: string;
+  warning: string;
+  error: string;
+  info: string;
+  black: string;
+  white: string;
+  primaryAlt: string;
+};
+
+export const customColors: ThemeColors = getRuntimeValue('CUSTOM_COLORS')
+  ? JSON.parse(getRuntimeValue('CUSTOM_COLORS'))
+  : null;
+
+export interface BrandRawConfig {
+  name: string;
+  shortName: string;
+  website: string;
+  mail: string;
+  addressStreet: string;
+  phone: string;
+  addressCity: string;
+}
+export const brandRawConfig: BrandRawConfig = getRuntimeValue('BRAND_CONFIG')
+  ? JSON.parse(getRuntimeValue('BRAND_CONFIG'))
+  : null;
+
+export const isWhiteLabeled: boolean = !!(customLogoPaths || brandRawConfig);

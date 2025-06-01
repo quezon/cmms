@@ -48,6 +48,7 @@ import { onSearchQueryChange } from '../../../utils/overall';
 import SearchInput from '../components/SearchInput';
 import { useGridApiRef } from '@mui/x-data-grid-pro';
 import useGridStatePersist from '../../../hooks/useGridStatePersist';
+import { useBrand } from '../../../hooks/useBrand';
 
 interface PropsType {
   values?: any;
@@ -57,6 +58,7 @@ interface PropsType {
 
 const Vendors = ({ openModal, handleCloseModal }: PropsType) => {
   const { t }: { t: any } = useTranslation();
+  const brandConfig = useBrand();
   const [isVendorDetailsOpen, setIsVendorDetailsOpen] =
     useState<boolean>(false);
   const { vendorId } = useParams();
@@ -176,7 +178,7 @@ const Vendors = ({ openModal, handleCloseModal }: PropsType) => {
       name: 'companyName',
       type: 'text',
       label: t('company_name'),
-      placeholder: 'Atlas',
+      placeholder: brandConfig.shortName,
       required: true
     },
     {

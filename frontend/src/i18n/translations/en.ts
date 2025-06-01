@@ -14,8 +14,8 @@ const locale = {
   COMPLETE: 'Complete',
   'home.built': 'Built to Make Managing Maintenance Easier',
   home_description:
-    "When whiteboards and sticky notes are chaos, and you need a CMMS software that's easy enough for your team to actually use - try Atlas",
-  try_grash: 'Try Atlas',
+    "When whiteboards and sticky notes are chaos, and you need a CMMS software that's easy enough for your team to actually use - try {{shortBrandName}}",
+  try_grash: 'Try {{shortBrandName}}',
   login: 'Log In',
   start_trial: 'Start a Free trial',
   'home.what': 'What',
@@ -24,7 +24,7 @@ const locale = {
     'Build efficient, reliable workflows that put you in control of maintenance. Generate, assign, and track work orders. Control inventory. And get reliable automated reports that improve visibility and create accountability.',
   key_features: 'Key Features',
   key_features_description:
-    'Some of the features that make Atlas one of the best CMMS available today',
+    'Some of the features that make {{shortBrandName}} one of the best CMMS available today',
   contribute: 'Contribute',
   work_orders: 'Work Orders',
   request_system: 'Work Request System',
@@ -38,7 +38,7 @@ const locale = {
   'work-orders.descriptions.0':
     'Sick of the reams of paperwork and lost Work Orders? All of those lost items directly affect the bottom line and your reputation.',
   'work-orders.descriptions.1':
-    'With Atlas you can easily and quickly organize all of your Work Orders, PMs and other Tasks throughout your team in a centralized database that can be accessed anywhere on any device.',
+    'With {{shortBrandName}} you can easily and quickly organize all of your Work Orders, PMs and other Tasks throughout your team in a centralized database that can be accessed anywhere on any device.',
   'work-orders.checks.0':
     'View all of your Tasks including WOs, PMs, and Work Requests',
   'work-orders.checks.1':
@@ -48,18 +48,16 @@ const locale = {
     'View work assignments with critical information such as Asset information, due date, priority and more.',
   'work-orders.checks.4':
     'View critical KPIs such as actual completed work, time spent and planned vs unplanned work.',
-
   'work-requests.title': 'A streamlined mobile work request system',
   'work-requests.descriptions.0':
     'Sick of using the old phone and email system that result in LOST tickets, constant daily interruptions, and duplicated work?',
   'work-requests.descriptions.1':
-    'Atlas’s maintenance management solution allows anyone you authorize to submit a problem to your maintenance department by simply scanning a QR code (bar code) or visiting a URL and typing in their request through their mobile devices.',
+    '{{shortBrandName}}’s maintenance management solution allows anyone you authorize to submit a problem to your maintenance department by simply scanning a QR code (bar code) or visiting a URL and typing in their request through their mobile devices.',
   'work-requests.checks.0': 'Never lose Work again.',
   'work-requests.checks.1':
     'Reduce time spent handling Work Requests by up to 34%.',
   'work-requests.checks.2':
     'Reduce time communicating with Requesters by up to 41% (calls, emails, texts).',
-
   'mobile-app.title': 'A mobile CMMS app that empowers your maintenance team',
   'mobile-app.descriptions.0':
     'Through the use of our Android and IOS mobile apps, our clients experience better organization, communication, accountability and productivity by up to 30% throughout their entire maintenance team.',
@@ -74,13 +72,12 @@ const locale = {
     'Respond to and log problems while actually working on the problem',
   'mobile-app.checks.5':
     'Lookup critical asset information while diagnosing a problem.',
-
   'eam.title': 'Enterprise Asset Management',
   'eam.description.short': 'Know your assets',
   'eam.descriptions.0':
     'Frustrated with trying to organize the chaotic mess of company’s equipment, wondering if the equipment has been properly taken care of, not knowing what they cost to maintain and all the other headaches that come with managing assets?',
   'eam.descriptions.1':
-    'Atlas CMMS’s Enterprise Asset Management module can be used for anywhere between 10 to 1,000,000 Assets, allowing you to track exactly what you want, the way you want to, in an easy-to-use and searchable tree structure.',
+    '{{brandName}}’s Enterprise Asset Management module can be used for anywhere between 10 to 1,000,000 Assets, allowing you to track exactly what you want, the way you want to, in an easy-to-use and searchable tree structure.',
   'eam.checks.0':
     'Know the health of your assets at every point of time and what they are costing you',
   'eam.checks.1': 'View complete and detailed Maintenance Logs.',
@@ -89,12 +86,11 @@ const locale = {
   'eam.checks.4':
     'Find information quickly and easily with QR Codes (bar codes)',
   'eam.checks.5': 'Receive real-time asset data with sensor connectivity.',
-
   'pm.title': 'An Effective Preventative Maintenance Program',
   'pm.descriptions.0':
     'Stop wasting precious hours manually distributing PM checklists and following up with your team to make sure the work is done.',
   'pm.descriptions.1':
-    'Atlas allows you to easily automate PM scheduling so the right work is automatically delivered at the right time to the right technician for the right Asset.',
+    '{{shortBrandName}} allows you to easily automate PM scheduling so the right work is automatically delivered at the right time to the right technician for the right Asset.',
   'pm.checks.0':
     'Automate PM scheduling to be daily, weekly, monthly, yearly, or based on events or meter readings.',
   'pm.checks.1':
@@ -105,13 +101,12 @@ const locale = {
   'pm.checks.4':
     'Upon PM completion, the work is automatically logged in the asset’s maintenance log..',
   'pm.checks.5': 'Requires little to no training to use.',
-
   'part.title': 'Get Control of your Spare Parts Inventory',
   'part.description.short': 'Know when your parts will run out',
   'part.descriptions.0':
     'Not sure what parts you have in stock or where they are being used? Don’t know when your parts will run out or if your technicians will have the necessary parts to do their jobs?',
   'part.descriptions.1':
-    'We designed Atlas’s parts management to solve those problems and more:',
+    'We designed {{shortBrandName}}’s parts management to solve those problems and more:',
   'part.checks.0':
     'Get instant push and email notifications when a part’s quantity is low. Keep the right number of parts in stock by receiving instant and automatic push/email notifications when the quantity of a part is below a custom set threshold.',
   'part.checks.1':
@@ -127,28 +122,27 @@ const locale = {
     'Optimize stock levels. Instantly view forecasting for a part to see how many parts may be used within the next year.',
   'part.checks.7':
     'Barcode lookup. Make your inventory easy to track and access with custom QR codes',
-
   'dashboard.title': 'Your data, your way with custom dashboards',
   'dashboard.descriptions.0':
     'Let’s face it, the first step to improving your operations is to know the good, the bad and the ugly.',
   'dashboard.descriptions.1':
-    'With Atlas’s Custom Dashboards you can finally start to understand that nefarious “black hole of maintenance” and begin putting data-backed plans into action, resulting in reduced labor costs, decreased downtime and more.',
-  'dashboard.descriptions.2': 'With Atlas’s Custom Dashboards you’ll get to …',
+    'With {{shortBrandName}}’s Custom Dashboards you can finally start to understand that nefarious “black hole of maintenance” and begin putting data-backed plans into action, resulting in reduced labor costs, decreased downtime and more.',
+  'dashboard.descriptions.2':
+    'With {{shortBrandName}}’s Custom Dashboards you’ll get to …',
   'dashboard.checks.0': 'Know where your money is being spent and why',
   'dashboard.checks.1': 'Know which asset is costing the most and why',
   'dashboard.checks.2': 'Create your own custom KPIs.',
   'dashboard.checks.3':
     'View reports that are automatically generated and updated based on your metric',
   'dashboard.checks.4':
-    'View reports that are easily shared via Excel sheets, PDFs or within Atlas',
+    'View reports that are easily shared via Excel sheets, PDFs or within {{shortBrandName}}',
   'dashboard.checks.5': 'And so much more ...',
   'home.smarter': 'Smarter',
   'home.work': 'Work',
   'home.smarter_description':
-    'Atlas makes it incredibly easy for technicians to work efficiently by giving them access to the tools and data they need to get work done — all from the palm of their hand.',
+    '{{shortBrandName}} makes it incredibly easy for technicians to work efficiently by giving them access to the tools and data they need to get work done — all from the palm of their hand.',
   leading_maintenance:
     'Leading the Way to a Better Future for Maintenance and Reliability',
-  //register
   premium_included: 'Premium features included',
   no_credit_card: 'No credit card required',
   perfect_tool: 'The perfect tool for Maintenance teams',
@@ -179,13 +173,11 @@ const locale = {
   terms_conditions: 'terms and conditions',
   create_your_account: 'Create your account',
   register: 'Register',
-  //signin
   login_description: 'Fill in the fields below to sign into your account.',
   no_account_yet: 'Don’t have an account, yet?',
   signup_here: 'Sign up here',
   wrong_credentials: 'Wrong credentials provided',
   lost_password: 'Lost password ?',
-  //work-orders
   link_wo: 'Link Work Orders',
   link_wo_description: 'Create relationships between Work Orders',
   required_relationType: 'Please select the relationship type.',
@@ -280,7 +272,7 @@ const locale = {
   save: 'Save',
   customers: 'Contractors',
   no_labor:
-    "No labor costs have been added yet. They'll show up here when a user logs time and has an hourly rate stored in Atlas.",
+    "No labor costs have been added yet. They'll show up here when a user logs time and has an hourly rate stored in {{shortBrandName}}.",
   not_assigned: 'Not Assigned',
   no_additional_cost: 'No Additional costs have been added yet',
   parts: 'Parts',
@@ -318,7 +310,6 @@ const locale = {
   cancel: 'Cancel',
   select_parts: 'Select Parts',
   sets_of_parts: 'Sets of Parts',
-  //preventive maintenance
   paused: 'Paused',
   trigger_details: 'Trigger details',
   starts_on: 'Starts On',
@@ -355,7 +346,6 @@ const locale = {
   no_access_pm:
     "You don't have access to the Preventive Maintenance section. Please contact your administrator if you should have access",
   enter_wo_title: 'Enter Work Order title',
-  //menuItems
   status_report: 'Status Report',
   wo_analysis: 'Work Order analysis',
   wo_aging: 'Work Order Aging',
@@ -376,7 +366,6 @@ const locale = {
   vendors: 'Vendors',
   categories: 'Categories',
   settings: 'Settings',
-  //request
   cancelled: 'Cancelled',
   reject: 'Reject',
   approve: 'Approve',
@@ -404,7 +393,6 @@ const locale = {
   low_priority: 'Low',
   medium_priority: 'Medium',
   high_priority: 'High',
-  //asset
   downtimes: 'Downtimes',
   confirm_delete_file_asset:
     'Are you sure you want to remove this File from this asset?',
@@ -472,7 +460,6 @@ const locale = {
   loading_assets: 'Loading assets under {{name}} #{{id}}',
   no_content: 'No Content',
   no_result_criteria: 'No result matches your search criteria',
-  //location
   map_view: 'Map View',
   location_create_success: 'The location has been created successfully',
   location_create_failure: "The location couldn't be created",
@@ -508,7 +495,6 @@ const locale = {
   assigned_teams: 'Assigned Teams',
   assigned_customers: 'Assigned Contractors',
   assigned_vendors: 'Assigned Vendors',
-  //no_access
   no_access_location:
     "You don't have access to Locations. Please contact your administrator if you should have access",
   no_access_vendors_customers:
@@ -538,7 +524,6 @@ const locale = {
   'noRows.location.message':
     'Locations let you manage more efficiently assets and workers',
   'noRows.location.action': "Press the '+' button to create a Location",
-  //inventory
   card_view: 'Card View',
   set_create_success: 'The Set has been created successfully',
   set_create_failure: "The Set couldn't be created",
@@ -587,7 +572,6 @@ const locale = {
   no_wo_found: 'No Work Order found',
   workers: 'Workers',
   Parts_and_Inventory: 'Parts & Inventory',
-  //purchase order
   po_edit_failure: "The Purchase Order couldn't be edited",
   po_delete_success: 'The Purchase Order has been deleted successfully',
   po_delete_failure: "The Purchase Order couldn't be deleted",
@@ -633,7 +617,6 @@ const locale = {
   APPROVED: 'Approved',
   PENDING: 'Pending',
   REJECTED: 'Rejected',
-  //meter
   when_reading_is: 'When Meter Reading is',
   greater_than: 'Greater than',
   lower_than: 'Lower than',
@@ -681,14 +664,12 @@ const locale = {
     'Meter readings give you the ability to monitor assets and trigger new work orders based on defined conditions',
   'noRows.meter.action': "Press the '+' button to create a Meter",
   meter: 'Meter',
-  //upload
   drag_one_file: 'Drag a unique file here',
   drag_many_files: 'Drag & drop files here',
   drop_to_start: 'Drop the files to start uploading',
   invalid_files_type: 'You cannot upload these file types',
   you_have_uploaded: 'You have uploaded',
   upload: 'Upload',
-  //vendors_customers
   Vendors_Customers: 'Vendors & Contractors',
   customer_create_success: 'The Contractor has been created successfully',
   customer_create_failure: "The Contractor couldn't be created",
@@ -719,7 +700,6 @@ const locale = {
   billing_currency: 'Billing Currency',
   go_back: 'Go back',
   confirm_delete_customer: 'Are you sure you want to delete this Contractor?',
-  //vendor
   vendor_create_success: 'The Vendor has been created successfully',
   vendor_create_failure: "The Vendor couldn't be created",
   vendor_edit_failure: "The Vendor couldn't be edited",
@@ -736,7 +716,6 @@ const locale = {
     'Vendors are organizations that provide Assets or Parts',
   'noRows.vendor.action': "Press the '+' button to create a Vendor",
   vendor_type_description: 'ex. Plumbing, Electrical',
-  //people teams
   role: 'Role',
   edit_user: 'Edit User',
   edit_user_description: 'Fill in the fields below to edit the user',
@@ -790,7 +769,6 @@ const locale = {
   'noRows.team.message': 'Teams help you manage specific groups of people.',
   'noRows.team.action': "Press the '+' button to create a team.",
   user_details: 'User Details',
-  //files
   file_delete_success: 'The file has been deleted successfully',
   file_delete_failure: "The file couldn't be deleted",
   uploaded_by: 'Uploaded By',
@@ -806,7 +784,6 @@ const locale = {
     'Upgrade to use files in your Assets, Work Orders, Locations etc...',
   parts_consumption: 'Parts Consumption',
   requests_analysis: 'Request Analysis',
-  //categories,
   category_create_success: 'The Category has been created successfully',
   category_create_failure: "The Category couldn't be created",
   category_edit_failure: "The Category couldn't be edited",
@@ -823,7 +800,6 @@ const locale = {
   no_category_message:
     "Looks like you don't have any {{categoryName}} Categories yet.",
   acquisition_cost: 'Acquisition Cost',
-  //settings
   general_settings: 'General Settings',
   request_form_configuration: 'Request form configuration',
   roles: 'Roles',
@@ -841,7 +817,7 @@ const locale = {
   external_id: 'External ID',
   permissions: 'Permissions',
   create_role_description:
-    'This role can do everything an Administrator can do in Atlas, but you can customize some important permissions below.',
+    'This role can do everything an Administrator can do in {{brandName}}, but you can customize some important permissions below.',
   create_and_edit: 'Create/Edit',
   to_access: 'Access',
   role_delete_success: 'The Role has been deleted successfully',
@@ -887,13 +863,11 @@ const locale = {
   business_type: 'Business type',
   general_asset_management: 'General asset management',
   physical_asset_management: 'Physical asset management',
-  //checklist
   checklist_delete_success: 'The Checklist has been deleted successfully',
   checklist_delete_failure: "The Checklist couldn't be deleted",
   create_checklist: 'Create Checklist',
   confirm_delete_checklist: 'Are you sure you want to delete this Checklist?',
   upgrade_checklist: 'Please Upgrade to use Checklists',
-  //components
   upgrade_now: 'Upgrade Now',
   total: 'Total',
   sub_task_status: 'Sub-task Status',
@@ -922,7 +896,6 @@ const locale = {
   select_date: 'Select date',
   task: 'Task',
   checklist: 'Checklist',
-  //analytics
   upgrade_analytics: 'Upgrade to see Analytics',
   grouped_by_category: 'Grouped by Category',
   downtime_by_asset: 'Downtime By Asset',
@@ -992,14 +965,12 @@ const locale = {
   total_purchase_price: 'Total Purchase Price',
   you_have: 'You have',
   new_messages: 'new messages',
-  //company profile
   company: 'Company',
   change_cover: 'Change cover',
   required_address: 'The address field is required',
   company_details: 'Company Details',
   company_details_description: 'Manage informations related to your company',
   learn_more: 'Learn more',
-  //user profile
   profile: 'Profile',
   email_notifications: 'Email notifications',
   email_updates_wo: 'Email Updates for Work Orders and Messages',
@@ -1030,7 +1001,6 @@ const locale = {
   you_are_using_plan:
     'You are currently using {{planName}} plan. It will expire on {{expiration}}. Upgrade now to get access to more features.',
   upgrade_plan: 'Upgrade Plan',
-  //subscription
   plans: 'Plans',
   monthly: 'Monthly',
   annually: 'Annually',
@@ -1053,7 +1023,8 @@ const locale = {
   your_payment_secure: 'Your payment data is encrypted and secure.',
   plan: 'Plan',
   current_plan: 'Current Plan',
-  number_users_who_will_use_grash: 'Number of users who will use Atlas',
+  number_users_who_will_use_grash:
+    'Number of users who will use {{shortBrandName}}',
   admin_role: 'Admin',
   technical_role: 'Technical',
   limited_technical_role: 'Limited Technical',
@@ -1213,7 +1184,7 @@ const locale = {
   and_optional: 'And(Optional)',
   then: 'Then',
   workflow_description:
-    'Create custom workflows as easy as If, And, Then. Save time and easily assign your work orders automatically through workflows to customize Atlas for the way your team operates.\nAll plans can create up to 1 custom workflow. To add additional workflows, upgrade to our Business plan',
+    'Create custom workflows as easy as If, And, Then. Save time and easily assign your work orders automatically through workflows to customize {{shortBrandName}} for the way your team operates.\nAll plans can create up to 1 custom workflow. To add additional workflows, upgrade to our Business plan',
   CREATE_PURCHASE_ORDER: 'Create a Purchase Order',
   PART_IS: 'The Part is',
   QUANTITY_INFERIOR: 'The quantity is inferior to',
@@ -1276,7 +1247,7 @@ const locale = {
   upgrade: 'Upgrade',
   downgrade: 'Downgrade',
   upgrade_description:
-    'You just upgraded your subscription plan. You need to enable the disabled users who might use Atlas. You can only do this once for the current subscription. Please choose carefully',
+    'You just upgraded your subscription plan. You need to enable the disabled users who might use {{shortBrandName}}. You can only do this once for the current subscription. Please choose carefully',
   enable_users: 'Enable users',
   max_users_description: 'You can enable up to {{maxUsers}} users',
   downgrade_description:
@@ -1337,7 +1308,7 @@ const locale = {
   simplify_wo: 'Simplify Work Orders in the mobile app',
   simplify_wo_description:
     'Hide time controls, costs and parts in the Work Order details while using the mobile app',
-  account_deletion: 'Atlas CMMS Account deletion',
+  account_deletion: '{{brandName}} Account deletion',
   switch_account: 'Switch account',
   switch_to_super_user: 'Switch to super admin',
   switch_account_description: 'Please choose an account to proceed',

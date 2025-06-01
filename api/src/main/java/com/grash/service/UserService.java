@@ -57,6 +57,7 @@ public class UserService {
     private final SubscriptionPlanService subscriptionPlanService;
     private final SubscriptionService subscriptionService;
     private final UserMapper userMapper;
+    private final BrandingService brandingService;
 
     @Value("${api.host}")
     private String PUBLIC_API_URL;
@@ -239,7 +240,8 @@ public class UserService {
         VerificationToken newUserToken = new VerificationToken(token, user, password);
         verificationTokenRepository.save(newUserToken);
         emailService2.sendMessageUsingThymeleafTemplate(new String[]{email}, messageSource.getMessage("password_reset"
-                , null, Helper.getLocale(user)), variables, "reset-password.html", Helper.getLocale(user));
+                        , new String[]{brandingService.getBrandConfig().getName()}, Helper.getLocale(user)), variables,
+                "reset-password.html", Helper.getLocale(user));
         return new SuccessResponse(true, "Password changed successfully");
     }
 
@@ -272,7 +274,8 @@ public class UserService {
                 put("company", inviter.getCompany().getName());
             }};
             emailService2.sendMessageUsingThymeleafTemplate(new String[]{email}, messageSource.getMessage(
-                            "invitation_to_use", null, Helper.getLocale(inviter)), variables, "invite.html",
+                            "invitation_to_use", new String[]{brandingService.getBrandConfig().getName()},
+                            Helper.getLocale(inviter)), variables, "invite.html",
                     Helper.getLocale(inviter));
         } else throw new CustomException("Email already in use", HttpStatus.NOT_ACCEPTABLE);
     }
@@ -334,8 +337,10 @@ public class UserService {
 //            throw new CustomException("MAIL_RECIPIENTS env variable not set", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         try {
-            emailService2.sendHtmlMessage(recipients, userSignupRequest.getSubscriptionPlanId() == null ? "New Atlas " +
-                            "registration" : "Atlas plan " + userSignupRequest.getSubscriptionPlanId() + " used",
+            emailService2.sendHtmlMessage(recipients, userSignupRequest.getSubscriptionPlanId() == null ?
+                            "New " + brandingService.getBrandConfig().getShortName() + " " +
+                                    "registration" :
+                            brandingService.getBrandConfig().getShortName() + " plan " + userSignupRequest.getSubscriptionPlanId() + " used",
                     user.getFirstName() + " " + user.getLastName() + " just created an account from company "
                             + user.getCompany().getName() + " with " + userSignupRequest.getEmployeesCount() + " " +
                             "employees.\nEmail: " + user.getEmail()

@@ -1,5 +1,7 @@
 package com.grash.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grash.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +37,7 @@ public class EmailService2 {
 
     private final SimpleMailMessage template;
     private final MailProperties mailProperties;
+    private final BrandingService brandingService;
     @Value("${spring.mail.username:#{null}")
     private String smtpUsername;
 
@@ -101,6 +104,8 @@ public class EmailService2 {
         thymeleafContext.setLocale(locale);
         thymeleafContext.setVariables(templateModel);
         thymeleafContext.setVariable("environment", environment);
+        thymeleafContext.setVariable("brandConfig", brandingService.getBrandConfig());
+        thymeleafContext.setVariable("backgroundColor", brandingService.getMailBackgroundColor());
         String htmlBody = thymeleafTemplateEngine.process(template, thymeleafContext);
 
         try {
@@ -119,7 +124,8 @@ public class EmailService2 {
             MimeMessage message = emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
             try {
-                helper.setFrom(new InternetAddress(mailProperties.getUsername(), "Atlas CMMS"));
+                helper.setFrom(new InternetAddress(mailProperties.getUsername(),
+                        brandingService.getBrandConfig().getName()));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }

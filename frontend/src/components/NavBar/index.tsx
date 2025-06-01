@@ -24,6 +24,7 @@ import LanguageSwitcher from '../../layouts/ExtendedSidebarLayout/Header/Buttons
 import { Link as RouterLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
+import { isWhiteLabeled } from '../../config';
 
 const HeaderWrapper = styled(Card)(
   ({ theme }) => `
@@ -59,15 +60,17 @@ export default function NavBar() {
         <Stack direction="row" alignItems="center">
           <Box alignItems={'center'}>
             <Logo />
-            <Typography
-              style={{ cursor: 'pointer' }}
-              fontSize={13}
-              onClick={() => {
-                window.open('https://www.intel-loop.com/', '_blank');
-              }}
-            >
-              Powered by Intelloop
-            </Typography>
+            {!isWhiteLabeled && (
+              <Typography
+                style={{ cursor: 'pointer' }}
+                fontSize={13}
+                onClick={() => {
+                  window.open('https://www.intel-loop.com/', '_blank');
+                }}
+              >
+                Powered by Intelloop
+              </Typography>
+            )}
           </Box>
           <Stack
             direction="row"
@@ -95,14 +98,16 @@ export default function NavBar() {
               >
                 {t('Pricing')}
               </Button>
-              <Button
-                component={'a'}
-                target={'_blank'}
-                href={'https://github.com/Grashjs/cmms'}
-                startIcon={<GitHub />}
-              >
-                GitHub
-              </Button>
+              {!isWhiteLabeled && (
+                <Button
+                  component={'a'}
+                  target={'_blank'}
+                  href={'https://github.com/Grashjs/cmms'}
+                  startIcon={<GitHub />}
+                >
+                  GitHub
+                </Button>
+              )}
               <LanguageSwitcher />
               <Button
                 component={RouterLink}

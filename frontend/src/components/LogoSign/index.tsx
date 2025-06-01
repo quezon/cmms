@@ -9,6 +9,9 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { customLogoPaths } from '../../config';
+import { useEffect, useState } from 'react';
+import { useBrand } from '../../hooks/useBrand';
 
 const LogoWrapper = styled(Link)(
   ({ theme }) => `
@@ -48,18 +51,21 @@ const TooltipWrapper = styled(({ className, ...props }: TooltipProps) => (
 interface OwnProps {
   white?: boolean;
 }
+
 function Logo({ white }: OwnProps) {
   const { t }: { t: any } = useTranslation();
   const theme = useTheme();
   const width = 60;
   const height = 60;
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const { logo, name: brandName } = useBrand();
+
   return (
-    <TooltipWrapper title="Atlas" arrow>
+    <TooltipWrapper title={brandName} arrow>
       <LogoWrapper to="/overview">
         <LogoSignWrapper>
           <img
-            src={`/static/images/logo/logo${white ? '-white' : ''}.png`}
+            src={white ? logo.white : logo.dark}
             width={`${width * (mobile ? 0.7 : 1)}px`}
             height={`${height * (mobile ? 0.7 : 1)}px`}
           />

@@ -20,6 +20,7 @@ import CheckTwoToneIcon from '@mui/icons-material/CheckTwoTone';
 import { AE, CN, DE, ES, FR, US, BR } from 'country-flag-icons/react/3x2';
 import SubscriptionPlans from '../SubscriptionPlans';
 import SubscriptionPlanSelector from '../../pricing/components/SubscriptionPlanSelector';
+import { useBrand } from '../../../hooks/useBrand';
 
 const AvatarSuccess = styled(Avatar)(
   ({ theme }) => `
@@ -325,7 +326,7 @@ const icons = {
 
 function Highlights() {
   const { t }: { t: any } = useTranslation();
-
+  const brandConfig = useBrand();
   const [currentTab, setCurrentTab] = useState('work-orders');
   const [monthly, setMonthly] = useState<boolean>(true);
   const tabs = [
@@ -338,107 +339,170 @@ function Highlights() {
     { value: 'dashboard', label: t('custom_dashboards') }
   ];
 
-  const featuresConfiguration = {
+  const featuresConfiguration: {
+    [key: string]: {
+      title: { key: string; params?: Record<string, any> };
+      descriptions: { key: string; params?: Record<string, any> }[];
+      checks: { key: string; params?: Record<string, any> }[];
+      image: string;
+    };
+  } = {
     'work-orders': {
-      title: 'work-orders.title',
+      title: {
+        key: 'work-orders.title'
+      },
       descriptions: [
-        'work-orders.descriptions.0',
-        'work-orders.descriptions.1'
+        { key: 'work-orders.descriptions.0' },
+        {
+          key: 'work-orders.descriptions.1',
+          params: { shortBrandName: brandConfig.shortName }
+        }
       ],
       checks: [
-        'work-orders.checks.0',
-        'work-orders.checks.1',
-        'work-orders.checks.2',
-        'work-orders.checks.3',
-        'work-orders.checks.4'
+        { key: 'work-orders.checks.0' },
+        { key: 'work-orders.checks.1' },
+        { key: 'work-orders.checks.2' },
+        { key: 'work-orders.checks.3' },
+        {
+          key: 'work-orders.checks.4',
+          params: { shortBrandName: brandConfig.shortName }
+        }
       ],
       image: '/static/images/overview/work_order_screenshot.png'
     },
+
     request: {
-      title: 'work-requests.title',
+      title: {
+        key: 'work-requests.title'
+      },
       descriptions: [
-        'work-requests.descriptions.0',
-        'work-requests.descriptions.1'
+        { key: 'work-requests.descriptions.0' },
+        {
+          key: 'work-requests.descriptions.1',
+          params: { shortBrandName: brandConfig.shortName }
+        }
       ],
       checks: [
-        'work-requests.checks.0',
-        'work-requests.checks.1',
-        'work-requests.checks.2'
+        { key: 'work-requests.checks.0' },
+        { key: 'work-requests.checks.1' },
+        { key: 'work-requests.checks.2' }
       ],
       image: '/static/images/overview/performance.png'
     },
+
     mobile: {
-      title: 'mobile-app.title',
-      descriptions: ['mobile-app.descriptions.0', 'mobile-app.descriptions.1'],
+      title: { key: 'mobile-app.title' },
+      descriptions: [
+        { key: 'mobile-app.descriptions.0' },
+        { key: 'mobile-app.descriptions.1' }
+      ],
       checks: [
-        'mobile-app.checks.0',
-        'mobile-app.checks.1',
-        'mobile-app.checks.2',
-        'mobile-app.checks.3',
-        'mobile-app.checks.4',
-        'mobile-app.checks.5'
+        { key: 'mobile-app.checks.0' },
+        { key: 'mobile-app.checks.1' },
+        { key: 'mobile-app.checks.2' },
+        { key: 'mobile-app.checks.3' },
+        { key: 'mobile-app.checks.4' },
+        { key: 'mobile-app.checks.5' }
       ],
       image: '/static/images/overview/mobile_home.png'
     },
+
     asset: {
-      title: 'eam.title',
-      descriptions: ['eam.descriptions.0', 'eam.descriptions.1'],
+      title: { key: 'eam.title' },
+      descriptions: [
+        { key: 'eam.descriptions.0' },
+        {
+          key: 'eam.descriptions.1',
+          params: { brandName: brandConfig.shortName }
+        }
+      ],
       checks: [
-        'eam.checks.0',
-        'eam.checks.1',
-        'eam.checks.2',
-        'eam.checks.3',
-        'eam.checks.4',
-        'eam.checks.5'
+        { key: 'eam.checks.0' },
+        { key: 'eam.checks.1' },
+        { key: 'eam.checks.2' },
+        { key: 'eam.checks.3' },
+        { key: 'eam.checks.4' },
+        { key: 'eam.checks.5' }
       ],
       image: '/static/images/overview/performance.png'
     },
+
     preventative: {
-      title: 'pm.title',
-      descriptions: ['pm.descriptions.0', 'pm.descriptions.1'],
+      title: {
+        key: 'pm.title'
+      },
+      descriptions: [
+        { key: 'pm.descriptions.0' },
+        {
+          key: 'pm.descriptions.1',
+          params: { shortBrandName: brandConfig.shortName }
+        }
+      ],
       checks: [
-        'pm.checks.0',
-        'pm.checks.1',
-        'pm.checks.2',
-        'pm.checks.3',
-        'pm.checks.4',
-        'pm.checks.5'
+        { key: 'pm.checks.0' },
+        { key: 'pm.checks.1' },
+        { key: 'pm.checks.2' },
+        { key: 'pm.checks.3' },
+        { key: 'pm.checks.4' },
+        { key: 'pm.checks.5' }
       ],
       image: '/static/images/overview/performance.png'
     },
+
     part: {
-      title: 'part.title',
-      descriptions: ['part.descriptions.0', 'part.descriptions.1'],
+      title: {
+        key: 'part.title'
+      },
+      descriptions: [
+        { key: 'part.descriptions.0' },
+        {
+          key: 'part.descriptions.1',
+          params: { shortBrandName: brandConfig.shortName }
+        }
+      ],
       checks: [
-        'part.checks.0',
-        'part.checks.1',
-        'part.checks.2',
-        'part.checks.3',
-        'part.checks.4',
-        'part.checks.5',
-        'part.checks.6',
-        'part.checks.7'
+        { key: 'part.checks.0' },
+        { key: 'part.checks.1' },
+        { key: 'part.checks.2' },
+        { key: 'part.checks.3' },
+        { key: 'part.checks.4' },
+        { key: 'part.checks.5' },
+        { key: 'part.checks.6' },
+        { key: 'part.checks.7' }
       ],
       image: '/static/images/overview/inventory_screenshot.png'
     },
+
     dashboard: {
-      title: 'dashboard.title',
+      title: {
+        key: 'dashboard.title'
+      },
       descriptions: [
-        'dashboard.descriptions.0',
-        'dashboard.descriptions.1',
-        'dashboard.descriptions.2'
+        { key: 'dashboard.descriptions.0' },
+        {
+          key: 'dashboard.descriptions.1',
+          params: { shortBrandName: brandConfig.shortName }
+        },
+        {
+          key: 'dashboard.descriptions.2',
+          params: { shortBrandName: brandConfig.shortName }
+        }
       ],
       checks: [
-        'dashboard.checks.0',
-        'dashboard.checks.1',
-        'dashboard.checks.2',
-        'dashboard.checks.3',
-        'dashboard.checks.4',
-        'dashboard.checks.5'
+        { key: 'dashboard.checks.0' },
+        { key: 'dashboard.checks.1' },
+        { key: 'dashboard.checks.2' },
+        { key: 'dashboard.checks.3' },
+        {
+          key: 'dashboard.checks.4',
+          params: { shortBrandName: brandConfig.shortName }
+        },
+        { key: 'dashboard.checks.5' }
       ],
       image: '/static/images/overview/analytics_screenshot.png'
     }
   };
+
   const CheckItem = ({ description }: { description: string }) => {
     return (
       <ListItem>
@@ -475,11 +539,11 @@ function Highlights() {
       >
         <Grid item xs={12} md={6}>
           <Typography sx={{ mb: 1 }} variant="h2">
-            {t(title)}.
+            {title}.
           </Typography>
           {descriptions.map((description, index) => (
             <Box key={index}>
-              <Typography variant="subtitle2">{t(description)}</Typography>
+              <Typography variant="subtitle2">{description}</Typography>
               <br />
             </Box>
           ))}
@@ -499,7 +563,7 @@ function Highlights() {
             <Blob1 />
             <Blob2 />
             <CardImageWrapper>
-              <img src={image} alt="Atlas" />
+              <img src={image} alt={brandConfig.shortName} />
             </CardImageWrapper>
           </BlowWrapper>
         </Grid>
@@ -641,7 +705,9 @@ function Highlights() {
                 color="text.secondary"
                 fontWeight="normal"
               >
-                {t('home.smarter_description')}
+                {t('home.smarter_description', {
+                  shortBrandName: brandConfig.shortName
+                })}
               </TypographySubHeading>
             </Box>
           </Grid>
@@ -668,7 +734,9 @@ function Highlights() {
             color="text.secondary"
             fontWeight="normal"
           >
-            {t('key_features_description')}
+            {t('key_features_description', {
+              shortBrandName: brandConfig.shortName
+            })}
           </TypographyH2>
         </Container>
         <Box
@@ -693,20 +761,23 @@ function Highlights() {
             ))}
           </Tabs>
         </Box>
-        {Object.entries(featuresConfiguration).map(([feature, config]) => {
-          return (
-            <>
-              {currentTab === feature && (
-                <Feature
-                  title={config.title}
-                  descriptions={config.descriptions}
-                  checks={config.checks}
-                  image={config.image}
-                />
-              )}
-            </>
-          );
-        })}
+        {Object.entries(featuresConfiguration).map(([feature, config]) => (
+          <>
+            {currentTab === feature && (
+              <Feature
+                title={t(config.title.key, config.title.params)}
+                descriptions={config.descriptions.map((desc) =>
+                  t(desc.key, desc.params)
+                )}
+                checks={config.checks.map((check) =>
+                  t(check.key, check.params)
+                )}
+                image={config.image}
+              />
+            )}
+          </>
+        ))}
+
         {/*<SubscriptionPlans />*/}
         {currentTab === 'rtl' && (
           <BoxRtl

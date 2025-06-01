@@ -9,6 +9,7 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { CustomSnackBarContext } from './CustomSnackBarContext';
 import mailToLink from 'mailto-link';
+import { useBrand } from '../hooks/useBrand';
 
 type CompanySettingsContext = {
   getFormattedDate: (dateString: string, hideTime?: boolean) => string;
@@ -45,6 +46,7 @@ export const CompanySettingsProvider: FC = ({ children }) => {
   };
   const { t }: { t: any } = useTranslation();
   const { showSnackBar } = useContext(CustomSnackBarContext);
+  const brandConfig = useBrand();
 
   const getFormattedDate = (dateString: string, hideTime?: boolean) => {
     if (!dateString) return '';
@@ -183,11 +185,11 @@ export const CompanySettingsProvider: FC = ({ children }) => {
   const requestSubscriptionChange = () => {
     window.open(
       mailToLink({
-        to: 'contact@atlas-cmms.com',
+        to: brandConfig.mail,
         subject: 'Subscription change request',
-        body: `Dear Atlas CMMS Team,
+        body: `Dear ${brandConfig.name} Team,
 
-I would like to request an upgrade to my current Atlas CMMS plan.
+I would like to request an upgrade to my current ${brandConfig.name} plan.
 
 Account Information:
 - Company Name: ${company.name}

@@ -1,6 +1,8 @@
 package com.grash.configuration;
 
 import com.google.common.base.Predicates;
+import com.grash.service.BrandingService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -19,7 +21,10 @@ import java.util.Optional;
 
 //@Configuration
 //@EnableSwagger2
+@RequiredArgsConstructor
 public class SwaggerConfig {
+
+    private final BrandingService brandingService;
 
     @Bean
     public Docket api() {
@@ -39,7 +44,7 @@ public class SwaggerConfig {
 
     private ApiInfo metadata() {
         return new ApiInfoBuilder()//
-                .title("Atlas API")//
+                .title(brandingService.getBrandConfig().getName() + " API")//
                 .version("1.0.0")//
                 .license("MIT License").licenseUrl("http://opensource.org/licenses/MIT")//
                 .build();

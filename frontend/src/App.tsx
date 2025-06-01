@@ -11,15 +11,26 @@ import ThemeProvider from './theme/ThemeProvider';
 import AppInit from './components/AppInit';
 import { CustomSnackBarProvider } from './contexts/CustomSnackBarContext';
 import ReactGA from 'react-ga4';
-import { googleTrackingId, IS_LOCALHOST } from './config';
+import {
+  customLogoPaths,
+  googleTrackingId,
+  IS_LOCALHOST,
+  isWhiteLabeled
+} from './config';
 import { useEffect } from 'react';
 import { CompanySettingsProvider } from './contexts/CompanySettingsContext';
+import { getLicenseValidity } from './slices/license';
+import { useDispatch, useSelector } from './store';
+import { useBrand } from './hooks/useBrand';
 
 if (!IS_LOCALHOST && googleTrackingId) ReactGA.initialize(googleTrackingId);
 function App() {
   const content = useRoutes(router);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { logo } = useBrand();
   const { isInitialized, company, isAuthenticated, user } = useAuth();
+  const { isLicenseValid } = useSelector((state) => state.license);
   let location = useLocation();
   useEffect(() => {
     if (!IS_LOCALHOST && googleTrackingId)
@@ -53,6 +64,22 @@ function App() {
         navigate('/app/switch-account');
       }
   }, [user, isInitialized, isAuthenticated, location]);
+
+  useEffect(() => {
+    if (isWhiteLabeled) dispatch(getLicenseValidity());
+  }, []);
+
+  useEffect(() => {
+    if (customLogoPaths && isLicenseValid) {
+      let link: HTMLLinkElement = document.querySelector("link[rel~='icon']");
+      if (!link) {
+        link = document.createElement('link');
+        link.rel = 'icon';
+        document.getElementsByTagName('head')[0].appendChild(link);
+      }
+      link.href = logo.dark;
+    }
+  }, [logo.dark, isLicenseValid]);
 
   return (
     <ThemeProvider>

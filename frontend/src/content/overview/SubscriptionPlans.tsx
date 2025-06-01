@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
+import { useBrand } from '../../hooks/useBrand';
 
 export default function SubscriptionPlans() {
   const { subscriptionPlans: unorderedSubscriptionPlans } = useSelector(
@@ -20,6 +21,7 @@ export default function SubscriptionPlans() {
   );
   const dispatch = useDispatch();
   const { t }: { t: any } = useTranslation();
+  const brandConfig = useBrand();
   const theme = useTheme();
   const subscriptionPlans = unorderedSubscriptionPlans.slice();
 
@@ -71,7 +73,7 @@ export default function SubscriptionPlans() {
                     sx={{ mt: 2 }}
                     onClick={() =>
                       window.open(
-                        'mailto:contact@atlas-cmms.com?subject=Business%20plan&body=Hi.%0D%0AI%20would%20like%20to%20have%20access%20to%20the%20Business%20plan.%20I%20need%20...',
+                        `mailto:${brandConfig.mail}?subject=Business%20plan&body=Hi.%0D%0AI%20would%20like%20to%20have%20access%20to%20the%20Business%20plan.%20I%20need%20...`,
                         '_blank'
                       )
                     }

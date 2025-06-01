@@ -17,6 +17,8 @@ services:
     depends_on:
       - postgres
       - minio
+    volumes:
+      - ./logo:/app/static/images
     environment:
       DB_URL: postgres/atlas
       DB_USER: ${POSTGRES_USER}
@@ -50,6 +52,9 @@ services:
       LICENSE_KEY: ${LICENSE_KEY:-}
       LICENSE_FINGERPRINT_REQUIRED: ${LICENSE_FINGERPRINT_REQUIRED:-true}
       ALLOWED_ORGANIZATION_ADMINS: ${ALLOWED_ORGANIZATION_ADMINS:-}
+      LOGO_PATHS: ${LOGO_PATHS}
+      CUSTOM_COLORS: ${CUSTOM_COLORS}
+      BRAND_CONFIG: ${BRAND_CONFIG}
     ports:
       - "8080:8080"
   frontend:
@@ -61,10 +66,13 @@ services:
         GOOGLE_TRACKING_ID: ${GOOGLE_TRACKING_ID:- }
         MUI_X_LICENSE: ${MUI_X_LICENSE:- }
         INVITATION_VIA_EMAIL: ${INVITATION_VIA_EMAIL:-false}
-        CLOUD_VERSION: false
+        CLOUD_VERSION: ${CLOUD_VERSION:-false}
         NODE_ENV: production
         ENABLE_SSO: ${ENABLE_SSO:-false}
         OAUTH2_PROVIDER: ${OAUTH2_PROVIDER:- }
+        LOGO_PATHS: ${LOGO_PATHS:- }
+        CUSTOM_COLORS: ${CUSTOM_COLORS:- }
+        BRAND_CONFIG: ${BRAND_CONFIG:- }
     ports:
       - "3000:3000"
     depends_on:

@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <link href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<style>
+<style th:inline="css">
     .invoice-title h2, .invoice-title h3 {
         display: inline-block;
-    }
-
-    .primary {
-        color: #088cf4;
     }
 </style>
 <body>
 <!--@thymesVar id="workOrder" type="com.grash.model.WorkOrder"-->
+<!--/*@thymesVar id="backgroundColor" type="java.lang.String"*/-->
 <!--@thymesVar id="companyName" type="java.lang.String"-->
 <!--/*@thymesVar id="relations" type="java.util.List<com.grash.model.Relation>"*/-->
 <!--/*@thymesVar id="tasks" type="java.util.List<com.grash.model.Task>"*/-->
@@ -32,7 +29,8 @@
         <div class="col-xs-12">
             <div class="invoice-title">
                 <h3 th:text="${companyName}"></h3>
-                <h3 class="pull-right primary" th:text="#{wo_number(${workOrder.customId})}"></h3>
+                <h3 th:class="pull-right" th:style="'color:'+${backgroundColor}"
+                    th:text="#{wo_number(${workOrder.customId})}"></h3>
             </div>
             <hr>
             <div class="row">
@@ -302,13 +300,11 @@
     </div>
     <br>
     <hr>
-    <div class="row justify-content-center align-items-center">
-        <div>
-            <span th:text="#{this_wo_created}" style="margin-right: 20px;"></span>
-        </div>
-        <div>
-            <img th:src="@{${environment.getProperty('api.host')} + '/images/logo.png'}" width="75" height="75"/>
-        </div>
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <span th:text="#{this_wo_created}" style="margin-right: 20px;"></span>
+        <img th:src="@{${environment.getProperty('white-labeling.logo-paths') != null ?
+        environment.getProperty('api.host') + '/images/custom-logo.png' :
+        environment.getProperty('api.host') + '/images/logo.png'}}" width="75" height="75"/>
     </div>
 </div>
 </body>

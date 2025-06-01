@@ -25,6 +25,7 @@ import { addRole } from '../../../../slices/role';
 import { CustomSnackBarContext } from '../../../../contexts/CustomSnackBarContext';
 import useAuth from '../../../../hooks/useAuth';
 import { PlanFeature } from '../../../../models/owns/subscriptionPlan';
+import { useBrand } from '../../../../hooks/useBrand';
 
 // const roles = [
 //   { label: 'Free', value: 'free' },
@@ -39,6 +40,7 @@ interface PageHeaderProps {
 function PageHeader({ rolesNumber, formatValues }: PageHeaderProps) {
   const { t }: { t: any } = useTranslation();
   const { hasFeature } = useAuth();
+  const brandConfig = useBrand();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const { showSnackBar } = useContext(CustomSnackBarContext);
@@ -211,7 +213,9 @@ function PageHeader({ rolesNumber, formatValues }: PageHeaderProps) {
                           {t('permissions')}
                         </Typography>
                         <Typography variant="subtitle2">
-                          {t('create_role_description')}
+                          {t('create_role_description', {
+                            brandName: brandConfig.name
+                          })}
                         </Typography>
                       </Box>
 

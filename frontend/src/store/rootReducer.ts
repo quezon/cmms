@@ -40,6 +40,7 @@ import { reducer as userAnalyticsReducer } from 'src/slices/analytics/user';
 import { reducer as importsReducer } from 'src/slices/imports';
 import { reducer as exportsReducer } from 'src/slices/exports';
 import { reducer as workflowReducer } from 'src/slices/workflow';
+import { reducer as licenseReducer } from 'src/slices/license';
 
 const rootReducer = combineReducers({
   calendar: calendarReducer,
@@ -82,7 +83,8 @@ const rootReducer = combineReducers({
   userAnalytics: userAnalyticsReducer,
   imports: importsReducer,
   exports: exportsReducer,
-  workflows: workflowReducer
+  workflows: workflowReducer,
+  license: licenseReducer
 });
 
 export default rootReducer;

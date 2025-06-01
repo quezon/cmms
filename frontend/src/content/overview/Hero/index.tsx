@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Link as RouterLink } from 'react-router-dom';
 import useScrollToLocation from 'src/hooks/useScrollToLocation';
 import useAuth from '../../../hooks/useAuth';
+import { useBrand } from '../../../hooks/useBrand';
 
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
@@ -124,6 +125,7 @@ const TsAvatar = styled(Box)(
 function Hero() {
   const { t }: { t: any } = useTranslation();
   const { isAuthenticated } = useAuth();
+  const brandConfig = useBrand();
   useScrollToLocation();
 
   return (
@@ -152,7 +154,7 @@ function Hero() {
             color="text.secondary"
             fontWeight="normal"
           >
-            {t('home_description')}
+            {t('home_description', { shortBrandName: brandConfig.shortName })}
           </TypographyH2>
           <Button
             component={RouterLink}
@@ -160,7 +162,7 @@ function Hero() {
             size="large"
             variant="contained"
           >
-            {t('try_grash')}
+            {t('try_grash', { shortBrandName: brandConfig.shortName })}
           </Button>
           <Button
             sx={{
@@ -178,7 +180,7 @@ function Hero() {
               ml: 2
             }}
             component="a"
-            href="mailto:contact@atlas-cmms.com"
+            href={`mailto:${brandConfig.mail}`}
             size="medium"
             variant="text"
           >
@@ -190,7 +192,7 @@ function Hero() {
             <RouterLink to="/app/work-orders">
               <ImgWrapper>
                 <img
-                  alt="Atlas"
+                  alt={brandConfig.shortName}
                   src="/static/images/overview/work_orders_screenshot.png"
                 />
               </ImgWrapper>

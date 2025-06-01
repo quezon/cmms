@@ -9,12 +9,14 @@ import {
   Divider,
   Drawer,
   lighten,
-  styled, Typography,
+  styled,
+  Typography,
   useTheme
 } from '@mui/material';
 import SidebarMenu from './SidebarMenu';
 import SidebarFooter from './SidebarFooter';
 import Logo from 'src/components/LogoSign';
+import { isWhiteLabeled } from '../../../config';
 
 const SidebarWrapper = styled(Box)(
   ({ theme }) => `
@@ -63,7 +65,17 @@ function Sidebar() {
             >
               <Box>
                 <Logo white />
-                <Typography style={{cursor: 'pointer', color: 'white'}} fontSize={13} onClick={()=>{ window.open("https://www.intel-loop.com/",'_blank')}}>Powered by Intelloop</Typography>
+                {!isWhiteLabeled && (
+                  <Typography
+                    style={{ cursor: 'pointer', color: 'white' }}
+                    fontSize={13}
+                    onClick={() => {
+                      window.open('https://www.intel-loop.com/', '_blank');
+                    }}
+                  >
+                    Powered by Intelloop
+                  </Typography>
+                )}
               </Box>
             </Box>
           </Box>
@@ -112,7 +124,17 @@ function Sidebar() {
               >
                 <Box>
                   <Logo white />
-                  <Typography style={{cursor: 'pointer', color: 'white'}} fontSize={13} onClick={()=>{ window.open("https://www.intel-loop.com/",'_blank')}}>Powered by Intelloop</Typography>
+                  {!isWhiteLabeled && (
+                    <Typography
+                      style={{ cursor: 'pointer', color: 'white' }}
+                      fontSize={13}
+                      onClick={() => {
+                        window.open('https://www.intel-loop.com/', '_blank');
+                      }}
+                    >
+                      Powered by Intelloop
+                    </Typography>
+                  )}
                 </Box>
               </Box>
             </Box>

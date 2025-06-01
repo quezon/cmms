@@ -12,6 +12,7 @@ import RefreshTwoToneIcon from '@mui/icons-material/RefreshTwoTone';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import { useTranslation } from 'react-i18next';
+import { useBrand } from '../../../../hooks/useBrand';
 
 const GridWrapper = styled(Grid)(
   ({ theme }) => `
@@ -45,7 +46,7 @@ const TypographySecondary = styled(Typography)(
 
 function Status500() {
   const { t }: { t: any } = useTranslation();
-
+  const { name: brandName } = useBrand();
   const [pending, setPending] = useState(false);
   function handleClick() {
     setPending(true);
@@ -140,7 +141,7 @@ function Status500() {
                     my: 2
                   }}
                 >
-                  Atlas
+                  {brandName}
                 </TypographyPrimary>
                 <TypographySecondary
                   variant="h4"
