@@ -184,7 +184,7 @@ function TermsOfService() {
           </Typography>
           <Typography paragraph>
             Subscription fees are based on the selected deployment model and
-            number of users. Current pricing is available at
+            number of users. Current pricing is available at{' '}
             {brandConfig.website}/pricing.
           </Typography>
 
@@ -295,11 +295,11 @@ function TermsOfService() {
             intellectual property rights therein are the exclusive property of
             Company.{' '}
             {IS_ORIGINAL_CLOUD ? 'Intelloop s.a.r.l' : brandConfig.name} owns
-            all intellectual property rights to
-            {brandConfig.name}, including its codebase, design, and
-            documentation, except for open source components which are governed
-            by their respective licenses. While {brandConfig.name} is open
-            source, your use is subject to the terms of this Agreement.
+            all intellectual property rights to {brandConfig.name}, including
+            its codebase, design, and documentation, except for open source
+            components which are governed by their respective licenses. While{' '}
+            {brandConfig.name} is open source, your use is subject to the terms
+            of this Agreement.
           </Typography>
 
           <Typography variant="h4" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>
@@ -416,7 +416,7 @@ function TermsOfService() {
           </Typography>
           <Typography paragraph>
             Company shall handle any personal data collected from users in
-            accordance with its Privacy Policy available at
+            accordance with its Privacy Policy available at{' '}
             {brandConfig.website}/privacy
           </Typography>
 
