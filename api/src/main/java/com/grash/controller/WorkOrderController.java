@@ -80,6 +80,7 @@ public class WorkOrderController {
     private final PreventiveMaintenanceService preventiveMaintenanceService;
     private final EntityManager em;
     private final PreventiveMaintenanceMapper preventiveMaintenanceMapper;
+    private final BrandingService brandingService;
 
 
     @Value("${frontend.url}")
@@ -417,6 +418,7 @@ public class WorkOrderController {
                     put("tasksImagesUrls", tasksImagesUrls);
                     put("messageSource", messageSource);
                     put("locale", Helper.getLocale(user));
+                    put("backgroundColor", brandingService.getMailBackgroundColor());
                 }};
                 thymeleafContext.setVariables(variables);
 
