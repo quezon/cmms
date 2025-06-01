@@ -21,6 +21,7 @@ import { isCloudVersion, isWhiteLabeled } from '../../config';
 function Overview() {
   const { t }: { t: any } = useTranslation();
   const brandConfig = useBrand();
+  const IS_ORIGINAL_CLOUD = !isWhiteLabeled && isCloudVersion;
 
   return (
     <Box>
@@ -44,7 +45,7 @@ function Overview() {
           </Typography>
           <Typography paragraph>
             Welcome to {brandConfig.name}{' '}
-            {isCloudVersion && !isWhiteLabeled && (
+            {IS_ORIGINAL_CLOUD && (
               <>
                 , a solution developed and provided by Intelloop s.a.r.l
                 ("Intelloop", "we", "us", or "our"), located at 410, Boulevard
@@ -57,7 +58,7 @@ function Overview() {
           <Typography paragraph>
             Our commitment is to your privacy and the protection of your
             information. This Privacy Policy outlines how we collect, use,
-            disclose, and safeguard your information when you visit our website
+            disclose, and safeguard your information when you visit our website{' '}
             {brandConfig.website} (the "Site") or use our {brandConfig.name}{' '}
             software and services (collectively, "Services").
           </Typography>
@@ -131,7 +132,7 @@ function Overview() {
             <ListItem sx={{ display: 'list-item' }}>
               <Typography>
                 <strong>Contractual Necessity</strong>: When processing is
-                necessary for performing our contract with you when you use
+                necessary for performing our contract with you when you use{' '}
                 {brandConfig.name}.
               </Typography>
             </ListItem>
@@ -142,13 +143,15 @@ function Overview() {
                 improvement of our Services.
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
-              <Typography>
-                <strong>Legal Obligations</strong>: When we need to comply with
-                legal obligations under Moroccan law and other applicable
-                regulations.
-              </Typography>
-            </ListItem>
+            {IS_ORIGINAL_CLOUD && (
+              <ListItem sx={{ display: 'list-item' }}>
+                <Typography>
+                  <strong>Legal Obligations</strong>: When we need to comply
+                  with legal obligations under Moroccan law and other applicable
+                  regulations.
+                </Typography>
+              </ListItem>
+            )}
           </List>
 
           <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>
@@ -237,12 +240,14 @@ function Overview() {
                 communication
               </Typography>
             </ListItem>
-            <ListItem sx={{ display: 'list-item' }}>
-              <Typography>
-                <strong>Billing Information</strong>: For 10 years as required
-                by Moroccan tax law
-              </Typography>
-            </ListItem>
+            {IS_ORIGINAL_CLOUD && (
+              <ListItem sx={{ display: 'list-item' }}>
+                <Typography>
+                  <strong>Billing Information</strong>: For 10 years as required
+                  by Moroccan tax law
+                </Typography>
+              </ListItem>
+            )}
           </List>
           <Typography paragraph>
             After these periods expire, we will securely delete or anonymize
@@ -313,8 +318,10 @@ function Overview() {
             laws of your country.
           </Typography>
           <Typography paragraph>
-            When transferring your data outside Morocco, we implement the
-            following safeguards:
+            {IS_ORIGINAL_CLOUD
+              ? 'When transferring your data outside Morocco,'
+              : ''}{' '}
+            We implement the following safeguards:
           </Typography>
           <List sx={{ pl: 4, listStyleType: 'disc' }}>
             <ListItem sx={{ display: 'list-item' }}>
@@ -335,7 +342,7 @@ function Overview() {
             </ListItem>
           </List>
           <Typography paragraph>
-            You may request a copy of these safeguards by contacting
+            You may request a copy of these safeguards by contacting{' '}
             {brandConfig.mail}.
           </Typography>
 
@@ -380,8 +387,10 @@ function Overview() {
             9. Your Rights
           </Typography>
           <Typography paragraph>
-            Under Moroccan Law 09-08 and other applicable data protection laws,
-            you have certain rights regarding your Personal Information,
+            {IS_ORIGINAL_CLOUD
+              ? 'Under Moroccan Law 09-08 and other applicable data protection laws,'
+              : ''}{' '}
+            You have certain rights regarding your Personal Information,
             including:
           </Typography>
           <List sx={{ pl: 4, listStyleType: 'disc' }}>
@@ -495,7 +504,7 @@ function Overview() {
             Our Services are not intended for children under the age of 16. We
             do not knowingly collect personal information from children under
             16. If you are a parent or guardian and believe your child has
-            provided us with Personal Information, please contact us at
+            provided us with Personal Information, please contact us at{' '}
             {brandConfig.mail}, and we will take steps to delete such
             information.
           </Typography>
@@ -529,7 +538,7 @@ function Overview() {
             constitutes acceptance of the updated Privacy Policy.
           </Typography>
 
-          {!isWhiteLabeled && isCloudVersion && (
+          {IS_ORIGINAL_CLOUD && (
             <>
               <Typography
                 variant="h3"

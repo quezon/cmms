@@ -21,6 +21,7 @@ import { isCloudVersion, isWhiteLabeled } from '../../config';
 function TermsOfService() {
   const { t }: { t: any } = useTranslation();
   const brandConfig = useBrand();
+  const IS_ORIGINAL_CLOUD = !isWhiteLabeled && isCloudVersion;
 
   return (
     <Box>
@@ -43,7 +44,7 @@ function TermsOfService() {
           <Typography variant="h3" sx={{ mb: 2, fontWeight: 'bold' }}>
             1. Introduction
           </Typography>
-          {!isWhiteLabeled && isCloudVersion && (
+          {IS_ORIGINAL_CLOUD && (
             <Typography paragraph>
               This Terms of Service Agreement ("Agreement") is a legal agreement
               between you as an individual or entity ("You" or "Customer") and
@@ -67,11 +68,16 @@ function TermsOfService() {
             2. Service Description
           </Typography>
           <Typography paragraph>
-            {brandConfig.name} is a solution developed and provided by Intelloop
-            s.a.r.l as part of its ADDAPTIVE Tech services, which guide
-            companies through digital transformation in maintenance and
-            reliability. The Software is offered as a service that may be
-            deployed through self-hosted, cloud-based, or hybrid models.
+            {IS_ORIGINAL_CLOUD && (
+              <>
+                {brandConfig.name} is a solution developed and provided by
+                Intelloop s.a.r.l as part of its ADDAPTIVE Tech services, which
+                guide companies through digital transformation in maintenance
+                and reliability.{' '}
+              </>
+            )}
+            The Software is offered as a service that may be deployed through
+            self-hosted, cloud-based, or hybrid models.
           </Typography>
 
           <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>
@@ -287,7 +293,9 @@ function TermsOfService() {
           <Typography paragraph>
             The Software, {brandConfig.name} Logo, and all worldwide
             intellectual property rights therein are the exclusive property of
-            Company. Intelloop s.a.r.l owns all intellectual property rights to
+            Company.{' '}
+            {IS_ORIGINAL_CLOUD ? 'Intelloop s.a.r.l' : brandConfig.name} owns
+            all intellectual property rights to
             {brandConfig.name}, including its codebase, design, and
             documentation, except for open source components which are governed
             by their respective licenses. While {brandConfig.name} is open
@@ -627,7 +635,8 @@ function TermsOfService() {
             15.1 Governing Law
           </Typography>
           <Typography paragraph>
-            This Agreement shall be governed by the laws of Morocco without
+            This Agreement shall be governed by the laws of{' '}
+            {IS_ORIGINAL_CLOUD ? 'Morocco' : brandConfig.addressCity} without
             regard to its conflict of law principles.
           </Typography>
 
@@ -637,7 +646,7 @@ function TermsOfService() {
           <Typography paragraph>
             Any disputes arising out of or relating to this Agreement shall be
             resolved through binding arbitration in ${brandConfig.addressCity},
-            {!isWhiteLabeled && isCloudVersion && (
+            {IS_ORIGINAL_CLOUD && (
               <>
                 administered by the Moroccan Arbitration Center under its
                 Commercial Arbitration Rules. The arbitration panel shall
@@ -708,7 +717,7 @@ function TermsOfService() {
             by email or through the Software interface. Users shall send any
             notices to Company at {brandConfig.mail}.
           </Typography>
-          {!isWhiteLabeled && isCloudVersion && (
+          {IS_ORIGINAL_CLOUD && (
             <>
               <Typography
                 variant="h3"
