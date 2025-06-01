@@ -16,7 +16,6 @@ const initialState: LicenseState = {
 const slice = createSlice({
   name: 'license',
   initialState,
-  extraReducers: (builder) => builder.addCase(revertAll, () => initialState),
   reducers: {
     getLicenseValidity(
       state: LicenseState,

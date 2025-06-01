@@ -59,6 +59,7 @@ function Logo({ white }: OwnProps) {
   const height = 60;
   const mobile = useMediaQuery(theme.breakpoints.down('sm'));
   const { logo, name: brandName } = useBrand();
+
   return (
     <TooltipWrapper title={brandName} arrow>
       <LogoWrapper to="/overview">
