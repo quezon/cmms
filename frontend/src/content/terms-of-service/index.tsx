@@ -179,7 +179,7 @@ function TermsOfService() {
           <Typography paragraph>
             Subscription fees are based on the selected deployment model and
             number of users. Current pricing is available at
-            www.atlas-cmms.com/pricing.
+            {brandConfig.website}/pricing.
           </Typography>
 
           <Typography variant="h4" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>
@@ -409,7 +409,7 @@ function TermsOfService() {
           <Typography paragraph>
             Company shall handle any personal data collected from users in
             accordance with its Privacy Policy available at
-            www.atlas-cmms.com/privacy
+            {brandConfig.website}/privacy
           </Typography>
 
           <Typography variant="h4" sx={{ mt: 2, mb: 1, fontWeight: 'bold' }}>

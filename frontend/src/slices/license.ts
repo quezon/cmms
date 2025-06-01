@@ -30,7 +30,7 @@ const slice = createSlice({
 
 export const reducer = slice.reducer;
 
-export const getAtlasLicenseValidity = (): AppThunk => async (dispatch) => {
+export const getLicenseValidity = (): AppThunk => async (dispatch) => {
   const { success } = await api.get<{ success: boolean }>(
     `${basePath}/validity`
   );

@@ -58,7 +58,7 @@ function Overview() {
             Our commitment is to your privacy and the protection of your
             information. This Privacy Policy outlines how we collect, use,
             disclose, and safeguard your information when you visit our website
-            www.atlas-cmms.com (the "Site") or use our {brandConfig.name}{' '}
+            {brandConfig.website} (the "Site") or use our {brandConfig.name}{' '}
             software and services (collectively, "Services").
           </Typography>
           <Typography paragraph>
@@ -300,7 +300,7 @@ function Overview() {
           </List>
           <Typography paragraph>
             For a complete and up-to-date list of our subprocessors, please
-            visit: www.atlas-cmms.com/subprocessors
+            visit: {brandConfig.website}/subprocessors
           </Typography>
 
           <Typography variant="h3" sx={{ mt: 3, mb: 2, fontWeight: 'bold' }}>

@@ -14,7 +14,7 @@ import ReactGA from 'react-ga4';
 import { googleTrackingId, IS_LOCALHOST, isWhiteLabeled } from './config';
 import { useEffect } from 'react';
 import { CompanySettingsProvider } from './contexts/CompanySettingsContext';
-import { getAtlasLicenseValidity } from './slices/license';
+import { getLicenseValidity } from './slices/license';
 import { useDispatch } from './store';
 
 if (!IS_LOCALHOST && googleTrackingId) ReactGA.initialize(googleTrackingId);
@@ -57,7 +57,7 @@ function App() {
       }
   }, [user, isInitialized, isAuthenticated, location]);
   useEffect(() => {
-    if (isWhiteLabeled) dispatch(getAtlasLicenseValidity());
+    if (isWhiteLabeled) dispatch(getLicenseValidity());
   }, []);
   return (
     <ThemeProvider>

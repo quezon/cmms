@@ -32,7 +32,7 @@ import { useZendesk } from 'react-use-zendesk';
 import { UiConfiguration } from 'src/models/owns/uiConfiguration';
 import { googleTrackingId, IS_LOCALHOST } from '../config';
 import ReactGA from 'react-ga4';
-import { getAtlasLicenseValidity } from '../slices/license';
+import { getLicenseValidity } from '../slices/license';
 
 interface AuthState {
   isInitialized: boolean;
