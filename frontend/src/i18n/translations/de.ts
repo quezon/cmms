@@ -80,7 +80,7 @@ const deJSON = {
   'eam.descriptions.0':
     'Frustriert, die chaotische Unordnung der Unternehmensausrüstung zu organisieren, sich zu fragen, ob die Ausrüstung richtig gepflegt wurde, nicht zu wissen, was sie kosten, um sie zu warten, und all die anderen Kopfschmerzen, die mit der Verwaltung von Anlagen einhergehen?',
   'eam.descriptions.1':
-    'Das Enterprise Asset Management-Modul von Atlas CMMS kann für 10 bis 1.000.000 Anlagen verwendet werden, sodass Sie genau das verfolgen können, was Sie möchten, auf die Weise, wie Sie es möchten, in einer benutzerfreundlichen und durchsuchbaren Baumstruktur.',
+    'Das Enterprise Asset Management-Modul von {{brandName}} kann für 10 bis 1.000.000 Anlagen verwendet werden, sodass Sie genau das verfolgen können, was Sie möchten, auf die Weise, wie Sie es möchten, in einer benutzerfreundlichen und durchsuchbaren Baumstruktur.',
   'eam.checks.0':
     'Kennen Sie den Zustand Ihrer Anlagen jederzeit und was sie kosten',
   'eam.checks.1': 'Komplette und detaillierte Wartungsprotokolle anzeigen.',
@@ -1406,7 +1406,7 @@ const deJSON = {
   simplify_wo: 'Arbeitsaufträge in der mobilen App vereinfachen',
   simplify_wo_description:
     'Verbergen Sie Zeitsteuerungen, Kosten und Teile in den Details des Arbeitsauftrags, während Sie die mobile App verwenden',
-  account_deletion: 'Löschung des Atlas CMMS-Kontos',
+  account_deletion: 'Löschung des {{brandName}}-Kontos',
   switch_account: 'Konto wechseln',
   switch_to_super_user: 'Zu Super-Admin wechseln',
   switch_account_description: 'Bitte wählen Sie ein Konto, um fortzufahren',
