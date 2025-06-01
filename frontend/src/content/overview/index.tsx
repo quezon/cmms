@@ -8,6 +8,7 @@ import NavBar from '../../components/NavBar';
 import { useEffect } from 'react';
 import { isCloudVersion } from '../../config';
 import { useBrand } from '../../hooks/useBrand';
+import { useSelector } from '../../store';
 
 const OverviewWrapper = styled(Box)(
   ({ theme }) => `
@@ -21,11 +22,16 @@ const OverviewWrapper = styled(Box)(
 function Overview() {
   const { t }: { t: any } = useTranslation();
   const navigate = useNavigate();
+  const { isLicenseValid } = useSelector((state) => state.license);
   const brandConfig = useBrand();
 
   useEffect(() => {
-    if (!isCloudVersion) navigate('/account/login');
-  }, [isCloudVersion]);
+    if (
+      !isCloudVersion ||
+      (isCloudVersion && isLicenseValid != null && !isLicenseValid)
+    )
+      navigate('/account/login');
+  }, [isCloudVersion, isLicenseValid]);
 
   return (
     <OverviewWrapper>
