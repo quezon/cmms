@@ -115,3 +115,4 @@ license-fingerprint-required: ${LICENSE_FINGERPRINT_REQUIRED:true}
 white-labeling:
   logo-paths: ${LOGO_PATHS:}
   custom-colors: ${CUSTOM_COLORS:}
+  brand-config: ${BRAND_CONFIG:}

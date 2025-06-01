@@ -104,6 +104,7 @@ public class EmailService2 {
         thymeleafContext.setLocale(locale);
         thymeleafContext.setVariables(templateModel);
         thymeleafContext.setVariable("environment", environment);
+        thymeleafContext.setVariable("brandConfig", brandingService.getBrandConfig());
         thymeleafContext.setVariable("backgroundColor", brandingService.getMailBackgroundColor());
         String htmlBody = thymeleafTemplateEngine.process(template, thymeleafContext);
 
