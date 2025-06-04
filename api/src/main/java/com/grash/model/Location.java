@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toCollection;
 @NoArgsConstructor
 public class Location extends CompanyAudit {
     private String customId;
-    
+
     @NotNull
     private String name;
 
@@ -32,8 +32,6 @@ public class Location extends CompanyAudit {
     private Double longitude;
 
     private Double latitude;
-
-    private boolean hasChildren;
 
     @ManyToMany
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
