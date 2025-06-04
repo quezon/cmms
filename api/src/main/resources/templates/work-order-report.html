@@ -302,10 +302,9 @@
     <hr>
     <div style="display: flex; align-items: center; justify-content: center;">
         <span th:text="#{this_wo_created}" style="margin-right: 20px;"></span>
-        <img th:src="@{${environment.getProperty('white-labeling.logo-paths') != null &&
-                 !environment.getProperty('white-labeling.logo-paths').isEmpty() ?
-        environment.getProperty('api.host') + '/images/custom-logo.png' :
-        environment.getProperty('api.host') + '/images/logo.png'}}" width="75" height="75"/>
+        <img th:src="@{${#strings.isEmpty(environment.getProperty('white-labeling.logo-paths')) ?
+    environment.getProperty('api.host') + '/images/logo.png' :
+    environment.getProperty('api.host') + '/images/custom-logo.png'}}" width="75" height="75"/>
     </div>
 </div>
 </body>
