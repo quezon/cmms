@@ -73,9 +73,7 @@ export const CustomSelect = ({
   const fetchRoles = async () => {
     dispatch(getRoles());
   };
-  const fetchRootLocations = async () => {
-    dispatch(getLocationChildren(0, [], { page: 0, size: 1000 }));
-  };
+
   const fetchCategories = async (category: string) => {
     dispatch(getCategories(category));
   };
@@ -151,13 +149,13 @@ export const CustomSelect = ({
       onOpen = fetchCurrencies;
       break;
     case 'parentLocation':
-      options = locationsHierarchy.map((location) => {
+      options = locationsMini.map((location) => {
         return {
           label: location.name,
           value: location.id
         };
       });
-      onOpen = fetchRootLocations;
+      onOpen = fetchLocations;
       break;
     case 'asset': {
       options = assetsMini
