@@ -188,5 +188,10 @@ Check CONTRIBUTING.md inside each subproject for details.
 You can also join our [Discord server](https://discord.gg/cHqyVRYpkA)
 
 ## Open source licensing info
+Atlas CMMS is dual-licensed:
 
-1) [LICENSE](LICENSE)
+- [GPLv3 License](./LICENSE) — Free and open source.
+- [Commercial License](./COMMERCIAL_LICENSE.MD) — Required for white labeling, custom branding, and advanced features like SSO.
+
+To enable commercial features, you must set a valid `LICENSE_KEY`.  
+Contact us at [contact@atlas-cmms.com](mailto:contact@atlas-cmms.com) to purchase a commercial license.
