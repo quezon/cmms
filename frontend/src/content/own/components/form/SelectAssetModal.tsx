@@ -1,33 +1,28 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   Box,
   Button,
-  CircularProgress,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
-  Stack,
   Typography,
-  useTheme,
-  Chip
+  useTheme
 } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from '../../../../store';
-import {
-  getAssetChildren,
-  resetAssetsHierarchy
-} from '../../../../slices/asset';
+import { getAssetsMini, resetAssetsHierarchy } from '../../../../slices/asset';
 import CustomDataGrid, { CustomDatagridColumn } from '../CustomDatagrid';
 import {
+  GridEventListener,
   GridRenderCellParams,
   GridRow,
-  GridEventListener,
   GridSelectionModel
 } from '@mui/x-data-grid';
 import { DataGridProProps, useGridApiRef } from '@mui/x-data-grid-pro';
-import { AssetRow, AssetMiniDTO } from '../../../../models/owns/asset';
+import { AssetMiniDTO } from '../../../../models/owns/asset';
 import { GroupingCellWithLazyLoading } from '../../Assets/GroupingCellWithLazyLoading';
 import ReplayTwoToneIcon from '@mui/icons-material/ReplayTwoTone';
 import { Pageable } from '../../../../models/owns/page';
@@ -44,6 +39,53 @@ interface SelectAssetModalProps {
   initialSelectedAssets?: AssetMiniDTO[]; // Optional pre-selected assets
 }
 
+const getAssetRows = (assets: AssetMiniDTO[]): IRow[] => {
+  // Build a map of parent to children
+  const assetsByParent: { [key: number]: number[] } = {};
+  const assetMap: { [key: number]: AssetMiniDTO } = {};
+
+  // Create asset map for quick lookup
+  assets.forEach((asset) => {
+    assetMap[asset.id] = asset;
+  });
+
+  // Build parent-children relationships
+  assets.forEach((asset) => {
+    if (asset.parentId) {
+      if (!assetsByParent[asset.parentId]) {
+        assetsByParent[asset.parentId] = [];
+      }
+      assetsByParent[asset.parentId].push(asset.id);
+    }
+  });
+
+  // Helper function to build hierarchy path
+  const buildHierarchy = (assetId: number): number[] => {
+    const hierarchy: number[] = [];
+    let currentAsset = assetMap[assetId];
+    hierarchy.unshift(currentAsset.id);
+
+    while (
+      currentAsset.parentId &&
+      !hierarchy.includes(currentAsset.parentId)
+    ) {
+      hierarchy.unshift(currentAsset.parentId);
+      currentAsset = assetMap[currentAsset.parentId];
+    }
+
+    return hierarchy;
+  };
+
+  return assets.map((asset) => {
+    const hierarchy = buildHierarchy(asset.id);
+    return {
+      ...asset,
+      hierarchy,
+      hasChildren: !!assetsByParent[asset.id]
+    };
+  });
+};
+type IRow = AssetMiniDTO & { hierarchy: number[]; hasChildren: boolean };
 const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   open,
   onClose,
@@ -57,13 +99,14 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   const dispatch = useDispatch();
   const apiRef = useGridApiRef();
   const theme = useTheme();
-  const { assetsHierarchy, loadingGet } = useSelector((state) => state.assets);
-  const [pageable, setPageable] = useState<Pageable>({ page: 0, size: 1000 });
+  const { loadingGet, assetsMini } = useSelector((state) => state.assets);
   const initialized = useRef<boolean>(false);
   const single = maxSelections === 1;
-  const [deployedAssets, setDeployedAssets] = useState<
-    { id: number; hierarchy: number[] }[]
-  >([{ id: 0, hierarchy: [] }]);
+
+  const assetsHierarchy: IRow[] = useMemo(
+    () => getAssetRows(assetsMini),
+    [assetsMini.length]
+  );
 
   // State for tracking selected assets
   const [selectedAssets, setSelectedAssets] = useState<AssetMiniDTO[]>(
@@ -76,9 +119,8 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
 
   const handleReset = (callApi: boolean) => {
     dispatch(resetAssetsHierarchy(callApi));
-    setDeployedAssets([{ id: 0, hierarchy: [] }]);
     if (callApi) {
-      dispatch(getAssetChildren(0, [], pageable));
+      dispatch(getAssetsMini());
     }
   };
 
@@ -107,67 +149,6 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
       setSelectionModel([]);
     }
   }, [open]);
-  useEffect(() => {
-    if (apiRef.current.getRow) {
-      const handleRowExpansionChange: GridEventListener<
-        'rowExpansionChange'
-      > = async (node) => {
-        const row = apiRef.current.getRow(node.id) as AssetRow | null;
-        if (!node.childrenExpanded || !row || row.childrenFetched) {
-          return;
-        }
-        apiRef.current.updateRows([
-          {
-            id: t('loading_assets', { name: row.name, id: node.id }),
-            hierarchy: [...row.hierarchy, '']
-          }
-        ]);
-        if (
-          !deployedAssets.find((deployedAsset) => deployedAsset.id === row.id)
-        ) {
-          setDeployedAssets((prev) => [
-            ...prev,
-            { id: row.id, hierarchy: row.hierarchy }
-          ]);
-        }
-        dispatch(getAssetChildren(row.id, row.hierarchy, pageable));
-      };
-
-      const handleCellKeyDown: GridEventListener<'cellKeyDown'> = (
-        params,
-        event
-      ) => {
-        const cellParams = apiRef.current.getCellParams(
-          params.id,
-          params.field
-        );
-        if (cellParams.colDef.type === 'treeDataGroup' && event.key === ' ') {
-          event.stopPropagation();
-          event.preventDefault();
-          event.defaultMuiPrevented = true;
-          apiRef.current.setRowChildrenExpansion(
-            params.id,
-            !params.rowNode.childrenExpanded
-          );
-        }
-      };
-
-      const unsubscribeExpansion = apiRef.current.subscribeEvent(
-        'rowExpansionChange',
-        handleRowExpansionChange
-      );
-      const unsubscribeKeyDown = apiRef.current.subscribeEvent(
-        'cellKeyDown',
-        handleCellKeyDown,
-        { isFirst: true }
-      );
-
-      return () => {
-        unsubscribeExpansion();
-        unsubscribeKeyDown();
-      };
-    }
-  }, [apiRef, dispatch, pageable, t, deployedAssets]);
 
   const columns: CustomDatagridColumn[] = [
     {
@@ -242,7 +223,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
 
     // Update the selected assets array
     const updatedSelectedAssets = currentSelectionModel.map((id) => {
-      return apiRef.current.getRow(id) as AssetRow;
+      return apiRef.current.getRow(id) as IRow;
     });
     setSelectedAssets(updatedSelectedAssets);
     if (single) {
@@ -269,7 +250,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
   const filteredAssetsHierarchy = assetsHierarchy.filter(
     (asset) =>
       !excludedAssetIds.includes(asset.id) &&
-      (locationId ? asset.location?.id === locationId : true)
+      (locationId ? asset.locationId === locationId : true)
   );
 
   return (
@@ -329,12 +310,7 @@ const SelectAssetModal: React.FC<SelectAssetModalProps> = ({
               }
               setSelectionModel(newSelectionModel);
               const updatedSelectedAssets = newSelectionModel.map((id) => {
-                const row = apiRef.current.getRow(id) as AssetRow;
-                return {
-                  id: row.id,
-                  name: row.name,
-                  customId: row.customId
-                };
+                return apiRef.current.getRow(id) as IRow;
               });
 
               setSelectedAssets(updatedSelectedAssets);
