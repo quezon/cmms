@@ -355,7 +355,7 @@ function Highlights() {
         { key: 'work-orders.descriptions.0' },
         {
           key: 'work-orders.descriptions.1',
-          params: { shortBrandName: brandConfig.shortName }
+          params: { shortBrandName: brandConfig.name }
         }
       ],
       checks: [
@@ -365,7 +365,7 @@ function Highlights() {
         { key: 'work-orders.checks.3' },
         {
           key: 'work-orders.checks.4',
-          params: { shortBrandName: brandConfig.shortName }
+          params: { shortBrandName: brandConfig.name }
         }
       ],
       image: '/static/images/overview/work_order_screenshot.png'
