@@ -706,7 +706,7 @@ function Highlights() {
                 fontWeight="normal"
               >
                 {t('home.smarter_description', {
-                  shortBrandName: brandConfig.shortName
+                  shortBrandName: brandConfig.name
                 })}
               </TypographySubHeading>
             </Box>
@@ -735,7 +735,7 @@ function Highlights() {
             fontWeight="normal"
           >
             {t('key_features_description', {
-              shortBrandName: brandConfig.shortName
+              shortBrandName: brandConfig.name
             })}
           </TypographyH2>
         </Container>
