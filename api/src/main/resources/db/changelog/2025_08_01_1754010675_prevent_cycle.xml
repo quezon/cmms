@@ -76,4 +76,46 @@ DECLARE
             EXECUTE FUNCTION prevent_cycle();
     </sql>
 </changeSet>
+    <changeSet id="1754017351824-1" author="Ibrahima G. Coulibaly">
+        <sql>
+            ALTER FUNCTION prevent_cycle RENAME TO prevent_location_cycle;
+        </sql>
+        <sql>
+            DROP TRIGGER asset_no_cycle ON asset;
+        </sql>
+        <sql>
+            CREATE
+            OR REPLACE FUNCTION prevent_asset_cycle()
+    RETURNS TRIGGER AS '
+DECLARE
+        has_cycle BOOLEAN;
+        BEGIN
+        WITH RECURSIVE chain AS (SELECT id, parent_asset_id
+                                 FROM asset
+                                 WHERE id = NEW.parent_asset_id
+                                 UNION ALL
+                                 SELECT a.id, a.parent_asset_id
+                                 FROM asset a
+                                          JOIN chain c ON a.id = c.parent_asset_id)
+        SELECT EXISTS (SELECT 1 FROM chain WHERE id = NEW.id)
+        INTO has_cycle;
+
+        IF
+        has_cycle THEN
+        RAISE EXCEPTION ''Circular reference detected for asset %'', NEW.id;
+        END IF;
+
+        RETURN NEW;
+        END;
+'
+        LANGUAGE plpgsql;
+
+            CREATE TRIGGER asset_no_cycle
+                BEFORE INSERT OR
+            UPDATE ON asset
+                FOR EACH ROW
+                WHEN (NEW.parent_asset_id IS NOT NULL)
+                EXECUTE FUNCTION prevent_asset_cycle();
+        </sql>
+    </changeSet>
 </databaseChangeLog>
