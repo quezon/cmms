@@ -89,7 +89,6 @@ public class ApiApplication implements CommandLineRunner {
                             PlanFeatures.ADDITIONAL_COST,
                             PlanFeatures.ADDITIONAL_TIME,
                             PlanFeatures.REQUEST_CONFIGURATION,
-                            PlanFeatures.PURCHASE_ORDER,
                             PlanFeatures.SIGNATURE,
                             PlanFeatures.ANALYTICS,
                             PlanFeatures.IMPORT_CSV

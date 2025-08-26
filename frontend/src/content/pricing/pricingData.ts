@@ -133,7 +133,7 @@ export const planFeatureCategories = [
       {
         name: 'Checklists',
         availability: {
-          basic: true,
+          basic: false,
           starter: true,
           professional: true,
           business: true
@@ -142,7 +142,7 @@ export const planFeatureCategories = [
       {
         name: 'Time and Cost Tracking',
         availability: {
-          basic: true,
+          basic: false,
           starter: true,
           professional: true,
           business: true
@@ -269,7 +269,7 @@ export const planFeatureCategories = [
       {
         name: 'File Upload',
         availability: {
-          basic: true,
+          basic: false,
           starter: true,
           professional: true,
           business: true
