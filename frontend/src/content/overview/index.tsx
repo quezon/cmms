@@ -1,4 +1,12 @@
-import { Box, Container, Grid, Link, styled, Typography } from '@mui/material';
+import {
+  Box,
+  Container,
+  Grid,
+  Link,
+  styled,
+  Typography,
+  Stack
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +23,8 @@ import {
   Instagram,
   Phone,
   Mail,
-  Sms
+  Sms,
+  LinkedIn
 } from '@mui/icons-material';
 
 const OverviewWrapper = styled(Box)(
@@ -63,61 +72,74 @@ function Footer() {
         <Grid container spacing={4}>
           <Grid item xs={12} md={3}>
             <SectionHeading variant="h5">Contact</SectionHeading>
-            <Box
-              sx={{ cursor: 'pointer' }}
-              onClick={() =>
-                (window.location.href = 'mailto:contact@atlas-cmms.com')
-              }
-              display="flex"
-              alignItems="center"
-            >
-              <Mail fontSize="small" />
-              <Typography variant="body2" sx={{ ml: 1 }}>
-                contact@atlas-cmms.com
-              </Typography>
-            </Box>
-            <Box display="flex" alignItems="center" mb={1}>
-              <Phone fontSize="small" />
-              <Typography variant="body2" sx={{ ml: 1 }}>
-                +212630690050
-              </Typography>
-            </Box>
-            <Box display="flex" alignItems="center" mb={1}>
-              <Sms fontSize="small" />
-              <Typography variant="body2" sx={{ ml: 1 }}>
-                +212630690050
-              </Typography>
-            </Box>
+            <Stack spacing={2}>
+              <Box
+                sx={{ cursor: 'pointer' }}
+                onClick={() =>
+                  (window.location.href = 'mailto:contact@atlas-cmms.com')
+                }
+                display="flex"
+                alignItems="center"
+              >
+                <Mail fontSize="small" />
+                <Typography variant="body2" sx={{ ml: 1 }}>
+                  contact@atlas-cmms.com
+                </Typography>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <Phone fontSize="small" />
+                <Typography variant="body2" sx={{ ml: 1 }}>
+                  +212630690050
+                </Typography>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <Sms fontSize="small" />
+                <Typography variant="body2" sx={{ ml: 1 }}>
+                  +212630690050
+                </Typography>
+              </Box>
+            </Stack>
           </Grid>
           <Grid item xs={12} md={3}>
             <SectionHeading variant="h5">Company</SectionHeading>
-            <FooterLink href="/pricing">Pricing</FooterLink>
-            <br />
-            <FooterLink href="/privacy">Privacy Policy</FooterLink>
-            <br />
-            <FooterLink href="/terms-of-service">Terms of Service</FooterLink>
+            <Stack spacing={2}>
+              <FooterLink href="/pricing">Pricing</FooterLink>
+              <FooterLink href="/privacy">Privacy Policy</FooterLink>
+              <FooterLink href="/terms-of-service">Terms of Service</FooterLink>
+            </Stack>
           </Grid>
           <Grid item xs={12} md={3}>
             <SectionHeading variant="h5">Social</SectionHeading>
-            <FooterLink href="#">
-              <Facebook />
-            </FooterLink>
-            <FooterLink href="#" sx={{ ml: 1 }}>
-              <Twitter />
-            </FooterLink>
-            <FooterLink href="#" sx={{ ml: 1 }}>
-              <Instagram />
-            </FooterLink>
+            <Stack direction="row" spacing={2}>
+              <FooterLink href="https://www.linkedin.com/company/91710999">
+                <LinkedIn />
+              </FooterLink>
+              {/*<FooterLink href="#">*/}
+              {/*  <Twitter />*/}
+              {/*</FooterLink>*/}
+              {/*<FooterLink href="#">*/}
+              {/*  <Instagram />*/}
+              {/*</FooterLink>*/}
+            </Stack>
           </Grid>
           <Grid item xs={12} md={3}>
             <SectionHeading variant="h5">Mobile apps</SectionHeading>
-            {/* Add app store badges here */}
-            <Typography variant="body2">Coming soon...</Typography>
+            <Stack spacing={2}>
+              <img
+                style={{ cursor: 'pointer' }}
+                onClick={() =>
+                  (window.location.href =
+                    'https://play.google.com/store/apps/details?id=com.atlas.cmms')
+                }
+                width={'150px'}
+                src={'/static/images/overview/playstore-badge.png'}
+              />
+            </Stack>
           </Grid>
         </Grid>
         <Box mt={4} textAlign="center">
           <Typography variant="body2">
-            © {new Date().getFullYear()} Company. All rights reserved.
+            © {new Date().getFullYear()} Intelloop. All rights reserved.
           </Typography>
         </Box>
       </Container>
