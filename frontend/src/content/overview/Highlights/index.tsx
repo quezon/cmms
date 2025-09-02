@@ -387,7 +387,7 @@ function Highlights() {
         { key: 'work-requests.checks.1' },
         { key: 'work-requests.checks.2' }
       ],
-      image: '/static/images/overview/performance.png'
+      image: '/static/images/overview/request.png'
     },
 
     mobile: {
@@ -424,7 +424,7 @@ function Highlights() {
         { key: 'eam.checks.4' },
         { key: 'eam.checks.5' }
       ],
-      image: '/static/images/overview/performance.png'
+      image: '/static/images/overview/assets.png'
     },
 
     preventative: {
@@ -446,7 +446,7 @@ function Highlights() {
         { key: 'pm.checks.4' },
         { key: 'pm.checks.5' }
       ],
-      image: '/static/images/overview/performance.png'
+      image: '/static/images/overview/pm.png'
     },
 
     part: {
@@ -653,7 +653,7 @@ function Highlights() {
               <LayoutImgButton>
                 <Typography variant="h4">{t('asset_management')}</Typography>
                 <img
-                  src="/static/images/overview/extended_sidebar.png"
+                  src="/static/images/overview/assets.png"
                   alt={t('asset_management')}
                 />
               </LayoutImgButton>
