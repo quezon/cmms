@@ -342,7 +342,7 @@ function RegisterJWT({
               )}
               <Typography
                 color={'primary'}
-                onClick={() => navigate('/privacy-policy')}
+                onClick={() => navigate('/privacy')}
                 sx={{ cursor: 'pointer' }}
               >
                 {t('privacy_policy')}
