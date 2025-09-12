@@ -9,5 +9,6 @@ public enum Language {
     PL,
     DE,
     AR,
-    IT
+    IT,
+    SV
 }

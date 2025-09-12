@@ -11,6 +11,7 @@ import trJSON from './translations/tr';
 import plJSON from './translations/pl';
 import itJSON from './translations/it';
 import ptBRJSON from './translations/pt_BR';
+import svJSON from './translations/sv';
 
 const resources = {
   de: { translation: deJSON },
@@ -21,7 +22,8 @@ const resources = {
   pl: { translation: plJSON },
   pt_br: { translation: ptBRJSON },
   ar: { translation: arJSON },
-  it: { translation: itJSON }
+  it: { translation: itJSON },
+  sv: { translation: svJSON }
 };
 
 i18n
