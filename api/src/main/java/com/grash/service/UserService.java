@@ -124,6 +124,7 @@ public class UserService {
                             .subscriptionPlan(subscriptionPlanService.findByCode("BUSINESS").get()).build();
             subscriptionService.create(subscription);
             Company company = new Company(userReq.getCompanyName(), userReq.getEmployeesCount(), subscription);
+            company.setDemo(Boolean.TRUE.equals(userReq.getDemo()));
             company.getCompanySettings().getGeneralPreferences().setCurrency(currencyService.findByCode("$").get());
             if (userReq.getLanguage() != null)
                 company.getCompanySettings().getGeneralPreferences().setLanguage(userReq.getLanguage());

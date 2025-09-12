@@ -5,6 +5,7 @@ import com.grash.dto.SuccessResponse;
 import com.grash.dto.UserSignupRequest;
 import com.grash.model.OwnUser;
 import com.grash.model.enums.Language;
+import com.grash.service.RateLimiterService;
 import com.grash.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,9 +24,14 @@ public class DemoController {
 
     private final UserService userService;
     private final EntityManager em;
+    private final RateLimiterService rateLimiterService;
 
     @GetMapping("/generate-account")
     public SuccessResponse generateAccount(HttpServletRequest req) {
+        String clientIp = req.getRemoteAddr(); // use IP as the key
+        if (!rateLimiterService.resolveBucket(clientIp).tryConsume(1)) {
+            return new SuccessResponse(false, "Rate limit exceeded. Try again later.");
+        }
         UserSignupRequest userSignupRequest = new UserSignupRequest();
         userSignupRequest.setFirstName("Demo");
         userSignupRequest.setLastName("Account");

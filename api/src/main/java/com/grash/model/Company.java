@@ -39,6 +39,8 @@ public class Company extends Audit {
     @OneToOne(cascade = CascadeType.ALL)
     private CompanySettings companySettings = new CompanySettings(this);
 
+    private boolean demo;
+
     public Company(String companyName, int employeesCount, Subscription subscription) {
         this.name = companyName;
         this.employeesCount = employeesCount;
