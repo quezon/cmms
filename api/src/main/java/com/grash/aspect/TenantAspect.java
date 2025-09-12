@@ -12,6 +12,7 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -34,9 +35,19 @@ import static org.apache.commons.lang3.reflect.FieldUtils.getAllFields;
 public class TenantAspect {
 
     private final EntityManager entityManager;
+    private static final ThreadLocal<Boolean> ignoreCompanyCheck = ThreadLocal.withInitial(() -> false);
+
+    public static void disableCompanyCheck() {
+        ignoreCompanyCheck.set(true);
+    }
+
+    public static void enableCompanyCheck() {
+        ignoreCompanyCheck.set(false);
+    }
 
     @Before("@annotation(org.springframework.web.bind.annotation.PostMapping) || @annotation(org.springframework.web.bind.annotation.PatchMapping)")
     public void validateTenant(JoinPoint joinPoint) {
+        if (ignoreCompanyCheck.get()) return;
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
         Method method = methodSignature.getMethod();
         Parameter[] parameters = method.getParameters();

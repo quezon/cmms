@@ -8,5 +8,6 @@ public enum Language {
     PT_BR,
     PL,
     DE,
-    AR
+    AR,
+    IT
 }

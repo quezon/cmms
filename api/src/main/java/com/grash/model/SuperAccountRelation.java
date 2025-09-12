@@ -18,10 +18,10 @@ public class SuperAccountRelation {
     private Long id;
 
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private OwnUser superUser;
 
     @NotNull
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     private OwnUser childUser;
 }

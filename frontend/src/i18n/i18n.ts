@@ -10,8 +10,9 @@ import frJSON from './translations/fr';
 import trJSON from './translations/tr';
 import plJSON from './translations/pl';
 import ptBRJSON from './translations/pt_BR';
+import itJSON from './translations/it';
 import { FlagComponent } from 'country-flag-icons/react/1x1';
-import { BR, DE, ES, FR, PL, TR, US, SA } from 'country-flag-icons/react/3x2';
+import { BR, DE, ES, FR, PL, TR, US, SA, IT } from 'country-flag-icons/react/3x2';
 import { LocaleSingularArg } from '@fullcalendar/react';
 import deLocale from '@fullcalendar/core/locales/de';
 import esLocale from '@fullcalendar/core/locales/es';
@@ -21,8 +22,9 @@ import ptBRLocale from '@fullcalendar/core/locales/pt-br';
 import frLocale from '@fullcalendar/core/locales/fr';
 import plLocale from '@fullcalendar/core/locales/pl';
 import enLocale from '@fullcalendar/core/locales/en-gb';
+import itLocale from '@fullcalendar/core/locales/it';
 import { Locale as DateLocale } from 'date-fns';
-import { fr, de, es, ar, tr, ptBR, pl, enUS } from 'date-fns/locale';
+import { fr, de, es, ar, tr, ptBR, pl, enUS, it } from 'date-fns/locale';
 const resources = {
   de: { translation: deJSON },
   en: { translation: locale },
@@ -33,7 +35,8 @@ const resources = {
   // cn: { translation: zhJSON },
   tr: { translation: trJSON },
   pt_br: { translation: ptBRJSON },
-  ar: { translation: arJSON }
+  ar: { translation: arJSON },
+  it: { translation: itJSON }
 };
 
 i18n
@@ -60,6 +63,7 @@ export type SupportedLanguage =
   | 'ES'
   | 'PT_BR'
   | 'PL'
+  | 'IT'
   | 'AR';
 
 export const supportedLanguages: {
@@ -124,6 +128,13 @@ export const supportedLanguages: {
     Icon: SA,
     calendarLocale: arLocale,
     dateLocale: ar
+  },
+  {
+    code: 'it',
+    label: 'Italian',
+    Icon: IT,
+    calendarLocale: itLocale,
+    dateLocale: it
   }
 ];
 export default i18n;

@@ -127,6 +127,8 @@ public class Helper {
                 return new Locale("de", "DE");
             case AR:
                 return new Locale("ar", "AR");
+            case IT:
+                return new Locale("it", "IT");
             default:
                 return Locale.getDefault();
         }
