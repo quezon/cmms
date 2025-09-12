@@ -13,7 +13,9 @@ import com.grash.service.UserService;
 import com.grash.service.VerificationTokenService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.annotations.Parameter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -71,8 +73,10 @@ public class AuthController {
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 403, message = "Access denied"), //
             @ApiResponse(code = 422, message = "Username is already in use")})
-    public SuccessResponse signup(@ApiParam("Signup User") @Valid @RequestBody UserSignupRequest user) {
-        return userService.signup(user);
+    public SignupSuccessResponse<UserResponseDTO> signup(@Valid @RequestBody UserSignupRequest user) {
+        SignupSuccessResponse<OwnUser> response = userService.signup(user);
+        return new SignupSuccessResponse<>(response.isSuccess(), response.getMessage(),
+                userMapper.toResponseDto(response.getUser()));
     }
 
 //    @PostMapping(

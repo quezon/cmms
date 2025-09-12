@@ -1507,7 +1507,8 @@ const deJSON = {
     'Passwort – leer lassen, wenn du es nicht ändern möchtest',
   upgrade_request_success:
     'Upgrade-Anfrage erhalten! Wir kontaktieren Sie in Kürze mit den Zahlungsdetails',
-  continue_with_sso: 'Weiter mit SSO'
+  continue_with_sso: 'Weiter mit SSO',
+  see_live_demo: 'Live-Demo ansehen'
 };
 
 export default deJSON;

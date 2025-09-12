@@ -1486,7 +1486,8 @@ const ptBRJSON = {
     'Senha - deixe em branco se não quiser alterá-la',
   upgrade_request_success:
     'Solicitação de upgrade recebida! Entraremos em contato em breve com os detalhes de pagamento',
-  continue_with_sso: 'Continuar com o SSO'
+  continue_with_sso: 'Continuar com o SSO',
+  see_live_demo: 'Ver demonstração ao vivo'
 };
 
 export default ptBRJSON;

@@ -2,6 +2,7 @@ package com.grash.service;
 
 import com.grash.advancedsearch.SearchCriteria;
 import com.grash.advancedsearch.SpecificationBuilder;
+import com.grash.dto.SignupSuccessResponse;
 import com.grash.dto.SuccessResponse;
 import com.grash.dto.UserPatchDTO;
 import com.grash.dto.UserSignupRequest;
@@ -92,16 +93,16 @@ public class UserService {
         }
     }
 
-    private SuccessResponse enableAndReturnToken(OwnUser user, boolean sendEmailToSuperAdmins,
+    private SignupSuccessResponse<OwnUser> enableAndReturnToken(OwnUser user, boolean sendEmailToSuperAdmins,
                                                  UserSignupRequest userSignupRequest) {
         user.setEnabled(true);
         userRepository.save(user);
         if (sendEmailToSuperAdmins) sendRegistrationMailToSuperAdmins(user, userSignupRequest);
-        return new SuccessResponse(true, jwtTokenProvider.createToken(user.getEmail(),
-                Collections.singletonList(user.getRole().getRoleType())));
+        return new SignupSuccessResponse<>(true, jwtTokenProvider.createToken(user.getEmail(),
+                Collections.singletonList(user.getRole().getRoleType())), user);
     }
 
-    public SuccessResponse signup(UserSignupRequest userReq) {
+    public SignupSuccessResponse<OwnUser> signup(UserSignupRequest userReq) {
         OwnUser user = userMapper.toModel(userReq);
         user.setEmail(user.getEmail().toLowerCase());
         if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
@@ -169,8 +170,8 @@ public class UserService {
             }
             userRepository.save(user);
             sendRegistrationMailToSuperAdmins(user, userReq);
-            return new SuccessResponse(true, "Successful registration. Check your mailbox to activate your " +
-                    "account");
+            return new SignupSuccessResponse<>(true, "Successful registration. Check your mailbox to activate your " +
+                    "account", null);
         }
 
     }

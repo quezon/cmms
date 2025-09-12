@@ -1474,7 +1474,8 @@ const trJSON = {
     'Şifre - değiştirmek istemiyorsanız boş bırakın',
   upgrade_request_success:
     'Yükseltme talebiniz alındı! Ödeme detaylarıyla yakında sizinle iletişime geçeceğiz',
-  continue_with_sso: 'SSO ile devam etmek'
+  continue_with_sso: 'SSO ile devam etmek',
+  see_live_demo: 'Canlı demoyu gör'
 };
 
 export default trJSON;

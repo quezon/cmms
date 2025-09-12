@@ -1409,7 +1409,8 @@ const locale = {
     "Password - leave empty if you don't want to change it",
   upgrade_request_success:
     "Upgrade request received! We'll contact you soon with payment details",
-  continue_with_sso: 'Continue with SSO'
+  continue_with_sso: 'Continue with SSO',
+  see_live_demo: 'See live demo'
 };
 
 export default locale;

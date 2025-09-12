@@ -1541,7 +1541,8 @@ const frJSON = {
     'Mot de passe - laisser vide si vous ne voulez pas le changer',
   upgrade_request_success:
     'Demande de mise à niveau reçue ! Nous vous contacterons bientôt avec les détails de paiement',
-  continue_with_sso: 'Continuer avec SSO'
+  continue_with_sso: 'Continuer avec SSO',
+  see_live_demo: 'Voir demo'
 };
 
 export default frJSON;

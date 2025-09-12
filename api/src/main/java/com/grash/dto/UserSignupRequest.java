@@ -39,4 +39,6 @@ public class UserSignupRequest {
 
     private String subscriptionPlanId;
 
+    private Boolean demo;
+
 }

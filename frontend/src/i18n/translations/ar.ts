@@ -1379,7 +1379,8 @@ const locale = {
   ui_configuration: 'تكوين واجهة المستخدم',
   password_leave_empty_if_you_dont_want_to_change:
     'كلمة المرور - اتركها فارغة إذا كنت لا تريد تغييرها',
-  continue_with_sso: 'استمر مع تسجيل الدخول'
+  continue_with_sso: 'استمر مع تسجيل الدخول',
+  see_live_demo: 'عرض العرض المباشر'
 };
 
 export default locale;

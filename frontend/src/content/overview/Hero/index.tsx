@@ -1,16 +1,19 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Grid,
   styled,
   Typography
 } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import useScrollToLocation from 'src/hooks/useScrollToLocation';
 import useAuth from '../../../hooks/useAuth';
 import { useBrand } from '../../../hooks/useBrand';
+import api from '../../../utils/api';
 
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
@@ -124,10 +127,39 @@ const TsAvatar = styled(Box)(
 
 function Hero() {
   const { t }: { t: any } = useTranslation();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, loginInternal } = useAuth();
   const brandConfig = useBrand();
+  const navigate = useNavigate();
+  const [generatingAccount, setGeneratingAccount] = useState<boolean>(false);
   useScrollToLocation();
+  const [shouldNavigate, setShouldNavigate] = useState(false);
 
+  useEffect(() => {
+    if (shouldNavigate && isAuthenticated) {
+      navigate('/app/work-orders');
+      setGeneratingAccount(false);
+      setShouldNavigate(false);
+    }
+  }, [isAuthenticated, shouldNavigate, navigate]);
+
+  const onSeeLiveDemo = async () => {
+    setGeneratingAccount(true);
+    try {
+      const { success, message } = await api.get<{
+        success: boolean;
+        message: string;
+      }>('demo/generate-account');
+
+      if (success) {
+        loginInternal(message);
+        setShouldNavigate(true);
+      } else {
+        setGeneratingAccount(false);
+      }
+    } catch (error) {
+      setGeneratingAccount(false);
+    }
+  };
   return (
     <Container maxWidth="lg">
       <Grid
@@ -169,11 +201,16 @@ function Hero() {
               ml: 2
             }}
             component="a"
-            href="#key-features"
+            startIcon={
+              generatingAccount && (
+                <CircularProgress size={'1rem'} color="primary" />
+              )
+            }
+            onClick={onSeeLiveDemo}
             size="medium"
             variant="text"
           >
-            {t('key_features')}
+            {t('see_live_demo')}
           </Button>
           <Button
             sx={{

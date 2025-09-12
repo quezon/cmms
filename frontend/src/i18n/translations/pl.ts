@@ -1463,7 +1463,8 @@ const plJSON = {
     'Hasło – pozostaw puste, jeśli nie chcesz go zmieniać',
   upgrade_request_success:
     'Otrzymano prośbę o uaktualnienie! Wkrótce skontaktujemy się z Tobą w sprawie szczegółów płatności',
-  continue_with_sso: 'Kontynuuj z wykorzystaniem SSO'
+  continue_with_sso: 'Kontynuuj z wykorzystaniem SSO',
+  see_live_demo: 'Zobacz pokaz na żywo'
 };
 
 export default plJSON;
