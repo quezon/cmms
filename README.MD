@@ -162,6 +162,8 @@ email at [contact@atlas-cmms.com](mailto:contact@atlas-cmms.com).
 - Polish
 - Portuguese (Brazil)
 - Arabic
+- Swedish
+- Italian
 
 ## 🏗️ **Tech Stack**
 
