@@ -36,7 +36,7 @@ const DemoAlert = () => {
           setShow(false);
         }}
         sx={{
-          position: 'absolute',
+          position: 'fixed',
           bottom: 10,
           left: '50%',
           transform: 'translateX(-50%)',
