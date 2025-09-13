@@ -94,10 +94,11 @@ public class UserService {
     }
 
     private SignupSuccessResponse<OwnUser> enableAndReturnToken(OwnUser user, boolean sendEmailToSuperAdmins,
-                                                 UserSignupRequest userSignupRequest) {
+                                                                UserSignupRequest userSignupRequest) {
         user.setEnabled(true);
         userRepository.save(user);
-        if (sendEmailToSuperAdmins) sendRegistrationMailToSuperAdmins(user, userSignupRequest);
+        if (sendEmailToSuperAdmins && user.getCompany() != null && !user.getCompany().isDemo())
+            sendRegistrationMailToSuperAdmins(user, userSignupRequest);
         return new SignupSuccessResponse<>(true, jwtTokenProvider.createToken(user.getEmail(),
                 Collections.singletonList(user.getRole().getRoleType())), user);
     }
