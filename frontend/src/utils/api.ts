@@ -1,6 +1,7 @@
 import { apiUrl } from '../config';
 
-function api<T>(url: string, options: { raw?: boolean }): Promise<T> {
+type Options = RequestInit & { raw?: boolean; headers: HeadersInit };
+function api<T>(url: string, options: Options): Promise<T> {
   return fetch(url, { headers: authHeader(false), ...options }).then(
     async (response) => {
       if (!response.ok) {
@@ -12,11 +13,11 @@ function api<T>(url: string, options: { raw?: boolean }): Promise<T> {
   );
 }
 
-function get<T>(url, options?) {
+function get<T>(url, options?: Options) {
   return api<T>(apiUrl + url, options);
 }
 
-function post<T>(url, data, options?, isNotJson?: boolean) {
+function post<T>(url, data, options?: Options, isNotJson?: boolean) {
   return api<T>(apiUrl + url, {
     ...options,
     method: 'POST',
@@ -24,7 +25,7 @@ function post<T>(url, data, options?, isNotJson?: boolean) {
   });
 }
 
-function patch<T>(url, data, options?) {
+function patch<T>(url, data, options?: Options) {
   return api<T>(apiUrl + url, {
     ...options,
     method: 'PATCH',
@@ -32,11 +33,11 @@ function patch<T>(url, data, options?) {
   });
 }
 
-function deletes<T>(url, options?) {
+function deletes<T>(url, options?: Options) {
   return api<T>(apiUrl + url, { ...options, method: 'DELETE' });
 }
 
-export function authHeader(publicRoute) {
+export function authHeader(publicRoute: boolean): HeadersInit {
   // return authorization header with jwt token
   let accessToken = localStorage.getItem('accessToken');
 

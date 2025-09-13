@@ -13,7 +13,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import useScrollToLocation from 'src/hooks/useScrollToLocation';
 import useAuth from '../../../hooks/useAuth';
 import { useBrand } from '../../../hooks/useBrand';
-import api from '../../../utils/api';
+import api, { authHeader } from '../../../utils/api';
 
 const TypographyH1 = styled(Typography)(
   ({ theme }) => `
@@ -148,7 +148,7 @@ function Hero() {
       const { success, message } = await api.get<{
         success: boolean;
         message: string;
-      }>('demo/generate-account');
+      }>('demo/generate-account', { headers: authHeader(true) });
 
       if (success) {
         loginInternal(message);
