@@ -1,6 +1,6 @@
 import { apiUrl } from '../config';
 
-type Options = RequestInit & { raw?: boolean; headers: HeadersInit };
+type Options = RequestInit & { raw?: boolean; headers?: HeadersInit };
 function api<T>(url: string, options: Options): Promise<T> {
   return fetch(url, { headers: authHeader(false), ...options }).then(
     async (response) => {
