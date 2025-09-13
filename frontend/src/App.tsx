@@ -122,7 +122,7 @@ function App() {
             <CompanySettingsProvider>
               <CssBaseline />
               {isInitialized ? content : <AppInit />}
-              {company?.demo && <DemoAlert />}
+              {user && company?.demo && <DemoAlert />}
             </CompanySettingsProvider>
           </CustomSnackBarProvider>
         </SnackbarProvider>
