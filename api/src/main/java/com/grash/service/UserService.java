@@ -170,6 +170,8 @@ public class UserService {
                     return enableAndReturnToken(user, true, userReq);
                 }
             }
+            if (userReq.getDemo())
+                return enableAndReturnToken(user, false, userReq);
             userRepository.save(user);
             sendRegistrationMailToSuperAdmins(user, userReq);
             return new SignupSuccessResponse<>(true, "Successful registration. Check your mailbox to activate your " +
