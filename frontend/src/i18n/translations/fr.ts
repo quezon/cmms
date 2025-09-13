@@ -1542,7 +1542,8 @@ const frJSON = {
   upgrade_request_success:
     'Demande de mise à niveau reçue ! Nous vous contacterons bientôt avec les détails de paiement',
   continue_with_sso: 'Continuer avec SSO',
-  see_live_demo: 'Voir demo'
+  demo_warning:
+    "Cette instance est en mode démo. N'utilisez pas cela pour de vraies données ! Tout sera supprimé à intervalles réguliers !"
 };
 
 export default frJSON;

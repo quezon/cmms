@@ -11,4 +11,5 @@ export interface Company {
   phone: string;
   subscription: OwnSubscription;
   companySettings: CompanySettings;
+  demo: boolean;
 }

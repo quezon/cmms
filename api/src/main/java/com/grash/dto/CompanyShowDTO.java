@@ -25,4 +25,6 @@ public class CompanyShowDTO extends AuditShowDTO {
     private Subscription subscription;
 
     private CompanySettings companySettings;
+
+    private boolean demo;
 }

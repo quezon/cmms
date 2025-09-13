@@ -6,7 +6,7 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import useAuth from 'src/hooks/useAuth';
 
-import { CssBaseline } from '@mui/material';
+import { Alert, CssBaseline } from '@mui/material';
 import ThemeProvider from './theme/ThemeProvider';
 import AppInit from './components/AppInit';
 import { CustomSnackBarProvider } from './contexts/CustomSnackBarContext';
@@ -17,13 +17,40 @@ import {
   IS_LOCALHOST,
   isWhiteLabeled
 } from './config';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { CompanySettingsProvider } from './contexts/CompanySettingsContext';
 import { getLicenseValidity } from './slices/license';
 import { useDispatch, useSelector } from './store';
 import { useBrand } from './hooks/useBrand';
+import { useTranslation } from 'react-i18next';
 
 if (!IS_LOCALHOST && googleTrackingId) ReactGA.initialize(googleTrackingId);
+
+const DemoAlert = () => {
+  const [show, setShow] = useState<boolean>(true);
+  const { t } = useTranslation();
+  return (
+    show && (
+      <Alert
+        onClose={() => {
+          setShow(false);
+        }}
+        sx={{
+          position: 'absolute',
+          bottom: 10,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          zIndex: 1000,
+          width: '50%'
+        }}
+        severity="error"
+      >
+        {t('demo_warning')}
+      </Alert>
+    )
+  );
+};
+
 function App() {
   const content = useRoutes(router);
   const navigate = useNavigate();
@@ -95,6 +122,7 @@ function App() {
             <CompanySettingsProvider>
               <CssBaseline />
               {isInitialized ? content : <AppInit />}
+              {company?.demo && <DemoAlert />}
             </CompanySettingsProvider>
           </CustomSnackBarProvider>
         </SnackbarProvider>

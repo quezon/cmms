@@ -142,4 +142,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2025_09_13_1757719340_demo.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2025_09_13_1757723543_cascade_delete.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>

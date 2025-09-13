@@ -1410,7 +1410,9 @@ const locale = {
   upgrade_request_success:
     "Upgrade request received! We'll contact you soon with payment details",
   continue_with_sso: 'Continue with SSO',
-  see_live_demo: 'See live demo'
+  see_live_demo: 'See live demo',
+  demo_warning:
+    'This instance is in demo mode. Do not use this for real data! Everything will be deleted at regular intervals!'
 };
 
 export default locale;
