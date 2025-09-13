@@ -97,7 +97,7 @@ public class UserService {
                                                                 UserSignupRequest userSignupRequest) {
         user.setEnabled(true);
         userRepository.save(user);
-        if (sendEmailToSuperAdmins && user.getCompany() != null && !user.getCompany().isDemo())
+        if (sendEmailToSuperAdmins)
             sendRegistrationMailToSuperAdmins(user, userSignupRequest);
         return new SignupSuccessResponse<>(true, jwtTokenProvider.createToken(user.getEmail(),
                 Collections.singletonList(user.getRole().getRoleType())), user);
@@ -335,6 +335,7 @@ public class UserService {
     @Async
     void sendRegistrationMailToSuperAdmins(OwnUser user, UserSignupRequest userSignupRequest) {
         if (user.getEmail().equals("superadmin@test.com")) return;
+        if (user.getCompany() != null && user.getCompany().isDemo()) return;
         if (recipients == null || recipients.length == 0) {
             return;
 //            throw new CustomException("MAIL_RECIPIENTS env variable not set", HttpStatus.INTERNAL_SERVER_ERROR);
