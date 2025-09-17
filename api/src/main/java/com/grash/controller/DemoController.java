@@ -3,10 +3,7 @@ package com.grash.controller;
 import com.grash.dto.SignupSuccessResponse;
 import com.grash.dto.SuccessResponse;
 import com.grash.dto.UserSignupRequest;
-import com.grash.dto.imports.AssetImportDTO;
-import com.grash.dto.imports.LocationImportDTO;
-import com.grash.dto.imports.MeterImportDTO;
-import com.grash.dto.imports.PartImportDTO;
+import com.grash.dto.imports.*;
 import com.grash.model.Asset;
 import com.grash.model.Company;
 import com.grash.model.OwnUser;
@@ -32,9 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -89,6 +84,7 @@ public class DemoController {
             List<Asset> assets = assetService.findByCompany(company.getId());
             importMeters(company, assets);
             importParts(company);
+            importWorkOrders(company);
         } catch (IOException e) {
             // In a real application, you'd want to handle this exception more gracefully
             e.printStackTrace();
@@ -98,6 +94,11 @@ public class DemoController {
     private void importLocations(Company company) throws IOException {
         List<LocationImportDTO> locations = parseCsv("demo-data/telecom/Locations.csv", this::toLocationImportDTO);
         importService.importLocations(locations, company);
+    }
+
+    private void importWorkOrders(Company company) throws IOException {
+        List<WorkOrderImportDTO> workOrders = parseCsv("demo-data/telecom/WorkOrders.csv", this::toWorkOrderImportDTO);
+        importService.importWorkOrders(workOrders, company);
     }
 
     private void importAssets(Company company) throws IOException {
@@ -134,6 +135,58 @@ public class DemoController {
                 .address(record.get("Address"))
                 .parentLocationName(record.get("Parent Location"))
                 .build();
+    }
+
+    public WorkOrderImportDTO toWorkOrderImportDTO(CSVRecord record) {
+        return WorkOrderImportDTO.builder()
+                .id(parseLong(record.get("ID")))
+                .title(record.get("Title"))
+                .status(record.get("Status"))
+                .priority(record.get("Priority"))
+                .description(record.get("Description"))
+                .dueDate(parseDouble(record.get("Due Date")))
+                .estimatedDuration(parseDoubleOrDefault(record.get("Estimated Duration"), 0.0))
+                .requiredSignature(record.get("Requires Signature"))
+                .category(record.get("Category"))
+                .locationName(record.get("Location Name"))
+                .teamName(record.get("Team Name"))
+                .primaryUserEmail(record.get("Primary User"))
+                .assignedToEmails(splitList(record.get("Assigned To")))
+                .assetName(record.get("Asset Name"))
+                .completedByEmail(record.get("Completed By"))
+                .completedOn(parseDouble(record.get("Completed On")))
+                .archived(record.get("Archived"))
+                .feedback(record.get("Feedback"))
+                .customersNames(splitList(record.get("Contractors")))
+                .build();
+    }
+
+    private static List<String> splitList(String value) {
+        if (value == null || value.trim().isEmpty()) {
+            return new ArrayList<>();
+        }
+        return Arrays.asList(value.split("\\s*,\\s*"));
+    }
+
+    private static Double parseDouble(String value) {
+        try {
+            return (value == null || value.trim().isEmpty()) ? null : Double.parseDouble(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
+    private static Double parseDoubleOrDefault(String value, double defaultValue) {
+        Double result = parseDouble(value);
+        return result == null ? defaultValue : result;
+    }
+
+    private static Long parseLong(String value) {
+        try {
+            return (value == null || value.trim().isEmpty()) ? null : Long.parseLong(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 
     private AssetImportDTO toAssetImportDTO(CSVRecord record) {
