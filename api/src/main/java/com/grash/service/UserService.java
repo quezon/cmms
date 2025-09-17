@@ -170,7 +170,7 @@ public class UserService {
                     return enableAndReturnToken(user, true, userReq);
                 }
             }
-            if (userReq.getDemo())
+            if (Boolean.TRUE.equals(userReq.getDemo()))
                 return enableAndReturnToken(user, false, userReq);
             userRepository.save(user);
             sendRegistrationMailToSuperAdmins(user, userReq);
