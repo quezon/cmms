@@ -126,6 +126,9 @@ public class MeterService {
         Optional<Location> optionalLocation = locationService.findByNameIgnoreCaseAndCompany(dto.getLocationName(),
                 companyId).stream().findFirst();
         optionalLocation.ifPresent(meter::setLocation);
+        Optional<Asset> optionalAsset = assetService.findByNameIgnoreCaseAndCompany(dto.getAssetName(),
+                companyId).stream().findFirst();
+        optionalAsset.ifPresent(meter::setAsset);
         Optional<MeterCategory> optionalMeterCategory =
                 meterCategoryService.findByNameIgnoreCaseAndCompanySettings(dto.getMeterCategory(), companySettingsId);
         optionalMeterCategory.ifPresent(meter::setMeterCategory);

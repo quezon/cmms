@@ -1,12 +1,17 @@
 package com.grash.dto.imports;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class AssetImportDTO {
 
     private Long id;
@@ -33,20 +38,20 @@ public class AssetImportDTO {
     private String additionalInfos;
 
     private String serialNumber;
-
-    private Collection<String> assignedToEmails;
-
-    private Collection<String> teamsNames;
+    @Builder.Default
+    private Collection<String> assignedToEmails = new ArrayList<>();
+    @Builder.Default
+    private Collection<String> teamsNames = new ArrayList<>();
 
     private String status;
 
     private Double acquisitionCost;
-
-    private Collection<String> customersNames;
-
-    private Collection<String> vendorsNames;
-
-    private Collection<String> partsNames;
+    @Builder.Default
+    private Collection<String> customersNames = new ArrayList<>();
+    @Builder.Default
+    private Collection<String> vendorsNames = new ArrayList<>();
+    @Builder.Default
+    private Collection<String> partsNames = new ArrayList<>();
     private String model;
     private String manufacturer;
     private String power;

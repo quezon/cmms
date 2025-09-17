@@ -1,13 +1,18 @@
 package com.grash.dto.imports;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class WorkOrderImportDTO {
 
     private Long id;
@@ -26,8 +31,8 @@ public class WorkOrderImportDTO {
     private String teamName;
 
     private String primaryUserEmail;
-
-    private List<String> assignedToEmails;
+    @Builder.Default
+    private List<String> assignedToEmails = new ArrayList<>();
 
     private String assetName;
 
@@ -35,5 +40,6 @@ public class WorkOrderImportDTO {
     private Double completedOn;
     private String archived;
     private String feedback;
-    private List<String> customersNames;
+    @Builder.Default
+    private List<String> customersNames = new ArrayList<>();
 }
