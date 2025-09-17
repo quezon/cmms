@@ -146,4 +146,6 @@
              relativeToChangelogFile="true"/>
     <include file="changelog/2025_09_15_1757950584_cad.xml"
              relativeToChangelogFile="true"/>
+    <include file="changelog/2025_09_17_1758107551_delete_demo_companies.xml"
+             relativeToChangelogFile="true"/>
 </databaseChangeLog>
