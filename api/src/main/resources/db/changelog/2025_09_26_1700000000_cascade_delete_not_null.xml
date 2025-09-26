@@ -32,5 +32,32 @@
                 referencedColumnNames="id"
                 onDelete="CASCADE"/>
     </changeSet>
+    <changeSet id="20250926-02-fk-work_order_assigned_to" author="Ibrahima G. Coulibaly">
+        <!-- Drop existing foreign key constraints -->
+        <dropForeignKeyConstraint
+                baseTableName="work_order_assigned_to"
+                constraintName="fkmfhu1adi2mobtmdpsprmuo267"/>
+
+        <dropForeignKeyConstraint
+                baseTableName="work_order_assigned_to"
+                constraintName="fks2pjdwafjgekyxtwj4f82qn4q"/>
+
+        <!-- Recreate foreign key constraints with ON DELETE CASCADE -->
+        <addForeignKeyConstraint
+                baseTableName="work_order_assigned_to"
+                baseColumnNames="work_order_id"
+                constraintName="fkmfhu1adi2mobtmdpsprmuo267"
+                referencedTableName="work_order"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint
+                baseTableName="work_order_assigned_to"
+                baseColumnNames="assigned_to_id"
+                constraintName="fks2pjdwafjgekyxtwj4f82qn4q"
+                referencedTableName="own_user"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
+    </changeSet>
 
 </databaseChangeLog>
