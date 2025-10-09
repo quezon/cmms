@@ -76,7 +76,7 @@ public class AssetController {
         return ResponseEntity.ok(assetService.findBySearchCriteria(searchCriteria));
     }
 
-    @GetMapping("/nfc/{id}")
+    @GetMapping("/nfc/{id:.+}")
     @PreAuthorize("permitAll()")
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"),
@@ -88,7 +88,7 @@ public class AssetController {
         return getAsset(optionalAsset, user);
     }
 
-    @GetMapping("/barcode/{data}")
+    @GetMapping("/barcode/{data:.+}")
     @PreAuthorize("permitAll()")
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"),
