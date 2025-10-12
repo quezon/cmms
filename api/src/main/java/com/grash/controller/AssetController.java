@@ -76,25 +76,25 @@ public class AssetController {
         return ResponseEntity.ok(assetService.findBySearchCriteria(searchCriteria));
     }
 
-    @GetMapping("/nfc/{id:.+}")
+    @GetMapping("/nfc")
     @PreAuthorize("permitAll()")
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "Asset not found")})
-    public AssetShowDTO getByNfcId(@ApiParam("id") @PathVariable("id") String nfcId,
+    public AssetShowDTO getByNfcId(@RequestParam String nfcId,
                                    @ApiIgnore @CurrentUser OwnUser user) {
         Optional<Asset> optionalAsset = assetService.findByNfcIdAndCompany(nfcId, user.getCompany().getId());
         return getAsset(optionalAsset, user);
     }
 
-    @GetMapping("/barcode/{data:.+}")
+    @GetMapping("/barcode")
     @PreAuthorize("permitAll()")
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"),
             @ApiResponse(code = 403, message = "Access denied"),
             @ApiResponse(code = 404, message = "Asset not found")})
-    public AssetShowDTO getByBarcode(@ApiParam("data") @PathVariable("data") String data,
+    public AssetShowDTO getByBarcode(@RequestParam String data,
                                      @ApiIgnore @CurrentUser OwnUser user) {
         Optional<Asset> optionalAsset = assetService.findByBarcodeAndCompany(data, user.getCompany().getId());
         return getAsset(optionalAsset, user);
