@@ -221,12 +221,6 @@ public class UserController {
                     userToSoftDelete.setEnabledInSubscription(false);
                     userToSoftDelete.setEmail(userToSoftDelete.getEmail().concat("_".concat(id.toString())));
                     return userMapper.toResponseDto(userService.save(userToSoftDelete));
-            } else if (//An admin should be able to softdelete a user in his/her company
-                    requester.isOwnsCompany() && requester.getCompany().getId().equals(optionalUserToSoftDelete.get().getCompany().getId())) {
-                userToSoftDelete.setEnabled(false);
-                userToSoftDelete.setEnabledInSubscription(false);
-                userToSoftDelete.setEmail(userToSoftDelete.getEmail().concat(requester.getCompany().getName().concat(id.toString())));
-                return userMapper.toResponseDto(userService.save(userToSoftDelete));
             }
             else {
                 throw new CustomException("You don't have permission", HttpStatus.NOT_ACCEPTABLE);
