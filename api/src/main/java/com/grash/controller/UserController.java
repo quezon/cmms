@@ -204,8 +204,7 @@ public class UserController {
 
     }
 
-
-    @PatchMapping("/softdelete/{id}")
+    @PatchMapping("/soft-delete/{id}")
     @PreAuthorize("hasRole('ROLE_CLIENT')")
     @ApiResponses(value = {//
             @ApiResponse(code = 500, message = "Something went wrong"), //
@@ -217,25 +216,18 @@ public class UserController {
 
         if (optionalUserToSoftDelete.isPresent()) {
             OwnUser userToSoftDelete = optionalUserToSoftDelete.get();
-            if (requester.getId().equals(id)) {
+            if (requester.getId().equals(id) || requester.getRole().getViewPermissions().contains(PermissionEntity.SETTINGS)) {
                 userToSoftDelete.setEnabled(false);
-                userToSoftDelete.setEnabledInSubscription(false);
-                userToSoftDelete.setEmail(userToSoftDelete.getEmail().concat("_".concat(id.toString())));
-                return userMapper.toResponseDto(userService.save(userToSoftDelete));
-            } else if (//An admin should be able to softdelete a user in his/her company
-                    requester.isOwnsCompany() && requester.getCompany().getId().equals(optionalUserToSoftDelete.get().getCompany().getId())) {
-                userToSoftDelete.setEnabled(false);
-                userToSoftDelete.setEnabledInSubscription(false);
-                userToSoftDelete.setEmail(userToSoftDelete.getEmail().concat(requester.getCompany().getName().concat(id.toString())));
-                return userMapper.toResponseDto(userService.save(userToSoftDelete));
+                    userToSoftDelete.setEnabledInSubscription(false);
+                    userToSoftDelete.setEmail(userToSoftDelete.getEmail().concat("_".concat(id.toString())));
+                    return userMapper.toResponseDto(userService.save(userToSoftDelete));
             }
             else {
                 throw new CustomException("You don't have permission", HttpStatus.NOT_ACCEPTABLE);
             }
         } else {
-            throw new CustomException("User or role not found", HttpStatus.NOT_FOUND);
+            throw new CustomException("User not found", HttpStatus.NOT_FOUND);
         }
-
     }
 }
 
