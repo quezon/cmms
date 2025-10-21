@@ -1,0 +1,1 @@
+<src/main/resources/db/migration/V1__create_users.sql content>
