@@ -1,0 +1,1 @@
+<src/main/resources/db/migration/V2__create_equipment.sql content>
