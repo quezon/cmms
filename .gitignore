@@ -6,3 +6,7 @@
 atlas_backups
 docker-compose-dev.yml
 logo
+# Ignore Oracle Autonomous Database wallet (do NOT commit)
+oracle-wallet/
+# or explicitly ignore ./oracle-wallet
+/oracle-
