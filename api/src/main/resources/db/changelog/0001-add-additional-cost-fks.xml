@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Small, focused changelog to add the three missing foreign keys for ADDITIONAL_COST. -->
+
+    <changeSet id="20251029-0001-add-additional-cost-fk-cat" author="generated-agent">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_ADD_COST_CAT_1029"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="ADDITIONAL_COST"
+                                 baseColumnNames="CATEGORY_ID"
+                                 constraintName="FK_ADD_COST_CAT_1029"
+                                 referencedTableName="COST_CATEGORY"
+                                 referencedColumnNames="ID"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+
+    <changeSet id="20251029-0001-add-additional-cost-fk-assigned" author="generated-agent">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_ADD_COST_ASS_1029"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="ADDITIONAL_COST"
+                                 baseColumnNames="ASSIGNED_TO_ID"
+                                 constraintName="FK_ADD_COST_ASS_1029"
+                                 referencedTableName="OWN_USER"
+                                 referencedColumnNames="ID"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+
+    <changeSet id="20251029-0001-add-additional-cost-fk-wo" author="generated-agent">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="FK_ADD_COST_WO_1029"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseTableName="ADDITIONAL_COST"
+                                 baseColumnNames="WORK_ORDER_ID"
+                                 constraintName="FK_ADD_COST_WO_1029"
+                                 referencedTableName="WORK_ORDER"
+                                 referencedColumnNames="ID"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

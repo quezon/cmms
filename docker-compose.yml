@@ -1,28 +1,27 @@
+# ...existing code...
 name: atlas-cmms
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: atlas_db
-    environment:
-      POSTGRES_DB: atlas
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PWD}
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+  # postgres service removed — the API will connect to Oracle ADB via wallet mounted below
   api:
     image: intelloop/atlas-cmms-backend
     container_name: atlas-cmms-backend
     depends_on:
-      - postgres
       - minio
     volumes:
       - ./logo:/app/static/images
+      # mount your Oracle Autonomous Database wallet (unzip wallet to ./oracle-wallet)
+      - ./oracle-wallet:/opt/oracle/wallet:ro
     environment:
-      DB_URL: postgres/atlas
-      DB_USER: ${POSTGRES_USER}
-      DB_PWD: ${POSTGRES_PWD}
+      # TNS alias from tnsnames.ora (e.g. adb_high). Set this in .env
+      - DB_SERVICE_NAME=${DB_SERVICE_NAME}
+      # compatibility with existing env keys
+      - DB_USERNAME=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PWD}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PWD=${POSTGRES_PWD}
+      # point Oracle client to wallet inside container
+      - TNS_ADMIN=/opt/oracle/wallet
+
       PUBLIC_API_URL: ${PUBLIC_API_URL:-http://localhost:8080}
       FASTSPRING_PWD: ${FASTSPRING_PWD}
       FASTSPRING_USER: ${FASTSPRING_USER}
@@ -41,7 +40,7 @@ services:
       MINIO_BUCKET: atlas-bucket
       MINIO_ACCESS_KEY: ${MINIO_USER}
       MINIO_SECRET_KEY: ${MINIO_PASSWORD}
-      STORAGE_TYPE: ${STORAGE_TYPE:-minio} #gpc|minio
+      STORAGE_TYPE: ${STORAGE_TYPE:-minio}
       PUBLIC_MINIO_ENDPOINT: ${PUBLIC_MINIO_ENDPOINT:-http://localhost:9000}
       INVITATION_VIA_EMAIL: ${INVITATION_VIA_EMAIL:-false}
       ENABLE_EMAIL_NOTIFICATIONS: ${ENABLE_EMAIL_NOTIFICATIONS:-false}
@@ -91,5 +90,6 @@ services:
     command: server --address ":9000" --console-address ":9001" /data
 
 volumes:
-  postgres_data:
   minio_data:
+# postgres_data volume removed
+# ...existing code...
