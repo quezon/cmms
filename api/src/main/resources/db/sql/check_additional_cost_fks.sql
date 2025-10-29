@@ -1,4 +1,5 @@
-CONNECT ATLAS_CMMS_DEV/Hjdueyu_5362_Retw#@ubrr2huo24vlmbkl_high
+-- Connect using your local credentials or SQL client. DO NOT commit real passwords.
+-- Example: CONNECT ATLAS_CMMS_DEV/<PASSWORD>@<SERVICE>
 SET PAGESIZE 200
 SET LINESIZE 200
 SET ECHO OFF
