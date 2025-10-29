@@ -11,6 +11,8 @@ spring:
     username: ${DB_USERNAME:${DB_USER:}}
     password: ${DB_PASSWORD:${DB_PWD:}}
     driver-class-name: oracle.jdbc.OracleDriver
+    hikari:
+      connection-init-sql: "ALTER SESSION DISABLE PARALLEL DML"
   #    init:
   #      data-locations: classpath:data-preprod.sql
   #    tomcat:
@@ -22,22 +24,23 @@ spring:
     serialization:
       fail-on-empty-beans: false
   liquibase:
-    change-log: classpath:/db/master.xml
-    enabled: true
+   change-log: classpath:/db/master.xml
+   enabled: true
+    # enabled: false
   messages:
     encoding: UTF-8
   servlet:
     multipart:
       max-request-size: 7MB
       max-file-size: 7MB
-  profiles:
-    active: dev
+  # Use default application.yml environment by not setting an explicit active profile here.
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   jpa:
     hibernate:
-      ddl-auto: validate
+      # ddl-auto: none
+      ddl-auto: none
     properties:
       hibernate:
         enable_lazy_load_no_trans: true
@@ -76,28 +79,28 @@ server:
 security:
   jwt:
     token:
-      secret-key: ${JWT_SECRET_KEY}
+      secret-key: ${JWT_SECRET_KEY:dev-secret}
       expire-length: 1209600000 # 1000*60*60*24*14
-  invitation-via-email: ${INVITATION_VIA_EMAIL}
+  invitation-via-email: ${INVITATION_VIA_EMAIL:false}
 frontend:
-  url: ${PUBLIC_FRONT_URL}
+  url: ${PUBLIC_FRONT_URL:http://localhost:3000}
 mail:
-  recipients: ${MAIL_RECIPIENTS}
-  enable: ${ENABLE_EMAIL_NOTIFICATIONS}
+  recipients: ${MAIL_RECIPIENTS:}
+  enable: ${ENABLE_EMAIL_NOTIFICATIONS:false}
 superAdmin:
   role:
     name: SuperAdministratorGrash@p;l
 fast-spring:
-  username: ${FASTSPRING_USER}
-  password: ${FASTSPRING_PWD}
+  username: ${FASTSPRING_USER:}
+  password: ${FASTSPRING_PWD:}
 management:
   health:
     mail:
       enabled: true
 api:
-  host: ${PUBLIC_API_URL}
+  host: ${PUBLIC_API_URL:http://localhost:8080}
 storage:
-  type: ${STORAGE_TYPE}
+  type: ${STORAGE_TYPE:MINIO}
   minio:
     endpoint: ${MINIO_ENDPOINT:}
     bucket: ${MINIO_BUCKET:}
